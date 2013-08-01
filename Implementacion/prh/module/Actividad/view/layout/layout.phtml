@@ -1,0 +1,18 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es_ES">
+	<head>
+		<?php echo $this->headMeta()->setCharset('utf8'); ?>
+		<?php echo $this->headTitle($this->title); ?>
+		<?php echo $this->headLink()->prependStylesheet($this->basePath().'/css/miestilo.css'); ?>
+		<?php echo $this->headStyle(); ?>
+		<?php echo $this->headScript()->prependFile($this->basePath().'/js/jquery.min.js'); ?>	
+	</head>
+	<body>
+		<div id="header">Encabezado Layout</div>
+		<div id="content"> <!-- Aca se va a cargar el codigo de la vista asociada al layout -->
+			<?php echo $this->content;?>
+		</div>
+		<div id="footer">Footer Layout</div>
+	</body>
+</html>
