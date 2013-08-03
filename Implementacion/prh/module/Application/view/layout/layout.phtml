@@ -3,214 +3,235 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>Sistema de Gestion</title>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/extjs/resources/css/ext-all.css"/>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/css/layout/style.css"/>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/css/layout/menu.css"/>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/css/layout/grid.css"/>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/css/layout/contenedor.css"/>
-        <link rel="stylesheet" href="<?=$this->basePath();?>/css/layout/messageBox.css"/>
-		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/extjs/adapter/ext/ext-base.js"></script>
-		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/extjs/ext-all.js"></script>
-		<script type="text/javascript" src="<?=$this->basePath()?>/extjs/src/locale/ext-lang-es.js">  </script> 
-		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/js/menu.js"></script>
-		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/js/ajax.js"></script>
-		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/js/formatearFecha.js"></script>
+        <title>Sistema de Alumnos</title>
+        <link rel="stylesheet" href="<?=$this->basePath();?>/ext-4.2/resources/css/ext-all-neptune2.css"/>
+		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/ext-4.2/ext-all.js"></script>
+		<script type="text/javascript" src="<?php echo $this->basePath(); ?>/ext-4.2/locale/ext-lang-es.js"></script>
+
+		<style type="text/css">
+
+			.panel{
+				margin: 0px;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				padding-left: 10px;
+				font-weight: bold;
+				font-size: 18px;
+				color: black;
+				background: white;
+			}
+			
+			.panelover{
+				margin: 0px;
+				margin-top: 0px;
+				margin-bottom: 0px;
+				padding-top: 5px;
+				padding-bottom: 5px;
+				padding-left: 10px;
+				font-weight: bold;
+				font-size: 18px;
+				color: red;
+				background: green;
+			}
+			
+			.tabs 
+			{
+				font-weight: bold;
+				font-size: 18px;
+				border-color: white;
+				color: #157fcc;
+				text-align: center;
+				background: white;	
+			}
+
+			.tabsover
+			{
+				font-weight: bold;
+				font-size: 18px;
+				border-color: white;
+				color: red;
+				text-align: center;	
+			}
+		
+
+        </style>
+		
 		<script type="text/javascript">
 
-		
-		
 		var baseURL = '<?=$this->basePath()?>';
+		var logout = baseURL + '/login/leave';
 
-		function buttonClick(b,e)
-		{
-			location.href = baseURL + '/' + b.modulo + '/' + b.codigo + '/index-ui';
-		}
+		menu = Ext.create('Ext.toolbar.Toolbar', {
+		//	id: 'panel',
+			//baseCls: 'null',
+			//cls: 'panel',
+		    width: 'fit',
+		    items: [
+		        {
+			        xtype: 'button',	
+			        cls: 'tabs', 
+			        scale: 'large',   
+		            text: 'Administraci&oacute;n',
+		            handler: function() {
+			            alert('You clicked the button!');
+			        }
+		        },
+		        '-',
+		        {
+			        xtype: 'button',
+			        cls: 'tabs',	
+			        scale: 'large',	
+		            text: 'Inscripciones',
+		            handler: function() {
+		            	Ext.Ajax.request({
+		            	    url: '/sapientia-alumnos/inscripciones/al-ins-carrera/index-ui',
+		            	    method: 'GET',
+		            	    success: function(response, options){
+			            	   var htmlResponse = response.responseText;
+		            	       var destino = Ext.getCmp('centerPanel');
+		            	       console.log(destino);
+		            	       if(destino)
+		            	       {
+		            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
+										console.log(a,b,c);
+			                   	    });
+		            	       }
+		            	       window.location = baseURL+'/inscripciones/al-ins-carrera/index-ui'
+		            	    },
+		            	    failure: function(response,options){
+								Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
+				           	}
+		            	});
+		            	
+		            }
+		        },
+		        '-',
+		        {
+		        	xtype: 'button',	
+		        	scale: 'large',	
+			        cls: 'tabs',
+		            text: 'Carreras',
+					handler: function() {
+		            	Ext.Ajax.request({
+		            	    url: '/sapientia-alumnos/carreras/planes/index-ui',
+		            	    method: 'GET',
+		            	    success: function(response, options){
+			            	   var htmlResponse = response.responseText;
+		            	       var destino = Ext.getCmp('centerPanel');
+		            	       console.log(destino);
+		            	       if(destino)
+		            	       {
+		            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
+										console.log(a,b,c);
+			                   	    });
+		            	       }
+		            	       window.location = baseURL+'/carreras/planes/index-ui'
+		            	    },
+		            	    failure: function(response,options){
+								Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
+				           	}
+		            	});
+		            	
+		            }	            
+		        },
+		        '-',
+		        {
+		        	xtype: 'button',
+		        	scale: 'large',	
+			        cls: 'tabs',
+		            text: 'Cursos',
+					handler: function() {
+		            	Ext.Ajax.request({
+		            	    url: '/sapientia-alumnos/cursos/cursos/index-ui',
+		            	    method: 'GET',
+		            	    success: function(response, options){
+			            	   var htmlResponse = response.responseText;
+		            	       var destino = Ext.getCmp('centerPanel');
+		            	       console.log(destino);
+		            	       if(destino)
+		            	       {
+		            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
+										console.log(a,b,c);
+			                   	    });
+		            	       }
+		            	       window.location = baseURL+'/cursos/cursos/index-ui'
+		            	    },
+		            	    failure: function(response,options){
+								Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
+				           	}
+		            	});
+		            	
+		            }	
+		        },
+		        '-',
+		        {
+		        	xtype: 'button',	
+		        	scale: 'large',	
+			        cls: 'tabs',
+		            text: 'Notas',
+		            handler: function() {
+			            alert('You clicked the button!');
+			        }
+		        },
+		        '-',
+		        {
+		        	xtype: 'button',	
+		        	scale: 'large',	
+			        cls: 'tabs',
+		            text: 'Calendario',
+		            handler: function() {
+			            alert('You clicked the button!');
+			        }
+		        },
+		        '->',
+//		        {
+//		            xtype    : 'textfield',
+//		            name     : 'field1',
+//		            emptyText: 'B&uacute;squeda'
+//		        }
+		        {
+			        xtype: 'button',
+			        scale: 'large',	
+			        cls: 'tabs',
+			        handler: function() {
+			        	window.location = logout;    
+			        },
+			        text: 'Salir'
+				}
+		    ]
+		});
 		
-			Ext.onReady(function(){
+		Ext.onReady(function(){
+			
+			Ext.create('Ext.container.Viewport', {
+				id: 'menuh',
+			    layout: 'border',
+			    items: [{
+			        region: 'north',
+			        title: 'Claudia Sosa - Matricula: 64729',
+		            items: [ menu ]
+			    },
+			    {
+			        region: 'center',  
+			        id: 'centerPanel',
+			        xtype: 'panel',
+			            width: 800,
+			            height: 600,
+			            border: false,
+			            autoScroll: true,			        
+			           items:[ ]
 
-				new Ext.Viewport({
-    				layout: 'anchor',
-    				id: 'mainContainer',
-    				autoScroll:true,
-					//style:{overflowX:'hidden', overflowY:'auto'},
-    				items: [
-    					{
-        					height: 32,
-        					xtype: 'container',
-        					cls: 'topFrame',
-        					border: false,
-        					id: 'frameSuperiorAbajo',
-        					defaults: {xtype:'container'},
-        					items:[
-        							//tres bloques
-        							{
-        								height: 30,
-        								autoWidth:true,
-        								xtype: 'toolbar',
-        								items: [
-        								        {
-            								        text: 'Organizacion',
-            								        split: true,
-            								        menu:{
-                								        defaults:{handler: buttonClick},
-														items:[
-														       {text: 'Mantener Empresa', codigo: 'empresas', modulo: 'org'},
-														       {text: 'Mantener Persona', codigo: 'personas', modulo: 'org'},
-														       {text: 'Mantener Roles', codigo: 'roles-de-partes', modulo: 'org'}
-														]
-                								    }
-        								        },
-        								        '-',
-        								        {
-            								        text: 'Stock',
-            								        split: true,
-            								        menu:{
-            								        	defaults:{handler: buttonClick},
-														items:[
-														       {text: 'Mantener Articulo', codigo: 'articulo', modulo: 'stock'},
-														       {text: 'Mantener Tipo Articulo', codigo: 'articulo-tipo', modulo: 'stock'}
-														]
-                								    }
-        								        },'-',
-        								        {
-            								        text: 'Contabilidad',
-            								        split: true,
-            								        menu:{
-            								        	defaults:{handler: buttonClick},
-														items:[
-														       {text: 'Mantener Moneda', codigo: 'moneda', modulo: 'cont'},
-														       {text: 'Mantener Tasa Cambio', codigo: 'tasa-cambio', modulo: 'cont'}
-														]
-                								    }
-        								        },'-',
-        								        {
-            								        text: 'Salir',
-            								        handler: function(b,e){
-														Ext.Msg.alert('Aviso','En Impl.');
-                								    }
-        								        }
-        								]
-        							}/*,
-        							{
-        								height: 84,
-        								cls: 'topFrameMid',
-        								items:[
-        										{
-        											xtype: 'container',
-        											data: menuPrincipal,
-										 			tpl: new Ext.XTemplate(
-										 				'<ul class="menuPrimerNivel">',
-														'<tpl for=".">',
-																'<li id="{[this.getLinkId()]}" class="liPrimerNivel" codigo="{codigo}">{texto}',
-																'</li>',
-														'</tpl>',
-														'</ul>',
-														{
-															getLinkId: function(values)
-															{
-																var result = Ext.id();
-												        		this.addListener.defer(1, this, [result]);
-												        		return result;
-															},
-															addListener: function(id)
-															{
+			    }]
+ 		});
 
-																Ext.get(id).on('mouseover', function(e)
-																		{
-																	
-																			e.stopEvent();
-																	
-																			//el codigo donde se hizo click
-																			var codigoClick = this.dom.attributes.codigo.value;
-																			var valor = null;
-																	
-																			//tenemos que encontrar el codogp
-																			for(var x=0; x<menuPrincipal.length; x++)
-																			{
-																				if(menuPrincipal[x].codigo == codigoClick)
-																				{
-																					valor = menuPrincipal[x];
-																					break;
-																				}
-																			}
-																	
-																			if(valor)
-																			{
-																		
-																				//guardamos los datos
-																				var listaHija = valor;
-																				listaHija.codigo = valor.codigo;
-																				//encontramos destino y agregamos los datos
-																				var abuelo = Ext.getCmp('frameSuperiorAbajo');
-																				var buscado = abuelo.find('itemId','listaNivelDos');
-																				if(buscado.length>0)
-																				{
-																					buscado = buscado[0];
-																					buscado.tpl.overwrite(buscado.el, listaHija);
-																				}
-																			}
-																	
-																	
-																		}
-																	);
-															}
-														}
-													),
-        											width: 600,
-        											height: 35,
-        											style:{float:'right'}
-        										},
-        										{
-        											xtype: 'container',
-        											html: 'Crear Factura',
-        											cls: 'crearFactura',
-        											height: 30
-        										}
-        								]
-        							},
-        							{
-											xtype:'container',
-											height: 33,
-        									cls: 'topFrameBot',
-										 	columnWidth: 1,
-										 	itemId: 'listaNivelDos',
-										 	style:{margin: '0 10px', borderTop: '1px solid black'},
-										 	tpl: new Ext.XTemplate(
-										 		'<ul class="menuSegundoNivel">',
-													'<tpl for="operaciones">',
-														'<a href="{[this.getHref(parent,values)]}"><li class="liSegundoNivel">',
-															'{nombre}',
-														'</li></a>',
-													'</tpl>',
-												'</ul>',
-												{
-													getHref: function(parent,values)
-													{
-														return baseURL + '/' + parent.codigo + '/' + values.codigo + '/index-ui';
-													}
-												}
-											)
-        							}*/
-        					]
-    					},
-    					{
-    						xtype: 'container',
-    						layout: 'anchor',
-    						id: 'mainViewContainer',
-    						items: viewContainer.bodyPanel
-    					}
-    				]
-				});
-	
-				
-				
-			});//onready
-		
-		var viewContainer = Ext.ns('viewContainer');
+		});//onready
+			
 		</script>
     </head>
     <body id='bodyHTML'>
        <?php echo $this->content; ?>
     </body>
 </html>
+		
