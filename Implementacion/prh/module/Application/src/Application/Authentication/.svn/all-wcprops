@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/sapientia/!svn/ver/10262/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/module/Application/src/Application/Authentication
+END
+Credenciales.php
+K 25
+svn:wc:ra_dav:version-url
+V 163
+/svn/sapientia/!svn/ver/9915/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/module/Application/src/Application/Authentication/Credenciales.php
+END
+AuthenticationListener.php
+K 25
+svn:wc:ra_dav:version-url
+V 173
+/svn/sapientia/!svn/ver/9915/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/module/Application/src/Application/Authentication/AuthenticationListener.php
+END
+Identidad.php
+K 25
+svn:wc:ra_dav:version-url
+V 161
+/svn/sapientia/!svn/ver/10071/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/module/Application/src/Application/Authentication/Identidad.php
+END

@@ -1,0 +1,38 @@
+<?php
+namespace Application\Authentication\Db;
+
+use EnterpriseSolutions\Db\Select;
+class AuthSelect extends Select
+{
+	public function _init()
+	{
+		$this->_select->from(array('pp'=> 'per_persona'))
+		     ->columns(array('nombre_generico','per_persona_id')/*,false*/)
+		     ->join(array('ppd' => 'per_persona_doc'), 'pp.per_persona_id = ppd.per_persona_id',array('doc_nro','per_doc_origen_id'))
+		     ->join(array('au' => 'adm_usuario'), 'pp.per_persona_id = au.per_persona_id',array('contrasena','activo','bloqueado','adm_usuario_id'))
+		     ->join(array('aa' => 'al_alumno'),'pp.per_persona_id = aa.per_persona_id',array())
+		     ->group(array('pp.per_persona_id','pp.nombre_generico','ppd.per_persona_doc_id','au.adm_usuario_id','ppd.doc_nro','ppd.per_doc_origen_id','au.contrasena','au.activo','au.bloqueado'))
+		     ->where("ppd.es_principal = 'S'")
+		     
+		     ->limit(10);
+		
+	}
+	
+	public function addSearchByDocNro($docNro)
+	{
+		$this->_select->where("ppd.doc_nro = '$docNro'");
+		return $this;
+	}
+	
+	public function addSearchByDirPaisId($dirPaisId)
+	{
+		$this->_select->where("ppd.per_doc_origen_id = $dirPaisId");
+		return $this;
+	}
+	
+	public function addSearchByPerDocTipoId($perDocTipoId)
+	{
+		$this->_select->where("ppd.per_doc_tipo_id = $perDocTipoId");
+		return $this;
+	}
+}
