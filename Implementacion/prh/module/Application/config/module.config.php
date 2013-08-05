@@ -1,4 +1,5 @@
 <?php
+namespace Application;
 /**
  * Zend Framework (http://framework.zend.com/)
  *
@@ -6,7 +7,10 @@
  * @copyright Copyright (c) 2005-2012 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
-
+use Zend\Authentication\AuthenticationService;
+use Zend\Authentication\Adapter\DbTable;
+use Application\Authentication\Db\AuthDao;
+use Application\Authentication\Db\Adapter;
 return array(
     'router' => array(
         'routes' => array(
@@ -20,6 +24,20 @@ return array(
                     ),
                 ),
             ),
+        		'login' => array(
+        				'type'    => 'segment',
+        				'options' => array(
+        						'route'    => '/login[/][:action][/:id]',
+        						'constraints' => array(
+        								'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+        								'id'     => '[0-9]+',
+        						),
+        						'defaults' => array(
+        								'controller' => 'Application\Controller\Login',
+        								'action'     => 'index',
+        						),
+        				),
+        		),
             // The following is a route to simplify getting started creating
             // new controllers and actions without needing to create a new
             // module. Simply drop new controllers in, and you can access them
@@ -55,6 +73,30 @@ return array(
     'service_manager' => array(
         'factories' => array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
+            'AuthService' => function($sm) {
+            	$authServiceManager = new AuthenticationService();
+            	// Use 'someNamespace' instead of 'Zend_Auth'
+            	 
+            	//$authServiceManager->setStorage(new SessionStorage('sapientia_alumnos'));
+            	 
+            	$dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+            	$authDao = new AuthDao($dbAdapter);
+            	$passwordEncoder = function($password){
+            		return md5(trim($password));
+            	};
+            	$authAdapter = new Adapter($authDao,$passwordEncoder);
+            	$authServiceManager->setAdapter($authAdapter);
+            	//$authAdapter = new DbTable($dbAdapter);
+            	//$authAdapter->setTableName('usuarios')
+            	//            ->setIdentityColumn('username')
+            	//            ->setCredentialColumn('password');
+            	//$authServiceManager->setAdapter($authAdapter);
+            	return $authServiceManager;
+            },
+            'Identidad' => function($sm){
+            	$authService = $sm->get('AuthService');
+            	return $authService->getIdentity();
+            }
         ),
     ),
     'translator' => array(
@@ -69,7 +111,8 @@ return array(
     ),
     'controllers' => array(
         'invokables' => array(
-            'Application\Controller\Index' => 'Application\Controller\IndexController'
+            'Application\Controller\Index' => 'Application\Controller\IndexController',
+            'Application\Controller\Login' => 'Application\Controller\LoginController'		
         ),
     ),
     'controller_plugins' => array(
