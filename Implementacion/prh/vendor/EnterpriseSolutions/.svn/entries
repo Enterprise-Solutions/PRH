@@ -1,0 +1,34 @@
+10
+
+dir
+10329
+http://dgi/svn/sapientia/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/vendor/EnterpriseSolutions
+http://dgi/svn/sapientia
+
+
+
+2013-06-17T18:51:54.347091Z
+10274
+pislas
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+9d2a51e2-980e-41ee-a276-8e86c976ba24
+
+Controller
+dir
+
+Db
+dir
+

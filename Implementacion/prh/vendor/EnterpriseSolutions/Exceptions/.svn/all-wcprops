@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 135
+/svn/sapientia/!svn/ver/10345/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/vendor/EnterpriseSolutions/Exceptions
+END
+Exception.php
+K 25
+svn:wc:ra_dav:version-url
+V 149
+/svn/sapientia/!svn/ver/10345/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/vendor/EnterpriseSolutions/Exceptions/Exception.php
+END
+Thrower.php
+K 25
+svn:wc:ra_dav:version-url
+V 147
+/svn/sapientia/!svn/ver/10345/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/vendor/EnterpriseSolutions/Exceptions/Thrower.php
+END
+Listener.php
+K 25
+svn:wc:ra_dav:version-url
+V 148
+/svn/sapientia/!svn/ver/10345/_1.PRODUCTO/03.implementacion/codigo_fuente/trunk/sapientia-alumnos/vendor/EnterpriseSolutions/Exceptions/Listener.php
+END
