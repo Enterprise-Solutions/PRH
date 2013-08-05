@@ -38,7 +38,6 @@ return array(
 				'not_found_template'       => 'error/404',
 				'exception_template'       => 'error/index',
 				'template_map' => array(
-						'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
 						'actividad/index/index'   => __DIR__ . '/../view/actividad/index/index.phtml', //Donde va a estar la vista por defecto
 						'error/404'               => __DIR__ . '/../view/error/404.phtml',
 						'error/index'             => __DIR__ . '/../view/error/index.phtml',
