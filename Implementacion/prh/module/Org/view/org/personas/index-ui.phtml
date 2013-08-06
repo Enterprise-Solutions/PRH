@@ -147,7 +147,7 @@ Ext.onReady(function(){
                 injectCheckbox: 1
             },
             width: 'fit',
-            padding: '0 20 0 20',
+            padding: '10 10 0 10',
             height: 450,
             region: 'center',  
 	           dockedItems: [{
@@ -268,6 +268,68 @@ Ext.onReady(function(){
             	        	
 		 });
 
+		 function showpopwindow() {
+			 
+		            var form = Ext.widget('form', {
+		                layout: {
+		                    type: 'vbox',
+		                    align: 'stretch'
+		                },
+		                border: false,
+		                bodyPadding: 10,
+
+		                fieldDefaults: {
+		                    labelAlign: 'top',
+		                    labelWidth: 100,
+		                    labelStyle: 'font-weight:bold'
+		                },
+		                items: [
+		                       {
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Name',      
+		                    allowBlank: false
+		                },
+		                {
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Your Email Address',
+		                    vtype: 'email',
+		                    allowBlank: false
+		                }],
+
+		                buttons: [{
+		                    text: 'Cancel',
+		                    handler: function() {
+		                        this.up('form').getForm().reset();
+		                        this.up('window').hide();
+		                    }
+		                }, {
+		                    text: 'Submit',
+		                    handler: function() {
+		                        if (this.up('form').getForm().isValid()) {
+		                            // In a real application, this would submit the form to the configured url
+
+		                            this.up('form').getForm().reset();
+		                            this.up('window').hide();
+		                            Ext.MessageBox.alert('Thank you!', 'Your Message has been sent.');
+		                        }
+		                    }
+		                }]
+		            });
+
+		            win = Ext.widget('window', {
+		                title: 'Agregar Persona',
+		                closeAction: 'hide',
+		                width: 600,
+		                height: 350,
+		                layout: 'fit',
+		                resizable: true,
+		                modal: true,
+		                items: form
+		            });
+		        
+		        win.show();
+		    }
+			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			id: 'margen',
 			padding: '15 5 0 5', 
@@ -280,6 +342,11 @@ Ext.onReady(function(){
 			            handler: function() {
 			            	window.location = baseURL+'/org/personas/create';
 						}
+		            },
+		            {
+			            xtype: 'button',	
+			            text: 'Click me ',
+		                handler: showpopwindow,
 		            }
 		        ],
 		    width: 'fit',
