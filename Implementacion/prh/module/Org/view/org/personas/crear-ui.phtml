@@ -90,8 +90,42 @@ Ext.onReady(function(){
 						});
 
 
+					var buttonCrear = function(b,e)
+					{
+									var basicForm = b.up('form').getForm();  						
+						            var valoresForm = basicForm.getFieldValues();
 
+						           	var auxnombre = valoresForm.nombre;
+						           	var auxapellido = valoresForm.apellido;
+						           	var auxfechanacimiento = valoresForm.fecha_de_nacimiento;
+						           	var auxgenero = valoresForm.genero;
+						           	console.log(auxgenero);
+						        	var auxcedula = valoresForm.doc_nro;
+						  
 
+						Ext.Ajax.request({
+							   url: baseURL + '/org/personas/crear',
+							   success: function(response, opt){
+								   mainStore.reload();
+							   },
+							   jsonData:{
+							       'post':{
+									   'org_parte_id':null,
+									   'nombre': auxnombre,
+									   'apellido': auxapellido,
+									   'genero': auxgenero,
+								   }
+							   }
+						 });
+						
+						
+					};
+
+// 					   'Documentos':{'agregados':[{
+// 							'org_documento_tipo_codigo': 'cedula',
+// 							'valor': auxcedula
+// 						}]}
+					
 				var pantallaPersona = Ext.create('Ext.form.Panel', {
 					items:[{
 					    xtype: 'panel',
@@ -116,20 +150,23 @@ Ext.onReady(function(){
 							        allowBlank: false,
 							        padding: 15,
 							        labelWidth: 110,
-							        anchor:'90%'
+							        anchor:'90%',
+							        name: 'nombre'
 							    },{
 						        	fieldLabel: 'Fecha de Nac:',
 						        	labelWidth: 110,
 						 	        xtype: 'datefield',
 						 	        allowBlank: false,
 						 	        padding: 15,
-						 	        anchor:'90%'
+						 	        anchor:'90%',
+						 	        name: 'fecha_de_nacimiento'
 						         },{
 						    	    	fieldLabel: 'Nro. de Doc',
 						    	    	labelWidth: 110,
 						    	        allowBlank: false,
 						    	        padding: 15,
-						    	        anchor:'90%'
+						    	        anchor:'90%',
+						    	        name: 'nro_doc',
 						    	 },{
 								        fieldLabel: 'Origen de Doc',
 								        xtype: 'combobox',
@@ -151,7 +188,7 @@ Ext.onReady(function(){
 								        displayField: 'name',
 								        valueField: 'id',
 								        value: '1',
-								        allowBlank: false,
+								        allowBlank: true,
 								        padding: 15,
 							 	        anchor:'90%'
 								    },{
@@ -162,7 +199,12 @@ Ext.onReady(function(){
 								    	value: 0,
 								    	anchor:'90%',
 								    	padding: 15,
-								    }
+// 								    },{
+// 						    	    	fieldLabel: 'Nro. de Doc',
+// 						    	    	hidden: true,
+// 						    	    	value: null,
+// 						    	    	name: 'post[org_parte-id]'
+						    	 	}
 					    	]},{
 					    		xtype: 'container',
 				                flex: 1,
@@ -174,6 +216,7 @@ Ext.onReady(function(){
 					    	        allowBlank: false,
 					    	        padding: 15,
 							        anchor:'90%',
+							        name: 'apellido'
 					    	    },{
 							        fieldLabel: 'Nacionalidad',
 							        xtype: 'combobox',
@@ -197,7 +240,8 @@ Ext.onReady(function(){
 							        valueField: 'id',
 							        value: '1',
 							        allowBlank: false,
-							        anchor:'90%'
+							        anchor:'90%',
+							        name: 'tipo_doc',
 							    },{
 						        	 xtype: 'fieldcontainer',
 						        	 padding: 15,
@@ -211,12 +255,12 @@ Ext.onReady(function(){
 						             items: [
 						                 {
 						                     boxLabel  : 'Masculino',
-						                     name      : 'size',
+						                     name      : 'genero',
 						                     inputValue: 'M',
 						                     id        : 'radio1'
 						                 }, {
 						                     boxLabel  : 'Femenino',
-						                     name      : 'size',
+						                     name      : 'genero',
 						                     inputValue: 'F',
 						                     id        : 'radio2'
 						                 }
@@ -241,7 +285,7 @@ Ext.onReady(function(){
 								        queryMode: 'local',
 								        displayField: 'name',
 								        valueField: 'id',
-								        allowBlank: false,
+								        allowBlank: true,
 								        padding: 15,
 							 	        anchor:'90%'
 						    	    }
@@ -259,18 +303,18 @@ Ext.onReady(function(){
 					    defaultType: 'textfield',
 						 items: [{
 						        fieldLabel: 'Direcci&oacute;n',
-						        allowBlank: false,
+						       // allowBlank: false,
 						        width: 400,
 						        anchor:'90%',
 						    	padding: 15,
 						    },{
 						        fieldLabel: 'Ciudad',
-						        allowBlank: false,
+						       // allowBlank: false,
 						        padding: 15,
 						        anchor:'90%'
 						    },{
 						        fieldLabel: 'Barrio',
-						        allowBlank: false,
+						      //  allowBlank: false,
 						        padding: 15,
 						        anchor:'90%'
 						    }
@@ -289,19 +333,19 @@ Ext.onReady(function(){
 									    fieldLabel: 'Email',
 									    vtype: 'email',
 									    width: 400,
-									    allowBlank: false,
+								//	    allowBlank: false,
 								         flex: 2,
 									    padding: 15,
 									    anchor:'90%'
 									},{
 									    fieldLabel: 'Tel&eacute;fono',
-									    allowBlank: false,
+								//	    allowBlank: false,
 								         flex: 1,
 									    anchor:'90%',
 										padding: 15,
 									},{
 									    fieldLabel: 'Celular',
-									    allowBlank: false,
+								//	    allowBlank: false,
 								         flex: 1,
 									    padding: 15,
 									    anchor:'90%'
@@ -321,9 +365,7 @@ Ext.onReady(function(){
 						      scale: 'large',
 						      text: 'Guardar',
 							  //disabled: true,
-							  handler: function() {
-						      window.location = 'http://localhost:10088/prh2/prh-persona.html'; 
-						      }
+							  handler: buttonCrear
 				 	      },{
 				 	    	  xtype: 'button',
 				 	    	  margin: '5 0 10 20',
