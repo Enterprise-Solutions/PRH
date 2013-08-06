@@ -84,22 +84,22 @@ Ext.onReady(function(){
 			]
 		});
 
-		var ComboPersonasStore = Ext.create('Ext.data.Store', {
-			model: 'ComboPersonas',
-			pageSize: 10, 
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'10'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
-				reader: {
-					type: 'json',
-					root: 'records',
-					totalProperty: 'numResults',
-				}
-			},
-			autoLoad: true
-		});
+// 		var ComboPersonasStore = Ext.create('Ext.data.Store', {
+// 			model: 'ComboPersonas',
+// 			pageSize: 10, 
+// 			proxy: {
+// 				type: 'ajax',
+// 				extraParams: {'p[limit]':'10'},
+// 				headers: {'Accept':'application/json'},
+// 				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
+// 				reader: {
+// 					type: 'json',
+// 					root: 'records',
+// 					totalProperty: 'numResults',
+// 				}
+// 			},
+// 			autoLoad: true
+// 		});
 		
 		var personasStore = Ext.create('Ext.data.Store', {
 			model: 'personas',
@@ -129,7 +129,7 @@ Ext.onReady(function(){
 		        width: 370,
 		        name: 'nombre',
 		        labelWidth: 70,
-		        store: ComboPersonasStore,
+		       // store: ComboPersonasStore,
 		        queryMode: 'remote',
 		        typeAhead: true,
 		        emptyText: 'Escriba el nombre de la Persona...',
@@ -268,7 +268,7 @@ Ext.onReady(function(){
             	        	
 		 });
 
-		var pantallaCursos = Ext.create('Ext.form.Panel', {
+		var pantallaPersonas = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
 			 id: 'margen',
 			    width: 'fit',	

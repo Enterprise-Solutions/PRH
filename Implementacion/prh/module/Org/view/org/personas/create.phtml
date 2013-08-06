@@ -1,0 +1,360 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Personas</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+			var mensajes = '<?php echo $texto; ?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+					var docTipo = Ext.create('Ext.data.Store', {
+				    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Cedula"},
+						        {"id": "2", "name":"Pasaporte"},
+						        {"id": "3", "name":"Otro"}
+					        ]
+					});
+					
+					var estadoCivil = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Soltero"},
+						        {"id": "2", "name":"Casado"},
+						        {"id": "3", "name":"Viudo"},
+						        {"id": "4", "name":"Divorciado"}
+					        ]
+						});
+					
+					var nacionalidad = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Paraguaya"},
+						        {"id": "2", "name":"Argentina"},
+						        {"id": "3", "name":"Brasilera"},
+						        {"id": "4", "name":"Uruguaya"},
+						        {"id": "5", "name":"Chilena"}
+					        ]
+						});
+					var pais = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Paraguay"},
+						        {"id": "2", "name":"Argentina"},
+						        {"id": "3", "name":"Brasil"},
+						        {"id": "4", "name":"Uruguay"},
+						        {"id": "5", "name":"Chile"}
+					        ]
+					});
+					
+					var religion = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Catolico"},
+						        {"id": "2", "name":"Evangelica"},
+						        {"id": "3", "name":"Judia"},
+						        {"id": "4", "name":"Atea"},
+						        {"id": "5", "name":"Otro"}
+					        ]
+						});
+					
+					var profesion = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+						        {"id": "1", "name":"Abogado"},
+						        {"id": "2", "name":"Arquitecto"},
+						        {"id": "3", "name":"Medico"},
+						        {"id": "4", "name":"Ingeniero"},
+						        {"id": "5", "name":"Otro"}
+					        ]
+						});
+
+
+
+
+				var pantallaPersona = Ext.create('Ext.form.Panel', {
+					items:[{
+					    xtype: 'panel',
+					    title: 'Datos Personales',
+					    collapsible: true,
+					    //anchor:'90%',
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					//    flex: 1,
+					    padding: '5 15 0 15',
+					    layout: 'hbox',
+					    defaultType: 'textfield',
+					    items: [{
+							xtype: 'container',
+							flex: 1,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [    
+							    {
+							        fieldLabel: 'Nombres',
+							        allowBlank: false,
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%'
+							    },{
+						        	fieldLabel: 'Fecha de Nac:',
+						        	labelWidth: 110,
+						 	        xtype: 'datefield',
+						 	        allowBlank: false,
+						 	        padding: 15,
+						 	        anchor:'90%'
+						         },{
+						    	    	fieldLabel: 'Nro. de Doc',
+						    	    	labelWidth: 110,
+						    	        allowBlank: false,
+						    	        padding: 15,
+						    	        anchor:'90%'
+						    	 },{
+								        fieldLabel: 'Origen de Doc',
+								        xtype: 'combobox',
+								        labelWidth: 110,
+								        store: pais,
+								        queryMode: 'local',
+								        displayField: 'name',
+								        valueField: 'id',
+								        value: '1',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%'
+						    	 },{
+								        fieldLabel: 'Religi&oacute;n',
+								        xtype: 'combobox',
+								        labelWidth: 110,
+								        store: religion,
+								        queryMode: 'local',
+								        displayField: 'name',
+								        valueField: 'id',
+								        value: '1',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%'
+								    },{
+								    	fieldLabel: 'Nro. de hijos',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minvalue: 0,
+								    	value: 0,
+								    	anchor:'90%',
+								    	padding: 15,
+								    }
+					    	]},{
+					    		xtype: 'container',
+				                flex: 1,
+				                layout: 'anchor',
+				                defaultType: 'textfield',
+				                items: [{
+					    	        fieldLabel: 'Apellidos',
+					    	        labelWidth: 110,
+					    	        allowBlank: false,
+					    	        padding: 15,
+							        anchor:'90%',
+					    	    },{
+							        fieldLabel: 'Nacionalidad',
+							        xtype: 'combobox',
+							        labelWidth: 110,
+							        store: nacionalidad,
+							        queryMode: 'local',
+							        displayField: 'name',
+							        valueField: 'id',
+							        value: '1',
+							        allowBlank: false,
+							        padding: 15,
+						 	        anchor:'90%'
+					    	    },{
+							        fieldLabel: 'Tipo de Doc',
+							        xtype: 'combobox',
+							        labelWidth: 110,
+							        padding: 15,
+							        store: docTipo,
+							        queryMode: 'local',
+							        displayField: 'name',
+							        valueField: 'id',
+							        value: '1',
+							        allowBlank: false,
+							        anchor:'90%'
+							    },{
+						        	 xtype: 'fieldcontainer',
+						        	 padding: 15,
+						             fieldLabel: 'Sexo',
+						             labelWidth: 110,
+						             defaultType: 'radiofield',
+						             defaults: {
+						                 flex: 0.5
+						             },
+						             layout: 'hbox',
+						             items: [
+						                 {
+						                     boxLabel  : 'Masculino',
+						                     name      : 'size',
+						                     inputValue: 'M',
+						                     id        : 'radio1'
+						                 }, {
+						                     boxLabel  : 'Femenino',
+						                     name      : 'size',
+						                     inputValue: 'F',
+						                     id        : 'radio2'
+						                 }
+						             ]
+						         },{
+								        fieldLabel: 'Estado Civil',
+								        xtype: 'combobox',
+								        store: estadoCivil,
+								        labelWidth: 110,
+								        queryMode: 'local',
+								        displayField: 'name',
+								        padding: 15,
+								        valueField: 'id',
+								        value: '2',
+								        allowBlank: false,
+								        anchor:'90%'
+								    },{
+								        fieldLabel: 'Profesi&oacute;n',
+								        xtype: 'combobox',
+								        store: profesion,
+								        labelWidth: 110,
+								        queryMode: 'local',
+								        displayField: 'name',
+								        valueField: 'id',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%'
+						    	    }
+					    		]
+					    	}]},{
+					    xtype: 'panel',
+					    title: 'Datos de Ubicaci&oacute;n',
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					    layout: 'column',
+					    flex: 1,
+					    padding: '5 15 0 15',
+					    defaultType: 'textfield',
+						 items: [{
+						        fieldLabel: 'Direcci&oacute;n',
+						        allowBlank: false,
+						        width: 400,
+						        anchor:'90%',
+						    	padding: 15,
+						    },{
+						        fieldLabel: 'Ciudad',
+						        allowBlank: false,
+						        padding: 15,
+						        anchor:'90%'
+						    },{
+						        fieldLabel: 'Barrio',
+						        allowBlank: false,
+						        padding: 15,
+						        anchor:'90%'
+						    }
+					    	    ]},{
+				    	xtype: 'panel',
+					    title: 'Datos de Contacto',
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+				         layout: 'column',
+				         padding: '5 15 5 15',
+				         defaultType: 'textfield',
+				         items: [ 
+									{
+									    fieldLabel: 'Email',
+									    vtype: 'email',
+									    width: 400,
+									    allowBlank: false,
+								         flex: 2,
+									    padding: 15,
+									    anchor:'90%'
+									},{
+									    fieldLabel: 'Tel&eacute;fono',
+									    allowBlank: false,
+								         flex: 1,
+									    anchor:'90%',
+										padding: 15,
+									},{
+									    fieldLabel: 'Celular',
+									    allowBlank: false,
+								         flex: 1,
+									    padding: 15,
+									    anchor:'90%'
+									}
+						         ]
+				     },{
+				    	xtype: 'container',
+				 	    height: 200,
+				 	    width: 'fit',
+				 	   layout: 'hbox',
+				 	   // flex: 1,
+				 	   // padding: '5 0 10 440',
+				 	    items:[
+				 	      {	  
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 0 10 1050',
+						      scale: 'large',
+						      text: 'Guardar',
+							  //disabled: true,
+							  handler: function() {
+						      window.location = 'http://localhost:10088/prh2/prh-persona.html'; 
+						      }
+				 	      },{
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 0 10 20',
+						      scale: 'large',
+						      text: 'Cancelar',
+							  //disabled: true,
+							  handler: function() {
+								  window.location = 'http://localhost:10088/prh2/prh-persona.html'; 
+							}
+				 	      }
+					    ]
+				     }]
+					});
+														
+				var pantallaPersonas = Ext.create('Ext.form.Panel', {
+					 id: 'margen',
+					    width: 'fit',
+					    renderTo: document.body,		           
+					    items:[{
+											xtype: 'container',
+											//layout: 'fit',  
+								            items: [pantallaPersona]  					
+								}
+						]	    	
+				});
+																			
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>

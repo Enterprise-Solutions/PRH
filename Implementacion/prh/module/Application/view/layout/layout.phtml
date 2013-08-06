@@ -74,31 +74,37 @@
 		    renderTo: document.body,
 		    items: [{
 		        title: 'Personas',
+// 		        listeners: {
+// 			        activate: function() {
+// 				        var urlaux = baseURL+'/org/personas/index-ui';
+// 				        console.log(window.location.pathname);
+// 				        console.log(urlaux);
+// 				        if (window.location.pathname != baseURL+'/org/personas/index-ui')
+// 				        {    
+// 				            	Ext.Ajax.request({
+// 				            	    url: '/prh/org/personas/index-ui',
+// 				            	    method: 'GET',
+// 				            	    success: function(response, options){
+// 					            	   var htmlResponse = response.responseText;
+// 				            	       var destino = Ext.getCmp('centerPanel');
+// 				            	       console.log(destino);
+// 				            	       if(destino)
+// 				            	       {
+// 				            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
+// 												console.log(a,b,c);
+// 					                   	    });
+// 				            	       }
+// 				            	       window.location = baseURL+'/org/personas/index-ui'
+// 				            	    },
+// 				            	    failure: function(response,options){
+// 										Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
+// 						           	}
+// 				            	});
+// 				         }     	
+// 	            	}
+//		        }
 		    },{
 		        title: 'Profesi&oacute;n',
-		        listeners: {
-			        activate: function() {
-		            	Ext.Ajax.request({
-		            	    url: '/prh/org/personas/index-ui',
-		            	    method: 'GET',
-		            	    success: function(response, options){
-			            	   var htmlResponse = response.responseText;
-		            	       var destino = Ext.getCmp('centerPanel');
-		            	       console.log(destino);
-		            	       if(destino)
-		            	       {
-		            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
-										console.log(a,b,c);
-			                   	    });
-		            	       }
-		            	       window.location = baseURL+'/org/personas/index-ui'
-		            	    },
-		            	    failure: function(response,options){
-								Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
-				           	}
-		            	});     	
-	            	}
-		        }
 		    },{
 		        title: 'Religi&oacute;n',
 		    },{
@@ -141,7 +147,7 @@
 				//title: 'Hoola',
 		    	anchor:'90%',
 				height: 'fit',
-				activeTab: 1,
+				activeTab: 0,
 				autoScroll: true,
 				border: 0,
 				plain: false,
@@ -240,8 +246,7 @@
 // 			    }, 
 			   {
 			        region: 'center',
-			        anchor:'90%',
-			        autoScroll: true,
+			        //anchor:'90%',
 			        height:'fit',
 			        items:[pantalla],
     
