@@ -1,574 +1,352 @@
+<?php echo $this->doctype(); ?>
 
-<script type="text/javascript">
-function hideBloque()
-{
-	var cajaMensaje = Ext.getCmp('messageBox');
-	if(cajaMensaje){
-		cajaMensaje.addClass('oculto');
-	}	
-}
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Personas</title>
 
-function formularioPersona(isNew, data)
-{
-	return {
-		xtype: 'form',
-		title: (isNew)?('Agregar Persona'):('Editar Persona'),
-		cls: 'ladoDerecho',
-		bodyCssClass: 'formularioGeneral',
-		layout: 'form',
-		autoHeight: true,
-		items:[
-		       {
-			       xtype: 'hidden',
-			       name: 'org_parte_id',
-			       value: (isNew)?(null):(data.org_parte_id)
-		       },
-		       {
-			       fieldLabel: 'Apellido',
-			       name: 'apellido',
-			       value: (isNew)?(null):(data.apellido_persona),
-			       xtype: 'textfield',
-			       allowBlank: false
-		       },
-		       {
-			       fieldLabel: 'Nombre',
-			       name: 'nombre',
-			       value: (isNew)?(null):(data.nombre_persona),
-			       xtype: 'textfield',
-			       allowBlank: false
-		       },
-		       {
-		           xtype: 'fieldset',
-		           title: 'Documento',
-		           labelWidth: 75,
-		           items:[
-		           			{
-		           				xtype: 'textfield',
-		           				name: 'valor',
-		           				allowBlank: false,
-		           				fieldLabel: 'Numero'
-		           			},
-		           			{
-		           				xtype: 'combo',
-		           				forceSelection: true,
-		           				mode: 'local',
-		           				typeAhead: true,
-		           				displayField: 'nombre',
-		           				valueField: 'org_documento_tipo_codigo',
-		           				store: orgDocumentoTipoStore,
-		           				allowBlank: false,
-		           				name: 'org_documento_tipo_codigo',
-		           				fieldLabel: 'Tipo'
-		           			}
-		           ]
-		       },	
-		       {
-			       fieldLabel: 'Fecha Nac.',
-			       name: 'fecha_nac',
-			       format: 'd/m/Y',
-			       value: (isNew)?(null):(data.fecha_nacimiento),
-			       xtype: 'datefield'
-		       },
-		       {
-			       fieldLabel: 'Genero',
-			       xtype: 'radiogroup',
-			       name: 'checkBoxGr',
-			       allowBlank: false,
-			       columns: 2,
-			       items: [
-			               {boxLabel: 'Hombre', name: 'genero_persona', inputValue: 'H', checked: (isNew)?(false):( (data.genero_persona == 'H')?(true):(false) )},
-			               {boxLabel: 'Mujer', name: 'genero_persona', inputValue: 'M', checked: (isNew)?(false):( (data.genero_persona == 'M')?(true):(false) )}
-			       ]
-		       },
-		       {
-			       xtype: 'container',
-			       layout: 'column',
-			       defaults:{style: {margin: '5px'}},
-			       items:[
-							{
-							    xtype: 'button',
-							    text: 'Guardar',
-							    handler: function(b,e){
-								       //verificar si esta todo ok
-								       var mainForm = b.ownerCt.ownerCt;
-								       basicForm = mainForm.getForm();
-								       if(basicForm.isValid())
-								       {
-									       var valores = basicForm.getFieldValues();
-
-									       
-									       if(valores.org_parte_id)//si existe es edicion
-									       {
-									    	   Ajax.PostElement.request({
-												   url: baseURL + '/org/empresas/editar',
-												   success: function(response, opt){
-												       mainStore.reload();
-												   },
-												   jsonData:{
-													   'put':{
-														   'org_parte_id': valores.org_parte_id,
-														   'nombre': valores.nombre,
-														   'apellido': valores.apellido,
-														   'fechaDeNacimiento': (formatearFecha(valores.fecha_nac, 1)),
-														   'genero': (valores.checkBoxGr)?(valores.checkBoxGr.inputValue):(null)
-													   },
-													   'formulario': mainForm.id
-												   }
-											   });
-									       }
-									       else
-									       {
-										       //sino es creacion
-									    	   //si esta todo ok hacemos la solicitud
-									    	   Ajax.PostElement.request({
-												   url: baseURL + '/org/personas/crear',
-												   success: function(response, opt){
-													   mainStore.reload();
-												   },
-												   jsonData:{
-												       'post':{
-														   'org_parte_id':null,
-														   'nombre': valores.nombre,
-														   'apellido': valores.apellido,
-														   'fechaDeNacimiento': (formatearFecha(valores.fecha_nac, 1)),
-														   'genero': (valores.checkBoxGr)?(valores.checkBoxGr.inputValue):(null),
-														   'Documentos':{'agregados':[{
-																'org_documento_tipo_codigo': valores.org_documento_tipo_codigo,
-																'valor': valores.valor
-															}]}
-													   },
-													   'formulario': mainForm.id
-												   }
-											   });
-									       }
-									       
-									       
-									       
-								       }
-								       else
-									   {
-										   Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
-									   }       
-								   }
-							},
-							{
-								xtype: 'button',
-								text: 'Cancelar',
-								handler: function(b,e){
-									var mainForm = b.ownerCt.ownerCt;
-							        var padre = mainForm.ownerCt;
-							        padre.remove(mainForm);
-								}
-							}
-				   ]
-		       }
-		],
-		listeners:{
-			'render':function(){
-				hideBloque();
-			}
-		}
-	};	
-}
-
-
-function borrarPersona(id)
-{
-	var destino = Ext.getCmp('formContainer');
-	if(destino)
-	{
-		destino.removeAll();
-	}
-	
-	var registro = mainStore.getById(id);
-   	
-   	if(registro)
-   	{
-       	Ext.Msg.show({
- 		   title:'Borrar',
- 		   msg: 'Esta seguro de querer borrar el elemento "' + registro.data.apellido_persona + ', ' +  registro.data.nombre_persona + '"?',
- 		   buttons: Ext.Msg.YESNO,
- 		   fn: function(a,b){
-                if(a == 'yes')
-                {
-                	Ajax.PostElement.request({
-					   url: baseURL + '/org/parte/borrar',
-					   success: function(response, opt){
-					       mainStore.reload();
-					   },
-					   jsonData:{
-					       'delete':[id],
-						   'formulario':null
-					   }
-				   });
-                }
- 	       },
- 		   icon: Ext.MessageBox.QUESTION
- 		});
-   	}
-}
-
-
-function formularioVerPersona(data)
-{
-	return {
-		xtype: 'form',
-		title: 'Ver Persona',
-		cls: 'ladoDerecho',
-		bodyCssClass: 'formularioGeneral',
-		layout: 'form',
-		autoHeight: true,
-		defaults:{xtype: 'displayfield'},
-		items:[
-		       {
-			       xtype: 'hidden',
-			       name: 'org_parte_id',
-			       value: data.org_parte_id
-		       },
-		       {
-			       fieldLabel: 'Apellido',
-			       name: 'apellido',
-			       value: data.apellido_persona
-		       },
-		       {
-			       fieldLabel: 'Nombre',
-			       name: 'nombre',
-			       value: data.nombre_persona
-		       },
-		       {
-		    	   fieldLabel: 'Fecha Nac.',
-			       name: 'fecha',
-			       value: data.fecha_nacimiento
-		       },
-		       {
-		    	   fieldLabel: 'Genero',
-			       name: 'genero',
-			       value: ((data.genero_persona == 'H')?('Hombre'):('Mujer'))
-		       },
-		       {
-			       xtype: 'container',
-			       layout: 'column',
-			       defaults:{style: {margin: '5px'}},
-			       items:[
-							{
-								xtype: 'button',
-								text: 'Cerrar Detalle',
-								handler: function(b,e){
-									var mainForm = b.ownerCt.ownerCt;
-							        var padre = mainForm.ownerCt;
-							        padre.remove(mainForm);
-								}
-							}
-				   ]
-		       }
-		],
-		listeners:{
-			'render':function(){
-				hideBloque();
-			}
-		}
-	};
-}
-
-
-function verPersona(id)
-{
-	var registro = mainStore.getById(id);
-   	
-   	if(registro)
-   	{
-   		var destino = Ext.getCmp('formContainer');
-		if(destino)
-		{
-			destino.removeAll();
-
-			Ajax.PostElement.request({
-				   url: baseURL + '/org/parte/get',
-				   method: 'GET',
-				   success: function(response, opt){
-							var data = Ext.decode(response.responseText);
-							var addedEl = destino.add(formularioVerPersona(data));
-							destino.doLayout();
-							addedEl.body.highlight();
-						
-				   },
-				   params:{
-				       'id':id,
-					   'formulario':null
-				   }
-			   });
-		}
+		<style type="text/css">
 		
-   		
-   	}
-}
-
-function editarPersona(id)
-{
-	
-	var registro = mainStore.getById(id);
-	
-	if(registro)
-	{
-		var destino = Ext.getCmp('formContainer');
-		if(destino)
-		{
-			destino.removeAll();
-			var addedEl = destino.add(formularioPersona(false, registro.data));
-			destino.doLayout();
-			addedEl.body.highlight();
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
 		}
-	}
-}
+        </style>
+        
+		<script type="text/javascript">
 
-var mainStore = new Ext.data.JsonStore({
-	// store configs
-	totalProperty: 'numResults',
-	url: baseURL + '/org/personas/index',
-	// reader configs
-	root: 'records',
-	paramNames: {
-		start: 'p[page]',
-		limit: 'p[limit]'
-	},
-	baseParams: {
-		'p[limit]': 10,
-		'p[page]': 0
-	},
-	autoLoad:true,
-	idProperty: 'org_parte_id',
-	fields: ['org_parte_id','org_parte_tipo_codigo','documentos','nombre_persona','apellido_persona','genero_persona','fecha_nacimiento','foto','org_parte_tipo_nombre']
-});
+			var baseURL = '<?=$this->basePath()?>';
+			var mensajes = '<?php echo $texto; ?>';
 
-var orgDocumentoTipoStore = new Ext.data.JsonStore({
-	// store configs
-	url: baseURL + '/org/combos/org-documento-tipo',
-	// reader configs
-	autoLoad:true,
-	root: 'records',
-	idProperty: 'org_documento_tipo_codigo',
-	fields: ['org_documento_tipo_codigo','nombre','descripcion']
-});
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
 
-viewContainer.bodyPanel = [{
-	layout: 'fit',
-	xtype: 'container',
-	autoHeight: true,
-	cls: 'fittedContainer',
-	items: [
-			{
-				xtype: 'container',
-				autoHeight: true,
-				id: 'secondMainContainer',
-				layout: 'column',
-				items:[
+		//modelos
+		Ext.define('personas', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'org_parte_id'
+				},
+				{
+					type: 'string',
+					name: 'org_parte_tipo'
+				}
+				,
+				{
+					type: 'string',
+					name: 'nombre_organizacion'
+				},
+				{
+					type: 'string', 
+					name: 'nombre_persona'
+				},
+				{
+					type: 'string', 
+					name: 'apellido_persona'
+				},{
+					type: 'string', 
+					name: 'fecha_nacimiento'
+				},{
+					type: 'png', 
+					name: 'foto'
+				},{
+					type: 'string', 
+					name: 'genero_persona'
+				},{
+					type: 'string', 
+					name: 'org_parte_tipo_nombre'
+				},{
+					type: 'string', 
+					name: 'documentos'
+				}
+			]
+		});
+
+		Ext.define('ComboPersonas', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: '__'
+				},
+				{
+					type: 'string',
+					name: 'nombre'
+				}
+			]
+		});
+
+		var ComboPersonasStore = Ext.create('Ext.data.Store', {
+			model: 'ComboPersonas',
+			pageSize: 10, 
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'10'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults',
+				}
+			},
+			autoLoad: true
+		});
+		
+		var personasStore = Ext.create('Ext.data.Store', {
+			model: 'personas',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]": page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/org/personas/index?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: true
+		});
+	
+
+		 var comboPersonas = Ext.create('Ext.form.field.ComboBox', {
+		        fieldLabel: 'Buscar Persona',
+		        displayField: 'nombre',
+		        valueField: 'pe_asignatura_prop_id',
+		        width: 370,
+		        name: 'nombre',
+		        labelWidth: 70,
+		        store: ComboPersonasStore,
+		        queryMode: 'remote',
+		        typeAhead: true,
+		        emptyText: 'Escriba el nombre de la Persona...',
+		        loadingText: 'Buscando Personas...',
+		        hideTrigger: true,
+		       // forceSelection: true,
+		        queryParam: 's[nombre]:',
+		        minChars: 2,
+		  });
+		  
+		var gridPersonas = Ext.create('Ext.grid.Panel', {
+            title: 'Personas',
+            selModel: {
+                checkOnly: true,
+                injectCheckbox: 1
+            },
+            width: 'fit',
+            padding: '0 20 0 20',
+            height: 450,
+            region: 'center',  
+	           dockedItems: [{
+                    xtype: 'pagingtoolbar',
+                    store: personasStore, 
+                    dock: 'bottom',
+                    displayInfo: true,
+                    listeners: {
+                        'afterrender': function (component)
+                        {
+                            component.down('#refresh').hide()
+                        },single: true
+                    },
+                    displayMsg: 'Cursos {0} al {1} de {2}',
+                    beforePageText: 'P&aacute;gina',
+                    afterPageText : 'de {0}',
+                    moveNext : function(){ 
+                   		page = page + itemsPorPagina;
+                   	 	this.store.currentPage++;
+           				personasStore.load({
+	       				    params:{
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,
+	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+	       				    }
+       					});
+           					console.log("page store: ", page);
+          				    console.log("page extjs: ",this.store.currentPage);	
+                	 },
+                 	 movePrevious : function(){ 
+                 		page = page - itemsPorPagina;
+						this.store.currentPage--;
+						personasStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   				    }
+   						});
+	       					console.log("page store: ", page);
+	      				    console.log("page extjs: ",this.store.currentPage);	
+            		 },
+             		moveFirst : function(){ 
+             			page = 0;
+						this.store.currentPage = 1;
+						personasStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   				    }
+   						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);	
+            	 	},
+            	 	moveLast : function(){                 	 	
+            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+            	 		}
+						else
 						{
-							xtype: 'container',
-							columnWidth: .65,
-							layout: 'anchor',
-							items:[
-									{
-										xtype: 'container',
-										html: 'Mantener Personas',
-										cls: 'mainTitle'
-									},
-									{
-				       	       			xtype: 'container',
-				       	       			itemId: 'gridContainer',
-				       	       			cls: 'gridContainer',
-				       	       			layout: 'anchor',
-				       	       			items: [
-				       	       			        {
-					       	       			        xtype: 'toolbar',
-					       	       			        style:{padding:'5px'},
-					       	       			        items:[
-					       	       			               {
-						       	       			               xtype: 'displayfield',
-						       	       			               style:{marginRight: '5px'},
-						       	       			         	   value: 'Buscar: '
-					       	       			               },
-					       	       			               {
-						       	       			               xtype: 'textfield',
-						       	       			               name: 'nombre_busqueda'
-					       	       			               },'->',
-					       	       			         		{
-						       	       			               xtype: 'button',
-						       	       			         	   iconCls: 'addIcon',
-						       	       			               text: 'Buscar',
-						       	       			               handler: function(b,e){
-																    var padre = b.ownerCt;
-																    //obtener valor del campo de texto
-																    var campo = padre.find('name','nombre_busqueda');
-																    if(campo.length>0)
-																    {
-																	    campo = campo[0];
-																	    mainStore.setBaseParam('s[nombre]',campo.getValue());
-																	    mainStore.load();
-																    }
-								       	       			       }
-					       	       			               },
-					       	       			         		{
-						       	       			               xtype: 'button',
-						       	       			         	   iconCls: 'addIcon',
-						       	       			               text: 'Limpiar',
-						       	       			               handler: function(b,e){
-																    var padre = b.ownerCt;
-																    //obtener valor del campo de texto
-																    var campo = padre.find('name','nombre_busqueda');
-																    if(campo.length>0)
-																    {
-																	    campo = campo[0];
-																	    campo.setValue(null);
-																	    mainStore.setBaseParam('s[nombre]',null);
-																	    mainStore.load();
-																    }
-								       	       			       }
-					       	       			               }
-							       	       			]
-				       	       			        },
-				       	       					{
-				               						xtype: 'grid',
-				               						height: 300,
-				               						id: 'mainGrid',
-				               						stripeRows: true,
-				               						loadMask: true,
-				               						sm: new Ext.grid.CellSelectionModel(),
-				               						viewConfig: {
-				               					        forceFit: true,
-				               					        emptyText: 'Sin Registros',
-				               					        loadingText: 'Cargando .. '
-				               						},
-				               						store: mainStore,
-				               						cm: new Ext.grid.ColumnModel([
-														{ header: "Apellido", dataIndex: 'apellido_persona', width: 160},
-														{ header: "Nombre", dataIndex: 'nombre_persona', width: 120},
-														{ header: "Documento(s)", dataIndex: 'documentos', width: 150, renderer: function(v,meta,record){
-															if(v && v.length)
-															{
-																var texto = '';
-																
-																for(var x=0; x<v.length; x++)
-																{
-																	texto += (v[x].valor + ' / ' + v[x].org_documento_tipo_codigo + '<br>');
-																}
-																
-																return texto;
-															}
-															
-															return '-';
-														}},
-														{header: 'Gen.', dataIndex: 'genero_persona'},
-														{ header: "Fecha", align: 'center', dataIndex: 'fecha_nacimiento', width: 150, renderer: function(v,meta,record){
-															if(!v)
-																return '-';
-
-															return v;
-														}},
-														{ header: "Tipo", dataIndex: 'org_parte_tipo_nombre',  width: 100},
-														{ header: "Ver", dataIndex: null, fixed:true, width: 40, align: 'center', renderer: function(v,meta,record){
-															return '<div class="viewIcon" onclick="verPersona(' + record.data.org_parte_id + ')"></div>';
-														}},
-														{ header: "Editar", dataIndex: null,  fixed:true, width: 40, align: 'center', renderer: function(v,meta,record){
-															return '<div class="editIcon" onclick="editarPersona(' + record.data.org_parte_id + ')"></div>';
-														}},
-														{ header: "Borrar", dataIndex: null,  fixed:true, width: 40, align: 'center', renderer: function(v,meta,record){
-															return '<div class="deleteIcon" onclick="borrarPersona(' + record.data.org_parte_id + ')"></div>';
-														}}
-														])
-				           						}
-				       	       			]
-				       	   			},
-				       	   			{
-				       	       			xtype: 'toolbar',
-				       	       			layout: 'toolbar',
-				       	       			cls: 'pagingContainer',
-				       	       			items:[
-				       	       			        {
-					       	       			        xtype: 'button',
-					       	       			        iconCls: 'addIcon',
-					       	       			        text: 'Agregar',
-													handler: function(b,e){
-														//buscamos destino
-														var destino = Ext.getCmp('formContainer');
-														if(destino)
-														{
-															destino.removeAll();
-															var addedEl = destino.add(formularioPersona(true, null));
-															destino.doLayout();
-															addedEl.body.highlight();
-														}
-													}
-				       	       			        },
-						       	       			'->',
-				       	       	   				{
-				       	       	       				xtype: 'paging',
-				       	       	       				displayInfo: true,
-				       	       	       				store: mainStore,
-				       	       	       				pageSize: 10,
-				       	       	       				preprendButtons: true
-				       	       	   				}
-				       	       			]
-				       	   			}
-							]
-						},
-						{
-							xtype: 'container',
-							columnWidth: .35,
-							layout: 'anchor',
-							items:[
-			    					{
-			    						xtype: 'container',
-			    						layout: 'anchor',
-			    						cls: 'oculto',
-			    						id: 'messageBox',
-			    						items:[
-			    						       {
-			        						       xtype: 'container',
-			    						    	   html: 'Generico'
-			    						       }
-			    					
-			   	    					]
-			    					},
-							       {
-									     xtype: 'container',
-									     layout: 'anchor',
-									     id: 'formContainer'
-							       }
-									/*{
-										xtype: 'panel',
-										title: 'Crear Org',
-										cls: 'ladoDerecho',
-										layout: 'anchor',
-										height: 200,
-										items:[]
-									}*/
-							]
+							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
-				]
-			}
-	]
-},
-{
-	xtype: 'container',
-	columnWidth: 1,
-	layout: 'column',
-	cls: 'quickAccessBottom',
-	items:[
-			{
-				cls: 'dataBottom',
-				html: 'Agregar Organizacion',
-				xtype: 'container'
-			},
-			{
-				cls: 'dataBottom',
-				html: 'Agregar Otra Cosa',
-				xtype: 'container'
-			},
-			{
-				cls: 'dataBottom',
-				html: 'Ir Para Otro Lado',
-				xtype: 'container'
-			}				
-	]
-}];
-</script>
+            	 		personasStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+		   				    }
+   						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);         					
+            	 	},
+                }],                       
+            layout: 'fit',
+            emptyText: "No existen personas",
+            
+            store: personasStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+                text: "Nombre",
+                dataIndex: 'nombre_persona',
+                sortable: true,
+                align: 'center',
+                flex: 1.5,
+                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
+                    console.log(metadata);
+                    return '<a href="'+baseURL+'/org/parte/get?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
+            	}
+//	            renderer: function(v,meta,record){
+//					return '<div class="viewIcon" onclick="verPersona(' + personasStore.getAt(0).get('prg_curso_id') + ')"></div>';
+//				}
+            },{
+                text: "Apellido",
+                dataIndex: 'apellido_persona',
+                align: 'center',
+                flex: 1,
+            },{
+                text: "Documento",
+                dataIndex: 'documentos',
+                align: 'center',
+                flex: 1,
+            },{
+                text: "Fecha de Nacimiento",
+                dataIndex: 'fecha_nacimiento',
+                align: 'center',
+                flex: 1,
+            },{
+                text: "Sexo",
+                dataIndex: 'genero_persona',
+                align: 'center',
+                flex: 1,
+            }
+            ]
+            	        	
+		 });
+
+		var pantallaCursos = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 id: 'margen',
+			    width: 'fit',	
+			    renderTo: document.body,		           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 55,
+				    layout:'hbox',
+				    items:[
+						  {
+							    xtype: 'container',
+							    padding: '15 0 0 25',
+							    flex: 1.15,
+							    layout: 'anchor',
+							    defaultType: 'textfield',
+							    //items: [comboCarrera]
+						  }
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '0 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+					           
+							         //  	auxcarrera = valoresForm.carrera;
+			
+										//inicializo los pages
+//							           	page = 0;
+//										gridPlan.store.currentPage = 1;
+//						                planEstudioStore.load({
+//											params: {
+//												"s[pe_plan_estudio_ver_id]": auxcarrera	 		
+//									   		} 
+//						               });
+						            }//end of handler  
+									        
+								},{
+			
+						  		xtype: 'button',
+						  		width: 100,
+						  		margin: '0 0 0 15',
+			               		text: 'Limpiar',
+				           		scale   : 'medium',
+				           		handler: function(b,e) {
+				           			//inicializo los pages
+						           	page = 0;
+									gridPersonas.store.currentPage = 1;
+									//console.log(this);
+				           			b.up('form').getForm().reset();
+				           			personasStore.load();
+							           			
+				           		}
+								}]},{
+									xtype: 'container',
+									layout: 'fit',  
+						            items: [gridPersonas]  					
+								}
+				    	],			    	
+		});
+
+				
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
