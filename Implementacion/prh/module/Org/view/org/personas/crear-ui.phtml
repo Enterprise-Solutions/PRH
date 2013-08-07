@@ -99,14 +99,13 @@ Ext.onReady(function(){
 						           	var auxapellido = valoresForm.apellido;
 						           	var auxfechanacimiento = valoresForm.fecha_de_nacimiento;
 						           	var auxgenero = valoresForm.genero;
-						           	console.log(auxgenero);
-						        	var auxcedula = valoresForm.doc_nro;
+						        	var auxcedula = valoresForm.nro_doc;
 						  
 
 						Ext.Ajax.request({
 							   url: baseURL + '/org/personas/crear',
 							   success: function(response, opt){
-								   mainStore.reload();
+								 //  mainStore.reload();
 							   },
 							   jsonData:{
 							       'post':{
@@ -114,17 +113,20 @@ Ext.onReady(function(){
 									   'nombre': auxnombre,
 									   'apellido': auxapellido,
 									   'genero': auxgenero,
-								   }
+									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
+				 					   'Documentos':{'agregados':[{
+			 							'org_documento_tipo_codigo': 'cedula',
+			 							'dir_pais-id': '1',
+			 							'valor': auxcedula
+			 							}]}
+							       }
 							   }
 						 });
 						
 						
 					};
 
-// 					   'Documentos':{'agregados':[{
-// 							'org_documento_tipo_codigo': 'cedula',
-// 							'valor': auxcedula
-// 						}]}
+
 					
 				var pantallaPersona = Ext.create('Ext.form.Panel', {
 					items:[{
@@ -156,6 +158,7 @@ Ext.onReady(function(){
 						        	fieldLabel: 'Fecha de Nac:',
 						        	labelWidth: 110,
 						 	        xtype: 'datefield',
+						 	       	format: 'd/m/Y',
 						 	        allowBlank: false,
 						 	        padding: 15,
 						 	        anchor:'90%',
@@ -256,12 +259,12 @@ Ext.onReady(function(){
 						                 {
 						                     boxLabel  : 'Masculino',
 						                     name      : 'genero',
-						                     inputValue: 'M',
+						                     inputValue: 'H',
 						                     id        : 'radio1'
 						                 }, {
 						                     boxLabel  : 'Femenino',
 						                     name      : 'genero',
-						                     inputValue: 'F',
+						                     inputValue: 'M',
 						                     id        : 'radio2'
 						                 }
 						             ]
