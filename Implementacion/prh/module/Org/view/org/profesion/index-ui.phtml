@@ -48,7 +48,7 @@ Ext.onReady(function(){
 		});
 		
 		var profesionStore = Ext.create('Ext.data.Store', {
-			model: 'personas',
+			model: 'profesion',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
@@ -249,7 +249,7 @@ Ext.onReady(function(){
                 flex: 1,
             },{
                 text: "Descripci&oacute;n",
-                dataIndex: 'descripci—n',
+                dataIndex: 'descripcion',
                 align: 'left',
                 flex: 1,
             }
