@@ -64,4 +64,13 @@ class BaseController extends AbstractActionController {
 	{
 		
 	}
+	
+	public function _returnAsJson($respuesta)
+	{
+		$viewModel = $this->_seleccionarViewModelSegunContexto(array('Zend\View\Model\JsonModel' => array(
+				'text/html','application/json'
+		)));
+		$viewModel->setVariables($respuesta);
+		return $viewModel;
+	}
 }

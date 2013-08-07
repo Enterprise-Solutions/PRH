@@ -7,7 +7,8 @@ return array(
         	'Org\Controller\Personas' => 'Org\Controller\PersonasController',
         	'Org\Controller\Empresas' => 'Org\Controller\EmpresasController',
         	'Org\Controller\RolesDePartes' => 'Org\Controller\RolesDePartesController',
-        	'Org\Controller\Combos'        => 'Org\Controller\CombosController'
+        	'Org\Controller\Combos'        => 'Org\Controller\CombosController',
+        	'Org\Controller\EstadoCivil'   => 'Org\Controller\EstadoCivilController'
         ),
     ),
     'router' => array(
