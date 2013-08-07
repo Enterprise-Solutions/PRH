@@ -274,7 +274,72 @@ Ext.onReady(function(){
                 dataIndex: 'genero_persona',
                 align: 'center',
                 flex: 1,
-            }
+            },{
+                xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    //tooltip: 'Edit',
+                handler: function(grid, rowIndex, colIndex) {
+                    	var id_edit = religionStore.getAt(rowIndex).get('org_religion_id');
+                    	var nombre_edit = religionStore.getAt(rowIndex).get('nombre');
+						editarwindow(id_edit, nombre_edit);                        
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
+                width: 35,
+                align: 'center',
+                items: [{
+                	icon: baseURL+'/img/icons/grid/delete.png',  
+                    //tooltip: 'Delete',
+                    handler: function(grid, rowIndex, colIndex) {
+                    	var id_delete = personasStore.getAt(rowIndex).get('org_parte_id');
+                    	var nombre_delete = personasStore.getAt(rowIndex).get('nombre_persona');
+                    	var apellido_delete = personasStore.getAt(rowIndex).get('apellido_persona');
+                    	var auxmensaje = 'Confirma que desea borrar a '+nombre_delete+' '+apellido_delete+'?';
+                    	Ext.Msg.show({
+                            title:'Consulta',
+                            msg: auxmensaje,
+                            width: 250,
+                            buttons: Ext.Msg.YESNO,
+                            icon: Ext.Msg.QUESTION,
+                            fn: function(rec) {
+                               if (rec === "yes") {
+                            	   Ext.Ajax.request({
+        							   url: baseURL + '/org/parte/borrar',
+        							   success: function(response, opt){
+        								   Ext.Msg.show({
+        									    title:'Aviso',
+        										msg:'Persona Borrada Correctamente'
+        								   });
+        								   function hide_message() {
+        								       Ext.defer(function() {
+        								           Ext.MessageBox.hide();
+        								       }, delay);
+        								   }
+        								   hide_message();
+        								   personasStore.load();
+        							   },
+        							   jsonData:{
+        							       'delete':[
+        							    	id_delete
+        							       ]
+        							   }
+        						 });
+                              }
+                               else{
+                            	   this.close();
+                               }	                               
+                           }
+                       });
+
+                    	
+                        
+                    }
+                }]
+            }       
             ]
             	        	
 		 });

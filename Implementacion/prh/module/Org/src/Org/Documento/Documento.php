@@ -32,6 +32,18 @@ class Documento
 	 */
 	public $valor;
 	
+	
+	/**
+	 * @Orm\Column(name="dir_pais_id")
+	 */
+	public $dir_pais_id;
+	
+	
+	/**
+	 * @Orm\Column(name="preferencia")
+	 */
+	public $preferencia;
+	
 	/**
 	 * @Orm\Column(name="org_parte_id")
 	 */

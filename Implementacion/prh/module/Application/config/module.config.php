@@ -11,6 +11,11 @@ use Zend\Authentication\AuthenticationService;
 use Zend\Authentication\Adapter\DbTable;
 use Application\Authentication\Db\AuthDao;
 use Application\Authentication\Db\Adapter;
+
+use Application\Login\DirPais\Select as DirPaisSelect;
+use Application\Login\PerDocTipo\Select as PerDocTipoSelect;
+use EnterpriseSolutions\Db\Dao;
+
 return array(
     'router' => array(
         'routes' => array(
@@ -92,6 +97,16 @@ return array(
             	//            ->setCredentialColumn('password');
             	//$authServiceManager->setAdapter($authAdapter);
             	return $authServiceManager;
+            },
+            'DirPaisDao' => function ($sm) {
+                $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                $select = new DirPaisSelect($dbAdapter);
+                return new Dao($select);
+            },
+            'PerDocTipoDao' => function ($sm) {
+                $dbAdapter = $sm->get('Zend\Db\Adapter\Adapter');
+                $select = new PerDocTipoSelect($dbAdapter);
+                return new Dao($select);
             },
             'Identidad' => function($sm){
             	$authService = $sm->get('AuthService');

@@ -26,7 +26,8 @@ class Dao extends GetDao
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
 						list($key,$value) = explode(':', $token);
-						$documento[$key] = $value;
+						//$documento[$key] = $value;
+						$documento[$key] = (in_array($key, array('org_documento_id','dir_pais_id','preferencia')))?(integer)$value:$value;
 					}
 					return $documento;
 				},
