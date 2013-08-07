@@ -1,0 +1,419 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Religion</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+			var mensajes = '<?php echo $texto; ?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+		Ext.define('religion', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'org_religion_id'
+				},
+				{
+					type: 'string',
+					name: 'nombre'
+				}
+			]
+		});
+		
+		var religionStore = Ext.create('Ext.data.Store', {
+			model: 'religion',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]": page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/org/religion/index?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: true
+		});
+
+		function agregarwindow() {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       {
+                    xtype: 'textfield',
+                    fieldLabel: 'Nombre de la Religi&oacute;n',   
+                    allowBlank: false,
+                    name: 'nombre',   
+                }],
+
+                buttons: [{
+                    text: 'Agregar',
+                    handler: function(b,e) {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/org/religion/post',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Religi&oacute;n Cargada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, delay);
+								   }
+								   hide_message();
+								   religionStore.load();
+							   },
+							   jsonData:{
+							       'post':{
+									   'nombre': auxnombre
+							       }
+							   }
+						 });
+						 this.up('window').close();
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').close();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Agregar Religi&oacute;n',
+                closeAction: 'hide',
+                width: 400,
+                height: 200,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+
+		function editarwindow (id_edit, nombre_edit) {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       {
+                    xtype: 'textfield',
+                    fieldLabel: 'Nombre de la Religi&oacute;n',   
+                    allowBlank: false,
+                    value: nombre_edit,
+                    name: 'nombre',   
+                }],
+
+                buttons: [{
+                    text: 'Guardar',
+                    handler: function(b,e) {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/org/religion/put',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Religi&oacute;n Modificada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, delay);
+								   }
+								   hide_message();
+								   religionStore.load();
+							   },
+							   jsonData:{
+							       'put':{
+							    	   'org_religion_id': id_edit,
+									   'nombre': auxnombre
+							       }
+							   }
+						 });
+						 this.up('window').close();
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').close();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Editar Religi&oacute;n',
+                closeAction: 'hide',
+                width: 400,
+                height: 200,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+    	
+		var gridReligion = Ext.create('Ext.grid.Panel', {
+            //title: 'Religi&oacute;n',
+            selModel: {
+                checkOnly: true,
+                injectCheckbox: 1
+            },
+            width: 'fit',
+            padding: '10 10 0 10',
+            height: 530,
+            region: 'center',  
+	           dockedItems: [
+	                {     
+		          	     xtype: 'toolbar',
+                         dock: 'top',
+                         items: [
+                         { 
+                             xtype: 'tbfill' 
+                         },{
+                        	xtype: 'button',	
+     			            text: 'Agregar',
+     		                handler: agregarwindow,
+                         }]
+	                }
+// 	                ,{
+//                     xtype: 'pagingtoolbar',
+//                     store: religionStore, 
+//                     dock: 'bottom',
+//                     displayInfo: true,
+//                     listeners: {
+//                         'afterrender': function (component)
+//                         {
+//                             component.down('#refresh').hide()
+//                         },single: true
+//                     },
+//                     displayMsg: 'Registro {0} al {1} de {2}',
+//                     beforePageText: 'P&aacute;gina',
+//                     afterPageText : 'de {0}',
+//                     moveNext : function(){ 
+//                    		page = page + itemsPorPagina;
+//                    	 	this.store.currentPage++;
+//            				religionStore.load({
+// 	       				    params:{
+// 	       				    	"p[limit]": itemsPorPagina,
+// 	       						"p[page]": page,
+// 	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+// 	       				    }
+//        					});
+//            					console.log("page store: ", page);
+//           				    console.log("page extjs: ",this.store.currentPage);	
+//                 	 },
+//                  	 movePrevious : function(){ 
+//                  		page = page - itemsPorPagina;
+// 						this.store.currentPage--;
+// 						religionStore.load({
+// 		   				    params:{
+// 		   				    	"p[limit]": itemsPorPagina,
+// 		   						"p[page]": page,
+// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+// 		   				    }
+//    						});
+// 	       					console.log("page store: ", page);
+// 	      				    console.log("page extjs: ",this.store.currentPage);	
+//             		 },
+//              		moveFirst : function(){ 
+//              			page = 0;
+// 						this.store.currentPage = 1;
+// 						religionStore.load({
+// 		   				    params:{
+// 		   				    	"p[limit]": itemsPorPagina,
+// 		   						"p[page]": page,
+// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+// 		   				    }
+//    						});
+//        					console.log("page store: ", page);
+//       				    console.log("page extjs: ",this.store.currentPage);	
+//             	 	},
+//             	 	moveLast : function(){                 	 	
+//             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+// 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+// 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+//             	 		}
+// 						else
+// 						{
+// 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+// 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+// 						}
+//             	 		religionStore.load({
+// 		   				    params:{
+// 		   				    	"p[limit]": itemsPorPagina,
+// 		   						"p[page]": page,
+// 		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+// 		   				    }
+//    						});
+//        					console.log("page store: ", page);
+//       				    console.log("page extjs: ",this.store.currentPage);         					
+//             	 	},
+//                 }
+	                ],                       
+            layout: 'fit',
+            emptyText: "No existen religiones cargadas",
+            
+            store: religionStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+                text: "Religi&oacute;n",
+                dataIndex: 'nombre',
+                align: 'center',
+                flex: 1,
+            },{
+                xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    //tooltip: 'Edit',
+                handler: function(grid, rowIndex, colIndex) {
+                    	var id_edit = religionStore.getAt(rowIndex).get('org_religion_id');
+                    	var nombre_edit = religionStore.getAt(rowIndex).get('nombre');
+						editarwindow(id_edit, nombre_edit);                        
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
+                width: 35,
+                align: 'center',
+                items: [{
+                	icon: baseURL+'/img/icons/grid/delete.png',  
+                    //tooltip: 'Delete',
+                    handler: function(grid, rowIndex, colIndex) {
+                    	var id_delete = religionStore.getAt(rowIndex).get('org_religion_id');
+                    	var nombre_delete = religionStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar la Religion '+nombre_delete+'?';
+                    	Ext.Msg.show({
+                            title:'Consulta',
+                            msg: auxmensaje,
+                            width: 250,
+                            buttons: Ext.Msg.YESNO,
+                            icon: Ext.Msg.QUESTION,
+                            fn: function(rec) {
+                               if (rec === "yes") {
+                            	   Ext.Ajax.request({
+        							   url: baseURL + '/org/religion/delete',
+        							   success: function(response, opt){
+        								   Ext.Msg.show({
+        									    title:'Aviso',
+        										msg:'Religi&oacute;n Borrada Correctamente'
+        								   });
+        								   function hide_message() {
+        								       Ext.defer(function() {
+        								           Ext.MessageBox.hide();
+        								       }, delay);
+        								   }
+        								   hide_message();
+        								   religionStore.load();
+        							   },
+        							   jsonData:{
+        							       'delete':[
+        							    	id_delete
+        							       ]
+        							   }
+        						 });
+                              }
+                               else{
+                            	   this.close();
+                               }	                               
+                           }
+                       });
+
+                    	
+                        
+                    }
+                }]
+            }       
+            ]
+            	        	
+		 });
+
+		 
+			
+		var pantalla = Ext.create('Ext.panel.Panel', {
+			id: 'margen',
+			padding: '15 5 0 5', 
+		    //title: ' ',
+		    width: 'fit',
+		    height: 570,
+		    renderTo: Ext.getBody(),
+		    items:[gridReligion],
+		});
+			
+
+
+				
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>

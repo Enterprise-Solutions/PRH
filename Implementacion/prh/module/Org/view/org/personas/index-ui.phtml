@@ -64,25 +64,25 @@ Ext.onReady(function(){
 					type: 'string', 
 					name: 'org_parte_tipo_nombre'
 				},{
-					type: 'string', 
+					type: 'object', 
 					name: 'documentos'
 				}
 			]
 		});
 
-		Ext.define('ComboPersonas', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: '__'
-				},
-				{
-					type: 'string',
-					name: 'nombre'
-				}
-			]
-		});
+// 		Ext.define('ComboPersonas', {
+// 			extend: 'Ext.data.Model',
+// 			fields: [
+// 				{
+// 					type: 'int',
+// 					name: '__'
+// 				},
+// 				{
+// 					type: 'string',
+// 					name: 'nombre'
+// 				}
+// 			]
+// 		});
 
 // 		var ComboPersonasStore = Ext.create('Ext.data.Store', {
 // 			model: 'ComboPersonas',
@@ -250,6 +250,21 @@ Ext.onReady(function(){
                 dataIndex: 'documentos',
                 align: 'center',
                 flex: 1,
+                renderer: function(v,meta,record){
+					if(v && v.length)
+					{
+						var texto = '';
+						
+						for(var x=0; x<v.length; x++)
+						{
+							texto += (v[x].valor + ' / ' + v[x].org_documento_tipo_codigo + '<br>');
+						}
+						
+						return texto;
+					}
+					
+					return '-';
+				}
             },{
                 text: "Fecha de Nacimiento",
                 dataIndex: 'fecha_nacimiento',

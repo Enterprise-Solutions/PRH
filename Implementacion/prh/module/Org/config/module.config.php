@@ -6,6 +6,7 @@ return array(
             'Org\Controller\Parte' => 'Org\Controller\ParteController',
         	'Org\Controller\Personas' => 'Org\Controller\PersonasController',
         	'Org\Controller\Profesion' => 'Org\Controller\ProfesionController',
+        	'Org\Controller\Religion' => 'Org\Controller\ReligionController',
         	'Org\Controller\Empresas' => 'Org\Controller\EmpresasController',
         	'Org\Controller\RolesDePartes' => 'Org\Controller\RolesDePartesController',
         	'Org\Controller\Combos'        => 'Org\Controller\CombosController',

@@ -78,16 +78,44 @@ Ext.onReady(function(){
 					        ]
 						});
 					
-					var profesion = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Abogado"},
-						        {"id": "2", "name":"Arquitecto"},
-						        {"id": "3", "name":"Medico"},
-						        {"id": "4", "name":"Ingeniero"},
-						        {"id": "5", "name":"Otro"}
-					        ]
-						});
+					Ext.define('profesion', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'org_profesion_id'
+							},
+							{
+								type: 'string',
+								name: 'nombre'
+							}
+							,
+							{
+								type: 'string',
+								name: 'abrev'
+							}
+						]
+					});
+					
+					var comboProfesionStore = Ext.create('Ext.data.Store', {
+						model: 'profesion',
+						pageSize: itemsPorPagina, 
+						proxy: {
+							type: 'ajax',
+							  extraParams:{
+							    	"p[limit]": itemsPorPagina,
+									"p[page]": page, 
+							  },
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/org/profesion/index?format=json',
+							reader: {
+								type: 'json',
+								root: 'records',
+								totalProperty: 'numResults'
+							}
+						},
+						autoLoad: true
+					});
 
 
 					var buttonCrear = function(b,e)
@@ -290,16 +318,23 @@ Ext.onReady(function(){
 								        allowBlank: false,
 								        anchor:'90%'
 								    },{
-								        fieldLabel: 'Profesi&oacute;n',
-								        xtype: 'combobox',
-								        store: profesion,
+								    	fieldLabel: 'Profesi&oacute;n',
+								    	xtype: 'combobox',
+								        displayField: 'nombre',
+								        valueField: 'org_profesion_id',
+								        name: 'profesion',
 								        labelWidth: 110,
-								        queryMode: 'local',
-								        displayField: 'name',
-								        valueField: 'id',
-								        allowBlank: true,
+								        store: comboProfesionStore,
+								        queryMode: 'remote',
+								        typeAhead: true,
+								        emptyText: 'Escriba el nombre de la Profesion...',
+								        loadingText: 'Buscando Profesiones...',
+								        hideTrigger: true,
+								        queryParam: 's[nombre]:',
+								        minChars: 1,
 								        padding: 15,
-							 	        anchor:'90%'
+							 	        anchor:'90%',
+								        allowBlank: true,	  
 						    	    }
 					    		]
 					    	}]},{
