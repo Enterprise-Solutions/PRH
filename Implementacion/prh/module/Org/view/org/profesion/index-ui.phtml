@@ -1,0 +1,282 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Profesion</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+			var mensajes = '<?php echo $texto; ?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+		Ext.define('profesion', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'org_profesion_id'
+				},
+				{
+					type: 'string',
+					name: 'nombre'
+				}
+				,
+				{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+		
+		var profesionStore = Ext.create('Ext.data.Store', {
+			model: 'personas',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]": page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/org/profesion/index?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: true
+		});
+
+		function showpopwindow() {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       {
+                    xtype: 'textfield',
+                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
+                    allowBlank: false,
+                    name: 'nombre',   
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Descripci&oacute;n',
+                    allowBlank: false,
+                    name: 'descripcion',   
+                }],
+
+                buttons: [{
+                    text: 'Agregar',
+                    handler: function() {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+			           	var auxdescripcion = valoresForm.descripcion;
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/org/profesion/crear',
+							   success: function(response, opt){
+								 //  mainStore.reload();
+							   },
+							   jsonData:{
+							       'post':{
+									   'org_profesion_id':null,
+									   'nombre': auxnombre,
+									   'descripcion': auxdescripcion,
+							       }
+							   }
+						 });
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').hide();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Agregar Persona',
+                closeAction: 'hide',
+                width: 600,
+                height: 350,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+		var gridProfesion = Ext.create('Ext.grid.Panel', {
+            //title: 'Profesi&oacute;n',
+            selModel: {
+                checkOnly: true,
+                injectCheckbox: 1
+            },
+            width: 'fit',
+            padding: '10 10 0 10',
+            height: 450,
+            region: 'center',  
+	           dockedItems: [
+	                {     
+		          	     xtype: 'toolbar',
+                         dock: 'top',
+                         items: [
+                         { 
+                             xtype: 'tbfill' 
+                         },{
+                        	xtype: 'button',	
+     			            text: 'Agregar',
+     		                handler: showpopwindow,
+                         }]
+	                },{
+                    xtype: 'pagingtoolbar',
+                    store: profesionStore, 
+                    dock: 'bottom',
+                    displayInfo: true,
+                    listeners: {
+                        'afterrender': function (component)
+                        {
+                            component.down('#refresh').hide()
+                        },single: true
+                    },
+                    displayMsg: 'Cursos {0} al {1} de {2}',
+                    beforePageText: 'P&aacute;gina',
+                    afterPageText : 'de {0}',
+                    moveNext : function(){ 
+                   		page = page + itemsPorPagina;
+                   	 	this.store.currentPage++;
+           				profesionStore.load({
+	       				    params:{
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,
+	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+	       				    }
+       					});
+           					console.log("page store: ", page);
+          				    console.log("page extjs: ",this.store.currentPage);	
+                	 },
+                 	 movePrevious : function(){ 
+                 		page = page - itemsPorPagina;
+						this.store.currentPage--;
+						profesionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   				    }
+   						});
+	       					console.log("page store: ", page);
+	      				    console.log("page extjs: ",this.store.currentPage);	
+            		 },
+             		moveFirst : function(){ 
+             			page = 0;
+						this.store.currentPage = 1;
+						profesionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   				    }
+   						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);	
+            	 	},
+            	 	moveLast : function(){                 	 	
+            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+            	 		}
+						else
+						{
+							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+						}
+            	 		profesionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+		   				    }
+   						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);         					
+            	 	},
+                }],                       
+            layout: 'fit',
+            emptyText: "No existen personas",
+            
+            store: profesionStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+                text: "Profesi&oacute;n",
+                dataIndex: 'nombre',
+                align: 'center',
+                flex: 1,
+            },{
+                text: "Descripci&oacute;n",
+                dataIndex: 'descripci—n',
+                align: 'left',
+                flex: 1,
+            }
+            ]
+            	        	
+		 });
+
+		 
+			
+		var pantalla = Ext.create('Ext.panel.Panel', {
+			id: 'margen',
+			padding: '15 5 0 5', 
+		    //title: ' ',
+		    width: 'fit',
+		    height: 570,
+		    renderTo: Ext.getBody(),
+		    items:[gridProfesion],
+		});
+			
+
+
+				
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>

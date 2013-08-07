@@ -362,11 +362,16 @@
 			    	    	src: baseURL + '/img/prh-login.png',
 				            padding: '0 0 0 100',
 				        })},{
+						       xtype: 'container',
+						       flex: 0.5,
+							   html: mensajes,
+							   padding: '270 0 0 0',		
+					      },{
 			        	xtype: 'container',
 			    	    height: 'fit',
 			    	    width: 'fit',
 			    	    flex: 1,
-			    	    padding: '0 0 0 100',
+			    	    padding: '0 0 0 0',
 			    	  //  layout: 'anchor',
 			    	    items:[{
 						       xtype: 'container',
@@ -436,10 +441,6 @@
 		                            			}
 									      ]
 						              },
-						              {
-							              xtype: 'container',
-							              flex: 1
-						              }
 							   ]
 					       },]
 				        }
