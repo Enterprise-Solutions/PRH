@@ -105,7 +105,17 @@ Ext.onReady(function(){
 						Ext.Ajax.request({
 							   url: baseURL + '/org/personas/crear',
 							   success: function(response, opt){
-								 //  mainStore.reload();
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Persona Cargada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, 2000);
+								   }
+								   hide_message();
+								   window.location = baseURL+'/org/personas/index-ui';
 							   },
 							   jsonData:{
 							       'post':{
@@ -114,11 +124,6 @@ Ext.onReady(function(){
 									   'apellido': auxapellido,
 									   'genero': auxgenero,
 									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
-				 					   'Documentos':{'agregados':[{
-			 							'org_documento_tipo_codigo': 'cedula',
-			 							'dir_pais-id': '1',
-			 							'valor': auxcedula
-			 							}]}
 							       }
 							   }
 						 });
@@ -126,7 +131,11 @@ Ext.onReady(function(){
 						
 					};
 
-
+// 					   'Documentos':{'agregados':[{
+// 							'org_documento_tipo_codigo': 'cedula',
+// 							'dir_pais-id': '1',
+// 							'valor': auxcedula
+// 							}]}
 					
 				var pantallaPersona = Ext.create('Ext.form.Panel', {
 					items:[{

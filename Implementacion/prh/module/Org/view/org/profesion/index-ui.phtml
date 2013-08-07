@@ -67,7 +67,7 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 
-		function showpopwindow() {
+		function agregarwindow() {
 			 
             var form = Ext.widget('form', {
                 layout: {
@@ -92,13 +92,13 @@ Ext.onReady(function(){
                 {
                     xtype: 'textfield',
                     fieldLabel: 'Descripci&oacute;n',
-                    allowBlank: false,
+                    allowBlank: true,
                     name: 'descripcion',   
                 }],
 
                 buttons: [{
                     text: 'Agregar',
-                    handler: function() {
+                    handler: function(b,e) {
                     	var basicForm = b.up('form').getForm();  						
 			            var valoresForm = basicForm.getFieldValues();
 
@@ -106,33 +106,43 @@ Ext.onReady(function(){
 			           	var auxdescripcion = valoresForm.descripcion;
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/crear',
+							   url: baseURL + '/org/profesion/post',
 							   success: function(response, opt){
-								 //  mainStore.reload();
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Profesi&oacute;n Cargada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, 2000);
+								   }
+								   hide_message();
+								   profesionStore.load();
 							   },
 							   jsonData:{
 							       'post':{
-									   'org_profesion_id':null,
 									   'nombre': auxnombre,
 									   'descripcion': auxdescripcion,
 							       }
 							   }
 						 });
+						 this.up('window').close();
                     }
                 },{
                     text: 'Cancelar',
                     handler: function() {
                         this.up('form').getForm().reset();
-                        this.up('window').hide();
+                        this.up('window').close();
                     }
                 }]
             });
 
             win = Ext.widget('window', {
-                title: 'Agregar Persona',
+                title: 'Agregar Profesi&oacute;n',
                 closeAction: 'hide',
-                width: 600,
-                height: 350,
+                width: 400,
+                height: 200,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -140,6 +150,94 @@ Ext.onReady(function(){
             }); 
        	 win.show();
     	}  
+
+		function editarwindow (id_edit, nombre_edit, descripcion_edit) {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       {
+                    xtype: 'textfield',
+                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
+                    allowBlank: false,
+                    value: nombre_edit,
+                    name: 'nombre',   
+                },
+                {
+                    xtype: 'textfield',
+                    fieldLabel: 'Descripci&oacute;n',
+                    allowBlank: true,
+                    value: descripcion_edit,
+                    name: 'descripcion',   
+                }],
+
+                buttons: [{
+                    text: 'Editar',
+                    handler: function(b,e) {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+			           	var auxdescripcion = valoresForm.descripcion;
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/org/profesion/put',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Profesi&oacute;n Modificada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, 2000);
+								   }
+								   hide_message();
+								   profesionStore.load();
+							   },
+							   jsonData:{
+							       'put':{
+							    	   'org_profesion_id': id_edit,
+									   'nombre': auxnombre,
+									   'descripcion': auxdescripcion,
+							       }
+							   }
+						 });
+						 this.up('window').close();
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').close();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Editar Profesi&oacute;n',
+                closeAction: 'hide',
+                width: 400,
+                height: 200,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+    	
 		var gridProfesion = Ext.create('Ext.grid.Panel', {
             //title: 'Profesi&oacute;n',
             selModel: {
@@ -160,7 +258,7 @@ Ext.onReady(function(){
                          },{
                         	xtype: 'button',	
      			            text: 'Agregar',
-     		                handler: showpopwindow,
+     		                handler: agregarwindow,
                          }]
 	                },{
                     xtype: 'pagingtoolbar',
@@ -173,7 +271,7 @@ Ext.onReady(function(){
                             component.down('#refresh').hide()
                         },single: true
                     },
-                    displayMsg: 'Cursos {0} al {1} de {2}',
+                    displayMsg: 'Registro {0} al {1} de {2}',
                     beforePageText: 'P&aacute;gina',
                     afterPageText : 'de {0}',
                     moveNext : function(){ 
@@ -237,7 +335,7 @@ Ext.onReady(function(){
             	 	},
                 }],                       
             layout: 'fit',
-            emptyText: "No existen personas",
+            emptyText: "No existen profesiones cargadas",
             
             store: profesionStore,
             loadMask: true,
@@ -250,9 +348,56 @@ Ext.onReady(function(){
             },{
                 text: "Descripci&oacute;n",
                 dataIndex: 'descripcion',
-                align: 'left',
+                align: 'center',
                 flex: 1,
-            }
+            },{
+                xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    //tooltip: 'Edit',
+                handler: function(grid, rowIndex, colIndex) {
+                    	var id_edit = profesionStore.getAt(rowIndex).get('org_profesion_id');
+                    	var nombre_edit = profesionStore.getAt(rowIndex).get('nombre');
+                    	var descripcion_edit = profesionStore.getAt(rowIndex).get('descripcion');
+						editarwindow(id_edit, nombre_edit, descripcion_edit);                        
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
+                width: 35,
+                align: 'center',
+                items: [{
+                	icon: baseURL+'/img/icons/grid/delete.png',  
+                    //tooltip: 'Delete',
+                    handler: function(grid, rowIndex, colIndex) {
+                    	var id_delete = profesionStore.getAt(rowIndex).get('org_profesion_id');
+                    	Ext.Ajax.request({
+							   url: baseURL + '/org/profesion/delete',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Profesi&oacute;n Borrada Correctamente'
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, 2000);
+								   }
+								   hide_message();
+								   profesionStore.load();
+							   },
+							   jsonData:{
+							       'delete':[
+							    	id_delete
+							       ]
+							   }
+						 });
+                        
+                    }
+                }]
+            }       
             ]
             	        	
 		 });

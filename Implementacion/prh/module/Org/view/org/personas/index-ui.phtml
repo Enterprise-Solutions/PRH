@@ -161,7 +161,7 @@ Ext.onReady(function(){
                             component.down('#refresh').hide()
                         },single: true
                     },
-                    displayMsg: 'Cursos {0} al {1} de {2}',
+                    displayMsg: 'Registro {0} al {1} de {2}',
                     beforePageText: 'P&aacute;gina',
                     afterPageText : 'de {0}',
                     moveNext : function(){ 
@@ -225,7 +225,7 @@ Ext.onReady(function(){
             	 	},
                 }],                       
             layout: 'fit',
-            emptyText: "No existen personas",
+            emptyText: "No existen personas cargadas",
             
             store: personasStore,
             loadMask: true,
@@ -240,9 +240,6 @@ Ext.onReady(function(){
                     console.log(metadata);
                     return '<a href="'+baseURL+'/org/parte/get?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
             	}
-//	            renderer: function(v,meta,record){
-//					return '<div class="viewIcon" onclick="verPersona(' + personasStore.getAt(0).get('prg_curso_id') + ')"></div>';
-//				}
             },{
                 text: "Apellido",
                 dataIndex: 'apellido_persona',
@@ -267,68 +264,6 @@ Ext.onReady(function(){
             ]
             	        	
 		 });
-
-		 function showpopwindow() {
-			 
-		            var form = Ext.widget('form', {
-		                layout: {
-		                    type: 'vbox',
-		                    align: 'stretch'
-		                },
-		                border: false,
-		                bodyPadding: 10,
-
-		                fieldDefaults: {
-		                    labelAlign: 'top',
-		                    labelWidth: 100,
-		                    labelStyle: 'font-weight:bold'
-		                },
-		                items: [
-		                       {
-		                    xtype: 'textfield',
-		                    fieldLabel: 'Name',      
-		                    allowBlank: false
-		                },
-		                {
-		                    xtype: 'textfield',
-		                    fieldLabel: 'Your Email Address',
-		                    vtype: 'email',
-		                    allowBlank: false
-		                }],
-
-		                buttons: [{
-		                    text: 'Cancel',
-		                    handler: function() {
-		                        this.up('form').getForm().reset();
-		                        this.up('window').hide();
-		                    }
-		                }, {
-		                    text: 'Submit',
-		                    handler: function() {
-		                        if (this.up('form').getForm().isValid()) {
-		                            // In a real application, this would submit the form to the configured url
-
-		                            this.up('form').getForm().reset();
-		                            this.up('window').hide();
-		                            Ext.MessageBox.alert('Thank you!', 'Your Message has been sent.');
-		                        }
-		                    }
-		                }]
-		            });
-
-		            win = Ext.widget('window', {
-		                title: 'Agregar Persona',
-		                closeAction: 'hide',
-		                width: 600,
-		                height: 350,
-		                layout: 'fit',
-		                resizable: true,
-		                modal: true,
-		                items: form
-		            });
-		        
-		        win.show();
-		    }
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			id: 'margen',
@@ -342,11 +277,6 @@ Ext.onReady(function(){
 			            handler: function() {
 			            	window.location = baseURL+'/org/personas/crear-ui';
 						}
-		            },
-		            {
-			            xtype: 'button',	
-			            text: 'Click me ',
-		                handler: showpopwindow,
 		            }
 		        ],
 		    width: 'fit',
