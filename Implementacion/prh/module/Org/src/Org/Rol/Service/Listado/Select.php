@@ -45,6 +45,15 @@ class Select extends DbSelect
 		$this->_select->where("orp.org_parte_rol_id = $orgParteRolId");
 	}
 	
+	public function addSearchByOrgParteRolIdArray($orgParteRolIdArray)
+	{
+		if(!is_array($orgParteRolIdArray) || count($orgParteRolIdArray) <= 1){
+			return $this;
+		}
+		$orgParteRolIdArray = join(",",$orgParteRolIdArray);
+		$this->_select->where("orp.org_parte_rol_id in ($orgParteRolIdArray)");
+	}
+	
 	public function addSearchByOrgParteTipoCodigo($codigo)
 	{
 		$this->_select->where("op.org_parte_tipo_codigo = '$codigo'");

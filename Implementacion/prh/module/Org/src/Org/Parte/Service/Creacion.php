@@ -10,11 +10,15 @@ use Org\Parte\Factory;
 use Org\Documento\Documento\Factory as docFactory;
 use Org\Documento\Repository as docRepository;
 use Org\Documento\Service as docService;
+
+use Org\Contacto\Factory as contactosFactory;
+use Org\Contacto\Repository as contactosRepository;
+use Org\Contacto\Service as contactosService;
 class Creacion
 {
 	public $_em;
-	public $_factory,$_docFactory;
-	public $_repository,$_docRepository;
+	public $_factory,$_docFactory,$_contactosFactory;
+	public $_repository,$_docRepository,$_contactosRepository;
 	public $_respuesta  = array();
 	public function __construct(EntityManager $em)
 	{
@@ -22,7 +26,10 @@ class Creacion
 		$this->_repository = new Repository($em); 
 		
 		$this->_docRepository = new docRepository($em);
-		$this->_docFactory = new docFactory($this->_docRepository);  	
+		$this->_docFactory = new docFactory($this->_docRepository);
+
+		$this->_contactosRepository = new contactosRepository($em);
+		$this->_contactosFactory = new contactosFactory($this->_contactosRepository);
 	}
 	
 	/**
@@ -46,6 +53,7 @@ class Creacion
 		$this->_setRespuesta($parte);
 		$datos['org_parte'] = $parte;
 		$this->_mantenerDocumentosDeParte($datos);
+		$this->_mantenerContactosDeParte($datos);
 		return $parte;			
 	}
 	
@@ -59,6 +67,16 @@ class Creacion
 		$service = new docService($this->_docFactory,$this->_docRepository);
 		$service->ejecutar($datos);
 		$this->_respuesta['Documentos'] = $service->getRespuesta();
+	}
+	
+	public function _mantenerContactosDeParte($datos)
+	{
+		if(!isset($datos['Contactos'])){
+			return;
+		}
+		$service = new contactosService($this->_contactosFactory,$this->_contactosRepository);
+		$service->ejecutar($datos);
+		$this->_respuesta['Contactos'] = $service->getRespuesta();
 	}
 	
 	public function _setRespuesta($parte)
