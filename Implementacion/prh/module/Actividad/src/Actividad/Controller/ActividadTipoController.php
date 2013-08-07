@@ -16,7 +16,7 @@ use EnterpriseSolutions\Exceptions\Thrower;
 
 class ActividadTipoController extends BaseController
 {
-    public function indexAction($overwritedParams = array('p' => array('page' => 0, 'limit' => 3)))
+    public function indexAction($overwritedParams = array())
     {
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao = new Dao($select);
