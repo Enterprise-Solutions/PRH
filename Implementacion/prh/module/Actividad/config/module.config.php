@@ -37,8 +37,11 @@ return array(
     
     'controllers' => array(
         'invokables' => array(  // Se invoca el controlador
-            'Actividad\Controller\Index' => 'Actividad\Controller\IndexController',
+            'Actividad\Controller\Actividad'     => 'Actividad\Controller\ActividadController',
             'Actividad\Controller\ActividadTipo' => 'Actividad\Controller\ActividadTipoController',
+            'Actividad\Controller\Nivel'         => 'Actividad\Controller\NivelController',
+            'Actividad\Controller\Modalidad'     => 'Actividad\Controller\ModalidadController',
+            'Actividad\Controller\Criterio'      => 'Actividad\Controller\CriterioController',
         ),
     ),
     
@@ -64,7 +67,7 @@ return array(
             __NAMESPACE__ . '_driver' => array(
                 'class' => 'Doctrine\ORM\Mapping\Driver\AnnotationDriver',
                 'cache' => 'array',
-                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__ . '/Entity'),
+                'paths' => array(__DIR__ . '/../src/' . __NAMESPACE__),
             ),
             'orm_default' => array(
                 'drivers' => array(

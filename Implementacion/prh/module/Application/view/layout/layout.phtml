@@ -63,6 +63,7 @@
 
 		var baseURL = '<?=$this->basePath()?>';
 		var logout = baseURL + '/login/leave';
+		var usuario_logueado = '<?php echo $this->logged_user(); ?>';
 		var delay = 2000;
 
 		var menuPersona = Ext.create('Ext.tab.Panel', {
@@ -182,7 +183,7 @@
 			    layout: 'border',
 			    items: [{
 			        region: 'north',
-			        title: 'Atilio Nicolini - Formador',
+			        title: usuario_logueado,
 			        collapsible: true,
 			        anchor:'90%',
 			        collapsed:true,
