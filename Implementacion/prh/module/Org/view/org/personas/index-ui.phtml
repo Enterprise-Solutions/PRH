@@ -237,7 +237,7 @@ Ext.onReady(function(){
                 flex: 1.5,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
-                    return '<a href="'+baseURL+'/org/parte/get?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
+                    return '<a href="'+baseURL+'/org/personas/get-ui#?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
             	}
             },{
                 text: "Apellido",

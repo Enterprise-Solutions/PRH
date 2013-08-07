@@ -71,12 +71,26 @@ Ext.onReady(function(){
 					        ]
 						});
 
+					Ext.define('Pais', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'dirPaisId'
+							},
+							{
+								type: 'string',
+								name: 'nombre'
+							}
+						]
+					});
+					
 					Ext.define('TipoDoc', {
 						extend: 'Ext.data.Model',
 						fields: [
 							{
 								type: 'int',
-								name: 'per_doc_tipo_id'
+								name: 'orgDocumentoTipoCodigo'
 							},
 							{
 								type: 'string',
@@ -172,6 +186,21 @@ Ext.onReady(function(){
 							},
 							autoLoad: true
 						});
+
+						var paisStore = Ext.create('Ext.data.Store', {
+							model: 'Pais',
+							proxy: {
+								type: 'ajax',
+								extraParams: {'p[limit]':'all'},
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/login/dir-pais?format=json',
+								reader: {
+									type: 'json',
+									root: 'records'
+								}
+							},
+							autoLoad: true
+						});
 					
 					var buttonCrear = function(b,e)
 					{
@@ -220,7 +249,7 @@ Ext.onReady(function(){
 				 					   'Documentos':{'agregados':[{
 				 							'org_documento_tipo_codigo': 'cedula',
 				 							'preferencia': '1',
-				 							'dir_pais_id': '1',
+				 							'dir_pais_id': auxdoc_origen,
 				 							'valor': auxcedula
 			 							}]}								   
 							       }
@@ -277,11 +306,9 @@ Ext.onReady(function(){
 								        fieldLabel: 'Origen de Doc',
 								        xtype: 'combobox',
 								        labelWidth: 110,
-								        store: pais,
-								        queryMode: 'local',
-								        displayField: 'name',
-								        valueField: 'id',
-								        value: '1',
+								        store: paisStore,
+								        displayField: 'nombre',
+								        valueField: 'dirPaisId',
 								        allowBlank: false,
 								        padding: 15,
 							 	        anchor:'90%',
@@ -341,7 +368,7 @@ Ext.onReady(function(){
 							        store: tipoDocumentoStore,
 							        queryMode: 'local',
 							        displayField: 'nombre',
-							        valueField: 'per_doc_tipo_id',
+							        valueField: 'orgDocumentoTipoCodigo',
 							        allowBlank: false,
 							        anchor:'90%',
 							        name: 'doc_tipo',
