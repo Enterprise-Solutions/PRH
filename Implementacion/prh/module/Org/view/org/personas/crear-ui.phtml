@@ -126,7 +126,14 @@ Ext.onReady(function(){
 						           	var auxapellido = valoresForm.apellido;
 						           	var auxfechanacimiento = valoresForm.fecha_de_nacimiento;
 						           	var auxgenero = valoresForm.genero;
-						        	var auxcedula = valoresForm.nro_doc;
+
+						        	var auxcedula = valoresForm.doc_nro;
+						        	var auxdoc_tipo = valoresForm.doc_tipo;
+						        	var auxdoc_origen = valoresForm.doc_origen;
+						        	
+						        	var auxnacionalidad = valoresForm.nacionalidad;
+						        	var auxreligion = valoresForm.religion;
+						        	var auxestado_civil = valoresForm.estado_civil;
 						  
 
 						Ext.Ajax.request({
@@ -151,6 +158,10 @@ Ext.onReady(function(){
 									   'apellido': auxapellido,
 									   'genero': auxgenero,
 									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
+
+									   'dir_pais_id': auxnacionalidad,
+									   'org_religion_id': auxreligion,
+									   'org_estado_civil_id': auxestado_civil,									   
 							       }
 							   }
 						 });
@@ -205,7 +216,7 @@ Ext.onReady(function(){
 						    	        allowBlank: false,
 						    	        padding: 15,
 						    	        anchor:'90%',
-						    	        name: 'nro_doc',
+						    	        name: 'doc_nro',
 						    	 },{
 								        fieldLabel: 'Origen de Doc',
 								        xtype: 'combobox',
@@ -217,7 +228,8 @@ Ext.onReady(function(){
 								        value: '1',
 								        allowBlank: false,
 								        padding: 15,
-							 	        anchor:'90%'
+							 	        anchor:'90%',
+							 	        name: 'doc_origen',
 						    	 },{
 								        fieldLabel: 'Religi&oacute;n',
 								        xtype: 'combobox',
@@ -229,7 +241,8 @@ Ext.onReady(function(){
 								        value: '1',
 								        allowBlank: true,
 								        padding: 15,
-							 	        anchor:'90%'
+							 	        anchor:'90%',
+							 	        name: 'religion',
 								    },{
 								    	fieldLabel: 'Nro. de hijos',
 								    	labelWidth: 110,
@@ -238,11 +251,7 @@ Ext.onReady(function(){
 								    	value: 0,
 								    	anchor:'90%',
 								    	padding: 15,
-// 								    },{
-// 						    	    	fieldLabel: 'Nro. de Doc',
-// 						    	    	hidden: true,
-// 						    	    	value: null,
-// 						    	    	name: 'post[org_parte-id]'
+								    	name: 'hijos',
 						    	 	}
 					    	]},{
 					    		xtype: 'container',
@@ -267,7 +276,8 @@ Ext.onReady(function(){
 							        value: '1',
 							        allowBlank: false,
 							        padding: 15,
-						 	        anchor:'90%'
+						 	        anchor:'90%',
+						 	        name: 'nacionalidad', 
 					    	    },{
 							        fieldLabel: 'Tipo de Doc',
 							        xtype: 'combobox',
@@ -280,7 +290,7 @@ Ext.onReady(function(){
 							        value: '1',
 							        allowBlank: false,
 							        anchor:'90%',
-							        name: 'tipo_doc',
+							        name: 'doc_tipo',
 							    },{
 						        	 xtype: 'fieldcontainer',
 						        	 padding: 15,
@@ -315,13 +325,13 @@ Ext.onReady(function(){
 								        valueField: 'id',
 								        value: '2',
 								        allowBlank: false,
-								        anchor:'90%'
+								        anchor:'90%',
+								        name: 'estado_civil',
 								    },{
 								    	fieldLabel: 'Profesi&oacute;n',
 								    	xtype: 'combobox',
 								        displayField: 'nombre',
 								        valueField: 'org_profesion_id',
-								        name: 'profesion',
 								        labelWidth: 110,
 								        store: comboProfesionStore,
 								        queryMode: 'remote',
@@ -333,7 +343,8 @@ Ext.onReady(function(){
 								        minChars: 1,
 								        padding: 15,
 							 	        anchor:'90%',
-								        allowBlank: true,	  
+								        allowBlank: true,
+								        name: 'profesion',	  
 						    	    }
 					    		]
 					    	}]},{
