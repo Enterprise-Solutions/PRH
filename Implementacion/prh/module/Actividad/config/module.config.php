@@ -37,7 +37,7 @@ return array(
     
     'controllers' => array(
         'invokables' => array(  // Se invoca el controlador
-            'Actividad\Controller\Index' => 'Actividad\Controller\IndexController',
+            'Actividad\Controller\Actividad' => 'Actividad\Controller\ActividadController',
             'Actividad\Controller\ActividadTipo' => 'Actividad\Controller\ActividadTipoController',
         ),
     ),

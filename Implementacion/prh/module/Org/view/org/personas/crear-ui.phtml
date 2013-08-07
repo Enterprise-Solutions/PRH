@@ -26,14 +26,6 @@
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
-					var docTipo = Ext.create('Ext.data.Store', {
-				    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Cedula"},
-						        {"id": "2", "name":"Pasaporte"},
-						        {"id": "3", "name":"Otro"}
-					        ]
-					});
 					
 					var estadoCivil = Ext.create('Ext.data.Store', {
 					    fields: ['id', 'name'],
@@ -45,26 +37,6 @@ Ext.onReady(function(){
 					        ]
 						});
 					
-					var nacionalidad = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Paraguaya"},
-						        {"id": "2", "name":"Argentina"},
-						        {"id": "3", "name":"Brasilera"},
-						        {"id": "4", "name":"Uruguaya"},
-						        {"id": "5", "name":"Chilena"}
-					        ]
-						});
-					var pais = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Paraguay"},
-						        {"id": "2", "name":"Argentina"},
-						        {"id": "3", "name":"Brasil"},
-						        {"id": "4", "name":"Uruguay"},
-						        {"id": "5", "name":"Chile"}
-					        ]
-					});
 					
 					var religion = Ext.create('Ext.data.Store', {
 					    fields: ['id', 'name'],
@@ -76,6 +48,42 @@ Ext.onReady(function(){
 						        {"id": "5", "name":"Otro"}
 					        ]
 						});
+					
+					var nacionalidad = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+					        {"id": "1", "name":"Paraguaya"},
+					        {"id": "2", "name":"Argentina"},
+					        {"id": "3", "name":"Brasilera"},
+					        {"id": "4", "name":"Uruguaya"},
+					        {"id": "5", "name":"Chilena"}
+					        ]
+						});
+
+					var pais = Ext.create('Ext.data.Store', {
+					    fields: ['id', 'name'],
+					    data : [
+					        {"id": "1", "name":"Paraguay"},
+					        {"id": "2", "name":"Argentina"},
+					        {"id": "3", "name":"Brasil"},
+					        {"id": "4", "name":"Uruguay"},
+					        {"id": "5", "name":"Chile"}
+					        ]
+						});
+
+					Ext.define('TipoDoc', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'per_doc_tipo_id'
+							},
+							{
+								type: 'string',
+								name: 'nombre'
+							}
+						]
+					});
 					
 					Ext.define('profesion', {
 						extend: 'Ext.data.Model',
@@ -95,28 +103,76 @@ Ext.onReady(function(){
 							}
 						]
 					});
-					
-					var comboProfesionStore = Ext.create('Ext.data.Store', {
-						model: 'profesion',
-						pageSize: itemsPorPagina, 
-						proxy: {
-							type: 'ajax',
-							  extraParams:{
-							    	"p[limit]": itemsPorPagina,
-									"p[page]": page, 
-							  },
-							headers: {'Accept':'application/json'},
-							url: baseURL + '/org/profesion/index?format=json',
-							reader: {
-								type: 'json',
-								root: 'records',
-								totalProperty: 'numResults'
+
+					Ext.define('religion', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'org_religion_id'
+							},
+							{
+								type: 'string',
+								name: 'nombre'
 							}
-						},
-						autoLoad: true
+						]
 					});
-
-
+					
+						var comboProfesionStore = Ext.create('Ext.data.Store', {
+							model: 'profesion',
+							pageSize: itemsPorPagina, 
+							proxy: {
+								type: 'ajax',
+								  extraParams:{
+								    	"p[limit]": itemsPorPagina,
+										"p[page]": page, 
+								  },
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/profesion/index?format=json',
+								reader: {
+									type: 'json',
+									root: 'records',
+									totalProperty: 'numResults'
+								}
+							},
+							autoLoad: true
+						});
+						
+						var comboReligionStore = Ext.create('Ext.data.Store', {
+							model: 'religion',
+							pageSize: itemsPorPagina, 
+							proxy: {
+								type: 'ajax',
+								  extraParams:{
+								    	"p[limit]": itemsPorPagina,
+										"p[page]": page, 
+								  },
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/religion/index?format=json',
+								reader: {
+									type: 'json',
+									root: 'records',
+									totalProperty: 'numResults'
+								}
+							},
+							autoLoad: true
+						});	
+						
+						var tipoDocumentoStore = Ext.create('Ext.data.Store', {
+							model: 'TipoDoc',
+							proxy: {
+								type: 'ajax',
+								extraParams: {'p[limit]':'all'},
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/login/per-doc-tipo?format=json',
+								reader: {
+									type: 'json',
+									root: 'records'
+								}
+							},
+							autoLoad: true
+						});
+					
 					var buttonCrear = function(b,e)
 					{
 									var basicForm = b.up('form').getForm();  						
@@ -158,10 +214,15 @@ Ext.onReady(function(){
 									   'apellido': auxapellido,
 									   'genero': auxgenero,
 									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
-
 									   'dir_pais_id': auxnacionalidad,
 									   'org_religion_id': auxreligion,
-									   'org_estado_civil_id': auxestado_civil,									   
+									   'org_estado_civil_id': auxestado_civil,	
+				 					   'Documentos':{'agregados':[{
+				 							'org_documento_tipo_codigo': 'cedula',
+				 							'preferencia': '1',
+				 							'dir_pais_id': '1',
+				 							'valor': auxcedula
+			 							}]}								   
 							       }
 							   }
 						 });
@@ -169,11 +230,6 @@ Ext.onReady(function(){
 						
 					};
 
-// 					   'Documentos':{'agregados':[{
-// 							'org_documento_tipo_codigo': 'cedula',
-// 							'dir_pais-id': '1',
-// 							'valor': auxcedula
-// 							}]}
 					
 				var pantallaPersona = Ext.create('Ext.form.Panel', {
 					items:[{
@@ -234,11 +290,10 @@ Ext.onReady(function(){
 								        fieldLabel: 'Religi&oacute;n',
 								        xtype: 'combobox',
 								        labelWidth: 110,
-								        store: religion,
-								        queryMode: 'local',
-								        displayField: 'name',
-								        valueField: 'id',
-								        value: '1',
+								        store: comboReligionStore,
+								        //queryMode: 'local',
+								        displayField: 'nombre',
+								        valueField: 'org_religion_id',
 								        allowBlank: true,
 								        padding: 15,
 							 	        anchor:'90%',
@@ -283,11 +338,10 @@ Ext.onReady(function(){
 							        xtype: 'combobox',
 							        labelWidth: 110,
 							        padding: 15,
-							        store: docTipo,
+							        store: tipoDocumentoStore,
 							        queryMode: 'local',
-							        displayField: 'name',
-							        valueField: 'id',
-							        value: '1',
+							        displayField: 'nombre',
+							        valueField: 'per_doc_tipo_id',
 							        allowBlank: false,
 							        anchor:'90%',
 							        name: 'doc_tipo',
