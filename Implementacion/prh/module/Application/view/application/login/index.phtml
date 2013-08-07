@@ -165,8 +165,7 @@
 						Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
 						return;
 					}
-				}
-				
+				}		
 			};
 
 			var formularioInternacional = function(){
@@ -324,8 +323,8 @@
 					        
 			        },
 			        border: 0,
-			        height: 187,
-			        maxHeight: 187,
+			        height: 120,
+			        maxHeight: 120,
 			    },  
 			    {
 			        region: 'south',
@@ -336,8 +335,8 @@
 				        background: 'linear-gradient(to bottom, white, #8291B5, #112D6F)',
 			        },
 			        border: 0,
-			        height: 187,
-			        maxHeight: 187,
+			        height: 110,
+			        maxHeight: 110,
 			    }, 
 			   {
 			        region: 'center',
@@ -360,18 +359,18 @@
 			    	    defaultType: 'textfield',
 			    	    items: Ext.create('Ext.Img', {
 			    	    	src: baseURL + '/img/prh-login.png',
-				            padding: '0 0 0 100',
+				            padding: '20 0 0 100',
 				        })},{
 						       xtype: 'container',
 						       flex: 0.5,
 							   html: mensajes,
-							   padding: '270 0 0 0',		
+							   padding: '300 0 0 0',		
 					      },{
 			        	xtype: 'container',
 			    	    height: 'fit',
 			    	    width: 'fit',
 			    	    flex: 1,
-			    	    padding: '0 0 0 0',
+			    	    padding: '50 0 0 0',
 			    	  //  layout: 'anchor',
 			    	    items:[{
 						       xtype: 'container',
