@@ -105,18 +105,30 @@ Ext.onReady(function(){
 			    params: {
 			        'id': aux,
 			    },
-			    success: function(response){
-			        var text = response.responseText;
-			        	 console.log(text);
-			        	 console.log(text["nombre_persona"]);
+			    success: function(response) {
+			    	var text = Ext.decode(response.responseText);
+			    	console.log(text);
+
+			    	var form = pantalla.getComponent('form');
+			    	console.log(form);
+			    	/*traer form x id
+
+			    	de ese traer su basic form
+
+			    	iterar text 
+
+			    	for(var campo in text)
+				    	c1 =basicform.finfield(campo)
+
+				    	contrrol q exista
+
+				    	c1.setValue(text.campo)*/
 			    }
 			});
 		};
 
-        cargarDatos();
-
-		
 		var pantallaPersona = Ext.create('Ext.form.Panel', {
+			id: 'form',
 			items:[{
 			    xtype: 'panel',
 			    title: 'Datos Personales',
@@ -342,7 +354,8 @@ Ext.onReady(function(){
 		    renderTo: Ext.getBody(),
 		    items:[pantallaPersona],
 		});
-				
+		
+		cargarDatos();
 });
 
 			
