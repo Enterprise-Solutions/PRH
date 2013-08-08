@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Personas</title>
+        <title>PRH - Tipo de Actividad</title>
 
 		<style type="text/css">
 		
@@ -27,90 +27,51 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('personas', {
+		Ext.define('actividadTipo', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
 					type: 'int',
-					name: 'org_parte_id'
-				},
-				{
+					name: 'act_actividad_tipo_id'
+				},{
 					type: 'string',
-					name: 'org_parte_tipo'
-				}
-				,
-				{
+					name: 'nombre'
+				},{
 					type: 'string',
-					name: 'nombre_organizacion'
-				},
-				{
-					type: 'string', 
-					name: 'nombre_persona'
-				},
-				{
-					type: 'string', 
-					name: 'apellido_persona'
+					name: 'codigo'
 				},{
-					type: 'string', 
-					name: 'fecha_nacimiento'
+					type: 'string',
+					name: 'atelier'
 				},{
-					type: 'png', 
-					name: 'foto'
+					type: 'string',
+					name: 'asistencia'
 				},{
-					type: 'string', 
-					name: 'genero_persona'
+					type: 'float',
+					name: 'duracion'
 				},{
-					type: 'string', 
-					name: 'org_parte_tipo_nombre'
+					type: 'string',
+					name: 'nivel'
 				},{
-					type: 'object', 
-					name: 'documentos'
+					type: 'string',
+					name: 'modalidad'
+				},{
+					type: 'string',
+					name: 'criterio'
 				}
 			]
 		});
-
-// 		Ext.define('ComboPersonas', {
-// 			extend: 'Ext.data.Model',
-// 			fields: [
-// 				{
-// 					type: 'int',
-// 					name: '__'
-// 				},
-// 				{
-// 					type: 'string',
-// 					name: 'nombre'
-// 				}
-// 			]
-// 		});
-
-// 		var ComboPersonasStore = Ext.create('Ext.data.Store', {
-// 			model: 'ComboPersonas',
-// 			pageSize: 10, 
-// 			proxy: {
-// 				type: 'ajax',
-// 				extraParams: {'p[limit]':'10'},
-// 				headers: {'Accept':'application/json'},
-// 				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
-// 				reader: {
-// 					type: 'json',
-// 					root: 'records',
-// 					totalProperty: 'numResults',
-// 				}
-// 			},
-// 			autoLoad: true
-// 		});
 		
-		var personasStore = Ext.create('Ext.data.Store', {
-			model: 'personas',
+		var actividadTipoStore = Ext.create('Ext.data.Store', {
+			model: 'actividadTipo',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
 				  extraParams:{
 				    	"p[limit]": itemsPorPagina,
-						"p[page]": page, 
+						"p[page]":  page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/org/personas/index?format=json',
+				url: baseURL + '/actividad/actividad-tipo/index?format=json',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -119,39 +80,33 @@ Ext.onReady(function(){
 			},
 			autoLoad: true
 		});
-	
-
-		 var comboPersonas = Ext.create('Ext.form.field.ComboBox', {
-		        fieldLabel: 'Buscar Persona',
-		        displayField: 'nombre',
-		        valueField: 'pe_asignatura_prop_id',
-		        width: 370,
-		        name: 'nombre',
-		        labelWidth: 70,
-		       // store: ComboPersonasStore,
-		        queryMode: 'remote',
-		        typeAhead: true,
-		        emptyText: 'Escriba el nombre de la Persona...',
-		        loadingText: 'Buscando Personas...',
-		        hideTrigger: true,
-		       // forceSelection: true,
-		        queryParam: 's[nombre]:',
-		        minChars: 2,
-		  });
-		  
-		var gridPersonas = Ext.create('Ext.grid.Panel', {
-            title: 'Personas',
+    	
+		var gridActividadTipo = Ext.create('Ext.grid.Panel', {
+            //title: 'Profesi&oacute;n',
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 450,
+            height: 373,
             region: 'center',  
-	           dockedItems: [{
+	           dockedItems: [
+	                {     
+		          	     xtype: 'toolbar',
+                         dock: 'top',
+                         items: [
+                         { 
+                             xtype: 'tbfill' 
+                         },{
+                        	xtype: 'button',	
+     			            text: 'Crear Tipo de Actividad',
+     		                //handler: agregarwindow,
+                         }]
+	                }
+	                ,{
                     xtype: 'pagingtoolbar',
-                    store: personasStore, 
+                    store: actividadTipoStore, 
                     dock: 'bottom',
                     displayInfo: true,
                     listeners: {
@@ -166,7 +121,7 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
-           				personasStore.load({
+           				actividadTipoStore.load({
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
@@ -179,7 +134,7 @@ Ext.onReady(function(){
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
 						this.store.currentPage--;
-						personasStore.load({
+						actividadTipoStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
@@ -192,7 +147,7 @@ Ext.onReady(function(){
              		moveFirst : function(){ 
              			page = 0;
 						this.store.currentPage = 1;
-						personasStore.load({
+						actividadTipoStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
@@ -212,7 +167,7 @@ Ext.onReady(function(){
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
-            	 		personasStore.load({
+            	 		actividadTipoStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
@@ -222,58 +177,54 @@ Ext.onReady(function(){
        					console.log("page store: ", page);
       				    console.log("page extjs: ",this.store.currentPage);         					
             	 	},
-                }],                       
+                }
+	                ],                       
             layout: 'fit',
-            emptyText: "No existen personas cargadas",
+            emptyText: "No existen tipo de actividades cargadas",
             
-            store: personasStore,
+            store: actividadTipoStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Nombre",
-                dataIndex: 'nombre_persona',
-                sortable: true,
+                text: "Tipo de Actividad",
+                dataIndex: 'nombre',
                 align: 'center',
-                flex: 1.5,
-                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
-                    console.log(metadata);
-                    return '<a href="'+baseURL+'/org/personas/get-ui#?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
-            	}
+                flex: 2.5,
             },{
-                text: "Apellido",
-                dataIndex: 'apellido_persona',
+                text: "C&oacute;digo",
+                dataIndex: 'codigo',
                 align: 'center',
                 flex: 1,
             },{
-                text: "Documento",
-                dataIndex: 'documentos',
+                text: "Atelier",
+                dataIndex: 'atelier',
                 align: 'center',
-                flex: 1,
-                renderer: function(v,meta,record){
-					if(v && v.length)
-					{
-						var texto = '';
-						
-						for(var x=0; x<v.length; x++)
-						{
-							texto += (v[x].valor + ' / ' + v[x].org_documento_tipo_codigo + '<br>');
-						}
-						
-						return texto;
-					}
-					
-					return '-';
-				}
+                flex: 0.6,
             },{
-                text: "Fecha de Nacimiento",
-                dataIndex: 'fecha_nacimiento',
+                text: "Asistencia",
+                dataIndex: 'asistencia',
                 align: 'center',
-                flex: 1,
+                flex: 0.6,
             },{
-                text: "Sexo",
-                dataIndex: 'genero_persona',
+                text: "Duraci&oacute;n",
+                dataIndex: 'duracion',
                 align: 'center',
-                flex: 1,
+                flex: 0.5,
+            },{
+                text: "Nivel",
+                dataIndex: 'codigo',
+                align: 'center',
+                flex: 0.5,
+            },{
+                text: "Modalidad",
+                dataIndex: 'modalidad',
+                align: 'center',
+                flex: 0.5,
+            },{
+                text: "Criterio",
+                dataIndex: 'criterio',
+                align: 'center',
+                flex: 0.4,
             },{
                 xtype:'actioncolumn',
                 width:35,
@@ -281,11 +232,12 @@ Ext.onReady(function(){
                 items: [{
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     //tooltip: 'Edit',
-                handler: function(grid, rowIndex, colIndex) {
-                    	var id_edit = religionStore.getAt(rowIndex).get('org_religion_id');
-                    	var nombre_edit = religionStore.getAt(rowIndex).get('nombre');
-						editarwindow(id_edit, nombre_edit);                        
-                    }
+//                 handler: function(grid, rowIndex, colIndex) {
+//                     	var id_edit = actividadTipoStore.getAt(rowIndex).get('org_profesion_id');
+//                     	var nombre_edit = actividadTipoStore.getAt(rowIndex).get('nombre');
+//                     	var abrev_edit = actividadTipoStore.getAt(rowIndex).get('abrev');
+// 						editarwindow(id_edit, nombre_edit, abrev_edit);                        
+//                     }
                 }]
             },{
                 xtype:'actioncolumn',
@@ -295,10 +247,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = personasStore.getAt(rowIndex).get('org_parte_id');
-                    	var nombre_delete = personasStore.getAt(rowIndex).get('nombre_persona');
-                    	var apellido_delete = personasStore.getAt(rowIndex).get('apellido_persona');
-                    	var auxmensaje = 'Confirma que desea borrar a '+nombre_delete+' '+apellido_delete+'?';
+                    	var id_delete = actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');
+                    	var nombre_delete = actividadTipoStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar el Tipo de Actividad '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -308,11 +259,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/org/parte/borrar',
+        							   url: baseURL + '/actividad/actividad-tipo/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Persona Borrada Correctamente'
+        										msg:'Tipoo de Actividad Borrada Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -320,12 +271,12 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   personasStore.load();
+        								   actividadTipoStore.load();
         							   },
         							   jsonData:{
-        							       'delete':[
-        							    	id_delete
-        							       ]
+        							       'delete':{
+												'act_actividad_tipo_id': id_delete,
+        							       }
         							   }
         						 });
                               }
@@ -343,33 +294,27 @@ Ext.onReady(function(){
             ]
             	        	
 		 });
+
+		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
-		    tbar : [
-		            { xtype: 'tbfill' },
-		            {
-			            xtype: 'button',	
-			            text: 'Crear Persona',
-			            handler: function() {
-			            	window.location = baseURL+'/org/personas/crear-ui';
-						}
-		            }
-		        ],
 		    width: 'fit',
 		    height: 570,
-		    items:[gridPersonas],
+		    items:[gridActividadTipo],
 		    listeners:{
 				'render':function(){
-					Ext.getCmp('topTabPanel').setActiveTab(0);
-					Ext.getCmp('personaTabPanel').setActiveTab(0);
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('personaTabPanel').setActiveTab(1);
 				}
 			}
 		});
-			
-		Ext.getCmp('centerPanel').add(pantalla);
+
+			Ext.getCmp('centerPanel').add(pantalla);
+
+
 				
 });
 

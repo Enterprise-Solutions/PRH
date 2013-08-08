@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Profesion</title>
+        <title>PRH - Estado Civil</title>
 
 		<style type="text/css">
 		
@@ -12,7 +12,7 @@
 				margin-top: 110px;
 		}
         </style>
-
+        
 		<script type="text/javascript">
 
 			var baseURL = '<?=$this->basePath()?>';
@@ -27,27 +27,22 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('profesion', {
+		Ext.define('estadoCivil', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
 					type: 'int',
-					name: 'org_profesion_id'
+					name: 'org_estado_civil_id'
 				},
 				{
 					type: 'string',
 					name: 'nombre'
 				}
-				,
-				{
-					type: 'string',
-					name: 'abrev'
-				}
 			]
 		});
 		
-		var profesionStore = Ext.create('Ext.data.Store', {
-			model: 'profesion',
+		var estadoCivilStore = Ext.create('Ext.data.Store', {
+			model: 'estadoCivil',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
@@ -56,7 +51,7 @@ Ext.onReady(function(){
 						"p[page]": page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/org/profesion/index?format=json',
+				url: baseURL + '/org/estado-civil/index?format=json',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -84,15 +79,9 @@ Ext.onReady(function(){
                 items: [
                        {
                     xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
+                    fieldLabel: 'Nombre del Estado Civil',   
                     allowBlank: false,
                     name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    name: 'abrev',   
                 }],
 
                 buttons: [{
@@ -102,14 +91,13 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/post',
+							   url: baseURL + '/org/estado-civil/post',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Cargada Correctamente'
+										msg:'Estado Civil Cargado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -117,12 +105,11 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   estadoCivilStore.load();
 							   },
 							   jsonData:{
 							       'post':{
-									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+									   'nombre': auxnombre
 							       }
 							   }
 						 });
@@ -138,10 +125,10 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Agregar Profesi&oacute;n',
+                title: 'Agregar Estado Civil',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 150,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -150,7 +137,7 @@ Ext.onReady(function(){
        	 win.show();
     	}  
 
-		function editarwindow (id_edit, nombre_edit, abrev_edit) {
+		function editarwindow (id_edit, nombre_edit) {
 			 
             var form = Ext.widget('form', {
                 layout: {
@@ -168,17 +155,10 @@ Ext.onReady(function(){
                 items: [
                        {
                     xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
+                    fieldLabel: 'Nombre del Estado Civil',   
                     allowBlank: false,
                     value: nombre_edit,
                     name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    value: abrev_edit,
-                    name: 'abrev',   
                 }],
 
                 buttons: [{
@@ -188,14 +168,13 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/put',
+							   url: baseURL + '/org/estado_civil/put',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Modificada Correctamente'
+										msg:'Estado Civil Modificado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -203,13 +182,12 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   estadoCivilStore.load();
 							   },
 							   jsonData:{
 							       'put':{
-							    	   'org_profesion_id': id_edit,
-									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+							    	   'org_estado_civil_id': id_edit,
+									   'nombre': auxnombre
 							       }
 							   }
 						 });
@@ -225,10 +203,10 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Editar Profesi&oacute;n',
+                title: 'Editar Estado Civil',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 150,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -237,15 +215,14 @@ Ext.onReady(function(){
        	 win.show();
     	}  
     	
-		var gridProfesion = Ext.create('Ext.grid.Panel', {
-            //title: 'Profesi&oacute;n',
+		var gridEstadoCivil = Ext.create('Ext.grid.Panel', {
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 530,
+            height: 333,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -260,96 +237,17 @@ Ext.onReady(function(){
      		                handler: agregarwindow,
                          }]
 	                }
-// 	                ,{
-//                     xtype: 'pagingtoolbar',
-//                     store: profesionStore, 
-//                     dock: 'bottom',
-//                     displayInfo: true,
-//                     listeners: {
-//                         'afterrender': function (component)
-//                         {
-//                             component.down('#refresh').hide()
-//                         },single: true
-//                     },
-//                     displayMsg: 'Registro {0} al {1} de {2}',
-//                     beforePageText: 'P&aacute;gina',
-//                     afterPageText : 'de {0}',
-//                     moveNext : function(){ 
-//                    		page = page + itemsPorPagina;
-//                    	 	this.store.currentPage++;
-//            				profesionStore.load({
-// 	       				    params:{
-// 	       				    	"p[limit]": itemsPorPagina,
-// 	       						"p[page]": page,
-// 	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
-// 	       				    }
-//        					});
-//            					console.log("page store: ", page);
-//           				    console.log("page extjs: ",this.store.currentPage);	
-//                 	 },
-//                  	 movePrevious : function(){ 
-//                  		page = page - itemsPorPagina;
-// 						this.store.currentPage--;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-// 	       					console.log("page store: ", page);
-// 	      				    console.log("page extjs: ",this.store.currentPage);	
-//             		 },
-//              		moveFirst : function(){ 
-//              			page = 0;
-// 						this.store.currentPage = 1;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);	
-//             	 	},
-//             	 	moveLast : function(){                 	 	
-//             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
-// 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
-// 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-//             	 		}
-// 						else
-// 						{
-// 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
-// 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-// 						}
-//             	 		profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);         					
-//             	 	},
-//                 }
 	                ],                       
             layout: 'fit',
-            emptyText: "No existen profesiones cargadas",
+            emptyText: "No existen estado_civiles cargadas",
             
-            store: profesionStore,
+            store: estadoCivilStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Profesi&oacute;n",
+                text: "Estado Civil",
                 dataIndex: 'nombre',
                 align: 'left',
-                flex: 1,
-            },{
-                text: "Abreviaci&oacute;n",
-                dataIndex: 'abrev',
-                align: 'center',
                 flex: 1,
             },{
                 xtype:'actioncolumn',
@@ -359,10 +257,9 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     //tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
-                    	var id_edit = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_edit = profesionStore.getAt(rowIndex).get('nombre');
-                    	var abrev_edit = profesionStore.getAt(rowIndex).get('abrev');
-						editarwindow(id_edit, nombre_edit, abrev_edit);                        
+                    	var id_edit = estadoCivilStore.getAt(rowIndex).get('org_estado_civil_id');
+                    	var nombre_edit = estadoCivilStore.getAt(rowIndex).get('nombre');
+						editarwindow(id_edit, nombre_edit);                        
                     }
                 }]
             },{
@@ -373,9 +270,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_delete = profesionStore.getAt(rowIndex).get('nombre');
-                    	var auxmensaje = 'Confirma que desea borrar la profesion '+nombre_delete+'?';
+                    	var id_delete = estadoCivilStore.getAt(rowIndex).get('org_estado_civil_id');
+                    	var nombre_delete = estadoCivilStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar el Estado Civil '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -385,11 +282,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/org/profesion/delete',
+        							   url: baseURL + '/org/estado_civil/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Profesi&oacute;n Borrada Correctamente'
+        										msg:'Estado Civil Borrado Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -397,7 +294,7 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   profesionStore.load();
+        								   estadoCivilStore.load();
         							   },
         							   jsonData:{
         							       'delete':[
@@ -428,12 +325,12 @@ Ext.onReady(function(){
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 500,
-		    items:[gridProfesion],
+		    height: 550,
+		    items:[gridEstadoCivil],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(0);
-					Ext.getCmp('personaTabPanel').setActiveTab(1);
+					Ext.getCmp('personaTabPanel').setActiveTab(3);
 				}
 			}
 		});
@@ -444,8 +341,7 @@ Ext.onReady(function(){
 });
 
 			
-</script>
-		
+		</script>
     </head>
     <body>
     </body>

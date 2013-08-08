@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Profesion</title>
+        <title>PRH - Actividad - Criterio </title>
 
 		<style type="text/css">
 		
@@ -12,7 +12,7 @@
 				margin-top: 110px;
 		}
         </style>
-
+        
 		<script type="text/javascript">
 
 			var baseURL = '<?=$this->basePath()?>';
@@ -27,27 +27,34 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('profesion', {
+		Ext.define('criterio', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
 					type: 'int',
-					name: 'org_profesion_id'
+					name: 'act_criterio_id'
 				},
 				{
 					type: 'string',
-					name: 'nombre'
-				}
-				,
-				{
+					name: 'codigo'
+				},{
 					type: 'string',
-					name: 'abrev'
+					name: 'nombre'
+				},{
+					type: 'float',
+					name: 'horas'
+				},{
+					type: 'date',
+					name: 'fecha_alta'
+				},{
+					type: 'string',
+					name: 'fecha_baja'
 				}
 			]
 		});
 		
-		var profesionStore = Ext.create('Ext.data.Store', {
-			model: 'profesion',
+		var criterioStore = Ext.create('Ext.data.Store', {
+			model: 'criterio',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
@@ -56,7 +63,7 @@ Ext.onReady(function(){
 						"p[page]": page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/org/profesion/index?format=json',
+				url: baseURL + '/actividad/criterio/index?format=json',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -82,18 +89,35 @@ Ext.onReady(function(){
                     labelStyle: 'font-weight:bold'
                 },
                 items: [
-                       {
-                    xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
-                    allowBlank: false,
-                    name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    name: 'abrev',   
-                }],
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Criterio',   
+		                    allowBlank: true,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'C&oacute;digo del Criterio',   
+		                    allowBlank: true,
+		                    name: 'codigo',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Horas',   
+		                    allowBlank: true,
+		                    name: 'horas',   
+                		},{
+                			fieldLabel: 'Fecha de alta:',
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        allowBlank: true,
+				 	        name: 'fecha_alta'  
+                		},{
+                			fieldLabel: 'Fecha de baja:',
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        allowBlank: true,
+				 	        name: 'fecha_baja'  
+                		}
+                       ],
 
                 buttons: [{
                     text: 'Agregar',
@@ -102,14 +126,17 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
+			           	var auxcodigo = valoresForm.codigo;
+			           	var auxhoras = valoresForm.horas;
+			           	var auxfecha_alta = valoresForm.fecha_alta;
+			           	var auxfecha_baja = valoresForm.fecha_baja;
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/post',
+							   url: baseURL + '/actividad/criterio/post',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Cargada Correctamente'
+										msg:'Criterio Cargado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -117,12 +144,15 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   criterioStore.load();
 							   },
 							   jsonData:{
 							       'post':{
 									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+									   'codigo': auxcodigo,
+									   'horas': auxhoras,
+									   'fecha_alta': auxfecha_alta,
+									   'fecha_baja': auxfecha_baja
 							       }
 							   }
 						 });
@@ -138,10 +168,10 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Agregar Profesi&oacute;n',
+                title: 'Agregar Criterio',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 400,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -150,7 +180,7 @@ Ext.onReady(function(){
        	 win.show();
     	}  
 
-		function editarwindow (id_edit, nombre_edit, abrev_edit) {
+		function editarwindow (id_edit, nombre_edit, codigo_edit, horas_edit, alta_edit, baja_edit) {
 			 
             var form = Ext.widget('form', {
                 layout: {
@@ -166,20 +196,40 @@ Ext.onReady(function(){
                     labelStyle: 'font-weight:bold'
                 },
                 items: [
-                       {
-                    xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
-                    allowBlank: false,
-                    value: nombre_edit,
-                    name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    value: abrev_edit,
-                    name: 'abrev',   
-                }],
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Criterio',   
+		                    allowBlank: true,
+		                    value: nombre_edit,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'C&oacute;digo del Criterio',   
+		                    allowBlank: true,
+		                    value: codigo_edit,
+		                    name: 'codigo',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Horas',   
+		                    allowBlank: true,
+		                    value: horas_edit,
+		                    name: 'horas',   
+                		},{
+                			fieldLabel: 'Fecha de alta:',
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        allowBlank: true,
+				 	       	value: alta_edit,
+				 	        name: 'fecha_alta'  
+                		},{
+                			fieldLabel: 'Fecha de baja:',
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        allowBlank: true,
+				 	       	value: baja_edit,
+				 	        name: 'fecha_baja'  
+                		}
+                ],
 
                 buttons: [{
                     text: 'Guardar',
@@ -188,14 +238,17 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
+			        	var auxcodigo = valoresForm.codigo;
+			           	var auxhoras = valoresForm.horas;
+			           	var auxfecha_alta = valoresForm.fecha_alta;
+			           	var auxfecha_baja = valoresForm.fecha_baja;
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/put',
+							   url: baseURL + '/actividad/criterio/put',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Modificada Correctamente'
+										msg:'Criterio Modificado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -203,13 +256,16 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   criterioStore.load();
 							   },
 							   jsonData:{
 							       'put':{
-							    	   'org_profesion_id': id_edit,
-									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+							    	   'act_criterio_id': id_edit,
+							    	   'nombre': auxnombre,
+									   'codigo': auxcodigo,
+									   'horas': auxhoras,
+									   'fecha_alta': auxfecha_alta,
+									   'fecha_baja': auxfecha_baja
 							       }
 							   }
 						 });
@@ -225,10 +281,10 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Editar Profesi&oacute;n',
+                title: 'Editar Criterio',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 400,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -237,15 +293,14 @@ Ext.onReady(function(){
        	 win.show();
     	}  
     	
-		var gridProfesion = Ext.create('Ext.grid.Panel', {
-            //title: 'Profesi&oacute;n',
+		var gridCriterio = Ext.create('Ext.grid.Panel', {
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 530,
+            height: 480,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -260,98 +315,39 @@ Ext.onReady(function(){
      		                handler: agregarwindow,
                          }]
 	                }
-// 	                ,{
-//                     xtype: 'pagingtoolbar',
-//                     store: profesionStore, 
-//                     dock: 'bottom',
-//                     displayInfo: true,
-//                     listeners: {
-//                         'afterrender': function (component)
-//                         {
-//                             component.down('#refresh').hide()
-//                         },single: true
-//                     },
-//                     displayMsg: 'Registro {0} al {1} de {2}',
-//                     beforePageText: 'P&aacute;gina',
-//                     afterPageText : 'de {0}',
-//                     moveNext : function(){ 
-//                    		page = page + itemsPorPagina;
-//                    	 	this.store.currentPage++;
-//            				profesionStore.load({
-// 	       				    params:{
-// 	       				    	"p[limit]": itemsPorPagina,
-// 	       						"p[page]": page,
-// 	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
-// 	       				    }
-//        					});
-//            					console.log("page store: ", page);
-//           				    console.log("page extjs: ",this.store.currentPage);	
-//                 	 },
-//                  	 movePrevious : function(){ 
-//                  		page = page - itemsPorPagina;
-// 						this.store.currentPage--;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-// 	       					console.log("page store: ", page);
-// 	      				    console.log("page extjs: ",this.store.currentPage);	
-//             		 },
-//              		moveFirst : function(){ 
-//              			page = 0;
-// 						this.store.currentPage = 1;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);	
-//             	 	},
-//             	 	moveLast : function(){                 	 	
-//             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
-// 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
-// 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-//             	 		}
-// 						else
-// 						{
-// 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
-// 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-// 						}
-//             	 		profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);         					
-//             	 	},
-//                 }
 	                ],                       
             layout: 'fit',
-            emptyText: "No existen profesiones cargadas",
+            emptyText: "No existen criterios cargados",
             
-            store: profesionStore,
+            store: criterioStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Profesi&oacute;n",
-                dataIndex: 'nombre',
-                align: 'left',
+	                text: "Criterio",
+	                dataIndex: 'nombre',
+	                align: 'left',
                 flex: 1,
-            },{
-                text: "Abreviaci&oacute;n",
-                dataIndex: 'abrev',
-                align: 'center',
-                flex: 1,
-            },{
+            	},{
+                    text: "C&oacute;digo",
+                    dataIndex: 'codigo',
+                    align: 'center',
+                    flex: 1,
+                },{
+                    text: "Duraci&oacute;n",
+                    dataIndex: 'horas',
+                    align: 'center',
+                    flex: 1,
+                },{
+                    text: "Fecha de Alta",
+                    dataIndex: 'fecha_baja',
+                    align: 'center',
+                    flex: 1,
+                },{
+                    text: "Fecha de baja",
+                    dataIndex: 'fecha_baja',
+                    align: 'center',
+                    flex: 1,
+                },{
                 xtype:'actioncolumn',
                 width:35,
                 align: 'center',
@@ -359,10 +355,13 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     //tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
-                    	var id_edit = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_edit = profesionStore.getAt(rowIndex).get('nombre');
-                    	var abrev_edit = profesionStore.getAt(rowIndex).get('abrev');
-						editarwindow(id_edit, nombre_edit, abrev_edit);                        
+                    	var id_edit = criterioStore.getAt(rowIndex).get('act_criterio_id');
+                    	var nombre_edit = criterioStore.getAt(rowIndex).get('nombre');
+                    	var codigo_edit = criterioStore.getAt(rowIndex).get('codigo');
+                    	var horas_edit = criterioStore.getAt(rowIndex).get('horas');
+                    	var alta_edit = criterioStore.getAt(rowIndex).get('fecha_alta');
+                    	var baja_edit = criterioStore.getAt(rowIndex).get('fecha_baja');
+						editarwindow(id_edit, nombre_edit, codigo_edit, horas_edit, alta_edit, baja_edit);                        
                     }
                 }]
             },{
@@ -373,9 +372,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_delete = profesionStore.getAt(rowIndex).get('nombre');
-                    	var auxmensaje = 'Confirma que desea borrar la profesion '+nombre_delete+'?';
+                    	var id_delete = criterioStore.getAt(rowIndex).get('act_criterio_id');
+                    	var nombre_delete = criterioStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar el criterio '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -385,11 +384,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/org/profesion/delete',
+        							   url: baseURL + '/actividad/criterio/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Profesi&oacute;n Borrada Correctamente'
+        										msg:'Criterio Borrado Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -397,12 +396,12 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   profesionStore.load();
+        								   criterioStore.load();
         							   },
         							   jsonData:{
-        							       'delete':[
-        							    	id_delete
-        							       ]
+        							       'delete':{
+												'act_criterio_id': id_delete,
+        							       }
         							   }
         						 });
                               }
@@ -428,12 +427,12 @@ Ext.onReady(function(){
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 500,
-		    items:[gridProfesion],
+		    height: 570,
+		    items:[gridCriterio],
 		    listeners:{
 				'render':function(){
-					Ext.getCmp('topTabPanel').setActiveTab(0);
-					Ext.getCmp('personaTabPanel').setActiveTab(1);
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('personaTabPanel').setActiveTab(4);
 				}
 			}
 		});
@@ -444,8 +443,7 @@ Ext.onReady(function(){
 });
 
 			
-</script>
-		
+		</script>
     </head>
     <body>
     </body>

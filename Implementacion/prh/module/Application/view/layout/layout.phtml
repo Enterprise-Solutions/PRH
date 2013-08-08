@@ -66,24 +66,34 @@
 		var usuario_logueado = '<?php echo $this->logged_user(); ?>';
 		var delay = 2000;
 
+		var verURL = function(){
+			if (window.location) {
+			    var auxurl = (window.location.pathname).split("prh/");
+			    var auxpath = (auxurl[1]).split("/");
+		        var path = '/'+auxpath[0]+'/'+auxpath[1];
+			    console.log(path);
+ 					return path;
+			}
+		};
+		
 		var menuPersona = Ext.create('Ext.tab.Panel', {
-			 anchor:'90%',
-		    height: '500',
+		   autoHeight:true,
 		    plain: true, 
-		    layout: {
-	            pack : 'center',
-	            align: 'center'
-	        },
-		    renderTo: document.body,
+		    style:{border:'none !important'},
+		    border: false,
+		    id: 'personaTabPanel',
+		    frame:false,
+		    //renderTo: document.body,
 		    items: [{
 		        title: 'Personas',
+/* esto tenes que descomentar, pero cuando haces eso el layout te lleva
+a esta pagina por el active predeterminado de la tabla, parece que re asigna el tab*/		        
 // 		        listeners: {
 // 			        activate: function() {
-// 				        var urlaux = baseURL+'/org/personas/index-ui';
-// 				        console.log(window.location.pathname);
-// 				        console.log(urlaux);
-// 				        if (window.location.pathname != baseURL+'/org/personas/index-ui')
+// 			        	var url = verURL(); 
+// 				        if (url != '/org/personas')
 // 				        {    
+// 					        console.log("prueba");
 // 				            	Ext.Ajax.request({
 // 				            	    url: '/prh/org/personas/index-ui',
 // 				            	    method: 'GET',
@@ -105,7 +115,7 @@
 // 				            	});
 // 				         }     	
 // 	            	}
-//		        }
+// 		        }
 		    },{
 		        title: 'Profesi&oacute;n',
 		    },{
@@ -124,13 +134,13 @@
 		});
 		
 		var menuActividad = Ext.create('Ext.tab.Panel', {
-			anchor:'90%',
-		    height: 'fit',
+		    layout: 'fit',
+		    border:0,
+		    id: 'actividadTabPanel',
 		    plain: true,
-		    renderTo: document.body,
+		    //renderTo: document.body,
 		    items: [{
-		        title: 'Actividad',
-		       // items: [tabActividad],
+		        title: 'Actividad'
 		    },{
 		        title: 'Tipo de Actividad',
 		    },{
@@ -145,115 +155,126 @@
 		});
 		
 		
-			
-		    var pantalla = Ext.create('Ext.tab.Panel', {
-				//title: 'Hoola',
-		    	anchor:'90%',
-				height: 'fit',
-				//activeTab: 3,
-				autoScroll: true,
-				border: 0,
-				plain: false,
-				buttonAlign: 'center',
-				renderTo: document.body,
-				items: [{
-					    title: 'Persona',
-					    items:[menuPersona],
-					},{
-					    title: 'Actividad',
-					    items:[menuActividad],
-					},{
-					    title: 'Calendario',
-					},{
-					    title: 'Stock',
-					},{
-					    title: 'Aporte',
-					},{
-					    title: 'Balance',
-					},{
-					    title: 'Presupuesto',
-					},{
-					    title: 'Estad&iacute;stica',
-				}]
-			});
 		
 		Ext.onReady(function(){
 			
 			Ext.create('Ext.container.Viewport', {
 			    layout: 'border',
-			    items: [{
-			        region: 'north',
-			        title: usuario_logueado,
-			        collapsible: true,
-			        anchor:'90%',
-			        collapsed:true,
-			        bodyStyle: {
-			        	background: 'white',
-			        	width: '100%',
-			        	height: '100%',
-			        },
-			        border: 0,
-			        height: 140,
-			        //maxHeight: 205,
-			        layout: 'hbox',
-			        items:[
-			        {
-			        	xtype: 'panel',
-			        	flex: 0.3,
-			    	    width: '300',
-			    	    height: 'fit',
-			    	    border: 0,
-			             padding: '0 0 0 0',
-			             defaultType: 'textfield',
-			             items: [ 
-			    					{	
-			    						 xtype: 'container',
-			    						  style: 'text-align:left',
-			    						  padding: 10,
-			    						  items: [{
-			    						      xtype: 'button',
-			    						      scale: 'large',
-			    						      text: 'SALIR',
-			    								width:90,
-			    								//disabled: true,
-			    								handler: function() {
-			    						      	window.location = logout; 
-			    								}
-			    						  }]
-			    					}
-			    		  ]
-			        	
-			        },{
-			    	    xtype: 'container',
-			    	    flex: 1,
-			    	    padding: '0 10 10 10',
-			    	    layout: 'anchor',
-			    	    defaultType: 'textfield',
-			    	    items: Ext.create('Ext.Img', {
-				            src: baseURL + '/img/prh-layout.png',
-				            padding: '0 0 0 820',
-				        })}]
-			    },
-// 			    {
-// 			        region: 'south',
-// 			      //  title: 'PRH - PARAGUAY',
-// 			        baseCls: 'completo',
-// 			       // collapsible: true,
-// 			       // html: 'Information goes here',
-// 			        bodyStyle: {
-// 			        	background: '#112D6F',
-// 			        },
-// 			        border: 0,
-// 			        height: 30,
-// 			        maxHeight: 30,
-// 			    }, 
+			    items: [
+				{
+				    xtype: 'container',
+				region: 'north',	
+				layout: 'anchor',
+				height: 120,
+				items:[
+				
+				{
+				   //title: usuario_logueado,
+				   xtype: 'container',
+				    //collapsible: true,
+				    style:{marginBottom: '7px'},
+				    //collapsed:true,
+				    border: 0,
+				    //html: usuario_logueado,
+				    height: 40,
+				    //maxHeight: 205,
+				    layout: 'column',
+				    items:[
+				           {
+				               xtype:'container',
+				               html: usuario_logueado,
+				               columnWidth:.5
+				           },
+				           {
+											xtype: 'container',
+											columnWidth:.5,
+										    layout: 'fit',
+										    border: 0,
+										     padding: '0 0 0 0',
+										     defaultType: 'textfield',
+										     items: [ 
+														{	
+															 xtype: 'container',
+															  style: 'text-align:left',
+															  padding: 10,
+															  items: [{
+															      xtype: 'button',
+															      scale: 'large',
+															      style:{float:'right'},
+															      text: 'SALIR',
+																	width:90,
+																	//disabled: true,
+																	handler: function() {
+															      	window.location = logout; 
+																	}
+															  }]
+														}
+											  ]
+											
+										}
+							/*,
+										{
+										    xtype: 'container',
+										    flex: 1,
+										    padding: '0 10 10 10',
+										    layout: 'anchor',
+										    defaultType: 'textfield',
+										    items: Ext.create('Ext.Img', {
+										        src: baseURL + '/img/prh-layout.png',
+										        padding: '0 0 0 820',
+										    })
+									    }*/
+				        ]
+				},
+				{
+				   xtype: 'container',
+				   height: 100,
+				   layout: 'anchor',
+				   items:[
+				          {
+							xtype: 'tabpanel',
+							height: 75,
+							layout: 'anchor',
+							id: 'topTabPanel',
+							//activeTab: 3,
+							border: false,
+							plain: false,
+							buttonAlign: 'center',
+							items: [{
+								    title: 'Persona',
+								    items:[menuPersona],
+								},{
+								    title: 'Actividad',
+								    items:[menuActividad],
+								},{
+								    title: 'Calendario',
+								},{
+								    title: 'Stock',
+								},{
+								    title: 'Aporte',
+								},{
+								    title: 'Balance',
+								},{
+								    title: 'Presupuesto',
+								},{
+								    title: 'Estad&iacute;stica',
+							}]
+				          }
+				
+				   ]
+				}
+				]
+				},	 
 			   {
 			        region: 'center',
 			        //anchor:'90%',
-			        height:'fit',
-			        items:[pantalla],
+			        id: 'centerPanel',
+			        autoScroll:true,
+			        layout:'anchor',
+			        items:[]
     
-			    }]
+			    }
+			    ]
 			});
 			
 

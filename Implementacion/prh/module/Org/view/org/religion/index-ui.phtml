@@ -128,7 +128,7 @@ Ext.onReady(function(){
                 title: 'Agregar Religi&oacute;n',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 150,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -206,7 +206,7 @@ Ext.onReady(function(){
                 title: 'Editar Religi&oacute;n',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 150,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -223,7 +223,7 @@ Ext.onReady(function(){
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 530,
+            height: 333,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -322,7 +322,7 @@ Ext.onReady(function(){
             columns:[{
                 text: "Religi&oacute;n",
                 dataIndex: 'nombre',
-                align: 'center',
+                align: 'left',
                 flex: 1,
             },{
                 xtype:'actioncolumn',
@@ -396,16 +396,21 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 570,
-		    renderTo: Ext.getBody(),
+		    height: 550,
 		    items:[gridReligion],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(0);
+					Ext.getCmp('personaTabPanel').setActiveTab(2);
+				}
+			}
 		});
 			
-
+		Ext.getCmp('centerPanel').add(pantalla);
 
 				
 });

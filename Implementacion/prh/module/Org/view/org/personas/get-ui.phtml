@@ -105,27 +105,63 @@ Ext.onReady(function(){
 			    params: {
 			        'id': aux,
 			    },
-			    success: function(response){
-			        var text = response.responseText;
-			        	 console.log(text);
-			        	 console.log(text["nombre_persona"]);
+			    success: function(response) {
+			    	var campos = Ext.decode(response.responseText);
+			    	var form = Ext.getCmp('form').getForm();
+			    	
+			    	for (campo in campos) {
+				    	var name = form.findField(campo);
+
+				    	if (campo == "fecha_nacimiento")
+				    	{
+				    		var fecha = campos["fecha_nacimiento"];
+		 			    	var fecha2 = fecha.split("-");
+		 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+		 			    	campos[campo] = result;
+		 			    	name.setValue(campos[campo]);
+					    }else if (campo == "genero_persona")
+				    	{
+					    	if (campo == 'M')
+					    		campos[campo] = 'Masculino';
+					    	else
+					    		campos[campo] = 'Femenino';
+		 			    	name.setValue(campos[campo]);
+					    } else
+					    	if (name) {
+						    	name.setValue(campos[campo]);
+						    	console.log(campo);
+					    	}		
+			    	}
+			    	
+			    	/*traer form x id
+
+			    	de ese traer su basic form
+
+			    	iterar text 
+
+			    	for(var campo in text)
+				    	c1 =basicform.finfield(campo)
+
+				    	contrrol q exista
+
+				    	c1.setValue(text.campo)*/
 			    }
 			});
 		};
 
-        cargarDatos();
-
-		
 		var pantallaPersona = Ext.create('Ext.form.Panel', {
+			id: 'form',
 			items:[{
 			    xtype: 'panel',
+			    bodyStyle: {
+		        	background: '#C8CED8',
+		        },
 			    title: 'Datos Personales',
-			    collapsible: true,
+			    //collapsible: true,
 			    //anchor:'90%',
 			    height: 'fit',
 			    width: 'fit',
 			    border: 1,
-			//    flex: 1,
 			    padding: '5 15 0 15',
 			    layout: 'hbox',
 			    defaultType: 'textfield',
@@ -136,78 +172,79 @@ Ext.onReady(function(){
 					defaultType: 'textfield',
 					items: [    
 					    {
-					    	xtype: 'displayfield',
-					        fieldLabel: 'Nombres',
-					        padding: 15,
-					        labelWidth: 110,
-					        anchor:'90%',
-					        value: 'Fulano',
-					        name: 'nombre',
-					        style: {
-					            borderColor: '#112D6F',
-					            borderStyle: 'simple',
-					        }
-					    },{
-				        	fieldLabel: 'Fecha de Nac:',
-				        	xtype: 'displayfield',
-					        padding: 15,
-					        labelWidth: 110,
-					        anchor:'90%',
-					        value: ' ',
-				 	        name: 'fecha_de_nacimiento'
-				         },{
+						    	xtype: 'displayfield',
+						        fieldLabel: 'Nombres',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'nombre_persona',
+						},{
 				    	    	fieldLabel: 'Nro. de Doc',
 					        	xtype: 'displayfield',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        value: ' ',
 				    	        name: 'doc_nro',
+				    	},{
+				        	fieldLabel: 'Fecha de Nac:',
+				        	xtype: 'displayfield',
+					        padding: 15,
+					        labelWidth: 110,
+					        anchor:'90%',
+				 	        name: 'fecha_nacimiento'
+				    	},{
+						        fieldLabel: 'Religi&oacute;n',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+					 	        name: 'religion',
+						  }
+			    	]},{
+					xtype: 'container',
+					flex: 1,
+					layout: 'anchor',
+					defaultType: 'textfield',
+					items: [{
+				    	        fieldLabel: 'Apellidos',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'apellido_persona'
 				    	 },{
 						        fieldLabel: 'Origen de Doc',
 					        	xtype: 'displayfield',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        value: ' ',
 					 	        name: 'doc_origen',
 				    	 },{
-						        fieldLabel: 'Religi&oacute;n',
-					        	xtype: 'displayfield',
+						        fieldLabel: 'Estado Civil',
+						        xtype: 'displayfield',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        value: ' ',
-					 	        name: 'religion',
-						    },{
-						    	fieldLabel: 'Nro. de hijos',
-					        	xtype: 'displayfield',
+						        name: 'estado_civil',
+						 },{
+						    	fieldLabel: 'Profesi&oacute;n',
+						    	xtype: 'displayfield',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        value: ' ',
-						    	name: 'hijos',
-				    	 	}
+						        name: 'profesion',	  
+				    	   }
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
 		                layout: 'anchor',
 		                defaultType: 'textfield',
 		                items: [{
-					    	        fieldLabel: 'Apellidos',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        value: ' ',
-							        name: 'apellido'
-					    	    },{
 							        fieldLabel: 'Nacionalidad',
 						        	xtype: 'displayfield',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        value: ' ',
 						 	        name: 'nacionalidad', 
 					    	    },{
 							        fieldLabel: 'Tipo de Doc',
@@ -215,7 +252,6 @@ Ext.onReady(function(){
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        value: ' ',
 							        name: 'doc_tipo',
 							    },{
 							    	fieldLabel: 'Sexo',
@@ -223,30 +259,23 @@ Ext.onReady(function(){
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        value: ' ',
-							        name: 'genero',
+							        name: 'genero_persona',
 						         },{
-							        fieldLabel: 'Estado Civil',
-							        xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        value: ' ',
-							        name: 'estado_civil',
-								 },{
-							    	fieldLabel: 'Profesi&oacute;n',
-							    	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        value: ' ',
-							        name: 'profesion',	  
-					    	    }
+								    	fieldLabel: 'Nro. de hijos',
+							        	xtype: 'displayfield',
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								    	name: 'hijos',
+						    	 }
 			    		]
 			    	}]},{
 			    xtype: 'panel',
+			    bodyStyle: {
+		        	background: '#C8CED8',
+		        },
 			    title: 'Datos de Ubicaci&oacute;n',
-			    collapsible: true,
+			    //collapsible: true,
 			    height: 'fit',
 			    width: 'fit',
 			    border: 1,
@@ -273,8 +302,11 @@ Ext.onReady(function(){
 				    }
 			    	    ]},{
 		    	xtype: 'panel',
+		    	bodyStyle: {
+		        	background: '#C8CED8',
+		        },
 			    title: 'Datos de Contacto',
-			    collapsible: true,
+			    //collapsible: true,
 			    height: 'fit',
 			    width: 'fit',
 			    border: 1,
@@ -342,7 +374,8 @@ Ext.onReady(function(){
 		    renderTo: Ext.getBody(),
 		    items:[pantallaPersona],
 		});
-				
+		
+		cargarDatos();
 });
 
 			
