@@ -59,8 +59,7 @@ class ActividadTipoController extends BaseController
     public function deleteAction()
     {
         $em = $this->getEntityManager();
-        //$data = $this->SubmitParams()->getParam('delete');
-        $data = array('act_actividad_tipo_id' => 143);
+        $data = $this->SubmitParams()->getParam('delete');
         
         $service = new EliminarActividadTipoService($em);
         $service->ejecutar($data);
