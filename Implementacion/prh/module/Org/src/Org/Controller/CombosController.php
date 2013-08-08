@@ -52,4 +52,13 @@ class CombosController extends BaseController
 		$template = $this->_crearTemplateParaListado();
 		return $template($dao);
 	}
+	
+	public function orgContactoTipoAction()
+	{
+	    $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+	    $select->_select->from('org_contacto_tipo');
+	    $dao = new Dao($select);
+	    $template = $this->_crearTemplateParaListado();
+	    return $template($dao);
+	}
 }
