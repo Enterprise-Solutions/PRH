@@ -110,27 +110,31 @@ Ext.onReady(function(){
 			    	var form = Ext.getCmp('form').getForm();
 			    	
 			    	for (campo in campos) {
+				    	if (campo == "documentos"){
+							var doc = (campos[campo]);
+							console.log(doc["org_documento_id"]);
+			    		}	
 				    	var name = form.findField(campo);
-
-				    	if (campo == "fecha_nacimiento")
-				    	{
-				    		var fecha = campos["fecha_nacimiento"];
-		 			    	var fecha2 = fecha.split("-");
-		 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
-		 			    	campos[campo] = result;
-		 			    	name.setValue(campos[campo]);
-					    }else if (campo == "genero_persona")
-				    	{
-					    	if (campo == 'M')
-					    		campos[campo] = 'Masculino';
-					    	else
-					    		campos[campo] = 'Femenino';
-		 			    	name.setValue(campos[campo]);
-					    } else
-					    	if (name) {
-						    	name.setValue(campos[campo]);
-						    	console.log(campo);
-					    	}		
+				    		if (name) {
+					    	if (campo == "fecha_nacimiento")
+					    	{
+					    		var fecha = campos["fecha_nacimiento"];
+			 			    	var fecha2 = fecha.split("-");
+			 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+			 			    	campos[campo] = result;
+			 			    	name.setValue(campos[campo]);
+						    }else if (campo == "genero_persona")
+					    	{
+						    	if (campo == 'M')
+						    		campos[campo] = 'Masculino';
+						    	else
+						    		campos[campo] = 'Femenino';
+			 			    	name.setValue(campos[campo]);
+						    } else{
+						    
+							    	name.setValue(campos[campo]);
+							    	console.log(campo);
+					    }	}	
 			    	}
 			    	
 			    	/*traer form x id

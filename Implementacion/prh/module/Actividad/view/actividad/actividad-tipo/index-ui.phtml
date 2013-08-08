@@ -99,10 +99,12 @@ Ext.onReady(function(){
                          { 
                              xtype: 'tbfill' 
                          },{
-                        	xtype: 'button',	
-     			            text: 'Crear Tipo de Actividad',
-     		                //handler: agregarwindow,
-                         }]
+     			            xtype: 'button',	
+    			            text: 'Crear Tipo de Actividad',
+    			            handler: function() {
+    			            	window.location = baseURL+'/actividad/actividad-tipo/crear-ui';
+    						}
+    		            }]
 	                }
 	                ,{
                     xtype: 'pagingtoolbar',
