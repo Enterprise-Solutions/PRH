@@ -171,7 +171,7 @@ Ext.onReady(function(){
                 title: 'Agregar Criterio',
                 closeAction: 'hide',
                 width: 400,
-                height: 200,
+                height: 400,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -300,7 +300,7 @@ Ext.onReady(function(){
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 333,
+            height: 480,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -423,16 +423,21 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
 		    height: 570,
-		    renderTo: Ext.getBody(),
 		    items:[gridCriterio],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('personaTabPanel').setActiveTab(4);
+				}
+			}
 		});
 			
-
+		Ext.getCmp('centerPanel').add(pantalla);
 
 				
 });

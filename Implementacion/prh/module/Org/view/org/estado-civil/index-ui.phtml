@@ -321,16 +321,21 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 570,
-		    renderTo: Ext.getBody(),
+		    height: 550,
 		    items:[gridEstadoCivil],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(0);
+					Ext.getCmp('personaTabPanel').setActiveTab(3);
+				}
+			}
 		});
 			
-
+		Ext.getCmp('centerPanel').add(pantalla);
 
 				
 });

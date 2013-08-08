@@ -330,7 +330,7 @@ Ext.onReady(function(){
             columns:[{
 	                text: "Nivel",
 	                dataIndex: 'nombre',
-	                align: 'center',
+	                align: 'left',
                 flex: 1,
             	},{
                     text: "Descripci&oacute;n",
@@ -407,15 +407,22 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
 		    height: 570,
-		    renderTo: Ext.getBody(),
 		    items:[gridNivel],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('personaTabPanel').setActiveTab(4);
+				}
+			}
 		});
 			
+		Ext.getCmp('centerPanel').add(pantalla);
+		
 
 
 				

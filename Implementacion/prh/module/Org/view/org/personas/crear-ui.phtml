@@ -84,6 +84,28 @@ Ext.onReady(function(){
 							}
 						]
 					});
+
+					Ext.define('nacionalidad', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'dir_pais_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							},{
+								type: 'string',
+								name: 'nacionalidad'
+							},{
+								type: 'string',
+								name: 'abrev'
+							},{
+								type: 'string',
+								name: 'codigo'
+							}
+						]
+					});
 					
 					Ext.define('TipoDoc', {
 						extend: 'Ext.data.Model',
@@ -201,6 +223,21 @@ Ext.onReady(function(){
 							},
 							autoLoad: true
 						});
+
+						var nacionalidadStore = Ext.create('Ext.data.Store', {
+							model: 'nacionalidad',
+							proxy: {
+								type: 'ajax',
+								extraParams: {'p[limit]':'all'},
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/combos/dir-pais?format=json',
+								reader: {
+									type: 'json',
+									root: 'records'
+								}
+							},
+							autoLoad: true
+						});
 					
 					var buttonCrear = function(b,e)
 					{
@@ -260,7 +297,7 @@ Ext.onReady(function(){
 					};
 
 					
-				var pantallaPersona = Ext.create('Ext.form.Panel', {
+				var panelPersona = Ext.create('Ext.form.Panel', {
 					items:[{
 					    xtype: 'panel',
 					    title: 'Datos Personales',
@@ -351,14 +388,13 @@ Ext.onReady(function(){
 							        fieldLabel: 'Nacionalidad',
 							        xtype: 'combobox',
 							        labelWidth: 110,
-							        store: nacionalidad,
-							        queryMode: 'local',
-							        displayField: 'name',
-							        valueField: 'id',
-							        value: '1',
+							        store: nacionalidadStore,
+							        displayField: 'nacionalidad',
+							        valueField: 'dir_pais_id',
 							        allowBlank: false,
 							        padding: 15,
 						 	        anchor:'90%',
+						 	       	minChars: 1,
 						 	        name: 'nacionalidad', 
 					    	    },{
 							        fieldLabel: 'Tipo de Doc',
@@ -445,6 +481,7 @@ Ext.onReady(function(){
 						        width: 400,
 						        anchor:'90%',
 						    	padding: 15,
+						    	name: 'direccion',
 						    },{
 						        fieldLabel: 'Ciudad',
 						       // allowBlank: false,
@@ -471,22 +508,22 @@ Ext.onReady(function(){
 									    fieldLabel: 'Email',
 									    vtype: 'email',
 									    width: 400,
-								//	    allowBlank: false,
-								         flex: 2,
+								        flex: 2,
 									    padding: 15,
-									    anchor:'90%'
+									    anchor:'90%',
+										name: 'email',
 									},{
 									    fieldLabel: 'Tel&eacute;fono',
-								//	    allowBlank: false,
 								         flex: 1,
 									    anchor:'90%',
 										padding: 15,
+										name: 'telefono',
 									},{
 									    fieldLabel: 'Celular',
-								//	    allowBlank: false,
 								         flex: 1,
 									    padding: 15,
-									    anchor:'90%'
+									    anchor:'90%',
+									    name: 'celular',
 									}
 						         ]
 				     },{
@@ -518,17 +555,26 @@ Ext.onReady(function(){
 				     }]
 					});
 														
-				var pantallaPersonas = Ext.create('Ext.form.Panel', {
-					 id: 'margen',
+				var pantalla = Ext.create('Ext.form.Panel', {
+					 //id: 'margen',
 					    width: 'fit',
+					    height: 600,
 					    renderTo: document.body,		           
 					    items:[{
 											xtype: 'container',
 											//layout: 'fit',  
-								            items: [pantallaPersona]  					
+								            items: [panelPersona]  					
 								}
-						]	    	
+						],
+						listeners:{
+							'render':function(){
+								Ext.getCmp('topTabPanel').setActiveTab(0);
+								Ext.getCmp('personaTabPanel').setActiveTab(0);
+							}
+						}	    	
 				});
+
+				Ext.getCmp('centerPanel').add(pantalla);
 																			
 });
 

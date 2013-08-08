@@ -345,7 +345,7 @@ Ext.onReady(function(){
 		 });
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    tbar : [
@@ -360,82 +360,16 @@ Ext.onReady(function(){
 		        ],
 		    width: 'fit',
 		    height: 570,
-		    renderTo: Ext.getBody(),
 		    items:[gridPersonas],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(0);
+					Ext.getCmp('personaTabPanel').setActiveTab(0);
+				}
+			}
 		});
 			
-// 		var pantallaPersonas = Ext.create('Ext.panel.Panel', {
-// 			 id: 'margen',
-// 			    width: 'fit',	
-// 			    renderTo: document.body,		           
-// 			    items:[
-// 				{
-// 				    xtype: 'container',
-// 				    id: 'filtros',
-// 				    height: 55,
-// 				    layout:'hbox',
-// 				    items:[
-// 						  {
-// 							    xtype: 'container',
-// 							    padding: '15 0 0 25',
-// 							    flex: 1.15,
-// 							    layout: 'anchor',
-// 							    defaultType: 'textfield',
-// 							    //items: [comboCarrera]
-// 						  }
-// 					   ]
-// 					},{
-// 						xtype: 'container',
-// 					    height: 45,
-// 					    layout:'hbox',
-// 					    items:[{
-			
-// 				           		xtype: 'button',
-// 				           		width: 100,
-// 				           		margin: '0 0 0 20',
-// 				            	text: 'Filtrar',
-// 					            scale   : 'medium',
-// 					            handler: function(b,e) {
-					            	
-// 							           var basicForm = b.up('form').getForm();						
-// 							           var valoresForm = basicForm.getFieldValues();
-					           
-// 							         //  	auxcarrera = valoresForm.carrera;
-			
-// 										//inicializo los pages
-// //							           	page = 0;
-// //										gridPlan.store.currentPage = 1;
-// //						                planEstudioStore.load({
-// //											params: {
-// //												"s[pe_plan_estudio_ver_id]": auxcarrera	 		
-// //									   		} 
-// //						               });
-// 						            }//end of handler  
-									        
-// 								},{
-			
-// 						  		xtype: 'button',
-// 						  		width: 100,
-// 						  		margin: '0 0 0 15',
-// 			               		text: 'Limpiar',
-// 				           		scale   : 'medium',
-// 				           		handler: function(b,e) {
-// 				           			//inicializo los pages
-// 						           	page = 0;
-// 									gridPersonas.store.currentPage = 1;
-// 									//console.log(this);
-// 				           			b.up('form').getForm().reset();
-// 				           			personasStore.load();
-							           			
-// 				           		}
-// 								}]},{
-// 									xtype: 'container',
-// 									layout: 'fit',  
-// 						            items: [gridPersonas]  					
-// 								}
-// 				    	],			    	
-// 		});
-
+		Ext.getCmp('centerPanel').add(pantalla);
 				
 });
 
