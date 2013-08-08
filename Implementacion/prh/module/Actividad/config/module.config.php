@@ -42,6 +42,7 @@ return array(
             'Actividad\Controller\Nivel'         => 'Actividad\Controller\NivelController',
             'Actividad\Controller\Modalidad'     => 'Actividad\Controller\ModalidadController',
             'Actividad\Controller\Criterio'      => 'Actividad\Controller\CriterioController',
+            'Actividad\Controller\Combos'        => 'Actividad\Controller\CombosController',
         ),
     ),
     
