@@ -65,6 +65,11 @@ class BaseController extends AbstractActionController {
 		
 	}
 	
+	public function crearUIAction()
+	{
+	
+	}
+	
 	public function getUIAction()
 	{
 	
