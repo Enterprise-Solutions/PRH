@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Profesion</title>
+        <title>PRH - Actividad - Nivel </title>
 
 		<style type="text/css">
 		
@@ -27,27 +27,24 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('profesion', {
+		Ext.define('nivel', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
 					type: 'int',
-					name: 'org_profesion_id'
-				},
-				{
+					name: 'act_nivel_id'
+				},{
 					type: 'string',
 					name: 'nombre'
-				}
-				,
-				{
+				},{
 					type: 'string',
-					name: 'abrev'
+					name: 'descripcion'
 				}
 			]
 		});
 		
-		var profesionStore = Ext.create('Ext.data.Store', {
-			model: 'profesion',
+		var nivelStore = Ext.create('Ext.data.Store', {
+			model: 'nivel',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
@@ -56,7 +53,7 @@ Ext.onReady(function(){
 						"p[page]": page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/org/profesion/index?format=json',
+				url: baseURL + '/actividad/nivel/index?format=json',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -82,18 +79,18 @@ Ext.onReady(function(){
                     labelStyle: 'font-weight:bold'
                 },
                 items: [
-                       {
-                    xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
-                    allowBlank: false,
-                    name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    name: 'abrev',   
-                }],
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Nivel',   
+		                    allowBlank: true,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Descripci&oacute;n del Nivel',   
+		                    allowBlank: true,
+		                    name: 'descripcion',   
+                		}
+                       ],
 
                 buttons: [{
                     text: 'Agregar',
@@ -102,14 +99,14 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
+			           	var auxdescripcion = valoresForm.descripcion
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/post',
+							   url: baseURL + '/actividad/nivel/post',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Cargada Correctamente'
+										msg:'Nivel Cargado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -117,12 +114,12 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   nivelStore.load();
 							   },
 							   jsonData:{
 							       'post':{
 									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+									   'descripcion': auxdescripcion
 							       }
 							   }
 						 });
@@ -138,7 +135,7 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Agregar Profesi&oacute;n',
+                title: 'Agregar Nivel',
                 closeAction: 'hide',
                 width: 400,
                 height: 200,
@@ -150,7 +147,7 @@ Ext.onReady(function(){
        	 win.show();
     	}  
 
-		function editarwindow (id_edit, nombre_edit, abrev_edit) {
+		function editarwindow (id_edit, nombre_edit, descripcion_edit) {
 			 
             var form = Ext.widget('form', {
                 layout: {
@@ -166,20 +163,20 @@ Ext.onReady(function(){
                     labelStyle: 'font-weight:bold'
                 },
                 items: [
-                       {
-                    xtype: 'textfield',
-                    fieldLabel: 'Nombre de la Profesi&oacute;n',   
-                    allowBlank: false,
-                    value: nombre_edit,
-                    name: 'nombre',   
-                },
-                {
-                    xtype: 'textfield',
-                    fieldLabel: 'Abreviaci&oacute;n',
-                    allowBlank: true,
-                    value: abrev_edit,
-                    name: 'abrev',   
-                }],
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Nivel',   
+		                    allowBlank: true,
+		                    value: nombre_edit,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Descripci&oacute;n del Nivel',   
+		                    allowBlank: true,
+		                    value: descripcion_edit,
+		                    name: 'descripcion',   
+                		}
+                ],
 
                 buttons: [{
                     text: 'Guardar',
@@ -188,14 +185,14 @@ Ext.onReady(function(){
 			            var valoresForm = basicForm.getFieldValues();
 
 			           	var auxnombre = valoresForm.nombre;
-			           	var auxabrev = valoresForm.abrev;
+			        	var auxdescripcion = valoresForm.descripcion
 	
 						Ext.Ajax.request({
-							   url: baseURL + '/org/profesion/put',
+							   url: baseURL + '/actividad/nivel/put',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Modificada Correctamente'
+										msg:'Nivel Modificado Correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -203,13 +200,13 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   profesionStore.load();
+								   nivelStore.load();
 							   },
 							   jsonData:{
 							       'put':{
-							    	   'org_profesion_id': id_edit,
-									   'nombre': auxnombre,
-									   'abrev': auxabrev,
+							    	   'act_nivel_id': id_edit,
+							    	   'nombre': auxnombre,
+									   'descripcion': auxdescripcion
 							       }
 							   }
 						 });
@@ -225,7 +222,7 @@ Ext.onReady(function(){
             });
 
             win = Ext.widget('window', {
-                title: 'Editar Profesi&oacute;n',
+                title: 'Editar Nivel',
                 closeAction: 'hide',
                 width: 400,
                 height: 200,
@@ -237,15 +234,14 @@ Ext.onReady(function(){
        	 win.show();
     	}  
     	
-		var gridProfesion = Ext.create('Ext.grid.Panel', {
-            //title: 'Profesi&oacute;n',
+		var gridNivel = Ext.create('Ext.grid.Panel', {
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
             },
             width: 'fit',
             padding: '10 10 0 10',
-            height: 530,
+            height: 335,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -259,99 +255,89 @@ Ext.onReady(function(){
      			            text: 'Agregar',
      		                handler: agregarwindow,
                          }]
+// 	                },{
+// 	                    xtype: 'pagingtoolbar',
+// 	                    store: nivelStore, 
+// 	                    dock: 'bottom',
+// 	                    displayInfo: true,
+// 	                    listeners: {
+// 	                        'afterrender': function (component)
+// 	                        {
+// 	                            component.down('#refresh').hide()
+// 	                        },single: true
+// 	                    },
+// 	                    displayMsg: 'Registro {0} al {1} de {2}',
+// 	                    beforePageText: 'P&aacute;gina',
+// 	                    afterPageText : 'de {0}',
+// 	                    moveNext : function(){ 
+// 	                   		page = page + itemsPorPagina;
+// 	                   	 	this.store.currentPage++;
+// 	           				nivelStore.load({
+// 		       				    params:{
+// 		       				    	"p[limit]": itemsPorPagina,
+// 		       						"p[page]": page,
+// 		       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+// 		       				    }
+// 	       					});
+// 	                	 },
+// 	                 	 movePrevious : function(){ 
+// 	                 		page = page - itemsPorPagina;
+// 							this.store.currentPage--;
+// 							nivelStore.load({
+// 			   				    params:{
+// 			   				    	"p[limit]": itemsPorPagina,
+// 			   						"p[page]": page,
+// 			   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+// 			   				    }
+// 	   						});
+// 	            		 },
+// 	             		moveFirst : function(){ 
+// 	             			page = 0;
+// 							this.store.currentPage = 1;
+// 							nivelStore.load({
+// 			   				    params:{
+// 			   				    	"p[limit]": itemsPorPagina,
+// 			   						"p[page]": page,
+// 			   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+// 			   				    }
+// 	   						});
+// 	            	 	},
+// 	            	 	moveLast : function(){                 	 	
+// 	            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+// 		                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+// 		                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+// 	            	 		}
+// 							else
+// 							{
+// 								page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+// 								this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+// 							}
+// 	            	 		nivelStore.load({
+// 			   				    params:{
+// 			   				    	"p[limit]": itemsPorPagina,
+// 			   						"p[page]": page,	        
+// 			   				    }
+// 	   						});      					
+// 	            	 	},
 	                }
-// 	                ,{
-//                     xtype: 'pagingtoolbar',
-//                     store: profesionStore, 
-//                     dock: 'bottom',
-//                     displayInfo: true,
-//                     listeners: {
-//                         'afterrender': function (component)
-//                         {
-//                             component.down('#refresh').hide()
-//                         },single: true
-//                     },
-//                     displayMsg: 'Registro {0} al {1} de {2}',
-//                     beforePageText: 'P&aacute;gina',
-//                     afterPageText : 'de {0}',
-//                     moveNext : function(){ 
-//                    		page = page + itemsPorPagina;
-//                    	 	this.store.currentPage++;
-//            				profesionStore.load({
-// 	       				    params:{
-// 	       				    	"p[limit]": itemsPorPagina,
-// 	       						"p[page]": page,
-// 	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
-// 	       				    }
-//        					});
-//            					console.log("page store: ", page);
-//           				    console.log("page extjs: ",this.store.currentPage);	
-//                 	 },
-//                  	 movePrevious : function(){ 
-//                  		page = page - itemsPorPagina;
-// 						this.store.currentPage--;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-// 	       					console.log("page store: ", page);
-// 	      				    console.log("page extjs: ",this.store.currentPage);	
-//             		 },
-//              		moveFirst : function(){ 
-//              			page = 0;
-// 						this.store.currentPage = 1;
-// 						profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);	
-//             	 	},
-//             	 	moveLast : function(){                 	 	
-//             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
-// 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
-// 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-//             	 		}
-// 						else
-// 						{
-// 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
-// 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-// 						}
-//             	 		profesionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);         					
-//             	 	},
-//                 }
 	                ],                       
             layout: 'fit',
-            emptyText: "No existen profesiones cargadas",
+            emptyText: "No existen Niveles cargados",
             
-            store: profesionStore,
+            store: nivelStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Profesi&oacute;n",
-                dataIndex: 'nombre',
-                align: 'left',
+	                text: "Nivel",
+	                dataIndex: 'nombre',
+	                align: 'center',
                 flex: 1,
-            },{
-                text: "Abreviaci&oacute;n",
-                dataIndex: 'abrev',
-                align: 'center',
-                flex: 1,
-            },{
+            	},{
+                    text: "Descripci&oacute;n",
+                    dataIndex: 'descripcion',
+                    align: 'left',
+                    flex: 1,
+                },{
                 xtype:'actioncolumn',
                 width:35,
                 align: 'center',
@@ -359,10 +345,10 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     //tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
-                    	var id_edit = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_edit = profesionStore.getAt(rowIndex).get('nombre');
-                    	var abrev_edit = profesionStore.getAt(rowIndex).get('abrev');
-						editarwindow(id_edit, nombre_edit, abrev_edit);                        
+                    	var id_edit = nivelStore.getAt(rowIndex).get('act_nivel_id');
+                    	var nombre_edit = nivelStore.getAt(rowIndex).get('nombre');
+                    	var descripcion_edit = nivelStore.getAt(rowIndex).get('descripcion');
+						editarwindow(id_edit, nombre_edit, descripcion_edit);                        
                     }
                 }]
             },{
@@ -373,9 +359,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = profesionStore.getAt(rowIndex).get('org_profesion_id');
-                    	var nombre_delete = profesionStore.getAt(rowIndex).get('nombre');
-                    	var auxmensaje = 'Confirma que desea borrar la profesion '+nombre_delete+'?';
+                    	var id_delete = nivelStore.getAt(rowIndex).get('act_nivel_id');
+                    	var nombre_delete = nivelStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar el nivel '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -385,11 +371,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/org/profesion/delete',
+        							   url: baseURL + '/actividad/nivel/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Profesi&oacute;n Borrada Correctamente'
+        										msg:'Nivel Borrado Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -397,12 +383,12 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   profesionStore.load();
+        								   nivelStore.load();
         							   },
         							   jsonData:{
-        							       'delete':[
-        							    	id_delete
-        							       ]
+        							       'delete':{
+												'act_nivel_id': id_delete,
+        							       }
         							   }
         						 });
                               }
@@ -410,10 +396,7 @@ Ext.onReady(function(){
                             	   this.close();
                                }	                               
                            }
-                       });
-
-                    	
-                        
+                       }); 
                     }
                 }]
             }       
@@ -430,7 +413,7 @@ Ext.onReady(function(){
 		    width: 'fit',
 		    height: 570,
 		    renderTo: Ext.getBody(),
-		    items:[gridProfesion],
+		    items:[gridNivel],
 		});
 			
 
