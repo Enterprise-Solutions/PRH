@@ -106,11 +106,17 @@ Ext.onReady(function(){
 			        'id': aux,
 			    },
 			    success: function(response) {
-			    	var text = Ext.decode(response.responseText);
-			    	console.log(text);
+			    	var campos = Ext.decode(response.responseText);
+			    	var form = Ext.getCmp('form').getForm();
+			    	
+			    	for (campo in campos) {
+				    	var name = form.findField(campo);
 
-			    	var form = pantalla.getComponent('form');
-			    	console.log(form);
+				    	if (name) {
+					    	name.setValue(campos[campo]);
+				    	}
+			    	}
+			    	
 			    	/*traer form x id
 
 			    	de ese traer su basic form
@@ -154,7 +160,7 @@ Ext.onReady(function(){
 					        labelWidth: 110,
 					        anchor:'90%',
 					        value: 'Fulano',
-					        name: 'nombre',
+					        name: 'nombre_persona',
 					        style: {
 					            borderColor: '#112D6F',
 					            borderStyle: 'simple',
@@ -166,7 +172,7 @@ Ext.onReady(function(){
 					        labelWidth: 110,
 					        anchor:'90%',
 					        value: ' ',
-				 	        name: 'fecha_de_nacimiento'
+				 	        name: 'fecha_nacimiento'
 				         },{
 				    	    	fieldLabel: 'Nro. de Doc',
 					        	xtype: 'displayfield',
@@ -212,7 +218,7 @@ Ext.onReady(function(){
 							        labelWidth: 110,
 							        anchor:'90%',
 							        value: ' ',
-							        name: 'apellido'
+							        name: 'apellido_persona'
 					    	    },{
 							        fieldLabel: 'Nacionalidad',
 						        	xtype: 'displayfield',
