@@ -27,49 +27,8 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 					
-					var estadoCivil = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Soltero"},
-						        {"id": "2", "name":"Casado"},
-						        {"id": "3", "name":"Viudo"},
-						        {"id": "4", "name":"Divorciado"}
-					        ]
-						});
 					
 					
-					var religion = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-						        {"id": "1", "name":"Catolico"},
-						        {"id": "2", "name":"Evangelica"},
-						        {"id": "3", "name":"Judia"},
-						        {"id": "4", "name":"Atea"},
-						        {"id": "5", "name":"Otro"}
-					        ]
-						});
-					
-					var nacionalidad = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-					        {"id": "1", "name":"Paraguaya"},
-					        {"id": "2", "name":"Argentina"},
-					        {"id": "3", "name":"Brasilera"},
-					        {"id": "4", "name":"Uruguaya"},
-					        {"id": "5", "name":"Chilena"}
-					        ]
-						});
-
-					var pais = Ext.create('Ext.data.Store', {
-					    fields: ['id', 'name'],
-					    data : [
-					        {"id": "1", "name":"Paraguay"},
-					        {"id": "2", "name":"Argentina"},
-					        {"id": "3", "name":"Brasil"},
-					        {"id": "4", "name":"Uruguay"},
-					        {"id": "5", "name":"Chile"}
-					        ]
-						});
 
 					Ext.define('Pais', {
 						extend: 'Ext.data.Model',
@@ -153,7 +112,83 @@ Ext.onReady(function(){
 							}
 						]
 					});
+
+					Ext.define('lugar', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'dir_barrio_id'
+							},
+							{
+								type: 'string',
+								name: 'barrio'
+							},{
+								type: 'string',
+								name: 'search'
+							},{
+								type: 'string',
+								name: 'ciudad'
+							},{
+								type: 'string',
+								name: 'dpto'
+							},{
+								type: 'string',
+								name: 'pais'
+							}
+						]
+					});
+
+					Ext.define('estadoCivil', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'org_estado_civil_id'
+							},
+							{
+								type: 'string',
+								name: 'nombre'
+							}
+						]
+					});
+
+					Ext.define('contactoTipo', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'org_contacto_tipo_codigo',
+							},
+							{
+								type: 'string',
+								name: 'nombre'
+							}
+							,
+							{
+								type: 'string',
+								name: 'descripcion'
+							}
+						]
+					});
+							
 					
+						var comboLugarStore = Ext.create('Ext.data.Store', {
+							model: 'lugar',
+							pageSize: itemsPorPagina, 
+							proxy: {
+								type: 'ajax',
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/combos/dir-barrio?format=json',
+								reader: {
+									type: 'json',
+									root: 'records',
+									totalProperty: 'numResults'
+								}
+							},
+							autoLoad: true
+						});
+						
 						var comboProfesionStore = Ext.create('Ext.data.Store', {
 							model: 'profesion',
 							pageSize: itemsPorPagina, 
@@ -238,6 +273,42 @@ Ext.onReady(function(){
 							},
 							autoLoad: true
 						});
+
+						var estadoCivilStore = Ext.create('Ext.data.Store', {
+							model: 'estadoCivil',
+							pageSize: itemsPorPagina, 
+							proxy: {
+								type: 'ajax',
+								  extraParams:{
+								    	"p[limit]": itemsPorPagina,
+										"p[page]": page, 
+								  },
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/estado-civil/index?format=json',
+								reader: {
+									type: 'json',
+									root: 'records',
+									totalProperty: 'numResults'
+								}
+							},
+							autoLoad: true
+						});
+
+						var contactoTipoStore = Ext.create('Ext.data.Store', {
+							model: 'contactoTipo',
+							proxy: {
+								type: 'ajax',
+								extraParams: {'p[limit]':'all'},
+								headers: {'Accept':'application/json'},
+								url: baseURL + '/org/combos/org-contacto-tipo?format=json',
+								reader: {
+									type: 'json',
+									root: 'records'
+								}
+							},
+							autoLoad: true
+						});
+						
 					
 					var buttonCrear = function(b,e)
 					{
@@ -256,6 +327,12 @@ Ext.onReady(function(){
 						        	var auxnacionalidad = valoresForm.nacionalidad;
 						        	var auxreligion = valoresForm.religion;
 						        	var auxestado_civil = valoresForm.estado_civil;
+
+						        	var auxdireccion = valoresForm.direccion; 
+						        	var auxlugar = valoresForm.lugar;     	
+
+						        	var auxcontacto_tipo = valoresForm.contacto_tipo; 
+						        	var auxcontacto = valoresForm.contacto;     	
 						  
 
 						Ext.Ajax.request({
@@ -288,7 +365,15 @@ Ext.onReady(function(){
 				 							'preferencia': '1',
 				 							'dir_pais_id': auxdoc_origen,
 				 							'valor': auxcedula
-			 							}]}								   
+			 							}]},
+			 							'Direcciones':{'agregados':[{
+				 							'direccion': auxdireccion,
+				 							'dir_barrio_id': auxlugar
+			 							}]},	
+			 							'Contactos':{'agregados':[{
+				 							'org_contacto_tipo_codigo': auxcontacto_tipo,
+				 							'contacto': auxcontacto
+			 							}]}									   
 							       }
 							   }
 						 });
@@ -346,6 +431,7 @@ Ext.onReady(function(){
 								        store: paisStore,
 								        displayField: 'nombre',
 								        valueField: 'dirPaisId',
+								        queryMode: 'local',
 								        allowBlank: false,
 								        padding: 15,
 							 	        anchor:'90%',
@@ -355,7 +441,7 @@ Ext.onReady(function(){
 								        xtype: 'combobox',
 								        labelWidth: 110,
 								        store: comboReligionStore,
-								        //queryMode: 'local',
+								        queryMode: 'local',
 								        displayField: 'nombre',
 								        valueField: 'org_religion_id',
 								        allowBlank: true,
@@ -389,6 +475,7 @@ Ext.onReady(function(){
 							        xtype: 'combobox',
 							        labelWidth: 110,
 							        store: nacionalidadStore,
+							        queryMode: 'local',
 							        displayField: 'nacionalidad',
 							        valueField: 'dir_pais_id',
 							        allowBlank: false,
@@ -434,13 +521,12 @@ Ext.onReady(function(){
 						         },{
 								        fieldLabel: 'Estado Civil',
 								        xtype: 'combobox',
-								        store: estadoCivil,
 								        labelWidth: 110,
-								        queryMode: 'local',
-								        displayField: 'name',
 								        padding: 15,
-								        valueField: 'id',
-								        value: '2',
+								        store: estadoCivilStore,
+								        queryMode: 'local',
+								        displayField: 'nombre',
+								        valueField: 'org_estado_civil_id',
 								        allowBlank: false,
 								        anchor:'90%',
 								        name: 'estado_civil',
@@ -451,13 +537,11 @@ Ext.onReady(function(){
 								        valueField: 'org_profesion_id',
 								        labelWidth: 110,
 								        store: comboProfesionStore,
-								        queryMode: 'remote',
 								        typeAhead: true,
 								        emptyText: 'Escriba el nombre de la Profesion...',
 								        loadingText: 'Buscando Profesiones...',
 								        hideTrigger: true,
-								        queryParam: 's[nombre]:',
-								        minChars: 1,
+								        queryMode: 'local',
 								        padding: 15,
 							 	        anchor:'90%',
 								        allowBlank: true,
@@ -477,21 +561,30 @@ Ext.onReady(function(){
 					    defaultType: 'textfield',
 						 items: [{
 						        fieldLabel: 'Direcci&oacute;n',
-						       // allowBlank: false,
-						        width: 400,
+						        allowBlank: true,
+						        width: 650,
+						        padding: 15,
 						        anchor:'90%',
-						    	padding: 15,
 						    	name: 'direccion',
 						    },{
-						        fieldLabel: 'Ciudad',
-						       // allowBlank: false,
+						        fieldLabel: 'Lugar',
+						        xtype: 'combobox',
+						        valueField: 'dir_barrio_id',
+						        displayField: 'search',
+						        labelWidth: 80,
+						        width: 400,
+						        store: comboLugarStore,
+						        queryMode: 'remote',
+						        typeAhead: true,
+						        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
+						        loadingText: 'Buscando Lugares...',
+						        hideTrigger: true,
+						        //allowBlank: true,
+						        queryParam: 's[barrio]:',
+						        minChars: 1,
 						        padding: 15,
-						        anchor:'90%'
-						    },{
-						        fieldLabel: 'Barrio',
-						      //  allowBlank: false,
-						        padding: 15,
-						        anchor:'90%'
+					 	        anchor:'90%',
+					 	       	name: 'lugar',
 						    }
 					    	    ]},{
 				    	xtype: 'panel',
@@ -505,25 +598,27 @@ Ext.onReady(function(){
 				         defaultType: 'textfield',
 				         items: [ 
 									{
-									    fieldLabel: 'Email',
-									    vtype: 'email',
+										fieldLabel: 'Tipo de Contacto',
+								        xtype: 'combobox',
+								        labelWidth: 130,
+								        width: 400,
+								        store: contactoTipoStore,
+								        queryMode: 'local',
+								        displayField: 'nombre',
+								        valueField: 'org_contacto_tipo_codigo',
+								        emptyText: 'Escriba el Tipo de Contacto...',
+								        loadingText: 'Buscando...',
+								        allowBlank: true,
+								        padding: 15,
+							 	        anchor:'90%',
+							 	        name: 'contacto_tipo',
+									},{
+									    fieldLabel: 'Contacto',
 									    width: 400,
-								        flex: 2,
-									    padding: 15,
+									    labelWidth: 110,
 									    anchor:'90%',
-										name: 'email',
-									},{
-									    fieldLabel: 'Tel&eacute;fono',
-								         flex: 1,
-									    anchor:'90%',
-										padding: 15,
-										name: 'telefono',
-									},{
-									    fieldLabel: 'Celular',
-								         flex: 1,
-									    padding: 15,
-									    anchor:'90%',
-									    name: 'celular',
+										padding: '15 15 15 50',
+										name: 'contacto',
 									}
 						         ]
 				     },{

@@ -86,6 +86,7 @@
 		    //renderTo: document.body,
 		    items: [{
 		        title: 'Personas',
+		        pathName: '/org/personas/index-ui',
 /* esto tenes que descomentar, pero cuando haces eso el layout te lleva
 a esta pagina por el active predeterminado de la tabla, parece que re asigna el tab*/		        
 // 		        listeners: {
@@ -118,18 +119,25 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 // 		        }
 		    },{
 		        title: 'Profesi&oacute;n',
+		        pathName: '/org/profesion/index-ui'
 		    },{
 		        title: 'Religi&oacute;n',
+		        pathName: '/org/religion/index-ui'
 		    },{
 		        title: 'Estado Civil',
+		        pathName: '/org/estado-civil/index-ui'
 		    },{
 		        title: 'Tipo de Documento',
+		        disabled: true,
 		    },{
 		        title: 'Rol',
+		        disabled: true,
 		    },{
 		        title: 'Relaci&oacute;n',
+		        disabled: true,
 		    },{
 		        title: 'Tipo de Contacto',
+		        disabled: true,
 		    }],
 		    listeners:{
 				'tabchange':function(tabPanel, newTab, oldTab, opciones)
@@ -140,7 +148,7 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
 					{
 						console.log('in',baseURL + newTab.pathName);
-						//window.location = baseURL + newTab.pathName;
+						window.location = baseURL + newTab.pathName;
 					}	
 				}
 			   }
@@ -153,18 +161,37 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 		    plain: true,
 		    //renderTo: document.body,
 		    items: [{
-		        title: 'Actividad'
+		        title: 'Actividad',
+		        pathName: '/actividad/actividad/index-ui',
 		    },{
 		        title: 'Tipo de Actividad',
+		        pathName: '/actividad/actividad-tipo/index-ui',
 		    },{
 		        title: 'Nivel',
+		        pathName: '/actividad/nivel/index-ui',
 		    },{
 		        title: 'Modalidad',
+		        pathName: '/actividad/modalidad/index-ui',
 		    },{
 		        title: 'Criterio',
+		        pathName: '/actividad/criterio/index-ui',
 		    },{
 		        title: 'Tarifas',
-		    }]
+		        disabled: true,
+		    }],
+		    listeners:{
+				'tabchange':function(tabPanel, newTab, oldTab, opciones)
+				{
+					console.log(newTab);
+					console.log('opci',baseURL,tabPanel, newTab, oldTab, opciones);
+					console.log( window.location, newTab.pathName);
+					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
+					{
+						console.log('in',baseURL + newTab.pathName);
+						window.location = baseURL + newTab.pathName;
+					}	
+				}
+			}
 		});
 		
 		
@@ -264,16 +291,22 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 								    items:[menuActividad],
 								},{
 								    title: 'Calendario',
+								    disabled: true,
 								},{
 								    title: 'Stock',
+								    disabled: true,
 								},{
 								    title: 'Aporte',
+								    disabled: true,
 								},{
 								    title: 'Balance',
+								    disabled: true,
 								},{
 								    title: 'Presupuesto',
+								    disabled: true,
 								},{
 								    title: 'Estad&iacute;stica',
+								    disabled: true,
 							}]
 				          }
 				
