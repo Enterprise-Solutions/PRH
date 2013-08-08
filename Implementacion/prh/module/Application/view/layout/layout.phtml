@@ -88,34 +88,34 @@
 		        title: 'Personas',
 /* esto tenes que descomentar, pero cuando haces eso el layout te lleva
 a esta pagina por el active predeterminado de la tabla, parece que re asigna el tab*/		        
-		        listeners: {
-			        activate: function() {
-			        	var url = verURL(); 
-				        if (url != '/org/personas')
-				        {    
-					        console.log("prueba");
-				            	Ext.Ajax.request({
-				            	    url: '/prh/org/personas/index-ui',
-				            	    method: 'GET',
-				            	    success: function(response, options){
-					            	   var htmlResponse = response.responseText;
-				            	       var destino = Ext.getCmp('centerPanel');
-				            	       console.log(destino);
-				            	       if(destino)
-				            	       {
-				            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
-												console.log(a,b,c);
-					                   	    });
-				            	       }
-				            	       window.location = baseURL+'/org/personas/index-ui'
-				            	    },
-				            	    failure: function(response,options){
-										Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
-						           	}
-				            	});
-				         }     	
-	            	}
-		        }
+// 		        listeners: {
+// 			        activate: function() {
+// 			        	var url = verURL(); 
+// 				        if (url != '/org/personas')
+// 				        {    
+// 					        console.log("prueba");
+// 				            	Ext.Ajax.request({
+// 				            	    url: '/prh/org/personas/index-ui',
+// 				            	    method: 'GET',
+// 				            	    success: function(response, options){
+// 					            	   var htmlResponse = response.responseText;
+// 				            	       var destino = Ext.getCmp('centerPanel');
+// 				            	       console.log(destino);
+// 				            	       if(destino)
+// 				            	       {
+// 				            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
+// 												console.log(a,b,c);
+// 					                   	    });
+// 				            	       }
+// 				            	       window.location = baseURL+'/org/personas/index-ui'
+// 				            	    },
+// 				            	    failure: function(response,options){
+// 										Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
+// 						           	}
+// 				            	});
+// 				         }     	
+// 	            	}
+// 		        }
 		    },{
 		        title: 'Profesi&oacute;n',
 		    },{
