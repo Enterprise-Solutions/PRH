@@ -15,8 +15,10 @@ class Select extends DbSelect
 			 	'org_parte_tipo_codigo',
 			 	'nombre_organizacion',
 			 	'nombre_persona','apellido_persona','fecha_nacimiento','genero_persona',
+			 	'org_religion_id','org_estado_civil_id','nacionalidad_persona',
 			 	'documentos' => new Expression("string_agg('org_documento_id:'||od.org_documento_id||','||'valor:'||od.valor||','||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||',dir_pais_id:'||od.dir_pais_id||',preferencia:'||od.preferencia,';')"),
-			 	'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id||',contacto:'||oc.contacto||',org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||',nombre:'||oct.nombre,';')")	
+			 	'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id||',contacto:'||oc.contacto||',org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||',nombre:'||oct.nombre,';')"),
+			 	'Direcciones' => new Expression("string_agg('dir_direccion_id:'||dd.dir_direccion_id||',direccion:'||dd.calle||',dir_barrio_id:'||dd.dir_barrio_id,';')")	
 			 		//'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id,';')")
 			 	))
 			 ->join(
@@ -48,6 +50,18 @@ class Select extends DbSelect
 			 	'oc.org_contacto_tipo_codigo = oct.org_contacto_tipo_codigo',
 			 	array(),
 			 	ZFSelect::JOIN_LEFT
+			 )
+			 ->join(
+			 	array('dd' => 'dir_direccion'),
+			 	'op.org_parte_id = dd.org_parte_id',
+			 	array(),
+			 	ZFSelect::JOIN_LEFT	
+			 )
+			 ->join(
+			 	array('ddt' => 'dir_direccion_tipo'),
+			 	'dd.dir_direccion_tipo_id = ddt.dir_direccion_tipo_id',
+			 	array(),
+			 	ZFSelect::JOIN_LEFT	
 			 )
 			 ->group(array(
 			 	'op.org_parte_id',

@@ -17,9 +17,4 @@ class PersonasController extends ParteController
 	{
 		return parent::crearAction('per');
 	}
-	
-	public function crearUIAction()
-	{
-		
-	}
 }

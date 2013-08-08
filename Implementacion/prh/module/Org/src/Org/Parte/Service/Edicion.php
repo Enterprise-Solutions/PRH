@@ -13,6 +13,10 @@ use Org\Contacto\Factory as contactosFactory;
 use Org\Contacto\Repository as contactosRepository;
 use Org\Contacto\Service as contactosService;
 
+use Org\Direccion\Factory as dirFactory;
+use Org\Direccion\Repository as dirRepository;
+use Org\Direccion\Service as dirService;
+
 class Edicion
 {
 	public $_em;
@@ -26,6 +30,9 @@ class Edicion
 		
 		$this->_contactosRepository = new contactosRepository($em);
 		$this->_contactosFactory = new contactosFactory($this->_contactosRepository);
+		
+		$this->_dirFactory = new dirFactory();
+		$this->_dirRepository = new dirRepository($em);
 	}
 	
 	/**
@@ -48,6 +55,7 @@ class Edicion
 		$datos['org_parte'] = $parte;
 		$this->_mantenerDocumentosDeParte($datos);
 		$this->_mantenerContactosDeParte($datos);
+		$this->_mantenerDireccionesDeParte($datos);
 		return $parte;
 	}
 	
@@ -71,6 +79,16 @@ class Edicion
 		$service = new contactosService($this->_contactosFactory,$this->_contactosRepository);
 		$service->ejecutar($datos);
 		$this->_respuesta['Contactos'] = $service->getRespuesta();
+	}
+	
+	public function _mantenerDireccionesDeParte($datos)
+	{
+		if(!isset($datos['Direcciones'])){
+			return;
+		}
+		$service = new dirService($this->_dirFactory,$this->_dirRepository);
+		$service->ejecutar($datos);
+		$this->_respuesta['Direcciones'] = $service->getRespuesta();
 	}
 	
 	public function _setRespuesta($parte)
