@@ -79,13 +79,15 @@
 		var menuPersona = Ext.create('Ext.tab.Panel', {
 		   autoHeight:true,
 		    plain: true, 
-		    style:{border:'none !important'},
-		    border: false,
+		    //style:{border:'none !important'},
+		    style:'background-color: #C8CED8',
+		    //border: false,
 		    id: 'personaTabPanel',
-		    frame:false,
+		    //frame:false,
 		    //renderTo: document.body,
 		    items: [{
 		        title: 'Personas',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/org/personas/index-ui',
 /* esto tenes que descomentar, pero cuando haces eso el layout te lleva
 a esta pagina por el active predeterminado de la tabla, parece que re asigna el tab*/		        
@@ -119,24 +121,31 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 // 		        }
 		    },{
 		        title: 'Profesi&oacute;n',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/org/profesion/index-ui'
 		    },{
 		        title: 'Religi&oacute;n',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/org/religion/index-ui'
 		    },{
 		        title: 'Estado Civil',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/org/estado-civil/index-ui'
 		    },{
-		        title: 'Tipo de Documento',
+		        title: 'Tipo de Doc.',
+		        tabConfig: {style:'width:120px'},
 		        disabled: true,
 		    },{
 		        title: 'Rol',
+		        tabConfig: {style:'width:120px'},
 		        disabled: true,
 		    },{
 		        title: 'Relaci&oacute;n',
+		        tabConfig: {style:'width:120px'},
 		        disabled: true,
 		    },{
-		        title: 'Tipo de Contacto',
+		        title: 'Tipo Contacto',
+		        tabConfig: {style:'width:120px'},
 		        disabled: true,
 		    }],
 		    listeners:{
@@ -155,28 +164,35 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 		});
 		
 		var menuActividad = Ext.create('Ext.tab.Panel', {
-		    layout: 'fit',
-		    border:0,
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+		    //border:0,
 		    id: 'actividadTabPanel',
-		    plain: true,
 		    //renderTo: document.body,
 		    items: [{
 		        title: 'Actividad',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/actividad/actividad/index-ui',
 		    },{
-		        title: 'Tipo de Actividad',
+		        title: 'Tipo de Act.',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/actividad/actividad-tipo/index-ui',
 		    },{
 		        title: 'Nivel',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/actividad/nivel/index-ui',
 		    },{
 		        title: 'Modalidad',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/actividad/modalidad/index-ui',
 		    },{
 		        title: 'Criterio',
+		        tabConfig: {style:'width:120px'},
 		        pathName: '/actividad/criterio/index-ui',
 		    },{
 		        title: 'Tarifas',
+		        tabConfig: {style:'width:120px'},
 		        disabled: true,
 		    }],
 		    listeners:{
@@ -194,7 +210,65 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 			}
 		});
 		
-		
+		var menuCalendario = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'calendarioTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
+
+		var menuStock = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'stockTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
+
+		var menuAporte = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'aporteTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
+
+		var menuBalance = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'balanceTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
+
+		var menuPresupuesto = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'presupuestoTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
+
+		var menuEstadistica = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			plain: true,
+			style:'background-color: #C8CED8',
+			//border:0,
+			id: 'estadisticaTabPanel',
+			//renderTo: document.body,
+			items: []
+		});
 		
 		Ext.onReady(function(){
 			
@@ -213,11 +287,12 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 				   //title: usuario_logueado,
 				   xtype: 'container',
 				    //collapsible: true,
-				    style:{marginBottom: '7px'},
+				    //style:{marginBottom: '7px'},
+				    style: 'border-bottom: 3px solid white',
 				    //collapsed:true,
-				    border: 0,
+				    //border: 0,
 				    //html: usuario_logueado,
-				    height: 40,
+				    height: 50,
 				    //maxHeight: 205,
 				    layout: 'column',
 				    items:[
@@ -276,36 +351,53 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 				   items:[
 				          {
 							xtype: 'tabpanel',
+							autoHeight:true,
+							plain: true,
+							style:'background-color: #C8CED8;',
+							//border:0,
 							height: 75,
-							layout: 'anchor',
+							//layout: 'anchor',
 							id: 'topTabPanel',
 							//activeTab: 3,
-							border: false,
-							plain: false,
+							//border: false,
 							buttonAlign: 'center',
 							items: [{
 								    title: 'Persona',
+								    tabConfig: {style:'width:120px'},
 								    items:[menuPersona],
 								},{
 								    title: 'Actividad',
+								    tabConfig: {style:'width:120px'},
 								    items:[menuActividad],
 								},{
 								    title: 'Calendario',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuCalendario],
 								    disabled: true,
 								},{
 								    title: 'Stock',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuStock],
 								    disabled: true,
 								},{
 								    title: 'Aporte',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuAporte],
 								    disabled: true,
 								},{
 								    title: 'Balance',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuBalance],
 								    disabled: true,
 								},{
 								    title: 'Presupuesto',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuPresupuesto],
 								    disabled: true,
 								},{
 								    title: 'Estad&iacute;stica',
+								    tabConfig: {style:'width:120px'},
+								    items:[menuEstadistica],
 								    disabled: true,
 							}]
 				          }
@@ -320,6 +412,7 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 			        id: 'centerPanel',
 			        autoScroll:true,
 			        layout:'anchor',
+			        style: 'margin-top: 5px;',
 			        items:[]
     
 			    }
