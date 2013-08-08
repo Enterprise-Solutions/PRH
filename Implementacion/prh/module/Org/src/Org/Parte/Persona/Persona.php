@@ -38,6 +38,21 @@ class Persona extends Parte
 	public $genero;
 	
 	/**
+	 * @Orm\Column(name="org_religion_id")
+	 */
+	public $org_religion_id;
+	
+	/**
+	 * @Orm\Column(name="org_estado_civil_id")
+	 */
+	public $org_estado_civil_id;
+	
+	/**
+	 * @Orm\Column(name="nacionalidad_persona")
+	 */
+	public $nacionalidad_persona;
+	
+	/**
 	 * @param string $operacion
 	 * @return InputFilter
 	 */
