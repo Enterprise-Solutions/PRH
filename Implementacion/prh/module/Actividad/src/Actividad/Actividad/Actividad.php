@@ -48,7 +48,7 @@ class Actividad{
 	/**
 	 * @Orm\Column(type="string")
 	*/
-	protected $nombreIdentificador;
+	protected $nombre_identificador;
 	
 	/**
 	 * @Orm\Column(type="float")
