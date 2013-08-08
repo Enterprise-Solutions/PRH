@@ -43,4 +43,13 @@ class CombosController extends BaseController
 		$template = $this->_crearTemplateParaListado();
 		return $template($dao);
 	}
+	
+	public function dirPaisAction()
+	{
+	    $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+	    $select->_select->from('dir_pais');
+	    $dao = new Dao($select);
+	    $template = $this->_crearTemplateParaListado();
+	    return $template($dao);
+	}
 }
