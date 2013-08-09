@@ -82,6 +82,7 @@
 		    //style:{border:'none !important'},
 		    style:'background-color: #C8CED8',
 		    //border: false,
+		    activeTab: 8,
 		    id: 'personaTabPanel',
 		    //frame:false,
 		    //renderTo: document.body,
@@ -89,36 +90,6 @@
 		        title: 'Personas',
 		        tabConfig: {style:'width:120px'},
 		        pathName: '/org/personas/index-ui',
-/* esto tenes que descomentar, pero cuando haces eso el layout te lleva
-a esta pagina por el active predeterminado de la tabla, parece que re asigna el tab*/		        
-// 		        listeners: {
-// 			        activate: function() {
-// 			        	var url = verURL(); 
-// 				        if (url != '/org/personas')
-// 				        {    
-// 					        console.log("prueba");
-// 				            	Ext.Ajax.request({
-// 				            	    url: '/prh/org/personas/index-ui',
-// 				            	    method: 'GET',
-// 				            	    success: function(response, options){
-// 					            	   var htmlResponse = response.responseText;
-// 				            	       var destino = Ext.getCmp('centerPanel');
-// 				            	       console.log(destino);
-// 				            	       if(destino)
-// 				            	       {
-// 				            	    	   destino.getEl().update(htmlResponse, true, function(a,b,c){
-// 												console.log(a,b,c);
-// 					                   	    });
-// 				            	       }
-// 				            	       window.location = baseURL+'/org/personas/index-ui'
-// 				            	    },
-// 				            	    failure: function(response,options){
-// 										Ext.Msg.alert('Aviso','Hubo un error al cargar la pagina.');
-// 						           	}
-// 				            	});
-// 				         }     	
-// 	            	}
-// 		        }
 		    },{
 		        title: 'Profesi&oacute;n',
 		        tabConfig: {style:'width:120px'},
@@ -147,6 +118,10 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 		        title: 'Tipo Contacto',
 		        tabConfig: {style:'width:120px'},
 		        disabled: true,
+		    },{
+		        title: 'prueba',
+		        tabConfig: {style:'width:120px'},
+		        hidden: true,
 		    }],
 		    listeners:{
 				'tabchange':function(tabPanel, newTab, oldTab, opciones)
@@ -166,6 +141,7 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 		var menuActividad = Ext.create('Ext.tab.Panel', {
 			autoHeight:true,
 			plain: true,
+			activeTab: 6,
 			style:'background-color: #C8CED8',
 		    //border:0,
 		    id: 'actividadTabPanel',
@@ -194,6 +170,10 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 		        title: 'Tarifas',
 		        tabConfig: {style:'width:120px'},
 		        disabled: true,
+		    },{
+		        title: 'prueba',
+		        tabConfig: {style:'width:120px'},
+		        hidden: true,
 		    }],
 		    listeners:{
 				'tabchange':function(tabPanel, newTab, oldTab, opciones)
@@ -288,7 +268,7 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 				   xtype: 'container',
 				    //collapsible: true,
 				    //style:{marginBottom: '7px'},
-				    style: 'border-bottom: 3px solid white',
+				    style: 'border-bottom: 3px solid #C8CED8',
 				    //collapsed:true,
 				    //border: 0,
 				    //html: usuario_logueado,
@@ -399,7 +379,7 @@ a esta pagina por el active predeterminado de la tabla, parece que re asigna el 
 								    tabConfig: {style:'width:120px'},
 								    items:[menuEstadistica],
 								    disabled: true,
-							}]
+								}]
 				          }
 				
 				   ]
