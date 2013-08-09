@@ -192,6 +192,10 @@ Ext.onReady(function(){
                 dataIndex: 'nombre',
                 align: 'center',
                 flex: 2.5,
+                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
+                    console.log(metadata);
+                    return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
+            	}
             },{
                 text: "C&oacute;digo",
                 dataIndex: 'codigo',
@@ -265,7 +269,7 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Tipoo de Actividad Borrada Correctamente'
+        										msg:'Tipo de Actividad Borrado Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {

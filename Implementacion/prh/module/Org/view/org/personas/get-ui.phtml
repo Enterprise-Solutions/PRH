@@ -116,25 +116,28 @@ Ext.onReady(function(){
 			    		}	
 				    	var name = form.findField(campo);
 				    		if (name) {
-					    	if (campo == "fecha_nacimiento")
-					    	{
-					    		var fecha = campos["fecha_nacimiento"];
-			 			    	var fecha2 = fecha.split("-");
-			 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
-			 			    	campos[campo] = result;
-			 			    	name.setValue(campos[campo]);
-						    }else if (campo == "genero_persona")
-					    	{
-						    	if (campo == 'M')
-						    		campos[campo] = 'Masculino';
-						    	else
-						    		campos[campo] = 'Femenino';
-			 			    	name.setValue(campos[campo]);
-						    } else{
-						    
-							    	name.setValue(campos[campo]);
-							    	console.log(campo);
-					    }	}	
+						    	if (campo == "fecha_nacimiento" && campos[campos])
+						    	{
+						    		var fecha = campos["fecha_nacimiento"];
+				 			    	var fecha2 = fecha.split("-");
+				 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+				 			    	campos[campo] = result;
+				 			    	name.setValue(campos[campo]);
+							    }else if (campo == "genero_persona")
+						    	{
+							    	if (campos[campo] == 'M'){
+							    		campos[campo] = 'Masculino';
+							    	}	
+							    	else if (campos[campo] == 'F'){
+							    		campos[campo] = 'Femenino';
+							    	}
+				 			    		name.setValue(campos[campo]);
+							    } else{
+							    
+								    	name.setValue(campos[campo]);
+								    	console.log(campo);
+						    	}	
+						    }	
 			    	}
 			    	
 			    	/*traer form x id
