@@ -140,52 +140,61 @@ Ext.onReady(function(){
 					
 					var buttonCrear = function(b,e)
 					{
-									var basicForm = b.up('form').getForm();  						
-						            var valoresForm = basicForm.getFieldValues();
+									var basicForm = b.up('form').getForm();
+							if(basicForm.isValid())
+							{
 
-						           	var auxnombre = valoresForm.nombre;
-						           	var auxcodigo = valoresForm.codigo;
-						           	var auxsubtitulo = valoresForm.subtitulo;
-						           	var auxcriterio = valoresForm.criterio;
-						        	var auxmodalidad = valoresForm.modalidad;
-						           	var auxnivel = valoresForm.nivel;
-						        	var auxatelier = valoresForm.atelier;
-						        	var auxduracion = valoresForm.duracion;
-						        	var auxasistencia = valoresForm.asistencia;
-						        	var auxfecha_alta = valoresForm.fecha_alta;
-						        	var auxfecha_baja = valoresForm.fecha_baja;
-
-						Ext.Ajax.request({
-							   url: baseURL + '/actividad/actividad-tipo/post',
-							   success: function(response, opt){
-								   Ext.Msg.show({
-									    title:'Aviso',
-										msg:'Tipo de Actividad Cargado Correctamente'
-								   });
-								   function hide_message() {
-								       Ext.defer(function() {
-								           Ext.MessageBox.hide();
-								       }, delay);
-								   }
-								   hide_message();
-								   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
-							   },
-							   jsonData:{
-							       'post':{
-									   'act_nivel_id':auxnivel,
-									   'nombre': auxnombre,
-									   'codigo': auxcodigo,
-									   'subtitulo': auxsubtitulo,
-									   'act_criterio_id': auxcriterio,
-									   'act_modalidad_id': auxmodalidad,
-									   'atelier': auxatelier,
-									   'asistencia': auxasistencia,
-									   'duracion': auxduracion,
-									   'fecha_alta': auxfecha_alta,
-									   'fecha_baja': auxfecha_baja			   
-							       }
-							   }
-						 });
+								            var valoresForm = basicForm.getFieldValues();
+		
+								           	var auxnombre = valoresForm.nombre;
+								           	var auxcodigo = valoresForm.codigo;
+								           	var auxsubtitulo = valoresForm.subtitulo;
+								           	var auxcriterio = valoresForm.criterio;
+								        	var auxmodalidad = valoresForm.modalidad;
+								           	var auxnivel = valoresForm.nivel;
+								        	var auxatelier = valoresForm.atelier;
+								        	var auxduracion = valoresForm.duracion;
+								        	var auxasistencia = valoresForm.asistencia;
+								        	var auxfecha_alta = valoresForm.fecha_alta;
+								        	var auxfecha_baja = valoresForm.fecha_baja;
+		
+									Ext.Ajax.request({
+										   url: baseURL + '/actividad/actividad-tipo/post',
+										   success: function(response, opt){
+											   Ext.Msg.show({
+												    title:'Aviso',
+													msg:'Tipo de Actividad Cargado Correctamente'
+											   });
+											   function hide_message() {
+											       Ext.defer(function() {
+											           Ext.MessageBox.hide();
+										       }, delay);
+										   }
+										   hide_message();
+										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+									   },
+									   jsonData:{
+									       'post':{
+											   'act_nivel_id':auxnivel,
+											   'nombre': auxnombre,
+											   'codigo': auxcodigo,
+											   'subtitulo': auxsubtitulo,
+											   'act_criterio_id': auxcriterio,
+											   'act_modalidad_id': auxmodalidad,
+											   'atelier': auxatelier,
+											   'asistencia': auxasistencia,
+											   'duracion': auxduracion,
+											   'fecha_alta': auxfecha_alta,
+											   'fecha_baja': auxfecha_baja			   
+									       }
+									   }
+								 });
+							}
+							else
+							{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+							}  	
 						
 						
 					};
@@ -242,7 +251,7 @@ Ext.onReady(function(){
 								    	fieldLabel: 'Duraci&oacute;n (hs)',
 								    	labelWidth: 110,
 								    	xtype: 'numberfield',
-								    	minvalue: 0,
+								    	minValue: 0,
 								    	value: 0,
 								    	step: 0.25,
 								    	anchor:'90%',

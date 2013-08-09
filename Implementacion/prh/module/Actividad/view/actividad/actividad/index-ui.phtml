@@ -35,32 +35,44 @@ Ext.onReady(function(){
 			fields: [
 				{
 					type: 'int',
-					name: 'act_actividad_tipo_id'
+					name: 'act_actividad_id'
 				},{
 					type: 'string',
-					name: 'nombre'
+					name: 'fecha_inicio'
 				},{
 					type: 'string',
-					name: 'codigo'
+					name: 'fecha_fin'
 				},{
 					type: 'string',
-					name: 'atelier'
-				},{
-					type: 'string',
-					name: 'asistencia'
+					name: 'nombre_identificador'
 				},{
 					type: 'float',
 					name: 'duracion'
 				},{
 					type: 'string',
-					name: 'nivel'
+					name: 'estado'
+				},{
+					type: 'float',
+					name: 'monto'
 				},{
 					type: 'string',
-					name: 'modalidad'
+					name: 'observaciones'
 				},{
 					type: 'string',
-					name: 'criterio'
-				}
+					name: 'tipo'
+				},{
+					type: 'int',
+					name: 'nro_personas'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'nombre_act_tipo'
+				},{
+					type: 'int',
+					name: 'anho'
+				},
 			]
 		});
 
@@ -166,8 +178,8 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 		
-		var actividadTipoStore = Ext.create('Ext.data.Store', {
-			model: 'actividadTipo',
+		var actividadStore = Ext.create('Ext.data.Store', {
+			model: 'actividad',
 			pageSize: itemsPorPagina, 
 			proxy: {
 				type: 'ajax',
@@ -176,7 +188,7 @@ Ext.onReady(function(){
 						"p[page]":  page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/actividad-tipo/index?format=json',
+				url: baseURL + '/actividad/actividad/index?format=json',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -303,9 +315,9 @@ Ext.onReady(function(){
 			
 										//inicializo los pages
 							           	page = 0;
-										gridActividadTipo.store.currentPage = 1;
+										gridActividad.store.currentPage = 1;
 										
-						                actividadTipoStore.load({
+						                actividadStore.load({
 											params: {
 												"s[nombre]": auxnombre,
 												"s[codigo]": auxcodigo,
@@ -326,7 +338,7 @@ Ext.onReady(function(){
 						           		handler: function(b,e) {
 						           			//inicializo los pages
 								           	page = 0;
-											gridActividadTipo.store.currentPage = 1;
+											gridActividad.store.currentPage = 1;
 											//console.log(this);
 						           			b.up('form').getForm().reset();
 						           			actividadTipoStore.load();						   	
@@ -335,7 +347,7 @@ Ext.onReady(function(){
 				    	]
 		});
     	
-		var gridActividadTipo = Ext.create('Ext.grid.Panel', {
+		var gridActividad = Ext.create('Ext.grid.Panel', {
             //title: 'Profesi&oacute;n',
             selModel: {
                 checkOnly: true,
@@ -354,15 +366,15 @@ Ext.onReady(function(){
                              xtype: 'tbfill' 
                          },{
      			            xtype: 'button',	
-    			            text: 'Crear Tipo de Actividad',
+    			            text: 'Crear Actividad',
     			            handler: function() {
-    			            	window.location = baseURL+'/actividad/actividad-tipo/crear-ui';
+    			            	window.location = baseURL+'/actividad/actividad/crear-ui';
     						}
     		            }]
 	                }
 	                ,{
                     xtype: 'pagingtoolbar',
-                    store: actividadTipoStore, 
+                    store: actividadStore, 
                     dock: 'bottom',
                     displayInfo: true,
                     listeners: {
@@ -377,15 +389,10 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
-           				actividadTipoStore.load({
+           				actividadStore.load({
 	       				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
-	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
 	       				    }
        					});
            					console.log("page store: ", page);
@@ -394,15 +401,10 @@ Ext.onReady(function(){
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
 						this.store.currentPage--;
-						actividadTipoStore.load({
+						actividadStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio	        
+		   						"p[page]": page,        
 		   				    }
    						});
 	       					console.log("page store: ", page);
@@ -411,15 +413,10 @@ Ext.onReady(function(){
              		moveFirst : function(){ 
              			page = 0;
 						this.store.currentPage = 1;
-						actividadTipoStore.load({
+						actividadStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio  
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -435,15 +432,10 @@ Ext.onReady(function(){
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
-            	 		actividadTipoStore.load({
+            	 		actividadStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio 
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -454,53 +446,63 @@ Ext.onReady(function(){
             layout: 'fit',
             emptyText: "No existen tipo de actividades cargadas",
             
-            store: actividadTipoStore,
+            store: actividadStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Tipo de Actividad",
+                text: "Actividad",
                 dataIndex: 'nombre',
                 align: 'left',
-                flex: 2.2,
+                flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
             	}
             },{
-                text: "C&oacute;digo",
-                dataIndex: 'codigo',
+                text: "Tipo de Act.",
+                dataIndex: 'nombre_act_tipo',
                 align: 'center',
                 flex: 1,
             },{
-                text: "Atelier",
-                dataIndex: 'atelier',
+                text: "Estado",
+                dataIndex: 'estado',
                 align: 'center',
-                flex: 0.6,
+                flex: 0.5,
             },{
-                text: "Asistencia",
-                dataIndex: 'asistencia',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: "Duraci&oacute;n",
+                text: "Duraci&oacute;n (hs)",
                 dataIndex: 'duracion',
                 align: 'center',
-                flex: 0.5,
+                flex: 0.6,
             },{
-                text: "Nivel",
-                dataIndex: 'nivel',
+                text: "Monto",
+                dataIndex: 'monto',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Participantes",
+                dataIndex: 'nro_personas',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Inicio",
+                dataIndex: 'fecha_inicio',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Fin",
+                dataIndex: 'fecha_fin',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Estado",
+                dataIndex: 'estado',
                 align: 'center',
                 flex: 0.5,
             },{
-                text: "Modalidad",
-                dataIndex: 'modalidad',
-                align: 'center',
-                flex: 0.5,
-            },{
-                text: "Criterio",
+                text: "Observac&oacute;n",
                 dataIndex: 'criterio',
                 align: 'center',
-                flex: 0.4,
+                flex: 1,
             },{
                 xtype:'actioncolumn',
                 width:35,
@@ -509,7 +511,7 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     tooltip: 'Edit',
                		handler: function(grid, rowIndex, colIndex) {
-                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');  
+                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_tipo_id');  
                    		window.location = url;                     
                     }
                 }]
@@ -521,8 +523,8 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');
-                    	var nombre_delete = actividadTipoStore.getAt(rowIndex).get('nombre');
+                    	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_tipo_id');
+                    	var nombre_delete = actividadStore.getAt(rowIndex).get('nombre');
                     	var auxmensaje = 'Confirma que desea borrar el Tipo de Actividad '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
@@ -545,7 +547,7 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   actividadTipoStore.load();
+        								   actividadStore.load();
         							   },
         							   jsonData:{
         							       'delete':{
@@ -578,19 +580,20 @@ Ext.onReady(function(){
 		    width: 'fit',
 		    height: 510,
 		    items:[
-		         {	
-		        	 xtype: 'panel',
-					 items: [panelFiltros]
+// 		         {	
+// 		        	 xtype: 'panel',
+// 					 items: [panelFiltros]
 			        
-		         },{
+// 		         }
+		         ,{
 		        	 xtype: 'container',
-					 items: [gridActividadTipo]
+					 items: [gridActividad]
 		         }
 		    ],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(1);
-					Ext.getCmp('actividadTabPanel').setActiveTab(1);
+					Ext.getCmp('actividadTabPanel').setActiveTab(0);
 				}
 			}
 		});
