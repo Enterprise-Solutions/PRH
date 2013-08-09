@@ -194,6 +194,7 @@ Ext.onReady(function(){
 					           	var auxnivel = valoresForm.act_nivel_id;
 					        	var auxatelier = valoresForm.atelier;
 					        	var auxasistencia = valoresForm.asistencia;
+					        	var auxduracion = valoresForm.duracion;
 					        	var auxfecha_alta = valoresForm.fecha_alta;
 					        	var auxfecha_baja = valoresForm.fecha_baja;
 
@@ -223,6 +224,7 @@ Ext.onReady(function(){
 								   'act_modalidad_id': auxmodalidad,
 								   'atelier': auxatelier,
 								   'asistencia': auxasistencia,
+								   'duracion': auxduracion,
 								   'fecha_alta': (formatearFecha(auxfecha_alta, 1)),
 								   'fecha_baja': (formatearFecha(auxfecha_baja, 1))			   
 						       }
@@ -280,6 +282,16 @@ Ext.onReady(function(){
 					 	        anchor:'90%',
 					 	        name: 'act_criterio_id', 
 				         },{
+						    	fieldLabel: 'Duraci&oacute;n (hs)',
+						    	labelWidth: 110,
+						    	xtype: 'numberfield',
+						    	minvalue: 0,
+						    	value: 0,
+						    	step: 0.25,
+						    	anchor:'90%',
+						    	padding: 15,
+						    	name: 'duracion',
+				    	 },{
 						        fieldLabel: 'Asistencia',
 						        xtype: 'combobox',
 						        labelWidth: 110,

@@ -150,6 +150,7 @@ Ext.onReady(function(){
 						        	var auxmodalidad = valoresForm.modalidad;
 						           	var auxnivel = valoresForm.nivel;
 						        	var auxatelier = valoresForm.atelier;
+						        	var auxduracion = valoresForm.duracion;
 						        	var auxasistencia = valoresForm.asistencia;
 						        	var auxfecha_alta = valoresForm.fecha_alta;
 						        	var auxfecha_baja = valoresForm.fecha_baja;
@@ -179,6 +180,7 @@ Ext.onReady(function(){
 									   'act_modalidad_id': auxmodalidad,
 									   'atelier': auxatelier,
 									   'asistencia': auxasistencia,
+									   'duracion': auxduracion,
 									   'fecha_alta': auxfecha_alta,
 									   'fecha_baja': auxfecha_baja			   
 							       }
@@ -237,6 +239,16 @@ Ext.onReady(function(){
 							 	        anchor:'90%',
 							 	        name: 'criterio', 
 						         },{
+								    	fieldLabel: 'Duraci&oacute;n (hs)',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minvalue: 0,
+								    	value: 0,
+								    	step: 0.25,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'duracion',
+						    	 },{
 								        fieldLabel: 'Asistencia',
 								        xtype: 'combobox',
 								        labelWidth: 110,
@@ -249,14 +261,14 @@ Ext.onReady(function(){
 							 	        anchor:'90%',
 							 	        name: 'asistencia', 
 						    	  },{
-			                			fieldLabel: 'Fecha de baja',
+			                			fieldLabel: 'Fecha de alta',
 							 	        xtype: 'datefield',
 							 	       	format: 'd/m/Y',
 							 	        allowBlank: true,
 							 	       	padding: 15,
 							 	        labelWidth: 110,
 							 	        anchor:'90%',
-							 	        name: 'fecha_baja'  
+							 	        name: 'fecha_alta'  
 								  }
 					    	]},{
 					    		xtype: 'container',
@@ -307,14 +319,14 @@ Ext.onReady(function(){
 						 	        anchor:'90%',
 						 	        name: 'atelier', 
 					    	  	},{
-		                			fieldLabel: 'Fecha de alta',
+		                			fieldLabel: 'Fecha de baja',
 						 	        xtype: 'datefield',
 						 	       	format: 'd/m/Y',
 						 	        allowBlank: true,
 							 	   	padding: 15,
 						 	        labelWidth: 110,
 						 	        anchor:'90%',
-						 	        name: 'fecha_alta'  
+						 	        name: 'fecha_baja'  
 		                	}]
 					    	}]},{
 				    	xtype: 'container',

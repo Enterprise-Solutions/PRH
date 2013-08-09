@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Actividad</title>
+        <title>PRH - Tipo de Actividad</title>
 
 		<style type="text/css">
 		
@@ -17,17 +17,20 @@
 
 			var baseURL = '<?=$this->basePath()?>';
 
-			var auxcarrera = null;
-			var titulo = null;
+			var auxnombre = null;
+			var auxcodigo = null;
+			var auxnivel = null;
+			var auxmodalidad = null;
+			var auxcriterio = null;
 	
-			var itemsPorPagina = 10;
+			var itemsPorPagina = 10
 			var page = 0;
 			
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('actividadTipo', {
+		Ext.define('actividad', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
@@ -60,6 +63,108 @@ Ext.onReady(function(){
 				}
 			]
 		});
+
+		Ext.define('nivel', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_nivel_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+
+		Ext.define('modalidad', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_modalidad_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+
+		Ext.define('criterio', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_criterio_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'codigo'
+				},{
+					type: 'float',
+					name: 'horas'
+				},{
+					type: 'date',
+					name: 'fecha_alta'
+				},{
+					type: 'date',
+					name: 'fecha_baja'
+				}
+			]
+		});
+
+		var nivelStore = Ext.create('Ext.data.Store', {
+			model: 'nivel',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-nivel?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var modalidadStore = Ext.create('Ext.data.Store', {
+			model: 'modalidad',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-modalidad?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var criterioStore = Ext.create('Ext.data.Store', {
+			model: 'criterio',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-criterio?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
 		
 		var actividadTipoStore = Ext.create('Ext.data.Store', {
 			model: 'actividadTipo',
@@ -80,6 +185,155 @@ Ext.onReady(function(){
 			},
 			autoLoad: true
 		});
+
+
+		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Nivel',
+	        xtype: 'combobox',
+	        labelWidth: 50,
+	        width: 180,
+	        store: nivelStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_nivel_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'nivel',
+	  	});
+
+		var comboModalidad = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Modalidad',
+	        xtype: 'combobox',
+	        labelWidth: 80,
+	        width: 200,
+	        store: modalidadStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_modalidad_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'modalidad',
+	  	});
+
+		var comboCriterio = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Criterio',
+	        xtype: 'combobox',
+	        labelWidth: 70,
+	        width: 280,
+	        store: criterioStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_criterio_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'criterio',
+	  	});
+		  
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 130,			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'hbox',
+				    items:[{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 250,
+						        anchor:'90%',
+						        name: 'nombre',
+							    flex: 0.5    
+				    	  },{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'C&oacute;digo',
+						        padding: '10 0 5 20',
+						        labelWidth: 60,
+						        width: 180,
+						        anchor:'90%',
+						        name: 'codigo',
+							    flex: 0.4    
+				    	  },{
+							    xtype: 'container',
+							    padding: '5 0 0 20', //margen del Form 'arriba lateral abajo'
+							    flex: 0.5,
+							    items: [comboNivel]
+						   }, 
+				    	   {
+						        xtype: 'container',
+						        padding: '5 0 0 0', 
+						        flex: 0.5,
+						        items: [comboModalidad]
+					    	},
+					    	{
+						        xtype: 'container',
+						        padding: '5 0 0 0', 
+						        flex: 0.65,
+						        items: [comboCriterio]
+					    	}
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '10 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+
+					           		    var auxnombre = valoresForm.nombre;
+					           		    var auxcodigo = valoresForm.codigo;
+					           			
+							           	auxnivel = valoresForm.nivel;
+							           	auxmodalidad = valoresForm.modalidad;
+							           	auxcriterio = valoresForm.criterio;
+			
+										//inicializo los pages
+							           	page = 0;
+										gridActividadTipo.store.currentPage = 1;
+										
+						                actividadTipoStore.load({
+											params: {
+												"s[nombre]": auxnombre,
+												"s[codigo]": auxcodigo,
+												"s[nivel]": auxnivel,
+												"s[modalidad]": auxmodalidad,
+												"s[criterio]": auxcriterio
+									   		} 
+						               });
+						            }//end of handler  
+									        
+								},{
+			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '10 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+											gridActividadTipo.store.currentPage = 1;
+											//console.log(this);
+						           			b.up('form').getForm().reset();
+						           			actividadTipoStore.load();						   	
+				           		  		}
+								}]}
+				    	]
+		});
     	
 		var gridActividadTipo = Ext.create('Ext.grid.Panel', {
             //title: 'Profesi&oacute;n',
@@ -88,8 +342,8 @@ Ext.onReady(function(){
                 injectCheckbox: 1
             },
             width: 'fit',
-            padding: '10 10 0 10',
-            height: 373,
+            padding: '5 0 0 0',
+            height: 372,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -99,10 +353,12 @@ Ext.onReady(function(){
                          { 
                              xtype: 'tbfill' 
                          },{
-                        	xtype: 'button',	
-     			            text: 'Crear Tipo de Actividad',
-     		                //handler: agregarwindow,
-                         }]
+     			            xtype: 'button',	
+    			            text: 'Crear Tipo de Actividad',
+    			            handler: function() {
+    			            	window.location = baseURL+'/actividad/actividad-tipo/crear-ui';
+    						}
+    		            }]
 	                }
 	                ,{
                     xtype: 'pagingtoolbar',
@@ -123,9 +379,13 @@ Ext.onReady(function(){
                    	 	this.store.currentPage++;
            				actividadTipoStore.load({
 	       				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
-	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio
 	       				    }
        					});
            					console.log("page store: ", page);
@@ -136,9 +396,13 @@ Ext.onReady(function(){
 						this.store.currentPage--;
 						actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio	        
 		   				    }
    						});
 	       					console.log("page store: ", page);
@@ -149,9 +413,13 @@ Ext.onReady(function(){
 						this.store.currentPage = 1;
 						actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio  
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -169,9 +437,13 @@ Ext.onReady(function(){
 						}
             	 		actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio 
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -188,8 +460,12 @@ Ext.onReady(function(){
             columns:[{
                 text: "Tipo de Actividad",
                 dataIndex: 'nombre',
-                align: 'center',
-                flex: 2.5,
+                align: 'left',
+                flex: 2.2,
+                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
+                    console.log(metadata);
+                    return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
+            	}
             },{
                 text: "C&oacute;digo",
                 dataIndex: 'codigo',
@@ -212,7 +488,7 @@ Ext.onReady(function(){
                 flex: 0.5,
             },{
                 text: "Nivel",
-                dataIndex: 'codigo',
+                dataIndex: 'nivel',
                 align: 'center',
                 flex: 0.5,
             },{
@@ -231,13 +507,11 @@ Ext.onReady(function(){
                 align: 'center',
                 items: [{
                     icon: baseURL+'/img/icons/grid/edit.png',  
-                    //tooltip: 'Edit',
-//                 handler: function(grid, rowIndex, colIndex) {
-//                     	var id_edit = actividadTipoStore.getAt(rowIndex).get('org_profesion_id');
-//                     	var nombre_edit = actividadTipoStore.getAt(rowIndex).get('nombre');
-//                     	var abrev_edit = actividadTipoStore.getAt(rowIndex).get('abrev');
-// 						editarwindow(id_edit, nombre_edit, abrev_edit);                        
-//                     }
+                    tooltip: 'Edit',
+               		handler: function(grid, rowIndex, colIndex) {
+                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');  
+                   		window.location = url;                     
+                    }
                 }]
             },{
                 xtype:'actioncolumn',
@@ -263,7 +537,7 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Tipoo de Actividad Borrada Correctamente'
+        										msg:'Tipo de Actividad Borrado Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -299,15 +573,24 @@ Ext.onReady(function(){
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			//id: 'margen',
-			padding: '15 5 0 5', 
+			padding: '5 0 0 10', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 570,
-		    items:[gridActividadTipo],
+		    height: 510,
+		    items:[
+		         {	
+		        	 xtype: 'panel',
+					 items: [panelFiltros]
+			        
+		         },{
+		        	 xtype: 'container',
+					 items: [gridActividadTipo]
+		         }
+		    ],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(1);
-					Ext.getCmp('actividadTabPanel').setActiveTab(0);
+					Ext.getCmp('actividadTabPanel').setActiveTab(1);
 				}
 			}
 		});
