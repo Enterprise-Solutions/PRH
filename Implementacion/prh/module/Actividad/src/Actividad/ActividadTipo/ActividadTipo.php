@@ -122,6 +122,10 @@ class ActividadTipo
                     array('name' => 'StringLength', 'options' => array('max' => 100)),
                 ),
             ),
+            'subtitulo' => array(
+                'name'     => 'subtitulo',
+                'required' => false,
+            ),
             'atelier' => array(
                 'name'       => 'atelier',
                 'required'   => true,
@@ -145,6 +149,18 @@ class ActividadTipo
                     array('name' => 'NotEmpty'),
                     array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
                 )
+            ),
+            'duracion' => array(
+                'name'     => 'duracion',
+                'required' => false,
+            ),
+            'fecha_baja' => array(
+                'name'     => 'fecha_baja',
+                'required' => false,
+            ),
+            'fecha_alta' => array(
+                'name'     => 'fecha_alta',
+                'required' => false,
             ),
         );
         
