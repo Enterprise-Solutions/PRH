@@ -153,6 +153,9 @@ class ActividadTipo
             'duracion' => array(
                 'name'     => 'duracion',
                 'required' => false,
+                'validators' => array(
+                    array('name' => 'GreaterThan', 'options' => array('min' => 0, 'message' => 'La duracion debe ser mayor a cero')),
+                )
             ),
             'fecha_baja' => array(
                 'name'     => 'fecha_baja',
