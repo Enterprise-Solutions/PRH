@@ -68,10 +68,10 @@
 			$texto = "";
 
 			if ($this->messages){
-				$texto .= '<ul>';
+				$texto .= '<ul style="list-style-type: none;padding: 0px;margin: 0px;">';
 				foreach($this->messages as $message)	
 				{
-					$texto .= ('<li>'.$message.'</li>');	
+					$texto .= ('<li style="color: #112D6F; font-size: 15px;"><b> ** '.$message.' ** </b></li>');	
 				}	
 				$texto .= '</ul>';
 			}

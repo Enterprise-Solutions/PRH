@@ -29,7 +29,7 @@ class ActividadTipoController extends BaseController
         $query = new Get($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao = new DaoGet($query);
         $template = $this->_crearTemplateParaGet();
-        return $template($dao, array('id' => 5));
+        return $template($dao, array());
     }
     
     public function postAction()
