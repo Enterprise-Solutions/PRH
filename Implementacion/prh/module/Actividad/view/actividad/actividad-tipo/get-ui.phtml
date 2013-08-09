@@ -1,0 +1,263 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Tipo de Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+
+		var buscarId = function(){
+			if (window.location.hash) {
+			    var params = (window.location.hash.substr(1)).split("#");
+			        var id = params[0].split("=");
+					return id[1];
+			}
+		};
+
+		var cargarDatos = function (){
+			var aux = buscarId();
+			Ext.Ajax.request({
+			    url: baseURL +'/actividad/actividad-tipo/get?id=int',
+			    params: {
+			        'id': aux,
+			    },
+			    success: function(response) {
+			    	var campos = Ext.decode(response.responseText);
+			    	var form = Ext.getCmp('form').getForm();
+			    	
+			    	for (campo in campos) {
+				    	if (campo == "documentos"){
+							var doc = (campos[campo]);
+							console.log(doc["org_documento_id"]);
+			    		}	
+				    	var name = form.findField(campo);
+				    		if (name) {
+				    			if (campo == "fecha_alta" || campo == "fecha_baja")
+						    	{
+				    				if (campos[campo]){
+							    		var fecha = campos[campo];
+					 			    	var fecha2 = fecha.split("-");
+					 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+					 			    	campos[campo] = result;
+					 			    	name.setValue(campos[campo]);
+				    				}
+						    	 }else if (campo == "asistencia" || campo == "atelier")
+							    	{
+								    	if (campos[campo] == 'S'){
+								    		campos[campo] = 'Si';
+								    	}
+								    	else if (campos[campo] == 'N'){
+								    		campos[campo] = 'No';
+								    	}
+					 			    	name.setValue(campos[campo]);
+								 	} else{
+								    
+									    	name.setValue(campos[campo]);
+									    	console.log(campo);
+							     }
+					    }	}	
+			    	}
+			    	
+			    	/*traer form x id
+
+			    	de ese traer su basic form
+
+			    	iterar text 
+
+			    	for(var campo in text)
+				    	c1 =basicform.finfield(campo)
+
+				    	contrrol q exista
+
+				    	c1.setValue(text.campo)*/
+			   
+				});
+		};
+
+		var pantallaPersona = Ext.create('Ext.form.Panel', {
+			id: 'form',
+			items:[{
+			    xtype: 'panel',
+			    bodyStyle: {
+		        	background: '#C8CED8',
+		        },
+			    title: 'Tipo de Actividad',
+			    //collapsible: true,
+			    //anchor:'90%',
+			    height: 'fit',
+			    width: 'fit',
+			    border: 1,
+			    padding: '20 15 15 15',
+			    layout: 'hbox',
+			    defaultType: 'textfield',
+			    items: [{
+					xtype: 'container',
+					flex: 1,
+					layout: 'anchor',
+					defaultType: 'textfield',
+					items: [    
+					    {
+						    	xtype: 'displayfield',
+						        fieldLabel: 'Nombre',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'nombre',
+						},{
+				    	    	fieldLabel: 'Nivel',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+				    	        name: 'nivel',
+				    	},{
+				    		 	fieldLabel: 'Duraci&oacute;n',
+						        xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'duracion',
+						},{
+						    	fieldLabel: 'Fecha de alta',
+						    	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'fecha_alta',	  
+				    	 }
+			    	]},{
+					xtype: 'container',
+					flex: 1,
+					layout: 'anchor',
+					defaultType: 'textfield',
+					items: [{
+				    	        fieldLabel: 'C&oacute;digo',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'codigo'
+				    	 },{
+						        fieldLabel: 'Modalidad',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+					 	        name: 'modalidad',
+				    	 },{
+				    			fieldLabel: 'Atelier',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'atelier',
+						 },{
+						    	fieldLabel: 'Fecha de baja',
+					        	xtype: 'displayfield',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						    	name: 'fecha_baja',
+					   	 }
+			    	]},{
+			    		xtype: 'container',
+		                flex: 1,
+		                layout: 'anchor',
+		                defaultType: 'textfield',
+		                items: [{
+							        fieldLabel: 'Subtitulo',
+						        	xtype: 'displayfield',
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+						 	        name: 'subtitulo', 
+					    	    },{
+						        	fieldLabel: 'Criterio',
+						        	xtype: 'displayfield',
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+						 	        name: 'criterio'
+						    	},{
+							    	fieldLabel: 'Asistencia',
+						        	xtype: 'displayfield',
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+							        name: 'asistencia',
+						         }
+			    		]
+			    	}]},{
+		    	xtype: 'container',
+		 	    height: 200,
+		 	    width: 'fit',
+		 	   layout: 'hbox',
+		 	   // flex: 1,
+		 	   // padding: '5 0 10 440',
+		 	    items:[
+		 	      {	  
+		 	    	  xtype: 'button',
+		 	    	  margin: '5 0 10 1025',
+				      scale: 'large',
+				      width: 100,
+				      text: 'Editar',
+				      handler: function() {
+						  window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+				      }
+		 	      },{
+		 	    	  xtype: 'button',
+		 	    	  margin: '5 0 10 20',
+				      scale: 'large',
+				      width: 100,
+				      text: 'Volver',
+					  //disabled: true,
+					  handler: function() {
+						  window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+					}
+		 	      }
+			    ]
+		     }],
+			});
+		
+		
+		var pantalla = Ext.create('Ext.form.Panel', {
+			id: 'margen',
+			padding: '15 5 0 5', 
+		    //title: ' ',
+		    width: 'fit',
+		    height: 570,
+		    renderTo: Ext.getBody(),
+		    items:[pantallaPersona],
+		});
+		
+		cargarDatos();
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
