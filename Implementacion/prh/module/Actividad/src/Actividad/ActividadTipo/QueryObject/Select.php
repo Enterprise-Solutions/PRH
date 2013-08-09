@@ -37,7 +37,7 @@ class Select extends DbSelect
     {
         if ($nivel && $nivel != "") {
             $this->_select
-                 ->where("aat.act_nicel_id = $nivel");
+                 ->where("aat.act_nivel_id = $nivel");
         }
     }
     
