@@ -17,8 +17,11 @@
 
 			var baseURL = '<?=$this->basePath()?>';
 
-			var auxcarrera = null;
-			var titulo = null;
+			var auxnombre = null;
+			var auxcodigo = null;
+			var auxnivel = null;
+			var auxmodalidad = null;
+			var auxcriterio = null;
 	
 			var itemsPorPagina = 10
 			var page = 0;
@@ -183,46 +186,12 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 
-// 		var ComboAsignaturaStore = Ext.create('Ext.data.Store', {
-// 			model: 'ComboAsignatura',
-// 			pageSize: 5, 
-// 			proxy: {
-// 				type: 'ajax',
-// 				extraParams: {'p[limit]':'5'},
-// 				headers: {'Accept':'application/json'},
-// 				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
-// 				reader: {
-// 					type: 'json',
-// 					root: 'records',
-// 					totalProperty: 'numResults',
-// 				}
-// 			},
-// 			autoLoad: true
-// 		});
-		
-		var asignatura = Ext.create('Ext.form.field.ComboBox', {
-	        fieldLabel: 'Asignatura',
-	        displayField: 'nombre',
-	        valueField: 'pe_asignatura_prop_id',
-	        width: 370,
-	        name: 'asignatura',
-	        labelWidth: 70,
-	      //  store: ComboAsignaturaStore,
-	        queryMode: 'remote',
-	        typeAhead: true,
-	        emptyText: 'Escriba el nombre de la Asignatura...',
-	        loadingText: 'Buscando Asignaturas...',
-	        hideTrigger: true,
-	       // forceSelection: true,
-	        queryParam: 's[nombre]:',
-	        minChars: 2,
-	  	});
 
 		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
 			fieldLabel: 'Nivel',
 	        xtype: 'combobox',
 	        labelWidth: 50,
-	        width: 190,
+	        width: 180,
 	        store: nivelStore,
 	        displayField: 'nombre',
 	        queryMode: 'local',
@@ -235,8 +204,8 @@ Ext.onReady(function(){
 		var comboModalidad = Ext.create('Ext.form.field.ComboBox', {
 			fieldLabel: 'Modalidad',
 	        xtype: 'combobox',
-	        labelWidth: 90,
-	        width: 210,
+	        labelWidth: 80,
+	        width: 200,
 	        store: modalidadStore,
 	        displayField: 'nombre',
 	        queryMode: 'local',
@@ -250,7 +219,7 @@ Ext.onReady(function(){
 			fieldLabel: 'Criterio',
 	        xtype: 'combobox',
 	        labelWidth: 70,
-	        width: 300,
+	        width: 280,
 	        store: criterioStore,
 	        displayField: 'nombre',
 	        queryMode: 'local',
@@ -272,10 +241,27 @@ Ext.onReady(function(){
 				    id: 'filtros',
 				    height: 40,
 				    layout:'hbox',
-				    items:[
-						  {
+				    items:[{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 250,
+						        anchor:'90%',
+						        name: 'nombre',
+							    flex: 0.5    
+				    	  },{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'C&oacute;digo',
+						        padding: '10 0 5 20',
+						        labelWidth: 60,
+						        width: 180,
+						        anchor:'90%',
+						        name: 'codigo',
+							    flex: 0.4    
+				    	  },{
 							    xtype: 'container',
-							    padding: '5 0 0 15', //margen del Form 'arriba lateral abajo'
+							    padding: '5 0 0 20', //margen del Form 'arriba lateral abajo'
 							    flex: 0.5,
 							    items: [comboNivel]
 						   }, 
@@ -288,7 +274,7 @@ Ext.onReady(function(){
 					    	{
 						        xtype: 'container',
 						        padding: '5 0 0 0', 
-						        flex: 1.5,
+						        flex: 0.65,
 						        items: [comboCriterio]
 					    	}
 					   ]
@@ -307,7 +293,10 @@ Ext.onReady(function(){
 					            	
 							           var basicForm = b.up('form').getForm();						
 							           var valoresForm = basicForm.getFieldValues();
-					           
+
+					           		    var auxnombre = valoresForm.nombre;
+					           		    var auxcodigo = valoresForm.codigo;
+					           			
 							           	auxnivel = valoresForm.nivel;
 							           	auxmodalidad = valoresForm.modalidad;
 							           	auxcriterio = valoresForm.criterio;
@@ -318,6 +307,8 @@ Ext.onReady(function(){
 										
 						                actividadTipoStore.load({
 											params: {
+												"s[nombre]": auxnombre,
+												"s[codigo]": auxcodigo,
 												"s[nivel]": auxnivel,
 												"s[modalidad]": auxmodalidad,
 												"s[criterio]": auxcriterio
@@ -388,9 +379,13 @@ Ext.onReady(function(){
                    	 	this.store.currentPage++;
            				actividadTipoStore.load({
 	       				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
-	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio
 	       				    }
        					});
            					console.log("page store: ", page);
@@ -401,9 +396,13 @@ Ext.onReady(function(){
 						this.store.currentPage--;
 						actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio	        
 		   				    }
    						});
 	       					console.log("page store: ", page);
@@ -414,9 +413,13 @@ Ext.onReady(function(){
 						this.store.currentPage = 1;
 						actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio  
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -434,9 +437,13 @@ Ext.onReady(function(){
 						}
             	 		actividadTipoStore.load({
 		   				    params:{
+								"s[nombre]": auxnombre,
+								"s[codigo]": auxcodigo,
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+								"s[nivel]": auxnivel,
+								"s[modalidad]": auxmodalidad,
+								"s[criterio]": auxcriterio 
 		   				    }
    						});
        					console.log("page store: ", page);
@@ -453,8 +460,8 @@ Ext.onReady(function(){
             columns:[{
                 text: "Tipo de Actividad",
                 dataIndex: 'nombre',
-                align: 'center',
-                flex: 2.5,
+                align: 'left',
+                flex: 2.2,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
@@ -500,13 +507,11 @@ Ext.onReady(function(){
                 align: 'center',
                 items: [{
                     icon: baseURL+'/img/icons/grid/edit.png',  
-                    //tooltip: 'Edit',
-//                 handler: function(grid, rowIndex, colIndex) {
-//                     	var id_edit = actividadTipoStore.getAt(rowIndex).get('org_profesion_id');
-//                     	var nombre_edit = actividadTipoStore.getAt(rowIndex).get('nombre');
-//                     	var abrev_edit = actividadTipoStore.getAt(rowIndex).get('abrev');
-// 						editarwindow(id_edit, nombre_edit, abrev_edit);                        
-//                     }
+                    tooltip: 'Edit',
+               		handler: function(grid, rowIndex, colIndex) {
+                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');  
+                   		window.location = url;                     
+                    }
                 }]
             },{
                 xtype:'actioncolumn',

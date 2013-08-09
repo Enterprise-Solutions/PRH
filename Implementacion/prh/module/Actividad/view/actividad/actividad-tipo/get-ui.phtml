@@ -22,6 +22,8 @@
 	
 			var itemsPorPagina = 10;
 			var page = 0;
+
+			var aux=null;
 			
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
@@ -37,7 +39,7 @@ Ext.onReady(function(){
 		};
 
 		var cargarDatos = function (){
-			var aux = buscarId();
+			aux = buscarId();
 			Ext.Ajax.request({
 			    url: baseURL +'/actividad/actividad-tipo/get?id=int',
 			    params: {
@@ -96,7 +98,7 @@ Ext.onReady(function(){
 				});
 		};
 
-		var pantallaPersona = Ext.create('Ext.form.Panel', {
+		var pantallaActividad = Ext.create('Ext.form.Panel', {
 			id: 'form',
 			items:[{
 			    xtype: 'panel',
@@ -219,12 +221,13 @@ Ext.onReady(function(){
 		 	    items:[
 		 	      {	  
 		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 10 1025',
+		 	    	  margin: '5 0 10 1015',
 				      scale: 'large',
 				      width: 100,
 				      text: 'Editar',
 				      handler: function() {
-						  window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+	                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+aux;  
+	                   		window.location = url;     
 				      }
 		 	      },{
 		 	    	  xtype: 'button',
@@ -243,16 +246,20 @@ Ext.onReady(function(){
 		
 		
 		var pantalla = Ext.create('Ext.form.Panel', {
-			id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
 		    height: 570,
-		    renderTo: Ext.getBody(),
-		    items:[pantallaPersona],
+		    items:[pantallaActividad],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+//					Ext.getCmp('actividadTabPanel').setActiveTab(1);
+				}
+			}
 		});
-		
 		cargarDatos();
+		Ext.getCmp('centerPanel').add(pantalla);
 });
 
 			

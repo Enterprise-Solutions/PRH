@@ -145,11 +145,14 @@ Ext.onReady(function(){
 
 						           	var auxnombre = valoresForm.nombre;
 						           	var auxcodigo = valoresForm.codigo;
+						           	var auxsubtitulo = valoresForm.subtitulo;
 						           	var auxcriterio = valoresForm.criterio;
 						        	var auxmodalidad = valoresForm.modalidad;
 						           	var auxnivel = valoresForm.nivel;
 						        	var auxatelier = valoresForm.atelier;
 						        	var auxasistencia = valoresForm.asistencia;
+						        	var auxfecha_alta = valoresForm.fecha_alta;
+						        	var auxfecha_baja = valoresForm.fecha_baja;
 
 						Ext.Ajax.request({
 							   url: baseURL + '/actividad/actividad-tipo/post',
@@ -171,10 +174,13 @@ Ext.onReady(function(){
 									   'act_nivel_id':auxnivel,
 									   'nombre': auxnombre,
 									   'codigo': auxcodigo,
+									   'subtitulo': auxsubtitulo,
 									   'act_criterio_id': auxcriterio,
 									   'act_modalidad_id': auxmodalidad,
 									   'atelier': auxatelier,
-									   'asistencia': auxasistencia			   
+									   'asistencia': auxasistencia,
+									   'fecha_alta': auxfecha_alta,
+									   'fecha_baja': auxfecha_baja			   
 							       }
 							   }
 						 });
@@ -205,37 +211,32 @@ Ext.onReady(function(){
 							defaultType: 'textfield',
 							items: [    
 							    {
-							        fieldLabel: 'Nombre',
-							        allowBlank: false,
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'nombre'
-							    },{
-						        	fieldLabel: 'Criterio',
-						        	xtype: 'combobox',
-							        labelWidth: 110,
-							        store: criterioStore,
-							        displayField: 'nombre',
-							        queryMode: 'local',
-							        valueField: 'act_criterio_id',
-							        allowBlank: false,
-							        padding: 15,
-						 	        anchor:'90%',
-						 	        name: 'criterio', 
-						         },{
-								        fieldLabel: 'Nivel',
-								        xtype: 'combobox',
+								        fieldLabel: 'Nombre',
+								        allowBlank: false,
+								        padding: 15,
 								        labelWidth: 110,
-								        store: nivelStore,
+								        anchor:'90%',
+								        name: 'nombre'
+							    },{
+								        fieldLabel: 'Subtitulo',
+								        allowBlank: true,
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        name: 'subtitulo'
+						    	},{
+							        	fieldLabel: 'Criterio',
+							        	xtype: 'combobox',
+								        labelWidth: 110,
+								        store: criterioStore,
 								        displayField: 'nombre',
 								        queryMode: 'local',
-								        valueField: 'act_nivel_id',
+								        valueField: 'act_criterio_id',
 								        allowBlank: false,
 								        padding: 15,
 							 	        anchor:'90%',
-							 	        name: 'nivel', 
-						    	  },{
+							 	        name: 'criterio', 
+						         },{
 								        fieldLabel: 'Asistencia',
 								        xtype: 'combobox',
 								        labelWidth: 110,
@@ -247,7 +248,16 @@ Ext.onReady(function(){
 								        padding: 15,
 							 	        anchor:'90%',
 							 	        name: 'asistencia', 
-						    	  }
+						    	  },{
+			                			fieldLabel: 'Fecha de baja',
+							 	        xtype: 'datefield',
+							 	       	format: 'd/m/Y',
+							 	        allowBlank: true,
+							 	       	padding: 15,
+							 	        labelWidth: 110,
+							 	        anchor:'90%',
+							 	        name: 'fecha_baja'  
+								  }
 					    	]},{
 					    		xtype: 'container',
 				                flex: 1,
@@ -256,7 +266,7 @@ Ext.onReady(function(){
 				                items: [{
 					    	        fieldLabel: 'C&oacute;digo',
 					    	        labelWidth: 110,
-					    	        allowBlank: false,
+					    	        allowBlank: true,
 					    	        padding: 15,
 							        anchor:'90%',
 							        name: 'codigo'
@@ -273,6 +283,18 @@ Ext.onReady(function(){
 						 	        anchor:'90%',
 						 	        name: 'modalidad', 
 					    	    },{
+							        fieldLabel: 'Nivel',
+							        xtype: 'combobox',
+							        labelWidth: 110,
+							        store: nivelStore,
+							        displayField: 'nombre',
+							        queryMode: 'local',
+							        valueField: 'act_nivel_id',
+							        allowBlank: false,
+							        padding: 15,
+						 	        anchor:'90%',
+						 	        name: 'nivel', 
+					    	   },{
 							        fieldLabel: 'Atelier',
 							        xtype: 'combobox',
 							        labelWidth: 110,
@@ -284,8 +306,16 @@ Ext.onReady(function(){
 							        padding: 15,
 						 	        anchor:'90%',
 						 	        name: 'atelier', 
-					    	  }
-					    		]
+					    	  	},{
+		                			fieldLabel: 'Fecha de alta',
+						 	        xtype: 'datefield',
+						 	       	format: 'd/m/Y',
+						 	        allowBlank: true,
+							 	   	padding: 15,
+						 	        labelWidth: 110,
+						 	        anchor:'90%',
+						 	        name: 'fecha_alta'  
+		                	}]
 					    	}]},{
 				    	xtype: 'container',
 				 	    height: 200,

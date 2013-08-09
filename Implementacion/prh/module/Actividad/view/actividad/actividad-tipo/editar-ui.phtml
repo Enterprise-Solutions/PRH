@@ -1,0 +1,415 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Tipo de Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+
+			var aux=null;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+						var si_no = Ext.create('Ext.data.Store', {
+				    fields: ['id', 'nombre'],
+				    data : [
+					        {"id": "S", "nombre":"Si"},
+					        {"id": "N", "nombre":"No"}
+				        ]
+					});
+				
+
+					Ext.define('nivel', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'act_nivel_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							},{
+								type: 'string',
+								name: 'descripcion'
+							}
+						]
+					});
+
+					Ext.define('modalidad', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'act_modalidad_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							},{
+								type: 'string',
+								name: 'descripcion'
+							}
+						]
+					});
+
+					Ext.define('criterio', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'act_criterio_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							},{
+								type: 'string',
+								name: 'codigo'
+							},{
+								type: 'float',
+								name: 'horas'
+							},{
+								type: 'date',
+								name: 'fecha_alta'
+							},{
+								type: 'date',
+								name: 'fecha_baja'
+							}
+						]
+					});
+					
+					var nivelStore = Ext.create('Ext.data.Store', {
+						model: 'nivel',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/act-nivel?format=json',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+
+					var modalidadStore = Ext.create('Ext.data.Store', {
+						model: 'modalidad',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/act-modalidad?format=json',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+
+					var criterioStore = Ext.create('Ext.data.Store', {
+						model: 'criterio',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/act-criterio?format=json',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+					
+					var buscarId = function(){
+						if (window.location.hash) {
+						    var params = (window.location.hash.substr(1)).split("#");
+						        var id = params[0].split("=");
+								return id[1];
+						}
+					};
+			
+					var cargarDatos = function (){
+						aux = buscarId();
+						Ext.Ajax.request({
+						   	url: baseURL +'/actividad/actividad-tipo/get?id=int',
+							    params: {
+							        'id': aux,
+							    },
+					    success: function(response) {
+					    	var campos = Ext.decode(response.responseText);
+					    	var form = Ext.getCmp('form').getForm();
+					    	
+					    	for (campo in campos) {
+					    		console.log(campo);
+						    	var name = form.findField(campo);
+						    		if (name) {
+						    			if (campo == "fecha_alta" || campo == "fecha_baja")
+								    	{
+						    				if (campos[campo]){
+									    		var fecha = campos[campo];
+							 			    	var fecha2 = fecha.split("-");
+							 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+							 			    	campos[campo] = result;
+							 			    	name.setValue(campos[campo]);
+						    				}
+										 } else{
+										    
+											    	name.setValue(campos[campo]);
+											    	console.log(campo);
+									     }
+							    					
+					    			}
+					    	}
+					    }
+					});
+				};
+
+				var buttonEditar = function(b,e)
+				{
+								var basicForm = b.up('form').getForm();  						
+					            var valoresForm = basicForm.getFieldValues();
+
+					           	var auxnombre = valoresForm.nombre;
+					           	var auxcodigo = valoresForm.codigo;
+					           	var auxsubtitulo = valoresForm.subtitulo;
+					           	var auxcriterio = valoresForm.act_criterio_id;
+					        	var auxmodalidad = valoresForm.act_modalidad_id;
+					           	var auxnivel = valoresForm.act_nivel_id;
+					        	var auxatelier = valoresForm.atelier;
+					        	var auxasistencia = valoresForm.asistencia;
+					        	var auxfecha_alta = valoresForm.fecha_alta;
+					        	var auxfecha_baja = valoresForm.fecha_baja;
+
+					Ext.Ajax.request({
+						   url: baseURL + '/actividad/actividad-tipo/put',
+						   success: function(response, opt){
+							   Ext.Msg.show({
+								    title:'Aviso',
+									msg:'Tipo de Actividad Cargado Correctamente'
+							   });
+							   function hide_message() {
+							       Ext.defer(function() {
+							           Ext.MessageBox.hide();
+							       }, delay);
+							   }
+							   hide_message();
+							   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+						   },
+						   jsonData:{
+						       'put':{
+						    	   'act_actividad_tipo_id': aux,
+								   'act_nivel_id':auxnivel,
+								   'nombre': auxnombre,
+								   'codigo': auxcodigo,
+								   'subtitulo': auxsubtitulo,
+								   'act_criterio_id': auxcriterio,
+								   'act_modalidad_id': auxmodalidad,
+								   'atelier': auxatelier,
+								   'asistencia': auxasistencia,
+								   'fecha_alta': (formatearFecha(auxfecha_alta, 1)),
+								   'fecha_baja': (formatearFecha(auxfecha_baja, 1))			   
+						       }
+						   }
+					 });
+					
+					
+				};
+		var pantallaActividad = Ext.create('Ext.form.Panel', {
+			id: 'form',
+			items:[{
+			    xtype: 'panel',
+			    bodyStyle: {
+		        	background: '#C8CED8',
+		        },
+			    title: 'Tipo de Actividad',
+			    //collapsible: true,
+			    //anchor:'90%',
+			    height: 'fit',
+			    width: 'fit',
+			    border: 1,
+			    padding: '20 15 15 15',
+			    layout: 'hbox',
+			    defaultType: 'textfield',
+			    items: [{
+					xtype: 'container',
+					flex: 1,
+					layout: 'anchor',
+					defaultType: 'textfield',
+					items: [    
+					    {
+						        fieldLabel: 'Nombre',
+						        allowBlank: false,
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'nombre'
+					    },{
+						        fieldLabel: 'Subtitulo',
+						        allowBlank: true,
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'subtitulo'
+				    	},{
+					        	fieldLabel: 'Criterio',
+					        	xtype: 'combobox',
+						        labelWidth: 110,
+						        store: criterioStore,
+						        displayField: 'nombre',
+						        queryMode: 'local',
+						        valueField: 'act_criterio_id',
+						        allowBlank: false,
+						        padding: 15,
+					 	        anchor:'90%',
+					 	        name: 'act_criterio_id', 
+				         },{
+						        fieldLabel: 'Asistencia',
+						        xtype: 'combobox',
+						        labelWidth: 110,
+						        store: si_no,
+						        displayField: 'nombre',
+						        queryMode: 'local',
+						        valueField: 'id',
+						        allowBlank: false,
+						        padding: 15,
+					 	        anchor:'90%',
+					 	        name: 'asistencia', 
+				    	  },{
+	                			fieldLabel: 'Fecha de alta',
+					 	        xtype: 'datefield',
+					 	       	format: 'd/m/Y',
+					 	        allowBlank: true,
+					 	       	padding: 15,
+					 	        labelWidth: 110,
+					 	        anchor:'90%',
+					 	        name: 'fecha_alta'  
+						  }
+			    	]},{
+			    		xtype: 'container',
+		                flex: 1,
+		                layout: 'anchor',
+		                defaultType: 'textfield',
+		                items: [{
+			    	        fieldLabel: 'C&oacute;digo',
+			    	        labelWidth: 110,
+			    	        allowBlank: true,
+			    	        padding: 15,
+					        anchor:'90%',
+					        name: 'codigo'
+			    	    },{
+					        fieldLabel: 'Modalidad',
+					        xtype: 'combobox',
+					        labelWidth: 110,
+					        store: modalidadStore,
+					        displayField: 'nombre',
+					        queryMode: 'local',
+					        valueField: 'act_modalidad_id',
+					        allowBlank: false,
+					        padding: 15,
+				 	        anchor:'90%',
+				 	        name: 'act_modalidad_id', 
+			    	    },{
+					        fieldLabel: 'Nivel',
+					        xtype: 'combobox',
+					        labelWidth: 110,
+					        store: nivelStore,
+					        displayField: 'nombre',
+					        queryMode: 'local',
+					        valueField: 'act_nivel_id',
+					        allowBlank: false,
+					        padding: 15,
+				 	        anchor:'90%',
+				 	        name: 'act_nivel_id', 
+			    	   },{
+					        fieldLabel: 'Atelier',
+					        xtype: 'combobox',
+					        labelWidth: 110,
+					        store: si_no,
+					        displayField: 'nombre',
+					        queryMode: 'local',
+					        valueField: 'id',
+					        allowBlank: false,
+					        padding: 15,
+				 	        anchor:'90%',
+				 	        name: 'atelier', 
+			    	  	},{
+                			fieldLabel: 'Fecha de baja',
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        allowBlank: true,
+					 	   	padding: 15,
+				 	        labelWidth: 110,
+				 	        anchor:'90%',
+				 	        name: 'fecha_baja'  
+                	}]
+			    	}]},{
+		    	xtype: 'container',
+		 	    height: 200,
+		 	    width: 'fit',
+		 	   layout: 'hbox',
+		 	   // flex: 1,
+		 	   // padding: '5 0 10 440',
+		 	    items:[
+		 	      {	  
+		 	    	  xtype: 'button',
+		 	    	  margin: '5 0 10 1015',
+				      scale: 'large',
+				      width: 100,
+				      text: 'Guardar',
+				      handler: buttonEditar
+		 	      },{
+		 	    	  xtype: 'button',
+		 	    	  margin: '5 0 10 20',
+				      scale: 'large',
+				      width: 100,
+				      text: 'Cancelar',
+					  //disabled: true,
+					  handler: function() {
+						  window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+					}
+		 	      }
+			    ]
+		     }],
+			});
+		
+		
+		var pantalla = Ext.create('Ext.panel.Panel', {
+			padding: '15 5 0 5', 
+		    //title: ' ',
+		    width: 'fit',
+		    height: 570,
+		    items:[pantallaActividad],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+//					Ext.getCmp('actividadTabPanel').setActiveTab(1);
+				}
+			}
+		});
+		cargarDatos();
+		Ext.getCmp('centerPanel').add(pantalla);
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
