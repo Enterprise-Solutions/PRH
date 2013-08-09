@@ -20,7 +20,7 @@
 			var auxcarrera = null;
 			var titulo = null;
 	
-			var itemsPorPagina = 16;
+			var itemsPorPagina = 10
 			var page = 0;
 			
 Ext.onReady(function(){
@@ -60,6 +60,108 @@ Ext.onReady(function(){
 				}
 			]
 		});
+
+		Ext.define('nivel', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_nivel_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+
+		Ext.define('modalidad', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_modalidad_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+
+		Ext.define('criterio', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_criterio_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'codigo'
+				},{
+					type: 'float',
+					name: 'horas'
+				},{
+					type: 'date',
+					name: 'fecha_alta'
+				},{
+					type: 'date',
+					name: 'fecha_baja'
+				}
+			]
+		});
+
+		var nivelStore = Ext.create('Ext.data.Store', {
+			model: 'nivel',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-nivel?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var modalidadStore = Ext.create('Ext.data.Store', {
+			model: 'modalidad',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-modalidad?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var criterioStore = Ext.create('Ext.data.Store', {
+			model: 'criterio',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/combos/act-criterio?format=json',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
 		
 		var actividadTipoStore = Ext.create('Ext.data.Store', {
 			model: 'actividadTipo',
@@ -80,6 +182,167 @@ Ext.onReady(function(){
 			},
 			autoLoad: true
 		});
+
+// 		var ComboAsignaturaStore = Ext.create('Ext.data.Store', {
+// 			model: 'ComboAsignatura',
+// 			pageSize: 5, 
+// 			proxy: {
+// 				type: 'ajax',
+// 				extraParams: {'p[limit]':'5'},
+// 				headers: {'Accept':'application/json'},
+// 				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
+// 				reader: {
+// 					type: 'json',
+// 					root: 'records',
+// 					totalProperty: 'numResults',
+// 				}
+// 			},
+// 			autoLoad: true
+// 		});
+		
+		var asignatura = Ext.create('Ext.form.field.ComboBox', {
+	        fieldLabel: 'Asignatura',
+	        displayField: 'nombre',
+	        valueField: 'pe_asignatura_prop_id',
+	        width: 370,
+	        name: 'asignatura',
+	        labelWidth: 70,
+	      //  store: ComboAsignaturaStore,
+	        queryMode: 'remote',
+	        typeAhead: true,
+	        emptyText: 'Escriba el nombre de la Asignatura...',
+	        loadingText: 'Buscando Asignaturas...',
+	        hideTrigger: true,
+	       // forceSelection: true,
+	        queryParam: 's[nombre]:',
+	        minChars: 2,
+	  	});
+
+		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Nivel',
+	        xtype: 'combobox',
+	        labelWidth: 50,
+	        width: 190,
+	        store: nivelStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_nivel_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'nivel',
+	  	});
+
+		var comboModalidad = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Modalidad',
+	        xtype: 'combobox',
+	        labelWidth: 90,
+	        width: 210,
+	        store: modalidadStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_modalidad_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'modalidad',
+	  	});
+
+		var comboCriterio = Ext.create('Ext.form.field.ComboBox', {
+			fieldLabel: 'Criterio',
+	        xtype: 'combobox',
+	        labelWidth: 70,
+	        width: 300,
+	        store: criterioStore,
+	        displayField: 'nombre',
+	        queryMode: 'local',
+	        valueField: 'act_criterio_id',
+	        padding: '5 10 5 0',
+ 	        anchor:'90%',
+ 	        name: 'criterio',
+	  	});
+		  
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 130,			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'hbox',
+				    items:[
+						  {
+							    xtype: 'container',
+							    padding: '5 0 0 15', //margen del Form 'arriba lateral abajo'
+							    flex: 0.5,
+							    items: [comboNivel]
+						   }, 
+				    	   {
+						        xtype: 'container',
+						        padding: '5 0 0 0', 
+						        flex: 0.5,
+						        items: [comboModalidad]
+					    	},
+					    	{
+						        xtype: 'container',
+						        padding: '5 0 0 0', 
+						        flex: 1.5,
+						        items: [comboCriterio]
+					    	}
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '10 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+					           
+							           	auxnivel = valoresForm.nivel;
+							           	auxmodalidad = valoresForm.modalidad;
+							           	auxcriterio = valoresForm.criterio;
+			
+										//inicializo los pages
+							           	page = 0;
+										gridActividadTipo.store.currentPage = 1;
+										
+						                actividadTipoStore.load({
+											params: {
+												"s[nivel]": auxnivel,
+												"s[modalidad]": auxmodalidad,
+												"s[criterio]": auxcriterio
+									   		} 
+						               });
+						            }//end of handler  
+									        
+								},{
+			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '10 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+											gridActividadTipo.store.currentPage = 1;
+											//console.log(this);
+						           			b.up('form').getForm().reset();
+						           			actividadTipoStore.load();						   	
+				           		  		}
+								}]}
+				    	]
+		});
     	
 		var gridActividadTipo = Ext.create('Ext.grid.Panel', {
             //title: 'Profesi&oacute;n',
@@ -88,8 +351,8 @@ Ext.onReady(function(){
                 injectCheckbox: 1
             },
             width: 'fit',
-            padding: '10 10 0 10',
-            height: 530,
+            padding: '5 0 0 0',
+            height: 372,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -305,11 +568,20 @@ Ext.onReady(function(){
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			//id: 'margen',
-			padding: '15 5 0 5', 
+			padding: '5 0 0 10', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 570,
-		    items:[gridActividadTipo],
+		    height: 510,
+		    items:[
+		         {	
+		        	 xtype: 'panel',
+					 items: [panelFiltros]
+			        
+		         },{
+		        	 xtype: 'container',
+					 items: [gridActividadTipo]
+		         }
+		    ],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(1);
