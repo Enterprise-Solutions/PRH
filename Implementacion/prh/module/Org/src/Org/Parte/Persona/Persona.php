@@ -113,8 +113,34 @@ class Persona extends Parte
 							)
 						)
 					)
-				)
-					
+				),
+				'org_religion_id' => array(
+					'name' => 'org_religion_id',
+					'required' => false,
+					'filters' => array(
+							array(
+									'name' => 'StripTags'
+							)
+					)
+				),
+				'org_estado_civil_id' => array(
+							'name' => 'org_estado_civil_id',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							)
+				),
+				'nacionalidad_persona' => array(
+							'name' => 'nacionalidad_persona',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							)
+					)
 			);
 		}else {
 			$spec = array(
@@ -170,6 +196,33 @@ class Persona extends Parte
 							)
 						)
 					)
+				),
+				'org_religion_id' => array(
+							'name' => 'org_religion_id',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							)
+				),
+				'org_estado_civil_id' => array(
+							'name' => 'org_estado_civil_id',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							)
+				),
+				'nacionalidad_persona' => array(
+							'name' => 'nacionalidad_persona',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							)
 				)
 					
 			);

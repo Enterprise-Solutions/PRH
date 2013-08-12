@@ -1,6 +1,6 @@
 <?php
 
-namespace Org\Parte\Service\Listado;
+namespace Org\Parte\Service\Get;
 use Zend\Db\Sql\Expression;
 
 use EnterpriseSolutions\Db\Select as DbSelect;
@@ -63,12 +63,29 @@ class Select extends DbSelect
 			 	array(),
 			 	ZFSelect::JOIN_LEFT	
 			 )
+			 ->join(
+			 	array('re' => 'org_religion'),
+			 	'op.org_religion_id = re.org_religion_id',
+			 	array('religion' => 'nombre'),
+			 	ZFSelect::JOIN_LEFT		
+			 )
+			 ->join(
+			 		array('ec' => 'org_estado_civil'), 
+			 		'op.org_estado_civil_id = ec.org_estado_civil_id',
+			 		array('estado_civil' => 'nombre'),
+			 		ZFSelect::JOIN_LEFT)
+			 /*->join(
+			 	array('dp' => 'dir_pais'),
+			 	'op.nacionalidad_persona = dp.dir_pais_id',
+			 	array('nacionalidad'),
+			 	ZFSelect::JOIN_LEFT	
+			 )*/
 			 ->group(array(
 			 	'op.org_parte_id',
 			 	'op.org_parte_tipo_codigo',
 			 	'op.nombre_organizacion',
 			 	'op.nombre_persona','op.apellido_persona','op.fecha_nacimiento','op.genero_persona','opt.nombre',
-			 	'op.org_religion_id','op.org_estado_civil_id','op.nacionalidad_persona'
+			 	'op.org_religion_id','op.org_estado_civil_id','op.nacionalidad_persona','re.nombre','ec.nombre'
 			 	));
 			
 	}
