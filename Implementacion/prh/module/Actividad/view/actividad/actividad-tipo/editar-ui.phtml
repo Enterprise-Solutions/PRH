@@ -183,7 +183,9 @@ Ext.onReady(function(){
 
 				var buttonEditar = function(b,e)
 				{
-								var basicForm = b.up('form').getForm();  						
+								var basicForm = b.up('form').getForm();
+					if(basicForm.isValid())
+					{  						
 					            var valoresForm = basicForm.getFieldValues();
 
 					           	var auxnombre = valoresForm.nombre;
@@ -198,39 +200,44 @@ Ext.onReady(function(){
 					        	var auxfecha_alta = valoresForm.fecha_alta;
 					        	var auxfecha_baja = valoresForm.fecha_baja;
 
-					Ext.Ajax.request({
-						   url: baseURL + '/actividad/actividad-tipo/put',
-						   success: function(response, opt){
-							   Ext.Msg.show({
-								    title:'Aviso',
-									msg:'Tipo de Actividad Cargado Correctamente'
-							   });
-							   function hide_message() {
-							       Ext.defer(function() {
-							           Ext.MessageBox.hide();
-							       }, delay);
-							   }
-							   hide_message();
-							   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
-						   },
-						   jsonData:{
-						       'put':{
-						    	   'act_actividad_tipo_id': aux,
-								   'act_nivel_id':auxnivel,
-								   'nombre': auxnombre,
-								   'codigo': auxcodigo,
-								   'subtitulo': auxsubtitulo,
-								   'act_criterio_id': auxcriterio,
-								   'act_modalidad_id': auxmodalidad,
-								   'atelier': auxatelier,
-								   'asistencia': auxasistencia,
-								   'duracion': auxduracion,
-								   'fecha_alta': (formatearFecha(auxfecha_alta, 1)),
-								   'fecha_baja': (formatearFecha(auxfecha_baja, 1))			   
-						       }
-						   }
-					 });
-					
+								Ext.Ajax.request({
+									   url: baseURL + '/actividad/actividad-tipo/put',
+									   success: function(response, opt){
+										   Ext.Msg.show({
+											    title:'Aviso',
+												msg:'Tipo de Actividad Editado Correctamente'
+										   });
+										   function hide_message() {
+										       Ext.defer(function() {
+										           Ext.MessageBox.hide();
+										       }, delay);
+										   }
+										   hide_message();
+										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+									   },
+									   jsonData:{
+									       'put':{
+									    	   'act_actividad_tipo_id': aux,
+											   'act_nivel_id':auxnivel,
+											   'nombre': auxnombre,
+											   'codigo': auxcodigo,
+											   'subtitulo': auxsubtitulo,
+											   'act_criterio_id': auxcriterio,
+											   'act_modalidad_id': auxmodalidad,
+											   'atelier': auxatelier,
+											   'asistencia': auxasistencia,
+											   'duracion': auxduracion,
+											   'fecha_alta': (formatearFecha(auxfecha_alta, 1)),
+											   'fecha_baja': (formatearFecha(auxfecha_baja, 1))			   
+									       }
+									   }
+								 });
+					}
+					else
+					{
+						Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+						return;
+					}  	
 					
 				};
 		var pantallaActividad = Ext.create('Ext.form.Panel', {

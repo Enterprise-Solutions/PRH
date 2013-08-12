@@ -28,16 +28,6 @@
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
-		//modelos
-
-		var buscarId = function(){
-			if (window.location.hash) {
-			    var params = (window.location.hash.substr(1)).split("#");
-			        var id = params[0].split("=");
-					return id[1];
-			}
-		};
-
 		var cargarDatos = function (){
 			aux = buscarId();
 			Ext.Ajax.request({

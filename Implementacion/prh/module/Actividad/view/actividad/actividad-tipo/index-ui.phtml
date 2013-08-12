@@ -120,114 +120,15 @@ Ext.onReady(function(){
 				}
 			]
 		});
-
-		var nivelStore = Ext.create('Ext.data.Store', {
-			model: 'nivel',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-nivel?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
-
-		var modalidadStore = Ext.create('Ext.data.Store', {
-			model: 'modalidad',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-modalidad?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
-
-		var criterioStore = Ext.create('Ext.data.Store', {
-			model: 'criterio',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-criterio?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
 		
-		var actividadTipoStore = Ext.create('Ext.data.Store', {
-			model: 'actividadTipo',
-			pageSize: itemsPorPagina, 
-			proxy: {
-				type: 'ajax',
-				  extraParams:{
-				    	"p[limit]": itemsPorPagina,
-						"p[page]":  page, 
-				  },
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/actividad-tipo/index?format=json',
-				reader: {
-					type: 'json',
-					root: 'records',
-					totalProperty: 'numResults'
-				}
-			},
-			autoLoad: true
-		});
-
-
-		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Nivel',
-	        xtype: 'combobox',
-	        labelWidth: 50,
-	        width: 180,
-	        store: nivelStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_nivel_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'nivel',
-	  	});
-
-		var comboModalidad = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Modalidad',
-	        xtype: 'combobox',
-	        labelWidth: 80,
-	        width: 200,
-	        store: modalidadStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_modalidad_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'modalidad',
-	  	});
-
-		var comboCriterio = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Criterio',
-	        xtype: 'combobox',
-	        labelWidth: 70,
-	        width: 280,
-	        store: criterioStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_criterio_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'criterio',
-	  	});
+	var nivelStore = createStore('nivel', baseURL, '/actividad/combos/act-nivel',"{'p[limit]':'all'}");
+	var modalidadStore = createStore('modalidad', baseURL, '/actividad/combos/act-modalidad',"{'p[limit]':'all'}");
+	var criterioStore = createStore('criterio', baseURL, '/actividad/combos/act-criterio',"{'p[limit]':'all'}");
+	var actividadTipoStore = createStorePage('actividadTipo', baseURL, '/actividad/actividad-tipo/index',"{'p[limit]':'all','p[page]':page,}", itemsPorPagina);
+	
+	var comboNivel = createCombo ('Nivel',50,180,nivelStore,'nombre','act_nivel_id','local','5 10 5 0','90%','nivel');
+	var comboModalidad = createCombo ('Modalidad',80,200,modalidadStore,'nombre','act_modalidad_id','local','5 10 5 0','90%','modalidad');
+	var comboCriterio = createCombo ('Nivel',70,280,criterioStore,'nombre','act_criterio_id','local','5 10 5 0','90%','criterio');
 		  
 		var panelFiltros = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
