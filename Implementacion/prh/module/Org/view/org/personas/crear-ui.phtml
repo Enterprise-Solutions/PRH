@@ -35,7 +35,6 @@
 			var id3 = 0;
 			var cont_tipo = 'cont_tipo'+id3;
 			var cont_valor = 'cont_valor'+id3;
-			//var agregados = "";
 			
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
@@ -374,7 +373,7 @@ Ext.onReady(function(){
 							           		agregarCont.push(elemento3);
 						           	} 
 						           	
-						           	console.log(agregarCont);
+						           //	console.log(agregarCont);
 						           	
 						        	var auxnacionalidad = valoresForm.nacionalidad;
 						        	var auxreligion = valoresForm.religion;
@@ -408,8 +407,8 @@ Ext.onReady(function(){
 												   'org_religion_id': auxreligion,
 												   'org_estado_civil_id': auxestado_civil,	
 							 					   'Documentos':{'agregados':agregarDoc},
-						 						   'Direcciones':{'agregados':agregarUbic}
-						 						//   'Contactos':{'agregados':agregarCont}									   
+						 						   'Direcciones':{'agregados':agregarUbic},
+						 						   'Contactos':{'agregados':agregarCont}									   
 										       }
 										   }
 									 });
@@ -562,7 +561,7 @@ Ext.onReady(function(){
 
 			var crearCont = function ()
 			{
-				id2++;
+				id3++;
 				cont_tipo = 'cont_tipo'+id3;
 				cont_valor = 'cont_valor'+id3;
 
