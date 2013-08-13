@@ -10,7 +10,7 @@ use Org\Parte\Parte;
  * @Orm\Entity @Orm\Table(name="org_contacto")
  * @Orm\InheritanceType("SINGLE_TABLE")
  * @Orm\DiscriminatorColumn(name="org_contacto_tipo_codigo", type="string")
- * @Orm\DiscriminatorMap({"celularpart" = "Org\Contacto\Contacto\CelularPart","celularlab" = "Org\Contacto\Contacto\CelularLab"}) 
+ * @Orm\DiscriminatorMap({"celularpart" = "Org\Contacto\Contacto\CelularPart","celularlab" = "Org\Contacto\Contacto\CelularLab","email" = "Org\Contacto\Contacto\Email","telefonolab" = "Org\Contacto\Contacto\TelefonoLab","telefonopart" = "Org\Contacto\Contacto\TelefonoPart","facebook" = "Org\Contacto\Contacto\Facebook","linkedIn" = "Org\Contacto\Contacto\LinkedIn","twitter" = "Org\Contacto\Contacto\Twitter"}) 
  */
 class Contacto
 {
