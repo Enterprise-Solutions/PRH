@@ -24,15 +24,18 @@
 			var page = 0;
 			
 			var id = 0;
+			var name_doc = 'doc'+id;
 			var doc_nro = 'nro'+id;
 			var doc_tipo = 'tipo'+id;
 			var doc_origen = 'origen'+id;
 
 			var id2 = 0;
+			var name_ubic = 'ubic'+id2;
 			var dir = 'dir'+id2;
 			var lug = 'lug'+id2;
 
 			var id3 = 0;
+			var name_cont = 'cont'+id3;
 			var cont_tipo = 'cont_tipo'+id3;
 			var cont_valor = 'cont_valor'+id3;
 			
@@ -355,7 +358,7 @@ Ext.onReady(function(){
 						           		aux_dir = 'dir'+j;
 						    			aux_lug = 'lug'+j;
 						    			
-							           		var elemento2 = {"direccion": valoresForm[aux_dir], "dir_barrio": valoresForm[aux_lug]};
+							           		var elemento2 = {"direccion": valoresForm[aux_dir], "dir_barrio_id": valoresForm[aux_lug]};
 							           		agregarUbic.push(elemento2);
 						           	} 
 						           	
@@ -424,12 +427,14 @@ Ext.onReady(function(){
 		var crearDoc = function ()
 		{
 			id++;
+			name_doc = 'doc'+id;
 			doc_nro = 'nro'+id;
 			doc_tipo = 'tipo'+id;
 			doc_origen = 'origen'+id;
 			
 			return new Ext.create('Ext.container.Container', {
 				xtype: 'container',
+				id: name_doc,
 			    title: 'Datos de Documentaci&oacute;n',
 			    collapsible: true,
 			    height: 'fit',
@@ -474,21 +479,14 @@ Ext.onReady(function(){
 					        padding: '5 15 5 15',
 				 	        anchor:'90%',
 				 	        name: doc_origen,
-			    	 	},{	  
-				 	    	  xtype: 'button',
-				 	    	  margin: '5 15 5 15',
-				 	    	  icon: baseURL+'/img/icons/grid/delete.png',
-// 							  handler:function() {
-// 								   var doc = crearDoc('1');
-// 								   Ext.getCmp('panelDoc').add(doc);
-// 							  }
-				 	     }]
+			    	 	}]
 			});
 		};
 
 			var crearUbic = function ()
 			{
 				id2++;
+				name_ubic = 'ubic'+id2;
 				dir = 'dir'+id2;
 				lug = 'lug'+id2;
 
@@ -510,6 +508,7 @@ Ext.onReady(function(){
 				
 				return new Ext.create('Ext.container.Container', {
 					xtype: 'container',
+					id: name_ubic,
 				    title: 'Datos de Documentaci&oacute;n',
 				    collapsible: true,
 				    height: 'fit',
@@ -546,15 +545,7 @@ Ext.onReady(function(){
 					        padding: '5 15 5 15',
 				 	        anchor:'90%',
 				 	       	name: lug,
-					    },{	  
-					 	    	  xtype: 'button',
-					 	    	  margin: '5 15 5 15',
-					 	    	  icon: baseURL+'/img/icons/grid/delete.png',
-//	 							  handler:function() {
-//	 								   var doc = crearDoc('1');
-//	 								   Ext.getCmp('panelDoc').add(doc);
-//	 							  }
-					 	     }]
+					    }]
 					});
 
 			};
@@ -562,6 +553,7 @@ Ext.onReady(function(){
 			var crearCont = function ()
 			{
 				id3++;
+				name_cont = 'cont'+id3;
 				cont_tipo = 'cont_tipo'+id3;
 				cont_valor = 'cont_valor'+id3;
 
@@ -586,6 +578,7 @@ Ext.onReady(function(){
 				    collapsible: true,
 				    height: 'fit',
 				    width: 'fit',
+				    id: name_cont,
 				    border: 1,
 				    flex: 1,
 				    layout: 'column',
@@ -614,15 +607,8 @@ Ext.onReady(function(){
 						    anchor:'90%',
 						    padding: '5 15 5 15',
 							name: cont_valor,
-						},{	  
-					 	    	  xtype: 'button',
-					 	    	  margin: '5 15 5 15',
-					 	    	  icon: baseURL+'/img/icons/grid/delete.png',
-//	 							  handler:function() {
-//	 								   var doc = crearDoc('1');
-//	 								   Ext.getCmp('panelDoc').add(doc);
-//	 							  }
-					 	     }]
+						}
+					 	]
 					});
 
 			};
@@ -676,12 +662,33 @@ Ext.onReady(function(){
 						 	        name: doc_origen,
 					    	 	},{	  
 						 	    	  xtype: 'button',
-						 	    	  margin: '10 15 5 15',
-						 	    	  icon: baseURL+'/img/icons/grid/add.png',
+						 	    	  margin: '7 0 5 20',
+						 	    	  scale: 'medium',
+						 	    	  style:'background-color: white; border:none',
+						 	    	  icon: baseURL+'/img/icons/grid/add3.png',
 									  handler:function() {
 										   var doc = crearDoc();
 										   Ext.getCmp('panelDoc').add(doc);
+										   if (id > '0'){
+											   Ext.getCmp('buttonDelete').setDisabled(false);	
+										   }
 									  }
+								 },{	  
+						 	    	  xtype: 'button',
+						 	    	  id: 'buttonDelete',
+						 	    	  margin: '7 0 5 0',
+						 	    	  disabled: true,
+						 	    	  scale: 'medium',
+						 	    	  style:'background-color: white; border:none',
+						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+						 	    	  handler:function() {
+		 								   Ext.getCmp('panelDoc').remove(name_doc);
+		 								   id--;
+		 								   name_doc = 'doc'+id;
+		 								   if (id == '0'){
+											   Ext.getCmp('buttonDelete').setDisabled(true);	
+										   }
+		 							  }
 						 	     }
 					    	    ]},{
 					    xtype: 'panel',
@@ -833,7 +840,7 @@ Ext.onReady(function(){
 						        fieldLabel: 'Direcci&oacute;n',
 						        allowBlank: true,
 						        width: 650,
-						        padding: '5 15 5 15',
+						        padding: '10 15 5 15',
 						        anchor:'90%',
 						    	name: dir,
 						    },{
@@ -852,17 +859,38 @@ Ext.onReady(function(){
 						        //allowBlank: true,
 						        queryParam: 's[barrio]:',
 						        minChars: 1,
-						        padding: '5 15 5 15',
+						        padding: '10 15 5 15',
 					 	        anchor:'90%',
 					 	       	name: lug,
 						    },{	  
 					 	    	  xtype: 'button',
-					 	    	  margin: '5 15 5 15',
-					 	    	  icon: baseURL+'/img/icons/grid/add.png',
+					 	    	  margin: '7 0 5 20',
+					 	    	  scale: 'medium',
+					 	    	  style:'background-color: white; border:none',
+					 	    	  icon: baseURL+'/img/icons/grid/add3.png',
 								  handler:function() {
 									   var ubic = crearUbic();
 									   Ext.getCmp('panelUbic').add(ubic);
+									   if (id2 > '0'){
+										   Ext.getCmp('buttonDelete2').setDisabled(false);	
+									   }
 								  }
+							 },{	  
+					 	    	  xtype: 'button',
+					 	    	  id: 'buttonDelete2',
+					 	    	  margin: '7 0 5 0',
+					 	    	  disabled: true,
+					 	    	  scale: 'medium',
+					 	    	  style:'background-color: white; border:none',
+					 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+					 	    	  handler:function() {
+	 								   Ext.getCmp('panelUbic').remove(name_ubic);
+	 								   id2--;
+	 								   name_ubic = 'ubic'+id2;
+	 								   if (id2 == '0'){
+										   Ext.getCmp('buttonDelete2').setDisabled(true);	
+									   }
+	 							  }
 					 	     }
 					    	    ]},{
 				    	xtype: 'panel',
@@ -888,7 +916,7 @@ Ext.onReady(function(){
 								        emptyText: 'Escriba el Tipo de Contacto...',
 								        loadingText: 'Buscando...',
 								        allowBlank: true,
-								        padding: '5 15 5 15',
+								        padding: '10 15 5 15',
 							 	        anchor:'90%',
 							 	        name: cont_tipo,
 									},{
@@ -896,17 +924,38 @@ Ext.onReady(function(){
 									    width: 400,
 									    labelWidth: 110,
 									    anchor:'90%',
-									    padding: '5 15 5 15',
+									    padding: '10 15 5 15',
 										name: cont_valor,
 									},{	  
 							 	    	  xtype: 'button',
-							 	    	  margin: '5 15 5 15',
-							 	    	  icon: baseURL+'/img/icons/grid/add.png',
+							 	    	  margin: '7 0 5 20',
+							 	    	  scale: 'medium',
+							 	    	  style:'background-color: white; border:none',
+							 	    	  icon: baseURL+'/img/icons/grid/add3.png',
 										  handler:function() {
 											   var cont = crearCont();
 											   Ext.getCmp('panelCont').add(cont);
+											   if (id3 > '0'){
+												   Ext.getCmp('buttonDelete3').setDisabled(false);	
+											   }
 										  }
-									}
+									 },{	  
+							 	    	  xtype: 'button',
+							 	    	  id: 'buttonDelete3',
+							 	    	  margin: '7 0 5 0',
+							 	    	  disabled: true,
+							 	    	  scale: 'medium',
+							 	    	  style:'background-color: white; border:none',
+							 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+							 	    	  handler:function() {
+			 								   Ext.getCmp('panelCont').remove(name_cont);
+			 								   id3--;
+			 								   name_cont = 'cont'+id3;
+			 								   if (id3 == '0'){
+												   Ext.getCmp('buttonDelete3').setDisabled(true);	
+											   }
+			 							  }
+							 	     }
 						         ]
 				     },{
 				    	xtype: 'container',
@@ -918,14 +967,14 @@ Ext.onReady(function(){
 				 	    items:[
 				 	      {	  
 				 	    	  xtype: 'button',
-				 	    	  margin: '5 0 10 1050',
+				 	    	  margin: '15 0 10 1050',
 						      scale: 'large',
 						      text: 'Guardar',
 							  //disabled: true,
 							  handler: buttonCrear
 				 	      },{
 				 	    	  xtype: 'button',
-				 	    	  margin: '5 0 10 20',
+				 	    	  margin: '15 0 10 20',
 						      scale: 'large',
 						      text: 'Cancelar',
 							  //disabled: true,
