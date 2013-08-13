@@ -38,7 +38,7 @@ class Credenciales {
 	/**
 	 * @Annotation\Type("Zend\Form\Element\Text")
 	 * @Annotation\Filter({"name":"StripTags"})
-	 * @Annotation\Filter({"name": "Boolean", "options": {"type":"string"}})
+	 *
 	 * @Annotation\Options({"label":"DirPaisId:"})
 	 * @Annotation\AllowEmpty()
 	 */
