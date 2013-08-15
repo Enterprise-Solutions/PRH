@@ -16,15 +16,14 @@ function createStore (aux_model, baseURL, aux_url, aux_params)
 	});	
 }
 
-function createStorePage (aux_model, baseURL, aux_url, aux_params, aux_size)
+function createStorePage (aux_model, baseURL, aux_url, aux_page, aux_size)
 {	
 	return new Ext.create('Ext.data.Store', {
 		model: aux_model,
 		pageSize: aux_size, 
 		proxy: {
 			type: 'ajax',
-			extraParams: {'p[limit]':'all'},
-			headers: aux_params,
+			headers: {'p[limit]':aux_size,'p[page]':aux_page},
 			url: baseURL+aux_url,
 			reader: {
 				type: 'json',

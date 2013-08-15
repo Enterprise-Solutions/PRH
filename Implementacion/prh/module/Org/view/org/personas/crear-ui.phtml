@@ -614,6 +614,7 @@ Ext.onReady(function(){
 			};
 								
 				var panelPersona = Ext.create('Ext.form.Panel', {
+					//padding: 10,
 					items:[{
 					    xtype: 'panel',
 					    id: 'panelDoc',
@@ -624,7 +625,7 @@ Ext.onReady(function(){
 					    border: 1,
 					    layout: 'column',
 					    flex: 1,
-					    padding: '10 15 0 15',
+					    padding: 10,
 					    defaultType: 'textfield',
 						 items: [{
 					    	    	fieldLabel: 'Nro. de Doc',
@@ -699,7 +700,7 @@ Ext.onReady(function(){
 					    width: 'fit',
 					    border: 1,
 					//    flex: 1,
-					    padding: '10 15 0 15',
+					    padding: '0 10 10 10',
 					    layout: 'hbox',
 					    defaultType: 'textfield',
 					    items: [{
@@ -797,12 +798,12 @@ Ext.onReady(function(){
 						                 {
 						                     boxLabel  : 'Masculino',
 						                     name      : 'genero',
-						                     inputValue: 'H',
+						                     inputValue: 'M',
 						                     id        : 'radio1'
 						                 }, {
 						                     boxLabel  : 'Femenino',
 						                     name      : 'genero',
-						                     inputValue: 'M',
+						                     inputValue: 'F',
 						                     id        : 'radio2'
 						                 }
 						             ]
@@ -834,7 +835,7 @@ Ext.onReady(function(){
 					    border: 1,
 					    layout: 'column',
 					    flex: 1,
-					    padding: '10 15 0 15',
+					    padding: '0 10 10 10',
 					    defaultType: 'textfield',
 						 items: [{
 						        fieldLabel: 'Direcci&oacute;n',
@@ -901,7 +902,7 @@ Ext.onReady(function(){
 					    width: 'fit',
 					    border: 1,
 				         layout: 'column',
-				         padding: '10 15 0 15',
+				         padding: '0 10 10 10',
 				         defaultType: 'textfield',
 				         items: [ 
 									{
