@@ -196,28 +196,34 @@ Ext.onReady(function(){
 				    	if (campo == "documentos"){
 							var docs = (campos[campo]);
 								for (doc in docs) {
-									var valor = (docs[doc].valor);
-									var tipo = (docs[doc].org_documento_tipo_codigo);
-									var origen = (docs[doc].dir_pais_id);
-									crearDoc(valor, tipo, origen);							
+									if(doc){
+										var valor = (docs[doc].valor);
+										var tipo = (docs[doc].org_documento_tipo_codigo);
+										var origen = (docs[doc].dir_pais_id);
+										crearDoc(valor, tipo, origen);
+									}							
 								}
 								continue;
 			    		}
 			    		if (campo == "Direcciones"){
 							var ubics = (campos[campo]);
 							for (ubic in ubics) {
-								var direccion = (docs[doc].direccion);
-								var lugar = (docs[doc].dir_barrio_id);
-								crearUbic(direccion, lugar);							
+								if(ubic){
+									var direccion = (ubics[ubic].direccion);
+									var lugar = (ubics[ubic].dir_barrio_id);
+									crearUbic(direccion, lugar);
+								}							
 							}
 							continue;	
 		    			}
 			    		if (campo == "contactos"){
-							var ubics = (campos[campo]);
-							for (ubic in ubics) {
-								var tipo = (docs[doc].org_contacto_tipo_codigo);
-								var contacto = (docs[doc].contacto);
-								crearCont(tipo, contacto);							
+							var conts = (campos[campo]);
+							for (cont in conts) {
+								if(cont){
+									var tipo = (conts[cont].org_contacto_tipo_codigo);
+									var contacto = (conts[cont].contacto);
+									crearCont(tipo, contacto);
+								}							
 							}
 							continue;	
 		    			}	
@@ -394,31 +400,14 @@ Ext.onReady(function(){
 								id: 'ubic_direccion',
 								defaultType: 'displayfield',
 								layout: 'anchor',
-								items: [    
-								    {
-								    	fieldLabel: 'Direcci&oacute;n',
-								        allowBlank: true,
-								        width: 650,
-								        padding: 15,
-								        anchor:'90%',
-								    	//name: dir,
-								    }
-						    	]},{
+								items: []
+							},{
 								xtype: 'container',
 								flex: 1,
 								id: 'ubic_lugar',
 								defaultType: 'displayfield',
 								layout: 'anchor',
-								items: [    
-								    {
-								    	fieldLabel: 'Lugar',
-								        labelWidth: 80,
-								        width: 400,
-								        padding: 15,
-							 	        anchor:'90%',
-							 	       	//name: lug,
-								    }
-						    	]}
+								items: []}
 					    	]},{
 				    	xtype: 'panel',
 					    title: 'Datos de Contacto',
@@ -438,32 +427,14 @@ Ext.onReady(function(){
 									id: 'cont_tipo',
 									defaultType: 'displayfield',
 									layout: 'anchor',
-									items: [    
-									    {
-									    	fieldLabel: 'Tipo de Contacto',
-									        labelWidth: 130,
-									        width: 400,
-									        padding: 15,
-								 	        anchor:'90%',
-								 	       // name: cont_tipo,
-									    }
-									]
+									items: []
 						    	},{        
 									xtype: 'container',
 									flex: 1,
 									defaultType: 'displayfield',
 									id: 'cont_contacto',
 									layout: 'anchor',
-									items: [    
-									    {
-									    	fieldLabel: 'Contacto',
-										    width: 400,
-										    labelWidth: 110,
-										    anchor:'90%',
-										    padding: 15,
-										 //	name: cont_valor,
-									    }
-						    		]    
+									items: []    
 							    }
 						]
 				     },{

@@ -282,9 +282,8 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     //tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
-                    	var id_edit = religionStore.getAt(rowIndex).get('org_religion_id');
-                    	var nombre_edit = religionStore.getAt(rowIndex).get('nombre');
-						editarwindow(id_edit, nombre_edit);                        
+                   		var url = baseURL+'/org/personas/editar-ui#?id='+personasStore.getAt(rowIndex).get('org_parte_id');  
+                   		window.location = url;                     
                     }
                 }]
             },{
