@@ -10,6 +10,7 @@ use Actividad\Actividad\QueryObject\Select;
 use Actividad\Actividad\QueryObject\Get;
 use Actividad\Actividad\Service\Crear as CrearActividadService;
 use Actividad\Actividad\Service\Editar as EditarActividadService;
+use Actividad\Actividad\Service\Eliminar as EliminarActividadService;
 
 class ActividadController extends BaseController
 {
@@ -55,7 +56,14 @@ class ActividadController extends BaseController
     
     public function deleteAction()
     {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParam('delete');
         
+        $service = new EliminarActividadService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
     }
     
     protected function toJson($respuesta)
