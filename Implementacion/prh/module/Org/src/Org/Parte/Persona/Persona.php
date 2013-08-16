@@ -137,8 +137,8 @@ class Persona extends Parte
 						array(
 							"name" => "Regex",
 							'options' => array(
-								"pattern" => "/^(H|M)$/",
-								"message" => "El valor debe ser H o M"
+								"pattern" => "/^(F|M)$/",
+								"message" => "El valor debe ser F o M"
 							)
 						)
 					)
@@ -175,7 +175,7 @@ class Persona extends Parte
 						'required' => false,
 						'filters' => array(
 								array(
-									'name' => 'StripTags'	
+									'name' => 'Digits'	
 								)
 						),
 						'validators' => array(
@@ -235,8 +235,8 @@ class Persona extends Parte
 						array(
 							"name" => "Regex",
 							'options' => array(
-								"pattern" => "/^(H|M)$/",
-								"message" => "El valor debe ser H o M"
+								"pattern" => "/^(F|M)$/",
+								"message" => "El valor debe ser F o M"
 							)
 						)
 					)

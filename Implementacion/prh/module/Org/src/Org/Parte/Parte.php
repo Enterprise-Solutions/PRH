@@ -77,7 +77,7 @@ class Parte
 		if(!$if->isValid()){
 			throw new Exception("Error de creacion");
 		}
-		$this->_creado(array_filter($if->getValues()));
+		$this->_creado(array_filter($if->getValues(),function($value){return ($value == null)?false:true;}));
 	}
 	
 	public function editar($datos)
@@ -86,7 +86,7 @@ class Parte
 		if(!$if->isValid()){
 			throw new Exception("Error de edicion");
 		}
-		$this->_editado(array_filter($if->getValues()));
+		$this->_editado(array_filter($if->getValues(),function($value){return ($value == null)?false:true;}));
 	}
 	
 	public function _creado($datos)
