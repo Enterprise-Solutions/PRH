@@ -52,6 +52,35 @@ class Persona extends Parte
 	 */
 	public $nacionalidad_persona;
 	
+	
+	/**
+	 * @Orm\Column(name="nro_hijos")
+	 */
+	public $nro_hijos;
+	
+	public function crear($datos)
+	{
+		parent::crear($this->_agregarNacionalidad($datos));
+	}
+	
+	public function editar($datos)
+	{
+		parent::editar($this->_agregarNacionalidad($datos));
+	}
+	
+	/**
+	 * @param array $datos
+	 * @return array
+	 */
+	public function _agregarNacionalidad($datos)
+	{
+		if(isset($datos['dir_pais_id'])){
+			$nacionalidad = $this->_repository->findNacionalidadDeDirPaisId($datos['dir_pais_id']);
+			$datos['nacionalidad_persona'] = $nacionalidad;
+		}
+		return $datos;	
+	}
+	
 	/**
 	 * @param string $operacion
 	 * @return InputFilter
@@ -140,7 +169,22 @@ class Persona extends Parte
 											'name' => 'StripTags'
 									)
 							)
-					)
+					),
+				'nro_hijos' => array(
+						'name' => 'nro_hijos',
+						'required' => false,
+						'filters' => array(
+								array(
+									'name' => 'StripTags'	
+								)
+						),
+						'validators' => array(
+							array(
+								'name' => 'Digits',
+								'options' => array('message' => 'Nro de hijos debe ser un valor numerico!')	
+							)	
+						)
+				)
 			);
 		}else {
 			$spec = array(
@@ -223,7 +267,22 @@ class Persona extends Parte
 											'name' => 'StripTags'
 									)
 							)
-				)
+				),
+				'nro_hijos' => array(
+							'name' => 'nro_hijos',
+							'required' => false,
+							'filters' => array(
+									array(
+											'name' => 'StripTags'
+									)
+							),
+							'validators' => array(
+									array(
+											'name' => 'Digits',
+											'options' => array('message' => 'Nro de hijos debe ser un valor numerico!')
+									)
+							)
+					)
 					
 			);
 		}

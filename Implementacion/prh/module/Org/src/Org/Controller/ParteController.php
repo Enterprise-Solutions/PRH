@@ -38,7 +38,8 @@ class ParteController extends BaseController
 	public function crearAction($orgParteTipoCodigo = null)
 	{
 		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-		$actionService = new Creacion($em);
+		$adapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$actionService = new Creacion($em,$adapter);
 		$service = new Transaccional($em,$actionService);
 		$datos = $this->SubmitParams()->getParam('post');
 		if($orgParteTipoCodigo){
@@ -51,7 +52,8 @@ class ParteController extends BaseController
 	public function editarAction()
 	{
 		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-		$actionService = new Edicion($em);
+		$adapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$actionService = new Edicion($em,$adapter);
 		$service = new Transaccional($em,$actionService);
 		$datos = $this->SubmitParams()->getParam('put');
 		$parte = $service->ejecutar($datos);

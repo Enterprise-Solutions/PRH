@@ -5,6 +5,7 @@ namespace Org\Parte\Service;
 use Org\Parte\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Zend\Db\Adapter\Adapter;
 use Org\Parte\Factory;
 
 use Org\Documento\Documento\Factory as docFactory;
@@ -25,10 +26,10 @@ class Creacion
 	public $_factory,$_docFactory,$_contactosFactory,$_dirFactory;
 	public $_repository,$_docRepository,$_contactosRepository,$_dirRepository;
 	public $_respuesta  = array();
-	public function __construct(EntityManager $em)
+	public function __construct(EntityManager $em,Adapter $adapter = null)
 	{
 		$this->_factory = new Factory($em);
-		$this->_repository = new Repository($em); 
+		$this->_repository = new Repository($em,$adapter); 
 		
 		$this->_docRepository = new docRepository($em);
 		$this->_docFactory = new docFactory($this->_docRepository);
@@ -55,6 +56,7 @@ class Creacion
 	{
 		$orgParteTipoCodigo = $datos['org_parte_tipo_codigo'];
 		$parte = $this->_factory->crear($orgParteTipoCodigo);
+		$parte->setRepository($this->_repository);
 		$parte->crear($datos);
 		$this->_repository
 		     ->persistir($parte);
