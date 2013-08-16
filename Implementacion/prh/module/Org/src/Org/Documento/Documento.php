@@ -11,7 +11,7 @@ use Org\Parte\Parte;
  * @Orm\Entity @Orm\Table(name="org_documento")
  * @Orm\InheritanceType("SINGLE_TABLE")
  * @Orm\DiscriminatorColumn(name="org_documento_tipo_codigo", type="string")
- * @Orm\DiscriminatorMap({"cedula" = "Org\Documento\Documento\Cedula","ruc" = "Org\Documento\Documento\Ruc"}) 
+ * @Orm\DiscriminatorMap({"cedula" = "Org\Documento\Documento\Cedula","ruc" = "Org\Documento\Documento\Ruc","pasaporte" = "Org\Documento\Documento\Pasaporte","carnet" = "Org\Documento\Documento\Carnet"}) 
  */
 class Documento
 {
