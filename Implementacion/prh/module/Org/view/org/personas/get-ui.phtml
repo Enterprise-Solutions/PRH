@@ -98,6 +98,90 @@ Ext.onReady(function(){
 			}
 		};
 
+		var crearDoc = function (valor, tipo, origen)
+		{			
+			var aux_valor = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Nro. de Doc',
+    	    	labelWidth: 90,
+    	        allowBlank: false,
+    	        value: valor,
+    	        padding: 15,
+    	        anchor:'90%',
+			});
+
+			var aux_tipo = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Tipo de Doc',
+		        width: 350,
+		        labelWidth: 95,
+		        value: tipo,
+		        padding: 15,
+		        anchor:'90%',
+			});
+
+			var aux_origen = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Origen de Doc',
+		        labelWidth: 110,
+		        width: 350,
+		        value: origen,
+		        padding: 15,
+	 	        anchor:'90%',
+			});
+
+			Ext.getCmp('doc_nro').add(aux_valor);
+			Ext.getCmp('doc_tipo').add(aux_tipo);
+			Ext.getCmp('doc_origen').add(aux_origen);
+			
+		};
+
+		var crearUbic = function (direccion, lugar)
+		{			
+			var aux_direccion = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Direcci&oacute;n',
+		        allowBlank: true,
+		        width: 650,
+		        value: direccion,
+		        padding: 15,
+		        anchor:'90%',
+			});
+
+			var aux_lugar = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Tipo de Doc',
+		        width: 350,
+		        labelWidth: 95,
+		        value: lugar,
+		        padding: 15,
+		        anchor:'90%',
+			});
+
+			Ext.getCmp('ubic_direccion').add(aux_direccion);
+			Ext.getCmp('ubic_lugar').add(aux_lugar);
+			
+		};
+
+		var crearCont = function (tipo, contacto)
+		{			
+			var aux_tipo = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Tipo de Contacto',
+		        labelWidth: 130,
+		        width: 400,
+		        value: tipo,
+		        padding: 15,
+	 	        anchor:'90%',
+			});
+
+			var aux_contacto = Ext.create('Ext.form.DisplayField', {
+				fieldLabel: 'Contacto',
+			    width: 400,
+			    labelWidth: 110,
+			    anchor:'90%',
+			    value: contacto,
+			    padding: 15,
+			});
+
+			Ext.getCmp('cont_tipo').add(aux_tipo);
+			Ext.getCmp('cont_contacto').add(aux_contacto);
+			
+		};
 		var cargarDatos = function (){
 			var aux = buscarId();
 			Ext.Ajax.request({
@@ -107,22 +191,52 @@ Ext.onReady(function(){
 			    },
 			    success: function(response) {
 			    	var campos = Ext.decode(response.responseText);
-			    	var form = Ext.getCmp('form').getForm();
-			    	
+			    	var form = Ext.getCmp('form').getForm();		    	
 			    	for (campo in campos) {
 				    	if (campo == "documentos"){
-							var doc = (campos[campo]);
-							console.log(doc["org_documento_id"]);
-			    		}	
+							var docs = (campos[campo]);
+								for (doc in docs) {
+									if(doc){
+										var valor = (docs[doc].valor);
+										var tipo = (docs[doc].org_documento_tipo_codigo);
+										var origen = (docs[doc].dir_pais_id);
+										crearDoc(valor, tipo, origen);
+									}							
+								}
+								continue;
+			    		}
+			    		if (campo == "Direcciones"){
+							var ubics = (campos[campo]);
+							for (ubic in ubics) {
+								if(ubic){
+									var direccion = (ubics[ubic].direccion);
+									var lugar = (ubics[ubic].dir_barrio_id);
+									crearUbic(direccion, lugar);
+								}							
+							}
+							continue;	
+		    			}
+			    		if (campo == "contactos"){
+							var conts = (campos[campo]);
+							for (cont in conts) {
+								if(cont){
+									var tipo = (conts[cont].org_contacto_tipo_codigo);
+									var contacto = (conts[cont].contacto);
+									crearCont(tipo, contacto);
+								}							
+							}
+							continue;	
+		    			}	
 				    	var name = form.findField(campo);
 				    		if (name) {
-						    	if (campo == "fecha_nacimiento" && campos[campos])
+						    	if (campo == "fecha_nacimiento")
 						    	{
 						    		var fecha = campos["fecha_nacimiento"];
 				 			    	var fecha2 = fecha.split("-");
 				 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
 				 			    	campos[campo] = result;
 				 			    	name.setValue(campos[campo]);
+				 			    	console.log(campos[campo]);
 							    }else if (campo == "genero_persona")
 						    	{
 							    	if (campos[campo] == 'M'){
@@ -135,256 +249,456 @@ Ext.onReady(function(){
 							    } else{
 							    
 								    	name.setValue(campos[campo]);
-								    	console.log(campo);
+								    	//console.log(campo);
 						    	}	
 						    }	
 			    	}
-			    	
-			    	/*traer form x id
-
-			    	de ese traer su basic form
-
-			    	iterar text 
-
-			    	for(var campo in text)
-				    	c1 =basicform.finfield(campo)
-
-				    	contrrol q exista
-
-				    	c1.setValue(text.campo)*/
 			    }
 			});
 		};
 
-		var pantallaPersona = Ext.create('Ext.form.Panel', {
-			id: 'form',
-			items:[{
-			    xtype: 'panel',
-			    bodyStyle: {
-		        	background: '#C8CED8',
-		        },
-			    title: 'Datos Personales',
-			    //collapsible: true,
-			    //anchor:'90%',
-			    height: 'fit',
-			    width: 'fit',
-			    border: 1,
-			    padding: '5 15 0 15',
-			    layout: 'hbox',
-			    defaultType: 'textfield',
-			    items: [{
-					xtype: 'container',
-					flex: 1,
-					layout: 'anchor',
-					defaultType: 'textfield',
-					items: [    
-					    {
-						    	xtype: 'displayfield',
-						        fieldLabel: 'Nombres',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'nombre_persona',
-						},{
-				    	    	fieldLabel: 'Nro. de Doc',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-				    	        name: 'doc_nro',
-				    	},{
-				        	fieldLabel: 'Fecha de Nac:',
-				        	xtype: 'displayfield',
-					        padding: 15,
-					        labelWidth: 110,
-					        anchor:'90%',
-				 	        name: 'fecha_nacimiento'
-				    	},{
-						        fieldLabel: 'Religi&oacute;n',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-					 	        name: 'religion',
-						  }
-			    	]},{
-					xtype: 'container',
-					flex: 1,
-					layout: 'anchor',
-					defaultType: 'textfield',
-					items: [{
-				    	        fieldLabel: 'Apellidos',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'apellido_persona'
-				    	 },{
-						        fieldLabel: 'Origen de Doc',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-					 	        name: 'doc_origen',
-				    	 },{
-						        fieldLabel: 'Estado Civil',
-						        xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'estado_civil',
-						 },{
-						    	fieldLabel: 'Profesi&oacute;n',
-						    	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'profesion',	  
-				    	   }
-			    	]},{
-			    		xtype: 'container',
-		                flex: 1,
-		                layout: 'anchor',
-		                defaultType: 'textfield',
-		                items: [{
-							        fieldLabel: 'Nacionalidad',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-						 	        name: 'nacionalidad', 
-					    	    },{
-							        fieldLabel: 'Tipo de Doc',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'doc_tipo',
-							    },{
-							    	fieldLabel: 'Sexo',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'genero_persona',
-						         },{
-								    	fieldLabel: 'Nro. de hijos',
-							        	xtype: 'displayfield',
+				var panelPersona = Ext.create('Ext.form.Panel', {
+					id: 'form',
+					items:[{
+					    xtype: 'panel',
+					    id: 'panelDoc',
+					    title: 'Datos de Documentaci&oacute;n',
+					    bodyStyle: {
+				     		background: '#C8CED8',
+				      	},
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					    padding: '10 15 0 15',
+					    layout: 'hbox',
+						 items: [{
+									xtype: 'container',
+									id: 'doc_nro',
+									flex: 1,
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: []
+							   },{
+									xtype: 'container',
+									flex: 1,
+									id: 'doc_tipo',
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: []
+							   },{
+									xtype: 'container',
+									id: 'doc_origen',
+									flex: 1,
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: []}
+					    	    ]},{
+					    xtype: 'panel',
+					    title: 'Datos Personales',
+					    bodyStyle: {
+				     		background: '#C8CED8',
+				      	},
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					    padding: '10 15 0 15',
+					    layout: 'hbox',
+					    items: [{
+							xtype: 'container',
+							flex: 1,
+							defaultType: 'displayfield',
+							layout: 'anchor',
+							items: [    
+							    {
+								        fieldLabel: 'Nombres',
 								        padding: 15,
 								        labelWidth: 110,
 								        anchor:'90%',
+								        name: 'nombre_persona'
+							    },{
+							        	fieldLabel: 'Fecha de Nac:',
+							        	labelWidth: 110,
+							 	        padding: 15,
+							 	        anchor:'90%',
+							 	        name: 'fecha_nacimiento'
+				         		},{
+								    	fieldLabel: 'Profesi&oacute;n',							    	
+								        labelWidth: 110,
+								        padding: 15,
+							 	        anchor:'90%',
+								        name: 'profesion',	  
+					    	    }
+					    	]},{
+					    		xtype: 'container',
+				                flex: 1,
+				                layout: 'anchor',
+				                defaultType: 'displayfield',
+				                items: [{
+						    	        fieldLabel: 'Apellidos',
+						    	        labelWidth: 110,
+						    	        padding: 15,
+								        anchor:'90%',
+								        name: 'apellido_persona'
+					    	    },{
+								        fieldLabel: 'Estado Civil',
+								        labelWidth: 110,
+								        padding: 15,
+								        anchor:'90%',
+								        name: 'estado_civil',
+								},{
+								        fieldLabel: 'Religi&oacute;n',
+								        labelWidth: 110,
+								        padding: 15,
+							 	        anchor:'90%',
+							 	        name: 'religion',
+								}
+					    		]
+					    	},{
+					    		xtype: 'container',
+				                flex: 1,
+				                layout: 'anchor',
+				                defaultType: 'displayfield',
+				                items: [{
+								        fieldLabel: 'Nacionalidad',
+								        labelWidth: 110,
+								        padding: 15,
+							 	        anchor:'90%',
+							 	        name: 'nacionalidad_persona', 
+					    	    },{
+							        	 padding: 15,
+							             fieldLabel: 'Genero',
+							             labelWidth: 110,
+									     padding: 15,
+								 	     anchor:'90%',
+										 name: 'genero_persona',
+						         },{
+								    	fieldLabel: 'Nro. de hijos',
+								    	labelWidth: 110,
+								    	anchor:'90%',
+								    	padding: 15,
 								    	name: 'hijos',
 						    	 }
-			    		]
-			    	}]},{
-			    xtype: 'panel',
-			    bodyStyle: {
-		        	background: '#C8CED8',
-		        },
-			    title: 'Datos de Ubicaci&oacute;n',
-			    //collapsible: true,
-			    height: 'fit',
-			    width: 'fit',
-			    border: 1,
-			    layout: 'column',
-			    flex: 1,
-			    padding: '5 15 0 15',
-			    defaultType: 'textfield',
-				 items: [{
-				        fieldLabel: 'Direcci&oacute;n',
-				       // allowBlank: false,
-				        width: 400,
-				        anchor:'90%',
-				    	padding: 15,
-				    },{
-				        fieldLabel: 'Ciudad',
-				       // allowBlank: false,
-				        padding: 15,
-				        anchor:'90%'
-				    },{
-				        fieldLabel: 'Barrio',
-				      //  allowBlank: false,
-				        padding: 15,
-				        anchor:'90%'
-				    }
-			    	    ]},{
-		    	xtype: 'panel',
-		    	bodyStyle: {
-		        	background: '#C8CED8',
-		        },
-			    title: 'Datos de Contacto',
-			    //collapsible: true,
-			    height: 'fit',
-			    width: 'fit',
-			    border: 1,
-		         layout: 'column',
-		         padding: '5 15 5 15',
-		         defaultType: 'textfield',
-		         items: [ 
-							{
-							    fieldLabel: 'Email',
-							    vtype: 'email',
-							    width: 400,
-						//	    allowBlank: false,
-						         flex: 2,
-							    padding: 15,
-							    anchor:'90%'
+					    		]
+					    	}]},{
+					    xtype: 'panel',
+					    id: 'panelUbic',
+					    bodyStyle: {
+				     		background: '#C8CED8',
+				      	},
+					    title: 'Datos de Ubicaci&oacute;n',
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					    padding: '10 15 0 15',
+					    layout: 'hbox',
+						 items: [{
+								xtype: 'container',
+								flex: 1,
+								id: 'ubic_direccion',
+								defaultType: 'displayfield',
+								layout: 'anchor',
+								items: []
 							},{
-							    fieldLabel: 'Tel&eacute;fono',
-						//	    allowBlank: false,
-						         flex: 1,
-							    anchor:'90%',
-								padding: 15,
-							},{
-							    fieldLabel: 'Celular',
-						//	    allowBlank: false,
-						         flex: 1,
-							    padding: 15,
-							    anchor:'90%'
+								xtype: 'container',
+								flex: 1,
+								id: 'ubic_lugar',
+								defaultType: 'displayfield',
+								layout: 'anchor',
+								items: []}
+					    	]},{
+				    	xtype: 'panel',
+					    title: 'Datos de Contacto',
+					    bodyStyle: {
+				     		background: '#C8CED8',
+				      	},
+					    id: 'panelCont',
+					    collapsible: true,
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					    padding: '10 15 0 15',
+					    layout: 'hbox',
+				        items: [{
+									xtype: 'container',
+									flex: 1,
+									id: 'cont_tipo',
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: []
+						    	},{        
+									xtype: 'container',
+									flex: 1,
+									defaultType: 'displayfield',
+									id: 'cont_contacto',
+									layout: 'anchor',
+									items: []    
+							    }
+						]
+				     },{
+				    	xtype: 'container',
+				 	    height: 200,
+				 	    width: 'fit',
+				 	   layout: 'hbox',
+				 	   // flex: 1,
+				 	   // padding: '5 0 10 440',
+				 	    items:[
+				 	      {	  
+				 	    	  xtype: 'button',
+				 	    	  margin: '15 0 10 1030',
+						      scale: 'large',
+						      text: 'Guardar',
+							  //disabled: true,
+							  //handler: buttonCrear
+				 	      },{
+				 	    	  xtype: 'button',
+				 	    	  margin: '15 0 10 20',
+						      scale: 'large',
+						      text: 'Cancelar',
+							  //disabled: true,
+							  handler: function() {
+								  window.location = baseURL+'/org/personas/index-ui';
 							}
-				         ]
-		     },{
-		    	xtype: 'container',
-		 	    height: 200,
-		 	    width: 'fit',
-		 	   layout: 'hbox',
-		 	   // flex: 1,
-		 	   // padding: '5 0 10 440',
-		 	    items:[
-		 	      {	  
-		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 10 1050',
-				      scale: 'large',
-				      text: 'Guardar',
-					  //disabled: true,
-		 	      },{
-		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 10 20',
-				      scale: 'large',
-				      text: 'Cancelar',
-					  //disabled: true,
-					  handler: function() {
-						  window.location = baseURL+'/org/personas/index-ui';
-					}
-		 	      }
-			    ]
-		     }],
-			});
-		
+				 	      }
+					    ]
+				     }]
+					});
 		
 		var pantalla = Ext.create('Ext.form.Panel', {
-			id: 'margen',
+			//id: 'margen',
 			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
-		    height: 570,
+		    height: 'fit',
 		    renderTo: Ext.getBody(),
-		    items:[pantallaPersona],
-		});
-		
+		    items:[panelPersona],
+			listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(0);
+//					Ext.getCmp('personaTabPanel').setActiveTab(0);
+				}
+			}
+		});	
 		cargarDatos();
+		Ext.getCmp('centerPanel').add(pantalla);
 });
 
+//	var pantallaPersona = Ext.create('Ext.form.Panel', {
+//	id: 'form',
+//	items:[{
+//	    xtype: 'panel',
+//	    bodyStyle: {
+//     		background: '#C8CED8',
+//      },
+//	    title: 'Datos Personales',
+//	    //collapsible: true,
+//	    //anchor:'90%',
+//	    height: 'fit',
+//	    width: 'fit',
+//	    border: 1,
+//	    padding: '5 15 0 15',
+//	    layout: 'hbox',
+//	    defaultType: 'textfield',
+//	    items: [{
+//			xtype: 'container',
+//			flex: 1,
+//			layout: 'anchor',
+//			defaultType: 'textfield',
+//			items: [    
+//			    {
+//				    	xtype: 'displayfield',
+//				        fieldLabel: 'Nombres',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//				        name: 'nombre_persona',
+//				},{
+//		    	    	fieldLabel: 'Nro. de Doc',
+//			        	xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//		    	        name: 'doc_nro',
+//		    	},{
+//		        	fieldLabel: 'Fecha de Nac:',
+//		        	xtype: 'displayfield',
+//			        padding: 15,
+//			        labelWidth: 110,
+//			        anchor:'90%',
+//		 	        name: 'fecha_nacimiento'
+//		    	},{
+//				        fieldLabel: 'Religi&oacute;n',
+//			        	xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//			 	        name: 'religion',
+//				  }
+//	    	]},{
+//			xtype: 'container',
+//			flex: 1,
+//			layout: 'anchor',
+//			defaultType: 'textfield',
+//			items: [{
+//		    	        fieldLabel: 'Apellidos',
+//			        	xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//				        name: 'apellido_persona'
+//		    	 },{
+//				        fieldLabel: 'Origen de Doc',
+//			        	xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//			 	        name: 'doc_origen',
+//		    	 },{
+//				        fieldLabel: 'Estado Civil',
+//				        xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//				        name: 'estado_civil',
+//				 },{
+//				    	fieldLabel: 'Profesi&oacute;n',
+//				    	xtype: 'displayfield',
+//				        padding: 15,
+//				        labelWidth: 110,
+//				        anchor:'90%',
+//				        name: 'profesion',	  
+//		    	   }
+//	    	]},{
+//	    		xtype: 'container',
+//             flex: 1,
+//             layout: 'anchor',
+//             defaultType: 'textfield',
+//             items: [{
+//					        fieldLabel: 'Nacionalidad',
+//				        	xtype: 'displayfield',
+//					        padding: 15,
+//					        labelWidth: 110,
+//					        anchor:'90%',
+//				 	        name: 'nacionalidad', 
+//			    	    },{
+//					        fieldLabel: 'Tipo de Doc',
+//				        	xtype: 'displayfield',
+//					        padding: 15,
+//					        labelWidth: 110,
+//					        anchor:'90%',
+//					        name: 'doc_tipo',
+//					    },{
+//					    	fieldLabel: 'Sexo',
+//				        	xtype: 'displayfield',
+//					        padding: 15,
+//					        labelWidth: 110,
+//					        anchor:'90%',
+//					        name: 'genero_persona',
+//				         },{
+//						    	fieldLabel: 'Nro. de hijos',
+//					        	xtype: 'displayfield',
+//						        padding: 15,
+//						        labelWidth: 110,
+//						        anchor:'90%',
+//						    	name: 'hijos',
+//				    	 }
+//	    		]
+//	    	}]},{
+//	    xtype: 'panel',
+//	    bodyStyle: {
+//     	background: '#C8CED8',
+//     },
+//	    title: 'Datos de Ubicaci&oacute;n',
+//	    //collapsible: true,
+//	    height: 'fit',
+//	    width: 'fit',
+//	    border: 1,
+//	    layout: 'column',
+//	    flex: 1,
+//	    padding: '5 15 0 15',
+//	    defaultType: 'textfield',
+//		 items: [{
+//		        fieldLabel: 'Direcci&oacute;n',
+//		       // allowBlank: false,
+//		        width: 400,
+//		        anchor:'90%',
+//		    	padding: 15,
+//		    },{
+//		        fieldLabel: 'Ciudad',
+//		       // allowBlank: false,
+//		        padding: 15,
+//		        anchor:'90%'
+//		    },{
+//		        fieldLabel: 'Barrio',
+//		      //  allowBlank: false,
+//		        padding: 15,
+//		        anchor:'90%'
+//		    }
+//	    	    ]},{
+// 	xtype: 'panel',
+// 	bodyStyle: {
+//     	background: '#C8CED8',
+//     },
+//	    title: 'Datos de Contacto',
+//	    //collapsible: true,
+//	    height: 'fit',
+//	    width: 'fit',
+//	    border: 1,
+//      layout: 'column',
+//      padding: '5 15 5 15',
+//      defaultType: 'textfield',
+//      items: [ 
+//					{
+//					    fieldLabel: 'Email',
+//					    vtype: 'email',
+//					    width: 400,
+//				//	    allowBlank: false,
+//				         flex: 2,
+//					    padding: 15,
+//					    anchor:'90%'
+//					},{
+//					    fieldLabel: 'Tel&eacute;fono',
+//				//	    allowBlank: false,
+//				         flex: 1,
+//					    anchor:'90%',
+//						padding: 15,
+//					},{
+//					    fieldLabel: 'Celular',
+//				//	    allowBlank: false,
+//				         flex: 1,
+//					    padding: 15,
+//					    anchor:'90%'
+//					}
+//		         ]
+//  },{
+// 	xtype: 'container',
+//	    height: 200,
+//	    width: 'fit',
+//	   layout: 'hbox',
+//	   // flex: 1,
+//	   // padding: '5 0 10 440',
+//	    items:[
+//	      {	  
+//	    	  xtype: 'button',
+//	    	  margin: '5 0 10 1050',
+//		      scale: 'large',
+//		      text: 'Guardar',
+//			  //disabled: true,
+//	      },{
+//	    	  xtype: 'button',
+//	    	  margin: '5 0 10 20',
+//		      scale: 'large',
+//		      text: 'Cancelar',
+//			  //disabled: true,
+//			  handler: function() {
+//				  window.location = baseURL+'/org/personas/index-ui';
+//			}
+//	      }
+//	    ]
+//  }],
+//	});
 			
 		</script>
     </head>

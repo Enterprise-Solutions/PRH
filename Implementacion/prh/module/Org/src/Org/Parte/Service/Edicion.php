@@ -5,6 +5,7 @@ namespace Org\Parte\Service;
 use Org\Parte\Repository;
 
 use Doctrine\ORM\EntityManager;
+use Zend\Db\Adapter\Adapter;
 use Org\Documento\Documento\Factory as docFactory;
 use Org\Documento\Repository as docRepository;
 use Org\Documento\Service as docService;
@@ -17,14 +18,15 @@ use Org\Direccion\Factory as dirFactory;
 use Org\Direccion\Repository as dirRepository;
 use Org\Direccion\Service as dirService;
 
+
 class Edicion
 {
 	public $_em;
 	public $_docFactory;
 	public $_repository,$_docRepository;
-	public function __construct(EntityManager $em)
+	public function __construct(EntityManager $em,Adapter $adapter = null)
 	{
-		$this->_repository = new Repository($em);
+		$this->_repository = new Repository($em,$adapter);
 		$this->_docRepository = new docRepository($em);
 		$this->_docFactory = new docFactory($this->_docRepository);
 		
