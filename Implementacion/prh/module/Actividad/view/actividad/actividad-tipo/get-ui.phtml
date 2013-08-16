@@ -101,7 +101,7 @@ Ext.onReady(function(){
 			    height: 'fit',
 			    width: 'fit',
 			    border: 1,
-			    padding: '20 15 15 15',
+			    padding: 10,
 			    layout: 'hbox',
 			    defaultType: 'textfield',
 			    items: [{
@@ -209,9 +209,10 @@ Ext.onReady(function(){
 		 	   // flex: 1,
 		 	   // padding: '5 0 10 440',
 		 	    items:[
+				  { xtype: 'tbfill' },
 		 	      {	  
 		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 10 1015',
+		 	    	  margin: '5 0 15 0',
 				      scale: 'large',
 				      width: 100,
 				      text: 'Editar',
@@ -221,7 +222,7 @@ Ext.onReady(function(){
 				      }
 		 	      },{
 		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 10 20',
+		 	    	  margin: '5 15 15 20',
 				      scale: 'large',
 				      width: 100,
 				      text: 'Volver',
@@ -236,7 +237,6 @@ Ext.onReady(function(){
 		
 		
 		var pantalla = Ext.create('Ext.form.Panel', {
-			padding: '15 5 0 5', 
 		    //title: ' ',
 		    width: 'fit',
 		    height: 570,

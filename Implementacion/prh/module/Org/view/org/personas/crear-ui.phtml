@@ -334,6 +334,8 @@ Ext.onReady(function(){
 						           	var auxapellido = valoresForm.apellido;
 						           	var auxfechanacimiento = valoresForm.fecha_de_nacimiento;
 						           	var auxgenero = valoresForm.genero;
+						           	var auxhijos = valoresForm.hijos;
+						           	var auxprofesion = valoresForm.org_profesion_id;
 
 						        	var agregarDoc = [];
 						        	
@@ -404,8 +406,10 @@ Ext.onReady(function(){
 												   'nombre': auxnombre,
 												   'apellido': auxapellido,
 												   'genero': auxgenero,
+												   'nro_hijos': auxhijos,
+												   'org_profesion_id': profesion,
 												   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
-												   'dir_pais_id': auxnacionalidad,
+												   'nacionalidad_persona': auxnacionalidad,
 												   'org_religion_id': auxreligion,
 												   'org_estado_civil_id': auxestado_civil,	
 							 					   'Documentos':{'agregados':agregarDoc},
@@ -447,7 +451,6 @@ Ext.onReady(function(){
 				 items: [{
 			    	    	fieldLabel: 'Nro. de Doc',
 			    	    	labelWidth: 90,
-			    	        allowBlank: false,
 			    	        padding: '5 15 5 15',
 			    	        width: 300,
 			    	        anchor:'90%',
@@ -462,7 +465,6 @@ Ext.onReady(function(){
 					        queryMode: 'local',
 					        displayField: 'nombre',
 					        valueField: 'orgDocumentoTipoCodigo',
-					        allowBlank: false,
 					        anchor:'90%',
 					        name: doc_tipo,
 					    },{
@@ -474,7 +476,6 @@ Ext.onReady(function(){
 					        displayField: 'nombre',
 					        valueField: 'dirPaisId',
 					        queryMode: 'local',
-					        allowBlank: false,
 					        padding: '5 15 5 15',
 				 	        anchor:'90%',
 				 	        name: doc_origen,
@@ -593,7 +594,6 @@ Ext.onReady(function(){
 					        valueField: 'org_contacto_tipo_codigo',
 					        emptyText: 'Escriba el Tipo de Contacto...',
 					        loadingText: 'Buscando...',
-					        allowBlank: true,
 					        padding: '5 15 5 15',
 				 	        anchor:'90%',
 				 	        name: cont_tipo,
@@ -775,7 +775,7 @@ Ext.onReady(function(){
 							        store: nacionalidadStore,
 							        queryMode: 'local',
 							        displayField: 'nacionalidad',
-							        valueField: 'dir_pais_id',
+							        valueField: 'nacionalidad',
 							        allowBlank: false,
 							        padding: 15,
 						 	        anchor:'90%',
@@ -819,7 +819,7 @@ Ext.onReady(function(){
 								        padding: 15,
 							 	        anchor:'90%',
 								        allowBlank: true,
-								        name: 'profesion',	  
+								        name: 'org_profesion_id',	  
 						    	    }
 					    		]
 					    	}]},{
@@ -963,17 +963,20 @@ Ext.onReady(function(){
 				 	   // flex: 1,
 				 	   // padding: '5 0 10 440',
 				 	    items:[
+				  		  { xtype: 'tbfill' },
 				 	      {	  
 				 	    	  xtype: 'button',
-				 	    	  margin: '15 0 10 1050',
+				 	    	  margin: '5 0 15 0',
 						      scale: 'large',
+						      width: 100,
 						      text: 'Guardar',
 							  //disabled: true,
 							  handler: buttonCrear
 				 	      },{
 				 	    	  xtype: 'button',
-				 	    	  margin: '15 0 10 20',
+				 	    	  margin: '5 15 15 20',
 						      scale: 'large',
+						      width: 100,
 						      text: 'Cancelar',
 							  //disabled: true,
 							  handler: function() {
