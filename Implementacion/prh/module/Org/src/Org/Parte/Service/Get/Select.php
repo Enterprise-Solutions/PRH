@@ -16,9 +16,9 @@ class Select extends DbSelect
 			 	'nombre_organizacion',
 			 	'nombre_persona','apellido_persona','fecha_nacimiento','genero_persona','nro_hijos',
 			 	'org_religion_id','org_estado_civil_id','nacionalidad_persona',
-			 	'documentos' => new Expression("string_agg('org_documento_id:'||od.org_documento_id||','||'valor:'||od.valor||','||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||',dir_pais_id:'||od.dir_pais_id||',preferencia:'||od.preferencia||',dir_pais:'||ddp.nombre||',org_documento_tipo:'||odt.nombre,';')"),
-			 	'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id||',contacto:'||oc.contacto||',org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||',org_contacto_tipo:'||oct.nombre,';')"),
-			 	'Direcciones' => new Expression("string_agg('dir_direccion_id:'||dd.dir_direccion_id||',direccion:'||dd.calle||',dir_barrio_id:'||dd.dir_barrio_id||',dir_barrio:'||db.nombre,';')")	
+			 	'documentos' => new Expression(" string_agg(distinct 'org_documento_id:'||od.org_documento_id||','||'valor:'||od.valor||','||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||',dir_pais_id:'||od.dir_pais_id||',preferencia:'||od.preferencia||',dir_pais:'||ddp.nombre||',org_documento_tipo:'||odt.nombre,';')"),
+			 	'contactos'  => new Expression(" string_agg(distinct 'org_contacto_id:'||oc.org_contacto_id||',contacto:'||oc.contacto||',org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||',org_contacto_tipo:'||oct.nombre,';')"),
+			 	'Direcciones' => new Expression("string_agg(distinct 'dir_direccion_id:'||dd.dir_direccion_id||',direccion:'||dd.calle||',dir_barrio_id:'||dd.dir_barrio_id||',dir_barrio:'||db.nombre,';')")	
 			 		//'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id,';')")
 			 	))
 			 ->join(
