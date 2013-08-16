@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Tipo de Actividad</title>
+        <title>PRH - Actividad</title>
 
 		<style type="text/css">
 		
@@ -68,10 +68,13 @@ Ext.onReady(function(){
 					name: 'nombre'
 				},{
 					type: 'string',
-					name: 'nombre_act_tipo'
+					name: 'actividad_tipo'
 				},{
 					type: 'int',
 					name: 'anho'
+				},{
+					type: 'string',
+					name: 'moneda'
 				},
 			]
 		});
@@ -451,16 +454,16 @@ Ext.onReady(function(){
             // grid columns
             columns:[{
                 text: "Actividad",
-                dataIndex: 'nombre',
+                dataIndex: 'nombre_identificador',
                 align: 'left',
                 flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
-                    return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
+                    return '<a href="'+baseURL+'/actividad/actividad/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
             	}
             },{
                 text: "Tipo de Act.",
-                dataIndex: 'nombre_act_tipo',
+                dataIndex: 'actividad_tipo',
                 align: 'center',
                 flex: 1,
             },{
@@ -469,6 +472,11 @@ Ext.onReady(function(){
                 align: 'center',
                 flex: 0.5,
             },{
+                text: "Tipo",
+                dataIndex: 'tipo',
+                align: 'center',
+                flex: 0.4,
+            },{
                 text: "Duraci&oacute;n (hs)",
                 dataIndex: 'duracion',
                 align: 'center',
@@ -476,6 +484,11 @@ Ext.onReady(function(){
             },{
                 text: "Monto",
                 dataIndex: 'monto',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Moneda",
+                dataIndex: 'moneda',
                 align: 'center',
                 flex: 0.6,
             },{
@@ -494,13 +507,8 @@ Ext.onReady(function(){
                 align: 'center',
                 flex: 0.6,
             },{
-                text: "Estado",
-                dataIndex: 'estado',
-                align: 'center',
-                flex: 0.5,
-            },{
-                text: "Observac&oacute;n",
-                dataIndex: 'criterio',
+                text: "Observaci&oacute;n",
+                dataIndex: 'observaciones',
                 align: 'center',
                 flex: 1,
             },{
@@ -511,7 +519,7 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     tooltip: 'Edit',
                		handler: function(grid, rowIndex, colIndex) {
-                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_tipo_id');  
+                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_id');  
                    		window.location = url;                     
                     }
                 }]
@@ -523,9 +531,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_tipo_id');
-                    	var nombre_delete = actividadStore.getAt(rowIndex).get('nombre');
-                    	var auxmensaje = 'Confirma que desea borrar el Tipo de Actividad '+nombre_delete+'?';
+                    	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_id');
+                    	var nombre_delete = actividadStore.getAt(rowIndex).get('nombre_identificador');
+                    	var auxmensaje = 'Confirma que desea borrar la Actividad '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -535,11 +543,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/actividad/actividad-tipo/delete',
+        							   url: baseURL + '/actividad/actividad/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Tipo de Actividad Borrado Correctamente'
+        										msg:'Actividad Borrada Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -551,7 +559,7 @@ Ext.onReady(function(){
         							   },
         							   jsonData:{
         							       'delete':{
-												'act_actividad_tipo_id': id_delete,
+												'act_actividad_id': id_delete,
         							       }
         							   }
         						 });

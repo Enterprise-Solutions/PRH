@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Tipo de Actividad</title>
+        <title>PRH - Actividad</title>
 
 		<style type="text/css">
 		
@@ -31,7 +31,7 @@ Ext.onReady(function(){
 		var cargarDatos = function (){
 			aux = buscarId();
 			Ext.Ajax.request({
-			    url: baseURL +'/actividad/actividad-tipo/get',
+			    url: baseURL +'/actividad/actividad/get',
 			    params: {
 			        'id': aux,
 			    },
@@ -46,7 +46,7 @@ Ext.onReady(function(){
 			    		}	
 				    	var name = form.findField(campo);
 				    		if (name) {
-				    			if (campo == "fecha_alta" || campo == "fecha_baja")
+				    			if (campo == "fecha_inicio" || campo == "fecha_fin")
 						    	{
 				    				if (campos[campo]){
 							    		var fecha = campos[campo];
@@ -67,10 +67,10 @@ Ext.onReady(function(){
 								 	} else{
 								    
 									    	name.setValue(campos[campo]);
+									    	console.log(campo);
 							     }
 					    }	}	
 			    	}
-			   
 				});
 		};
 
@@ -81,9 +81,7 @@ Ext.onReady(function(){
 			    bodyStyle: {
 		        	background: '#C8CED8',
 		        },
-			    title: 'Tipo de Actividad',
-			    //collapsible: true,
-			    //anchor:'90%',
+			    title: 'Datos de la Actividad',
 			    height: 'fit',
 			    width: 'fit',
 			    border: 1,
@@ -94,98 +92,93 @@ Ext.onReady(function(){
 					xtype: 'container',
 					flex: 1,
 					layout: 'anchor',
-					defaultType: 'textfield',
+					defaultType: 'displayfield',
 					items: [    
 					    {
-						    	xtype: 'displayfield',
 						        fieldLabel: 'Nombre',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'nombre',
+						        name: 'nombre_identificador',
 						},{
-				    	    	fieldLabel: 'Nivel',
-					        	xtype: 'displayfield',
+						        fieldLabel: 'Costo',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-				    	        name: 'nivel',
-				    	},{
-				    		 	fieldLabel: 'Duraci&oacute;n (hs)',
-						        xtype: 'displayfield',
+					 	        name: 'monto',
+			    	 	},{
+						        fieldLabel: 'Estado',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'duracion',
-						},{
-						    	fieldLabel: 'Fecha de alta',
-						    	xtype: 'displayfield',
+					 	        name: 'estado', 
+			    	    },{
+						    	fieldLabel: 'Inicio',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'fecha_alta',	  
-				    	 }
+						    	name: 'fecha_inicio',
+				   	 	}
 			    	]},{
 					xtype: 'container',
 					flex: 1,
 					layout: 'anchor',
-					defaultType: 'textfield',
+					defaultType: 'displayfield',
 					items: [{
-				    	        fieldLabel: 'C&oacute;digo',
-					        	xtype: 'displayfield',
+				    	        fieldLabel: 'Tipo de Act.',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'codigo'
+						        name: 'actividad_tipo'
 				    	 },{
-						        fieldLabel: 'Modalidad',
-					        	xtype: 'displayfield',
+					        	fieldLabel: 'Moneda',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-					 	        name: 'modalidad',
-				    	 },{
-				    			fieldLabel: 'Atelier',
-					        	xtype: 'displayfield',
+					 	        name: 'moneda'
+					     },{
+						        fieldLabel: 'Tipo',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'atelier',
-						 },{
-						    	fieldLabel: 'Fecha de baja',
-					        	xtype: 'displayfield',
+					 	        name: 'tipo', 
+			    	     },{
+						    	fieldLabel: 'Fin',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						    	name: 'fecha_baja',
-					   	 }
+						    	name: 'fecha_fin',
+					   	  }
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
 		                layout: 'anchor',
-		                defaultType: 'textfield',
+		                defaultType: 'displayfield',
 		                items: [{
-							        fieldLabel: 'Subtitulo',
-						        	xtype: 'displayfield',
+					    		 	fieldLabel: 'Duraci&oacute;n (hs)',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-						 	        name: 'subtitulo', 
-					    	    },{
-						        	fieldLabel: 'Criterio',
-						        	xtype: 'displayfield',
+							        name: 'duracion',
+							  },{
+							    	fieldLabel: 'Participantes',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-						 	        name: 'criterio'
-						    	},{
-							    	fieldLabel: 'Asistencia',
-						        	xtype: 'displayfield',
+							        name: 'nro_personas',	  
+					    	  },{
+							    	fieldLabel: 'A&ntilde;o',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        name: 'asistencia',
-						         }
+							        name: 'anho_formacion',	  
+					    	  },{
+							    	fieldLabel: "Observaci&oacute;n",
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+							    	name: 'observaciones',
+							  }
 			    		]
 			    	}]},{
 		    	xtype: 'container',
@@ -203,7 +196,7 @@ Ext.onReady(function(){
 				      width: 100,
 				      text: 'Editar',
 				      handler: function() {
-	                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+aux;  
+	                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+aux;  
 	                   		window.location = url;     
 				      }
 		 	      },{
@@ -214,26 +207,47 @@ Ext.onReady(function(){
 				      text: 'Volver',
 					  //disabled: true,
 					  handler: function() {
-						  window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+						  window.location = baseURL+'/actividad/actividad/index-ui';
 					}
 		 	      }
 			    ]
 		     }],
 			});
 		
-		
 		var pantalla = Ext.create('Ext.form.Panel', {
-		    //title: ' ',
-		    width: 'fit',
-		    height: 570,
-		    items:[pantallaActividad],
-		    listeners:{
-				'render':function(){
-					Ext.getCmp('topTabPanel').setActiveTab(1);
-//					Ext.getCmp('actividadTabPanel').setActiveTab(1);
-				}
-			}
+			 type:  'hbox',
+			 
+			 width: 'fit',
+			 height: 'fit',		           
+			 items:[
+								{
+									xtype: 'tabpanel',
+									//style:'background-color: #C8CED8',
+									//layout: 'fit',
+									items: [{
+								        title: 'Datos de Actividad',
+								        tabConfig: {style:'width:240px'},
+								        items:[pantallaActividad],
+								    },{
+								        title: 'Formadores',
+								        tabConfig: {style:'width:240px'},
+								        items: []
+								    },{
+								        title: 'Participantes',
+								        tabConfig: {style:'width:240px'},
+								        items: []								       
+								    }]
+								}
+								
+			  ],
+			  listeners:{
+						'render':function(){
+								Ext.getCmp('topTabPanel').setActiveTab(1);
+//								Ext.getCmp('actividadTabPanel').setActiveTab(1);
+						}
+			  }	    	
 		});
+
 		cargarDatos();
 		Ext.getCmp('centerPanel').add(pantalla);
 });

@@ -1,0 +1,332 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Tipo de Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+// 					Ext.define('modalidad', {
+// 						extend: 'Ext.data.Model',
+// 						fields: [
+// 							{
+// 								type: 'int',
+// 								name: 'act_modalidad_id'
+// 							},{
+// 								type: 'string',
+// 								name: 'nombre'
+// 							},{
+// 								type: 'string',
+// 								name: 'descripcion'
+// 							}
+// 						]
+// 					});
+					
+// 					var modalidadStore = Ext.create('Ext.data.Store', {
+// 						model: 'modalidad',
+// 						proxy: {
+// 							type: 'ajax',
+// 							extraParams: {'p[limit]':'all'},
+// 							headers: {'Accept':'application/json'},
+// 							url: baseURL + '/actividad/combos/act-modalidad?format=json',
+// 							reader: {
+// 								type: 'json',
+// 								root: 'records'
+// 							}
+// 						},
+// 						autoLoad: true
+// 					});
+					
+					var buttonCrear = function(b,e)
+					{
+									var basicForm = b.up('form').getForm();
+							if(basicForm.isValid())
+							{
+								            var valoresForm = basicForm.getFieldValues();
+		
+									Ext.Ajax.request({
+										   url: baseURL + '/actividad/actividad/post',
+										   success: function(response, opt){
+											   Ext.Msg.show({
+												    title:'Aviso',
+													msg:'Actividad Creada Correctamente'
+											   });
+											   function hide_message() {
+											       Ext.defer(function() {
+											           Ext.MessageBox.hide();
+										       }, delay);
+										   }
+										   hide_message();
+										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
+									   },
+									   jsonData:{
+									       'post':{
+											   'nombre_identificador': valoresForm.nombre_identificador,
+											   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
+											   'duracion': valoresForm.duracion,
+											   'monto': valoresForm.monto,
+											   'cont_moneda_id': valoresForm.cont_moneda_id,
+											   'nro_personas': valoresForm.nro_personas,
+											   'estado': valoresForm.estado,
+											   'tipo': valoresForm.tipo,
+											   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
+											   'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
+											   'fecha_fin': (formatearFecha(valoresForm.fecha_fin, 1)),
+											   'observaciones': valoresForm.observaciones	   
+									       }
+									   }
+								 });
+							}
+							else
+							{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+							}  	
+						
+						
+					};
+
+					
+				var panelActividad = Ext.create('Ext.form.Panel', {
+					items:[{
+					    xtype: 'panel',
+					    bodyStyle: {
+				        	background: '#C8CED8',
+				        },
+					    title: 'Actividad',
+					    //anchor:'90%',
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					//    flex: 1,
+					    padding: 10,
+					    layout: 'hbox',
+					    defaultType: 'textfield',
+					    items: [{
+							xtype: 'container',
+							flex: 1,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [    
+							    {
+								        fieldLabel: 'Nombre',
+								        allowBlank: false,
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        name: 'nombre_identificador'
+							    },{
+								    	fieldLabel: 'Duraci&oacute;n (hs)',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minValue: 0,
+								    	value: 0,
+								    	step: 0.25,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'duracion',
+					    	    },{
+								    	fieldLabel: 'Costo',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minValue: 0,
+								    	value: 0,
+								    	hideTrigger: true,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'monto',
+				    	    	},{
+							        	fieldLabel: 'Estado',
+							        	xtype: 'combobox',
+								        labelWidth: 110,
+								        //store: modalidadStore,
+								       // displayField: 'nombre',
+								        queryMode: 'local',
+								        //valueField: 'act_modalidad_id',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%',
+							 	        name: 'estado', 
+						         },{
+								    	fieldLabel: 'A&ntilde;o de Form.',
+								    	xtype: 'combobox',
+								        labelWidth: 110,
+								        //store: modalidadStore,
+								       // displayField: 'nombre',
+								        queryMode: 'local',
+								        //valueField: 'act_modalidad_id',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%',
+								    	name: 'cal_anho_formacion_id',
+					    	     },{
+			                			fieldLabel: 'Inicio',
+							 	        xtype: 'datefield',
+							 	       	format: 'd/m/Y',
+							 	        allowBlank: true,
+							 	       	padding: 15,
+							 	        labelWidth: 110,
+							 	        anchor:'90%',
+							 	        name: 'fecha_inicio'  
+								  }
+					    	]},{
+					    		xtype: 'container',
+				                flex: 1,
+				                layout: 'anchor',
+				                defaultType: 'textfield',
+				                items: [{
+					    	        fieldLabel: 'Tipo de Act',
+					    	        xtype: 'combobox',
+							        labelWidth: 110,
+							        //store: modalidadStore,
+							       // displayField: 'nombre',
+							        queryMode: 'local',
+							        //valueField: 'act_modalidad_id',
+							        allowBlank: false,
+							        padding: 15,
+						 	        anchor:'90%',
+							        name: 'act_actividad_tipo_id'
+					    	    },{
+							    	fieldLabel: 'Participantes',
+							    	labelWidth: 110,
+							    	xtype: 'numberfield',
+							    	minValue: 0,
+							    	value: 0,
+							    	step: 1,
+							    	anchor:'90%',
+							    	padding: 15,
+							    	name: 'nro_personas',
+				    	    	},{
+							        fieldLabel: 'Moneda',
+							        xtype: 'combobox',
+							        labelWidth: 110,
+							        //store: modalidadStore,
+							       // displayField: 'nombre',
+							        queryMode: 'local',
+							        //valueField: 'act_modalidad_id',
+							        allowBlank: false,
+							        padding: 15,
+						 	        anchor:'90%',
+						 	        name: 'cont_moneda_id', 
+					    	    },{
+						        	fieldLabel: 'Tipo',
+						        	xtype: 'combobox',
+							        labelWidth: 110,
+							        //store: modalidadStore,
+							       // displayField: 'nombre',
+							        queryMode: 'local',
+							        //valueField: 'act_modalidad_id',
+							        allowBlank: false,
+							        padding: 15,
+						 	        anchor:'90%',
+						 	        name: 'tipo', 
+					         	},{
+							        fieldLabel: 'Observaci&oacute;n',
+							        allowBlank: false,
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+						 	        name: 'observaciones', 
+					    	  	},{
+		                			fieldLabel: 'Fin',
+						 	        xtype: 'datefield',
+						 	       	format: 'd/m/Y',
+						 	        allowBlank: true,
+							 	   	padding: 15,
+						 	        labelWidth: 110,
+						 	        anchor:'90%',
+						 	        name: 'fecha_fin'  
+		                	}]
+					    	}]},{
+				    	xtype: 'container',
+				 	    height: 200,
+				 	    width: 'fit',
+				 	   layout: 'hbox',
+				 	    items:[
+						  { xtype: 'tbfill' },	
+				 	      {	  
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 0 15 0',
+						      scale: 'large',
+						      width: 100, 
+						      text: 'Guardar',
+							  //disabled: true,
+							  handler: buttonCrear
+				 	      },{
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 15 15 20',
+				 	    	  width: 100, 
+						      scale: 'large',
+						      text: 'Cancelar',
+							  //disabled: true,
+							  handler: function() {
+								  window.location = baseURL+'/actividad/actividad/index-ui';
+							}
+				 	      }
+					    ]
+				     }]
+					});
+
+				var pantalla = Ext.create('Ext.form.Panel', {
+					 type:  'hbox',			 
+					 width: 'fit',
+					 height: 'fit',		           
+					 items:[
+										{
+											xtype: 'tabpanel',
+											//style:'background-color: #C8CED8',
+											//layout: 'fit',
+											items: [{
+										        title: 'Datos de Actividad',
+										        tabConfig: {style:'width:240px'},
+										        items:[panelActividad],
+										    },{
+										        title: 'Formadores',
+										        tabConfig: {style:'width:240px'},
+										        items: []
+										    },{
+										        title: 'Participantes',
+										        tabConfig: {style:'width:240px'},
+										        items: []								       
+										    }]
+										}
+										
+					  ],
+					  listeners:{
+								'render':function(){
+										Ext.getCmp('topTabPanel').setActiveTab(1);
+//										Ext.getCmp('actividadTabPanel').setActiveTab(0);
+								}
+					  }	    	
+				});
+												
+				Ext.getCmp('centerPanel').add(pantalla);
+																			
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
