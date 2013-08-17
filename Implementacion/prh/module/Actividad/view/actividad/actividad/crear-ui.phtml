@@ -79,6 +79,15 @@ Ext.onReady(function(){
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
 									   },
+									   failure: function(response, opt){
+											  // console.log(response);
+												Ext.MessageBox.show({
+						                            title: 'Error de Creaci&oacute;n',
+						                            msg: response.statusText,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
+										},
 									   jsonData:{
 									       'post':{
 											   'nombre_identificador': valoresForm.nombre_identificador,

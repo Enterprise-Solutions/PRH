@@ -1084,7 +1084,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Persona Cargada Correctamente'
+									    height: 'fit',
+									    width: 'fit',
+										msg:'Persona editada correctamente'
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -1094,6 +1096,15 @@ Ext.onReady(function(){
 								   hide_message();
 								   window.location = baseURL+'/org/personas/index-ui';
 							   },
+							   failure: function(response, opt){
+								   console.log(response);
+									Ext.MessageBox.show({
+			                            title: 'Error de Edici&oacute;n',
+			                            msg: response.responseText,
+			                            icon: Ext.MessageBox.ERROR,
+			                            buttons: Ext.Msg.OK
+			                        });
+								},
 							   jsonData:{
 							       'put':{
 									   'org_parte_id':aux,
@@ -1115,7 +1126,7 @@ Ext.onReady(function(){
 			}
 			else
 			{
-				Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+				Ext.Msg.alert('Aviso','Error en la edici&oacute;n, verifique los campos');
 				return;
 			}  	
 			

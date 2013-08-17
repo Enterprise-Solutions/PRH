@@ -114,6 +114,15 @@ Ext.onReady(function(){
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad/index-ui';
 									   },
+									   failure: function(response, opt){
+										  // console.log(response);
+											Ext.MessageBox.show({
+					                            title: 'Error de Edici&oacute;n',
+					                            msg: response.statusText,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+										},
 									   jsonData:{
 									       'put':{
 										       'act_actividad_id': aux,

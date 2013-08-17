@@ -157,7 +157,6 @@ Ext.onReady(function(){
 					    	var form = Ext.getCmp('form').getForm();
 					    	
 					    	for (campo in campos) {
-					    		console.log(campo);
 						    	var name = form.findField(campo);
 						    		if (name) {
 						    			if (campo == "fecha_alta" || campo == "fecha_baja")
@@ -169,10 +168,8 @@ Ext.onReady(function(){
 							 			    	campos[campo] = result;
 							 			    	name.setValue(campos[campo]);
 						    				}
-										 } else{
-										    
-											    	name.setValue(campos[campo]);
-											    	console.log(campo);
+										 } else{				    
+											    name.setValue(campos[campo]);
 									     }
 							    					
 					    			}
@@ -215,6 +212,15 @@ Ext.onReady(function(){
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
 									   },
+									    failure: function(response, opt){
+											   console.log(response);
+												Ext.MessageBox.show({
+						                            title: 'Error de Edici&oacute;n',
+						                            msg: response.responseText,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
+										},
 									   jsonData:{
 									       'put':{
 									    	   'act_actividad_tipo_id': aux,

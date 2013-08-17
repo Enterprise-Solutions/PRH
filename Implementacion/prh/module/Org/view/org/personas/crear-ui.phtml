@@ -23,21 +23,21 @@
 			var itemsPorPagina = 10;
 			var page = 0;
 			
-			var id = 0;
-			var name_doc = 'doc'+id;
-			var doc_nro = 'nro'+id;
-			var doc_tipo = 'tipo'+id;
-			var doc_origen = 'origen'+id;
+			var id_add_doc = 0;
+			var doc_add_name = 'doc_a'+id_add_doc;
+			var doc_add_nro = 'nro_a'+id_add_doc;
+			var doc_add_tipo = 'tipo_a'+id_add_doc;
+			var doc_add_origen = 'origen_a'+id_add_doc;
 
-			var id2 = 0;
-			var name_ubic = 'ubic'+id2;
-			var dir = 'dir'+id2;
-			var lug = 'lug'+id2;
+			var id_add_ubic = 0;
+			var ubic_add_name = 'ubic_a'+id_add_ubic;
+			var ubic_add_dir = 'dir_a'+id_add_ubic;
+			var ubic_add_lug = 'lug_a'+id_add_ubic;
 
-			var id3 = 0;
-			var name_cont = 'cont'+id3;
-			var cont_tipo = 'cont_tipo'+id3;
-			var cont_valor = 'cont_valor'+id3;
+			var id_add_cont = 0;
+			var cont_add_name = 'cont_a'+id_add_cont;
+			var cont_add_valor = 'valor_a'+id_add_cont;
+			var cont_add_tipo = 'tip_a'+id_add_cont;
 			
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
@@ -340,45 +340,50 @@ Ext.onReady(function(){
 						        	var agregarDoc = [];
 						        	
 						           	var i = 0;
-						           	for(i=0; i<=id; i++)
+						           	for(i=0; i<=id_add_doc; i++)
 						           	{	
-						           		aux_doc_nro = 'nro'+i;
-						    			aux_doc_tipo = 'tipo'+i;
-						    			aux_doc_origen = 'origen'+i;
-							           		var elemento = {"org_documento_tipo_codigo": valoresForm[aux_doc_tipo], "preferencia": i, 
-								           			   "dir_pais_id": valoresForm[aux_doc_origen], "valor": valoresForm[aux_doc_nro]};
+						    			var aux_doc_add_nro = 'nro_a'+i;
+						    			var aux_doc_add_tipo = 'tipo_a'+i;
+						    			var aux_doc_add_origen = 'origen_a'+i;
+
+						    			if (valoresForm[aux_doc_add_nro]){
+							           		var elemento = {"org_documento_tipo_codigo": valoresForm[aux_doc_add_tipo],
+									           			 "preferencia": '1',"dir_pais_id": valoresForm[aux_doc_add_origen], 
+								           			   "valor": valoresForm[aux_doc_add_nro]};
 							           		agregarDoc.push(elemento);
+						    			}
 						           	} 
-						           	
-						           	console.log(agregarDoc);
 
 									var agregarUbic = [];
 						        	
-						           	var j = 0;
-						           	for(j=0; j<=id2; j++)
+									var j = 0;
+						           	for(j=0; j<=id_add_ubic; j++)
 						           	{	
-						           		aux_dir = 'dir'+j;
-						    			aux_lug = 'lug'+j;
-						    			
-							           		var elemento2 = {"direccion": valoresForm[aux_dir], "dir_barrio_id": valoresForm[aux_lug]};
+										var aux_ubic_add_dir = 'dir_a'+j;
+										var aux_ubic_add_lug = 'lug_a'+j;
+
+										if (valoresForm[aux_ubic_add_dir]){
+							           		var elemento2 = {"direccion": valoresForm[aux_ubic_add_dir], 
+									           				"dir_barrio_id": valoresForm[aux_ubic_add_lug]};
 							           		agregarUbic.push(elemento2);
+										}
 						           	} 
-						           	
-						           //	console.log(agregarUbic);
 
 									var agregarCont = [];
 						        	
-						           	var k = 0;
-						           	for(k=0; k<=id3; k++)
+									var k = 0;
+						           	for(k=0; k<=id_add_cont; k++)
 						           	{	
-						           		aux_cont_tipo = 'cont_tipo'+k;
-						    			aux_cont_valor = 'cont_valor'+k;
-						    			
-							           		var elemento3 = {"org_contacto_tipo_codigo": valoresForm[aux_cont_tipo], "contacto":valoresForm[aux_cont_valor]};
-							           		agregarCont.push(elemento3);
+						           		var aux_cont_add_tipo = 'tip_a'+k;
+										var aux_cont_add_valor = 'valor_a'+k;
+
+										if (valoresForm[aux_cont_add_valor]){
+								           		var elemento3 = { 
+										           				"org_contacto_tipo_codigo": valoresForm[aux_cont_add_tipo], 
+										           				"contacto":valoresForm[aux_cont_add_valor]};
+								           		agregarCont.push(elemento3);
+										}
 						           	} 
-						           	
-						           //	console.log(agregarCont);
 						           	
 						        	var auxnacionalidad = valoresForm.nacionalidad;
 						        	var auxreligion = valoresForm.religion;
@@ -390,7 +395,7 @@ Ext.onReady(function(){
 										   success: function(response, opt){
 											   Ext.Msg.show({
 												    title:'Aviso',
-													msg:'Persona Cargada Correctamente'
+													msg:'Persona Creada Correctamente'
 											   });
 											   function hide_message() {
 											       Ext.defer(function() {
@@ -399,6 +404,15 @@ Ext.onReady(function(){
 											   }
 											   hide_message();
 											   window.location = baseURL+'/org/personas/index-ui';
+										   },
+										   failure: function(response, opt){
+											   console.log(response);
+												Ext.MessageBox.show({
+						                            title: 'Error de Creaci&oacute;n',
+						                            msg: response.responseText,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
 										   },
 										   jsonData:{
 										       'post':{
@@ -421,7 +435,7 @@ Ext.onReady(function(){
 						}
 						else
 						{
-							Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+							Ext.Msg.alert('Aviso','Error en la creaci&oacute;n, verifique los campos');
 							return;
 						}  	
 						
@@ -429,67 +443,103 @@ Ext.onReady(function(){
 
 		var crearDoc = function ()
 		{
-			id++;
-			name_doc = 'doc'+id;
-			doc_nro = 'nro'+id;
-			doc_tipo = 'tipo'+id;
-			doc_origen = 'origen'+id;
-			
-			return new Ext.create('Ext.container.Container', {
-				xtype: 'container',
-				id: name_doc,
-			    title: 'Datos de Documentaci&oacute;n',
-			    collapsible: true,
-			    height: 'fit',
-			    width: 'fit',
-			    border: 1,
-			    flex: 1,
-			    layout: 'column',
-				defaultType: 'textfield',
-			    padding: '5 0 0 0',
-			    defaultType: 'textfield',
-				 items: [{
-			    	    	fieldLabel: 'Nro. de Doc',
-			    	    	labelWidth: 90,
-			    	        padding: '5 15 5 15',
-			    	        width: 300,
-			    	        anchor:'90%',
-			    	        name: doc_nro,
-		    	 		},{
-					        fieldLabel: 'Tipo de Doc',
-					        xtype: 'combobox',
-					        width: 350,
-					        labelWidth: 95,
-					        padding: '5 15 5 15',
-					        store: tipoDocumentoStore,
-					        queryMode: 'local',
-					        displayField: 'nombre',
-					        valueField: 'orgDocumentoTipoCodigo',
-					        anchor:'90%',
-					        name: doc_tipo,
-					    },{
-					        fieldLabel: 'Origen de Doc',
-					        xtype: 'combobox',
-					        labelWidth: 110,
-					        width: 350,
-					        store: paisStore,
-					        displayField: 'nombre',
-					        valueField: 'dirPaisId',
-					        queryMode: 'local',
-					        padding: '5 15 5 15',
-				 	        anchor:'90%',
-				 	        name: doc_origen,
-			    	 	}]
-			});
+				id_add_doc++;
+				doc_add_name = 'doc_a'+id_add_doc;
+				doc_add_nro = 'nro_a'+id_add_doc;
+				doc_add_tipo = 'tipo_a'+id_add_doc;
+				doc_add_origen = 'origen_a'+id_add_doc;
+				
+				var paisStore2 = Ext.create('Ext.data.Store', {
+					model: 'Pais',
+					proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/login/dir-pais?format=json',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+					autoLoad: true
+				});
+	
+				var tipoDocumentoStore2 = Ext.create('Ext.data.Store', {
+					model: 'TipoDoc',
+					proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/login/per-doc-tipo?format=json',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+					autoLoad: true
+				});
+	
+				var aux_valor = Ext.create('Ext.form.TextField', {
+					fieldLabel: 'Nro. de Doc',
+	    	    	labelWidth: 110,
+	    	        allowBlank: false,
+	    	        padding: 15,
+	    	        anchor:'90%',
+	    	        name: doc_add_nro,
+				});
+	
+				var aux_tipo = Ext.create('Ext.form.ComboBox', {
+					fieldLabel: 'Tipo Doc',
+			        labelWidth: 95,
+			        padding: 15,
+			        anchor:'90%',
+			        store: tipoDocumentoStore2,
+			        displayField: 'nombre',
+			        valueField: 'orgDocumentoTipoCodigo',
+			        queryMode: 'local',    
+		 	        name: doc_add_tipo,
+			  	});
+	
+				var aux_origen = Ext.create('Ext.form.ComboBox', {
+					fieldLabel: 'Origen Doc',
+			        labelWidth: 110,
+			        padding: 15,
+			        anchor:'90%',
+			        store: paisStore2,
+			        displayField: 'nombre',
+			        valueField: 'dirPaisId',
+			        queryMode: 'local',     
+			        name: doc_add_origen,
+			  	});
+	
+				var aux_button = Ext.create('Ext.Button', {
+					  margin: '13 5 0 5',
+		 	    	  scale: 'medium',
+		 	    	  id: doc_add_name,
+		 	    	  name: doc_add_origen,
+		 	    	  style:'background-color: white; border:none',
+		 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+					  handler:function(){
+						    Ext.getCmp('doc_nro').remove(aux_valor);
+							Ext.getCmp('doc_tipo').remove(aux_tipo);
+							Ext.getCmp('doc_origen').remove(aux_origen);
+							Ext.getCmp('doc_button').remove(aux_button);
+				  	  }
+				});
+	
+				Ext.getCmp('doc_nro').add(aux_valor);
+				Ext.getCmp('doc_tipo').add(aux_tipo);
+				Ext.getCmp('doc_origen').add(aux_origen);
+				Ext.getCmp('doc_button').add(aux_button);
 		};
 
 			var crearUbic = function ()
 			{
-				id2++;
-				name_ubic = 'ubic'+id2;
-				dir = 'dir'+id2;
-				lug = 'lug'+id2;
-
+				id_add_ubic++;
+				ubic_add_name = 'ubic_a'+id_add_ubic;
+				ubic_add_dir = 'dir_a'+id_add_ubic;
+				ubic_add_lug = 'lug_a'+id_add_ubic;
+	
 				var comboLugarStore2 = Ext.create('Ext.data.Store', {
 					model: 'lugar',
 					pageSize: itemsPorPagina, 
@@ -505,113 +555,115 @@ Ext.onReady(function(){
 					},
 					autoLoad: true
 				});
+					
+				var aux_direccion = Ext.create('Ext.form.TextField', {
+					fieldLabel: 'Direcci&oacute;n',
+					labelwidth: 40,
+			        allowBlank: true,
+			        padding: 15,
+			        anchor:'90%',
+			        name: ubic_add_dir
+				});
+	
+				var aux_lugar = Ext.create('Ext.form.ComboBox', {
+					fieldLabel: 'Lugar',
+			        xtype: 'combobox',
+			        valueField: 'dir_barrio_id',
+			        displayField: 'search',
+			        labelWidth: 90,
+			        store: comboLugarStore2,
+			        queryMode: 'remote',
+			        typeAhead: true,
+			        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
+			        loadingText: 'Buscando Lugares...',
+			        hideTrigger: true,
+			        queryParam: 's[barrio]:',
+			        minChars: 1,
+			        padding: 15,
+		 	        anchor:'90%',
+			        name: ubic_add_lug
+				});
+
+				var aux_button = Ext.create('Ext.Button', {
+					  margin: '13 5 0 5',
+		 	    	  scale: 'medium',
+		 	    	  style:'background-color: white; border:none',
+		 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+					  handler:function() {
+						  	Ext.getCmp('ubic_direccion').remove(aux_direccion);
+							Ext.getCmp('ubic_lugar').remove(aux_lugar);
+							Ext.getCmp('ubic_button').remove(aux_button);
+					  }
+				});
 				
-				return new Ext.create('Ext.container.Container', {
-					xtype: 'container',
-					id: name_ubic,
-				    title: 'Datos de Documentaci&oacute;n',
-				    collapsible: true,
-				    height: 'fit',
-				    width: 'fit',
-				    border: 1,
-				    flex: 1,
-				    layout: 'column',
-					defaultType: 'textfield',
-				    padding: '10 0 0 0',
-				    defaultType: 'textfield',
-					 items: [{
-					        fieldLabel: 'Direcci&oacute;n',
-					        width: 650,
-					        padding: '5 15 5 15',
-					        anchor:'90%',
-					    	name: dir,
-					    },{
-					        fieldLabel: 'Lugar',
-					        xtype: 'combobox',
-					        valueField: 'dir_barrio_id',
-					        displayField: 'search',
-					        labelWidth: 80,
-					        width: 400,
-					        store: comboLugarStore2,
-					        queryMode: 'remote',
-					        typeAhead: true,
-					        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
-					        loadingText: 'Buscando Lugares...',
-					        hideTrigger: true,
-					        queryParam: 's[barrio]:',
-					        minChars: 1,
-					        padding: '5 15 5 15',
-				 	        anchor:'90%',
-				 	       	name: lug,
-					    }]
-					});
+				Ext.getCmp('ubic_direccion').add(aux_direccion);
+				Ext.getCmp('ubic_lugar').add(aux_lugar);
+				Ext.getCmp('ubic_button').add(aux_button);
 
 			};
 
 			var crearCont = function ()
 			{
-				id3++;
-				name_cont = 'cont'+id3;
-				cont_tipo = 'cont_tipo'+id3;
-				cont_valor = 'cont_valor'+id3;
-
-				var contactoTipoStore2 = Ext.create('Ext.data.Store', {
-					model: 'contactoTipo',
-					proxy: {
-						type: 'ajax',
-						extraParams: {'p[limit]':'all'},
-						headers: {'Accept':'application/json'},
-						url: baseURL + '/org/combos/org-contacto-tipo?format=json',
-						reader: {
-							type: 'json',
-							root: 'records'
-						}
-					},
-					autoLoad: true
-				});
-				
-				return new Ext.create('Ext.container.Container', {
-					xtype: 'container',
-				    title: 'Datos de Documentaci&oacute;n',
-				    collapsible: true,
-				    height: 'fit',
-				    width: 'fit',
-				    id: name_cont,
-				    border: 1,
-				    flex: 1,
-				    layout: 'column',
-					defaultType: 'textfield',
-				    padding: '10 0 0 0',
-				    defaultType: 'textfield',
-					 items: [{
-							fieldLabel: 'Tipo de Contacto',
-					        xtype: 'combobox',
-					        labelWidth: 130,
-					        width: 400,
-					        store: contactoTipoStore2,
-					        queryMode: 'local',
-					        displayField: 'nombre',
-					        valueField: 'org_contacto_tipo_codigo',
-					        emptyText: 'Escriba el Tipo de Contacto...',
-					        loadingText: 'Buscando...',
-					        padding: '5 15 5 15',
-				 	        anchor:'90%',
-				 	        name: cont_tipo,
-						},{
-						    fieldLabel: 'Contacto',
-						    width: 400,
-						    labelWidth: 110,
-						    anchor:'90%',
-						    padding: '5 15 5 15',
-							name: cont_valor,
-						}
-					 	]
+					id_add_cont++;
+					cont_add_name = 'cont_a'+id_add_cont;
+					cont_add_valor = 'valor_a'+id_add_cont;
+					cont_add_tipo = 'tip_a'+id_add_cont;
+		
+					var contactoTipoStore = Ext.create('Ext.data.Store', {
+						model: 'contactoTipo',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/org/combos/org-contacto-tipo?format=json',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+						
+					var aux_tipo = Ext.create('Ext.form.ComboBox', {
+						fieldLabel: 'Tipo de Contacto',
+				        labelWidth: 130,
+				        padding: 15,
+				        anchor:'90%',
+				        store: contactoTipoStore,
+				        displayField: 'nombre',
+				        valueField: 'org_contacto_tipo_codigo',
+				        emptyText: 'Escriba el Tipo de Contacto...',
+				        queryMode: 'local',    
+				        name: cont_add_tipo,
+				  	});
+				  	
+					var aux_contacto = Ext.create('Ext.form.TextField', {
+						fieldLabel: 'Contacto',
+					    labelWidth: 90,
+					    anchor:'90%',
+					    padding: 15,
+					    name: cont_add_valor,
 					});
 
+					var aux_button = Ext.create('Ext.Button', {
+						  margin: '13 5 0 5',
+			 	    	  scale: 'medium',
+			 	    	  style:'background-color: white; border:none',
+			 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+						  handler:function() {
+							  	Ext.getCmp('cont_tipo').remove(aux_tipo);
+								Ext.getCmp('cont_contacto').remove(aux_contacto);
+								Ext.getCmp('cont_button').remove(aux_button);
+						  }
+					});
+					
+					Ext.getCmp('cont_tipo').add(aux_tipo);
+					Ext.getCmp('cont_contacto').add(aux_contacto);
+					Ext.getCmp('cont_button').add(aux_button);
 			};
 								
 				var panelPersona = Ext.create('Ext.form.Panel', {
-					//padding: 10,
+					id: 'form',
 					items:[{
 					    xtype: 'panel',
 					    id: 'panelDoc',
@@ -620,74 +672,78 @@ Ext.onReady(function(){
 					    height: 'fit',
 					    width: 'fit',
 					    border: 1,
-					    layout: 'column',
-					    flex: 1,
 					    padding: 10,
-					    defaultType: 'textfield',
+					    layout: 'hbox',
 						 items: [{
-					    	    	fieldLabel: 'Nro. de Doc',
-					    	    	labelWidth: 90,
-					    	        allowBlank: false,
-					    	        padding: '10 15 5 15',
-					    	        width: 300,
-					    	        anchor:'90%',
-					    	        name: doc_nro,
-				    	 		},{
-							        fieldLabel: 'Tipo de Doc',
-							        xtype: 'combobox',
-							        width: 350,
-							        labelWidth: 95,
-							        padding: '10 15 5 15',
-							        store: tipoDocumentoStore,
-							        queryMode: 'local',
-							        displayField: 'nombre',
-							        valueField: 'orgDocumentoTipoCodigo',
-							        allowBlank: false,
-							        anchor:'90%',
-							        name: doc_tipo,
-							    },{
-							        fieldLabel: 'Origen de Doc',
-							        xtype: 'combobox',
-							        labelWidth: 110,
-							        width: 350,
-							        store: paisStore,
-							        displayField: 'nombre',
-							        valueField: 'dirPaisId',
-							        queryMode: 'local',
-							        allowBlank: false,
-							        padding: '10 15 5 15',
-						 	        anchor:'90%',
-						 	        name: doc_origen,
-					    	 	},{	  
-						 	    	  xtype: 'button',
-						 	    	  margin: '7 0 5 20',
-						 	    	  scale: 'medium',
-						 	    	  style:'background-color: white; border:none',
-						 	    	  icon: baseURL+'/img/icons/grid/add3.png',
-									  handler:function() {
-										   var doc = crearDoc();
-										   Ext.getCmp('panelDoc').add(doc);
-										   if (id > '0'){
-											   Ext.getCmp('buttonDelete').setDisabled(false);	
-										   }
-									  }
-								 },{	  
-						 	    	  xtype: 'button',
-						 	    	  id: 'buttonDelete',
-						 	    	  margin: '7 0 5 0',
-						 	    	  disabled: true,
-						 	    	  scale: 'medium',
-						 	    	  style:'background-color: white; border:none',
-						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
-						 	    	  handler:function() {
-		 								   Ext.getCmp('panelDoc').remove(name_doc);
-		 								   id--;
-		 								   name_doc = 'doc'+id;
-		 								   if (id == '0'){
-											   Ext.getCmp('buttonDelete').setDisabled(true);	
-										   }
-		 							  }
-						 	     }
+									xtype: 'container',
+									id: 'doc_nro',
+									flex: 1,
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: [{
+										xtype: 'textfield',
+										fieldLabel: 'Nro. de Doc',
+						    	    	labelWidth: 110,
+						    	        allowBlank: false,
+						    	        padding: 15,
+						    	        anchor:'90%',
+						    	        name: doc_add_nro,
+									}]
+							   },{
+									xtype: 'container',
+									flex: 1.1,
+									id: 'doc_tipo',
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: [{
+										xtype: 'combobox',
+										fieldLabel: 'Tipo Doc',
+								        labelWidth: 95,
+								        padding: 15,
+								        anchor:'90%',
+								        store: tipoDocumentoStore,
+								        displayField: 'nombre',
+								        valueField: 'orgDocumentoTipoCodigo',
+								        queryMode: 'local',    
+							 	        name: doc_add_tipo,
+									}]
+							   },{
+									xtype: 'container',
+									id: 'doc_origen',
+									flex: 1,
+									defaultType: 'displayfield',
+									layout: 'anchor',
+									items: [{
+										xtype: 'combobox',
+										fieldLabel: 'Origen Doc',
+								        labelWidth: 110,
+								        padding: 15,
+								        anchor:'90%',
+								        store: paisStore,
+								        displayField: 'nombre',
+								        valueField: 'dirPaisId',
+								        queryMode: 'local',     
+								        name: doc_add_origen,
+									}]
+							   },{
+									xtype: 'container',
+									id: 'doc_button',
+									flex: 0.2,
+									layout: {
+								        type: 'vbox',
+								        align: 'center'
+								    },
+									items: [{
+										  xtype: 'button',
+										  margin: '13 0 0 5',
+							 	    	  scale: 'medium',
+							 	    	  style:'background-color: white; border:none',
+							 	    	  icon: baseURL+'/img/icons/grid/add3.png',
+										  handler:function(){ 
+											  crearDoc();
+										  }
+									}]
+							   }
 					    	    ]},{
 					    xtype: 'panel',
 					    title: 'Datos Personales',
@@ -823,139 +879,139 @@ Ext.onReady(function(){
 						    	    }
 					    		]
 					    	}]},{
-					    xtype: 'panel',
-					    id: 'panelUbic',
-					    title: 'Datos de Ubicaci&oacute;n',
-					    collapsible: true,
-					    height: 'fit',
-					    width: 'fit',
-					    border: 1,
-					    layout: 'column',
-					    flex: 1,
-					    padding: '0 10 10 10',
-					    defaultType: 'textfield',
-						 items: [{
-						        fieldLabel: 'Direcci&oacute;n',
-						        allowBlank: true,
-						        width: 650,
-						        padding: '10 15 5 15',
-						        anchor:'90%',
-						    	name: dir,
-						    },{
-						        fieldLabel: 'Lugar',
-						        xtype: 'combobox',
-						        valueField: 'dir_barrio_id',
-						        displayField: 'search',
-						        labelWidth: 80,
-						        width: 400,
-						        store: comboLugarStore,
-						        queryMode: 'remote',
-						        typeAhead: true,
-						        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
-						        loadingText: 'Buscando Lugares...',
-						        hideTrigger: true,
-						        //allowBlank: true,
-						        queryParam: 's[barrio]:',
-						        minChars: 1,
-						        padding: '10 15 5 15',
-					 	        anchor:'90%',
-					 	       	name: lug,
-						    },{	  
-					 	    	  xtype: 'button',
-					 	    	  margin: '7 0 5 20',
-					 	    	  scale: 'medium',
-					 	    	  style:'background-color: white; border:none',
-					 	    	  icon: baseURL+'/img/icons/grid/add3.png',
-								  handler:function() {
-									   var ubic = crearUbic();
-									   Ext.getCmp('panelUbic').add(ubic);
-									   if (id2 > '0'){
-										   Ext.getCmp('buttonDelete2').setDisabled(false);	
+							    xtype: 'panel',
+							    id: 'panelUbic',
+							    title: 'Datos de Ubicaci&oacute;n',
+							    collapsible: true,
+							    height: 'fit',
+							    width: 'fit',
+							    border: 1,
+							    padding: '0 10 10 10',
+							    layout: 'hbox',
+								 items: [{
+											xtype: 'container',
+											flex: 1,
+											id: 'ubic_direccion',
+											defaultType: 'textfield',
+											layout: 'anchor',
+											items: [{
+												xtype: 'textfield',
+												fieldLabel: 'Direcci&oacute;n',
+												labelwidth: 40,
+										        allowBlank: true,
+										        padding: 15,
+										        anchor:'90%',
+										        name: ubic_add_dir
+											}]
+									    },{
+											xtype: 'container',
+											flex: 1,
+											id: 'ubic_lugar',
+											defaultType: 'displayfield',
+											layout: 'anchor',
+											items: [{
+												xtype: 'combox',
+												fieldLabel: 'Lugar',
+										        xtype: 'combobox',
+										        valueField: 'dir_barrio_id',
+										        displayField: 'search',
+										        labelWidth: 90,
+										        store: comboLugarStore,
+										        queryMode: 'remote',
+										        typeAhead: true,
+										        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
+										        loadingText: 'Buscando Lugares...',
+										        hideTrigger: true,
+										        queryParam: 's[barrio]:',
+										        minChars: 1,
+										        padding: 15,
+									 	        anchor:'90%',
+										        name: ubic_add_lug
+											}]
+										},{
+											xtype: 'container',
+											id: 'ubic_button',
+											flex: 0.2,
+											layout: {
+										        type: 'vbox',
+										        align: 'center'
+										    },
+											items: [{
+												  xtype: 'button',
+												  margin: '13 5 0 5',
+									 	    	  scale: 'medium',
+									 	    	  style:'background-color: white; border:none',
+									 	    	  icon: baseURL+'/img/icons/grid/add3.png',
+												  handler:function(){ 
+													  crearUbic();
+												  }
+						
+											}]
 									   }
-								  }
-							 },{	  
-					 	    	  xtype: 'button',
-					 	    	  id: 'buttonDelete2',
-					 	    	  margin: '7 0 5 0',
-					 	    	  disabled: true,
-					 	    	  scale: 'medium',
-					 	    	  style:'background-color: white; border:none',
-					 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
-					 	    	  handler:function() {
-	 								   Ext.getCmp('panelUbic').remove(name_ubic);
-	 								   id2--;
-	 								   name_ubic = 'ubic'+id2;
-	 								   if (id2 == '0'){
-										   Ext.getCmp('buttonDelete2').setDisabled(true);	
-									   }
-	 							  }
-					 	     }
-					    	    ]},{
-				    	xtype: 'panel',
-					    title: 'Datos de Contacto',
-					    id: 'panelCont',
-					    collapsible: true,
-					    height: 'fit',
-					    width: 'fit',
-					    border: 1,
-				         layout: 'column',
-				         padding: '0 10 10 10',
-				         defaultType: 'textfield',
-				         items: [ 
-									{
-										fieldLabel: 'Tipo de Contacto',
-								        xtype: 'combobox',
-								        labelWidth: 130,
-								        width: 400,
-								        store: contactoTipoStore,
-								        queryMode: 'local',
-								        displayField: 'nombre',
-								        valueField: 'org_contacto_tipo_codigo',
-								        emptyText: 'Escriba el Tipo de Contacto...',
-								        loadingText: 'Buscando...',
-								        allowBlank: true,
-								        padding: '10 15 5 15',
-							 	        anchor:'90%',
-							 	        name: cont_tipo,
-									},{
-									    fieldLabel: 'Contacto',
-									    width: 400,
-									    labelWidth: 110,
-									    anchor:'90%',
-									    padding: '10 15 5 15',
-										name: cont_valor,
-									},{	  
-							 	    	  xtype: 'button',
-							 	    	  margin: '7 0 5 20',
-							 	    	  scale: 'medium',
-							 	    	  style:'background-color: white; border:none',
-							 	    	  icon: baseURL+'/img/icons/grid/add3.png',
-										  handler:function() {
-											   var cont = crearCont();
-											   Ext.getCmp('panelCont').add(cont);
-											   if (id3 > '0'){
-												   Ext.getCmp('buttonDelete3').setDisabled(false);	
+							    	]},{
+								    	xtype: 'panel',
+									    title: 'Datos de Contacto',
+									    id: 'panelCont',
+									    collapsible: true,
+									    height: 'fit',
+									    width: 'fit',
+									    border: 1,
+									    padding: '0 10 10 10',
+									    layout: 'hbox',
+								        items: [{
+													xtype: 'container',
+													flex: 1,
+													id: 'cont_tipo',
+													defaultType: 'displayfield',
+													layout: 'anchor',
+													items: [{
+														xtype: 'combobox',
+														fieldLabel: 'Tipo de Contacto',
+												        labelWidth: 130,
+												        padding: 15,
+												        anchor:'90%',
+												        store: contactoTipoStore,
+												        displayField: 'nombre',
+												        valueField: 'org_contacto_tipo_codigo',
+												        emptyText: 'Escriba el Tipo de Contacto...',
+												        queryMode: 'local',    
+												        name: cont_add_tipo,
+													}]
+										    	},{        
+													xtype: 'container',
+													flex: 1,
+													defaultType: 'displayfield',
+													id: 'cont_contacto',
+													layout: 'anchor',
+													items: [{
+														xtype: 'textfield',
+														fieldLabel: 'Contacto',
+													    labelWidth: 90,
+													    anchor:'90%',
+													    padding: 15,
+													    name: cont_add_valor,
+													}]    
+											    },{
+													xtype: 'container',
+													id: 'cont_button',
+													flex: 0.2,
+													layout: {
+												        type: 'vbox',
+												        align: 'center'
+												    },
+													items: [{
+															  xtype: 'button',
+															  margin: '13 5 0 5',
+												 	    	  scale: 'medium',
+												 	    	  style:'background-color: white; border:none',
+												 	    	  icon: baseURL+'/img/icons/grid/add3.png',
+															  handler:function(){ 
+																  crearCont();
+															  }
+													}]
 											   }
-										  }
-									 },{	  
-							 	    	  xtype: 'button',
-							 	    	  id: 'buttonDelete3',
-							 	    	  margin: '7 0 5 0',
-							 	    	  disabled: true,
-							 	    	  scale: 'medium',
-							 	    	  style:'background-color: white; border:none',
-							 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
-							 	    	  handler:function() {
-			 								   Ext.getCmp('panelCont').remove(name_cont);
-			 								   id3--;
-			 								   name_cont = 'cont'+id3;
-			 								   if (id3 == '0'){
-												   Ext.getCmp('buttonDelete3').setDisabled(true);	
-											   }
-			 							  }
-							 	     }
-						         ]
-				     },{
+										]
+								     },{
 				    	xtype: 'container',
 				 	    height: 200,
 				 	    width: 'fit',
