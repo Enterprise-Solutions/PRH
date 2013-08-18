@@ -28,36 +28,89 @@ Ext.onReady(function(){
 		//modelos
 				
 
-// 					Ext.define('nivel', {
-// 						extend: 'Ext.data.Model',
-// 						fields: [
-// 							{
-// 								type: 'int',
-// 								name: 'act_nivel_id'
-// 							},{
-// 								type: 'string',
-// 								name: 'nombre'
-// 							},{
-// 								type: 'string',
-// 								name: 'descripcion'
-// 							}
-// 						]
-// 					});
+Ext.define('actividadTipo', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'act_actividad_tipo_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							}
+						]
+					});
+
+					Ext.define('anhoFormacion', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'cal_anho_formacion_id'
+							},{
+								type: 'string',
+								name: 'anho'
+							}
+						]
+					});
+
+					Ext.define('moneda', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'cont_moneda_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							}
+						]
+					});
 					
-// 					var nivelStore = Ext.create('Ext.data.Store', {
-// 						model: 'nivel',
-// 						proxy: {
-// 							type: 'ajax',
-// 							extraParams: {'p[limit]':'all'},
-// 							headers: {'Accept':'application/json'},
-// 							url: baseURL + '/actividad/combos/act-nivel?format=json',
-// 							reader: {
-// 								type: 'json',
-// 								root: 'records'
-// 							}
-// 						},
-// 						autoLoad: true
-// 					});
+					var actividadTipoStore = Ext.create('Ext.data.Store', {
+						model: 'actividadTipo',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/act-actividad-tipo',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+
+					var anhoFormacionStore = Ext.create('Ext.data.Store', {
+						model: 'anhoFormacion',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/cal-anho-formacion',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
+
+					var monedaStore = Ext.create('Ext.data.Store', {
+						model: 'moneda',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'p[limit]':'all'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/combos/cont-moneda',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
+						},
+						autoLoad: true
+					});
 			
 					var cargarDatos = function (){
 						aux = buscarId();
@@ -175,12 +228,14 @@ Ext.onReady(function(){
 						        fieldLabel: 'Nombre',
 						        allowBlank: false,
 						        padding: 15,
+						        tabIndex: 1,
 						        labelWidth: 110,
 						        anchor:'90%',
 						        name: 'nombre_identificador'
 					    },{
 						    	fieldLabel: 'Duraci&oacute;n (hs)',
 						    	labelWidth: 110,
+						    	tabIndex: 3,
 						    	xtype: 'numberfield',
 						    	minValue: 0,
 						    	value: 0,
@@ -192,6 +247,7 @@ Ext.onReady(function(){
 						    	fieldLabel: 'Costo',
 						    	labelWidth: 110,
 						    	xtype: 'numberfield',
+						    	tabIndex: 5,
 						    	minValue: 0,
 						    	value: 0,
 						    	hideTrigger: true,
@@ -200,24 +256,21 @@ Ext.onReady(function(){
 						    	name: 'monto',
 		    	    	},{
 					        	fieldLabel: 'Estado',
-					        	xtype: 'combobox',
-						        labelWidth: 110,
-						        //store: modalidadStore,
-						       // displayField: 'nombre',
-						        queryMode: 'local',
-						        //valueField: 'act_modalidad_id',
-						        allowBlank: false,
 						        padding: 15,
-					 	        anchor:'90%',
+						        maxLength: 1,
+						        tabIndex: 7, 
+						        labelWidth: 110,
+						        anchor:'90%',
 					 	        name: 'estado', 
 				         },{
 						    	fieldLabel: 'A&ntilde;o de Form.',
 						    	xtype: 'combobox',
 						        labelWidth: 110,
-						        //store: modalidadStore,
-						       // displayField: 'nombre',
+						        tabIndex: 9,
+						        store: anhoFormacionStore,
+						        displayField: 'anho',
 						        queryMode: 'local',
-						        //valueField: 'act_modalidad_id',
+						        valueField: 'cal_anho_formacion_id',
 						        allowBlank: false,
 						        padding: 15,
 					 	        anchor:'90%',
@@ -226,7 +279,7 @@ Ext.onReady(function(){
 	                			fieldLabel: 'Inicio',
 					 	        xtype: 'datefield',
 					 	       	format: 'd/m/Y',
-					 	        allowBlank: true,
+					 	        tabIndex: 11,
 					 	       	padding: 15,
 					 	        labelWidth: 110,
 					 	        anchor:'90%',
@@ -241,10 +294,11 @@ Ext.onReady(function(){
 			    	        fieldLabel: 'Tipo de Act',
 			    	        xtype: 'combobox',
 					        labelWidth: 110,
-					        //store: modalidadStore,
-					       // displayField: 'nombre',
+					        tabIndex: 2,
+					        store: actividadTipoStore,
+					        displayField: 'nombre',
 					        queryMode: 'local',
-					        //valueField: 'act_modalidad_id',
+					        valueField: 'act_actividad_tipo_id',
 					        allowBlank: false,
 					        padding: 15,
 				 	        anchor:'90%',
@@ -254,6 +308,7 @@ Ext.onReady(function(){
 					    	labelWidth: 110,
 					    	xtype: 'numberfield',
 					    	minValue: 0,
+					    	tabIndex: 4,
 					    	value: 0,
 					    	step: 1,
 					    	anchor:'90%',
@@ -263,39 +318,36 @@ Ext.onReady(function(){
 					        fieldLabel: 'Moneda',
 					        xtype: 'combobox',
 					        labelWidth: 110,
-					        //store: modalidadStore,
-					       // displayField: 'nombre',
+					        store: monedaStore,
+					        displayField: 'nombre',
 					        queryMode: 'local',
-					        //valueField: 'act_modalidad_id',
+					        valueField: 'cont_moneda_id',
 					        allowBlank: false,
 					        padding: 15,
+					        tabIndex: 6,
 				 	        anchor:'90%',
 				 	        name: 'cont_moneda_id', 
 			    	    },{
 				        	fieldLabel: 'Tipo',
-				        	xtype: 'combobox',
-					        labelWidth: 110,
-					        //store: modalidadStore,
-					       // displayField: 'nombre',
-					        queryMode: 'local',
-					        //valueField: 'act_modalidad_id',
-					        allowBlank: false,
 					        padding: 15,
-				 	        anchor:'90%',
+					        tabIndex: 8,
+					        maxLength: 1,
+					        labelWidth: 110,
+					        anchor:'90%',
 				 	        name: 'tipo', 
 			         	},{
 					        fieldLabel: 'Observaci&oacute;n',
-					        allowBlank: false,
 					        padding: 15,
 					        labelWidth: 110,
 					        anchor:'90%',
+					        tabIndex: 10,
 				 	        name: 'observaciones', 
 			    	  	},{
                 			fieldLabel: 'Fin',
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
-				 	        allowBlank: true,
 					 	   	padding: 15,
+					 	    tabIndex: 12,
 				 	        labelWidth: 110,
 				 	        anchor:'90%',
 				 	        name: 'fecha_fin'  
