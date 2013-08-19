@@ -37,7 +37,7 @@ class ActividadController extends BaseController
         
         $service = new CrearActividadService($em);
         $service->ejecutar($data);
-        $this->getEntityMangaer()->flush();
+        $this->getEntityManager()->flush();
         
         return $this->toJson($service->getRespuesta());
     }
