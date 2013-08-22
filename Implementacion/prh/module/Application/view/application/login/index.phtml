@@ -187,7 +187,15 @@
 	                            hideLabel: true,
 	                            allowBlank: false,
 	                            tabIndex: 1,
-	                            name: 'Credenciales[cedula]'
+	                            name: 'Credenciales[cedula]',
+	                            listeners:{
+	                            	specialkey: function(field, e){
+	                                    if (e.getKey() == e.ENTER) {
+	                                    	buttonHandlerIngresar(Ext.getCmp('ingresarButton'), null);
+	                                    }
+	                                }
+		                        }
+		                            
                             },
                             {
                             	xtype: 'label',
@@ -199,7 +207,14 @@
 	                            hideLabel: true,
 	                            allowBlank: false,
 	                            tabIndex: 2,
-	                            name: 'Credenciales[contrasenha]'
+	                            name: 'Credenciales[contrasenha]',
+	                            listeners:{
+	                            	specialkey: function(field, e){
+	                                    if (e.getKey() == e.ENTER) {
+	                                    	buttonHandlerIngresar(Ext.getCmp('ingresarButton'), null);
+	                                    }
+	                                }
+		                        }
                             },
                             {
                             	xtype: 'label',
@@ -277,7 +292,14 @@
 	                            hideLabel: true,
 	                            allowBlank: false,
 	                            tabIndex: 1,
-	                            name: 'Credenciales[cedula]'
+	                            name: 'Credenciales[cedula]',
+	                            listeners:{
+	                            	specialkey: function(field, e){
+	                                    if (e.getKey() == e.ENTER) {
+	                                    	buttonHandlerIngresar(Ext.getCmp('ingresarButton'), null);
+	                                    }
+	                                }
+		                        }
                             },
                             {
                             	xtype: 'label',
@@ -289,7 +311,14 @@
 	                            hideLabel: true,
 	                            allowBlank: false,
 	                            tabIndex: 2,
-	                            name: 'Credenciales[contrasenha]'
+	                            name: 'Credenciales[contrasenha]',
+	                            listeners:{
+	                            	specialkey: function(field, e){
+	                                    if (e.getKey() == e.ENTER) {
+	                                    	buttonHandlerIngresar(Ext.getCmp('ingresarButton'), null);
+	                                    }
+	                                }
+		                        }
                             },
                             {
                             	xtype: 'container',
@@ -300,6 +329,7 @@
                             			{
                             				xtype: 'button',
                             				scale: 'medium',
+                            				id: 'ingresarButton',
                             				tabIndex: 3,
                             				text: 'Ingresar',
                             				handler: buttonHandlerIngresar
