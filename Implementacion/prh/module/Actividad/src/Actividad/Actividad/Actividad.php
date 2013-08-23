@@ -4,7 +4,6 @@ namespace Actividad\Actividad;
 
 use Doctrine\ORM\Mapping as Orm;
 use Zend\InputFilter\Factory as InputFilterFactory;
-
 use EnterpriseSolutions\Exceptions\Thrower;
 
 /**
