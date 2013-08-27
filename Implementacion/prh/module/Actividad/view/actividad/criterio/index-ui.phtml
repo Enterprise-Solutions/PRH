@@ -100,7 +100,10 @@ Ext.onReady(function(){
 		                    allowBlank: true,
 		                    name: 'codigo',   
                 		},{
-		                    xtype: 'textfield',
+                			xtype: 'numberfield',
+					    	minValue: 0,
+					    	step: 0.25,
+					    	decimalPrecision: 2,
 		                    fieldLabel: 'Horas',   
 		                    allowBlank: true,
 		                    name: 'horas',   
@@ -209,7 +212,10 @@ Ext.onReady(function(){
 		                    value: codigo_edit,
 		                    name: 'codigo',   
                 		},{
-		                    xtype: 'textfield',
+                			xtype: 'numberfield',
+					    	minValue: 0,
+					    	step: 0.25,
+					    	decimalPrecision: 2,
 		                    fieldLabel: 'Horas',   
 		                    allowBlank: true,
 		                    value: horas_edit,
