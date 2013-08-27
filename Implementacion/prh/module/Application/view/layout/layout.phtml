@@ -74,7 +74,6 @@
 			    var auxurl = (window.location.pathname).split("prh/");
 			    var auxpath = (auxurl[1]).split("/");
 		        var path = '/'+auxpath[0]+'/'+auxpath[1];
-			    console.log(path);
  					return path;
 			}
 		};
@@ -129,12 +128,8 @@
 		    listeners:{
 				'tabchange':function(tabPanel, newTab, oldTab, opciones)
 				{
-					console.log(newTab);
-					console.log('opci',baseURL,tabPanel, newTab, oldTab, opciones);
-					console.log( window.location, newTab.pathName);
 					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
 					{
-						console.log('in',baseURL + newTab.pathName);
 						window.location = baseURL + newTab.pathName;
 					}	
 				}
@@ -181,12 +176,8 @@
 		    listeners:{
 				'tabchange':function(tabPanel, newTab, oldTab, opciones)
 				{
-					console.log(newTab);
-					console.log('opci',baseURL,tabPanel, newTab, oldTab, opciones);
-					console.log( window.location, newTab.pathName);
 					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
 					{
-						console.log('in',baseURL + newTab.pathName);
 						window.location = baseURL + newTab.pathName;
 					}	
 				}

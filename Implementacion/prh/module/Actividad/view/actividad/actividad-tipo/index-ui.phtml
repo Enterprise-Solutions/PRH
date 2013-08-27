@@ -198,24 +198,17 @@ Ext.onReady(function(){
 							           var basicForm = b.up('form').getForm();						
 							           var valoresForm = basicForm.getFieldValues();
 
-					           		    var auxnombre = valoresForm.nombre;
-					           		    var auxcodigo = valoresForm.codigo;
-					           			
-							           	auxnivel = valoresForm.nivel;
-							           	auxmodalidad = valoresForm.modalidad;
-							           	auxcriterio = valoresForm.criterio;
-			
-										//inicializo los pages
+							           //inicializo los pages
 							           	page = 0;
 										gridActividadTipo.store.currentPage = 1;
 										
 						                actividadTipoStore.load({
 											params: {
-												"s[nombre]": auxnombre,
-												"s[codigo]": auxcodigo,
-												"s[nivel]": auxnivel,
-												"s[modalidad]": auxmodalidad,
-												"s[criterio]": auxcriterio
+												"s[nombre]": valoresForm.nombre,
+												"s[codigo]": valoresForm.codigo,
+												"s[nivel]": valoresForm.nivel,
+												"s[modalidad]": valoresForm.modalidad,
+												"s[criterio]": valoresForm.criterio
 									   		} 
 						               });
 						            }//end of handler  
@@ -281,53 +274,53 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
+                   	 	var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
            				actividadTipoStore.load({
 	       				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio
+	       						"s[nombre]": valoresForm.nombre,
+								"s[codigo]": valoresForm.codigo,
+								"s[nivel]": valoresForm.nivel,
+								"s[modalidad]": valoresForm.modalidad,
+								"s[criterio]": valoresForm.criterio
 	       				    }
        					});
-           					console.log("page store: ", page);
-          				    console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
+                 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+				        var valoresForm = basicForm.getFieldValues();
 						this.store.currentPage--;
 						actividadTipoStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
-		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio	        
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,
+	       						"s[nombre]": valoresForm.nombre,
+								"s[codigo]": valoresForm.codigo,
+								"s[nivel]": valoresForm.nivel,
+								"s[modalidad]": valoresForm.modalidad,
+								"s[criterio]": valoresForm.criterio       
 		   				    }
    						});
-	       					console.log("page store: ", page);
-	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
+             			var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+				        var valoresForm = basicForm.getFieldValues();
 						this.store.currentPage = 1;
 						actividadTipoStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
-		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio  
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,
+	       						"s[nombre]": valoresForm.nombre,
+								"s[codigo]": valoresForm.codigo,
+								"s[nivel]": valoresForm.nivel,
+								"s[modalidad]": valoresForm.modalidad,
+								"s[criterio]": valoresForm.criterio 
 		   				    }
    						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);	
             	 	},
             	 	moveLast : function(){                 	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
@@ -339,19 +332,19 @@ Ext.onReady(function(){
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
+            	 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+				        var valoresForm = basicForm.getFieldValues();
             	 		actividadTipoStore.load({
 		   				    params:{
-								"s[nombre]": auxnombre,
-								"s[codigo]": auxcodigo,
-		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page,
-								"s[nivel]": auxnivel,
-								"s[modalidad]": auxmodalidad,
-								"s[criterio]": auxcriterio 
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,
+	       						"s[nombre]": valoresForm.nombre,
+								"s[codigo]": valoresForm.codigo,
+								"s[nivel]": valoresForm.nivel,
+								"s[modalidad]": valoresForm.modalidad,
+								"s[criterio]": valoresForm.criterio
 		   				    }
-   						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);         					
+   						});      					
             	 	},
                 }
 	                ],                       
@@ -367,7 +360,6 @@ Ext.onReady(function(){
                 align: 'left',
                 flex: 2.2,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
-                    console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
             	}
             },{
