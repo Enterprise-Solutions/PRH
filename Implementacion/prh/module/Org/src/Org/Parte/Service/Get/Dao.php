@@ -11,7 +11,7 @@ class Dao extends GetDao
 			$documentos = array();
 			//return $record;
 		}else{
-			$documentos = explode(';', $record['documentos']);
+			$documentos = explode(';*', $record['documentos']);
 		}
 		
 		$documentos = array_map(
@@ -23,7 +23,7 @@ class Dao extends GetDao
 							return $keyValueArray;
 							},
 							explode(",", $documento));*/
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
@@ -41,12 +41,12 @@ class Dao extends GetDao
 			//return $record;
 			$contactos = array();
 		}else{
-			$contactos = explode(';', $record['contactos']);
+			$contactos = explode(';*', $record['contactos']);
 		}
 		
 		$contactos = array_map(
 				function($documentoString){
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
@@ -64,12 +64,12 @@ class Dao extends GetDao
 			//return $record;
 			$direcciones = array();
 		}else{
-			$direcciones = explode(';', $record['Direcciones']);
+			$direcciones = explode(';*', $record['Direcciones']);
 		}
 		//$contactos = explode(';', $record['Direcciones']);
 		$direcciones = array_map(
 				function($documentoString){
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
