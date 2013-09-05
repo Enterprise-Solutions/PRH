@@ -17,10 +17,10 @@
 
 			var baseURL = '<?=$this->basePath()?>';
 
-			var auxcarrera = null;
+			var auxprofesion = null;
 			var titulo = null;
 	
-			var itemsPorPagina = 13;
+			var itemsPorPagina = 11;
 			var page = 0;
 			
 Ext.onReady(function(){
@@ -236,7 +236,79 @@ Ext.onReady(function(){
             }); 
        	 win.show();
     	}  
-    	
+
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 'fit',			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'column',
+				    items:[{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 400,
+						        layout:'anchor',
+						        anchor:'90%',
+						        name: 'nombre',       
+				    	  }
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '5 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+
+										auxprofesion = valoresForm.nombre;
+										
+							           //inicializo los pages
+							           	page = 0;
+										gridProfesion.store.currentPage = 1;
+										
+						                profesionStore.load({
+											params: {
+												"s[nombre]": auxprofesion
+									   		} 
+						               });
+						            }//end of handler  
+									        
+								},{
+			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '5 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+								           	auxprofesion = null;
+											gridProfesion.store.currentPage = 1;
+											//console.log(this);
+						           			b.up('form').getForm().reset();
+						           			profesionStore.load();						   	
+				           		  		}
+								}]}
+				    	]
+		});	
+		
 		var gridProfesion = Ext.create('Ext.grid.Panel', {
             //title: 'Profesi&oacute;n',
             selModel: {
@@ -245,7 +317,7 @@ Ext.onReady(function(){
             },
             width: 'fit',
             padding: 10,
-            height: 470,
+            height: 410,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -415,8 +487,17 @@ Ext.onReady(function(){
 			//id: 'margen',
 		    //title: ' ',
 		    width: 'fit',
-		    height: 500,
-		    items:[gridProfesion],
+		    height: 550,
+		    items:[
+			         {	
+			        	 xtype: 'panel',
+						 items: [panelFiltros]
+				        
+			         },{
+			        	 xtype: 'container',
+						 items:[gridProfesion],
+			         }
+			],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(0);
