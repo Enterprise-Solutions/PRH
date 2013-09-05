@@ -49,11 +49,11 @@ class Dao extends EsDao
 				
 				$contactos = array_map(
 						function($documentoString){
-							$keyValueTokens = explode(",",$documentoString);
+							$keyValueTokens = explode(",!",$documentoString);
 							$documento = array();
 							foreach($keyValueTokens as $token){
 								//$tokens = explode(':', $keyValueToken);
-								list($key,$value) = explode(':!', $token);
+								list($key,$value) = explode(':', $token);
 								//$documento[$key] = ($key == 'org_documento_id')?(integer)$value:$value;
 								$documento[$key] = (in_array($key, array('org_contacto_id')))?(integer)$value:$value;
 							}
