@@ -20,7 +20,7 @@
 			var auxcarrera = null;
 			var titulo = null;
 	
-			var itemsPorPagina = 10;
+			var itemsPorPagina = 13;
 			var page = 0;
 			
 Ext.onReady(function(){
@@ -223,7 +223,7 @@ Ext.onReady(function(){
             },
             width: 'fit',
             padding: 10,
-            height: 333,
+            height: 470,
             region: 'center',  
 	           dockedItems: [
 	                {     
@@ -238,80 +238,70 @@ Ext.onReady(function(){
      		                handler: agregarwindow,
                          }]
 	                }
-// 	                ,{
-//                     xtype: 'pagingtoolbar',
-//                     store: religionStore, 
-//                     dock: 'bottom',
-//                     displayInfo: true,
-//                     listeners: {
-//                         'afterrender': function (component)
-//                         {
-//                             component.down('#refresh').hide()
-//                         },single: true
-//                     },
-//                     displayMsg: 'Registro {0} al {1} de {2}',
-//                     beforePageText: 'P&aacute;gina',
-//                     afterPageText : 'de {0}',
-//                     moveNext : function(){ 
-//                    		page = page + itemsPorPagina;
-//                    	 	this.store.currentPage++;
-//            				religionStore.load({
-// 	       				    params:{
-// 	       				    	"p[limit]": itemsPorPagina,
-// 	       						"p[page]": page,
-// 	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
-// 	       				    }
-//        					});
-//            					console.log("page store: ", page);
-//           				    console.log("page extjs: ",this.store.currentPage);	
-//                 	 },
-//                  	 movePrevious : function(){ 
-//                  		page = page - itemsPorPagina;
-// 						this.store.currentPage--;
-// 						religionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-// 	       					console.log("page store: ", page);
-// 	      				    console.log("page extjs: ",this.store.currentPage);	
-//             		 },
-//              		moveFirst : function(){ 
-//              			page = 0;
-// 						this.store.currentPage = 1;
-// 						religionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);	
-//             	 	},
-//             	 	moveLast : function(){                 	 	
-//             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
-// 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
-// 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-//             	 		}
-// 						else
-// 						{
-// 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
-// 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-// 						}
-//             	 		religionStore.load({
-// 		   				    params:{
-// 		   				    	"p[limit]": itemsPorPagina,
-// 		   						"p[page]": page,
-// 		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
-// 		   				    }
-//    						});
-//        					console.log("page store: ", page);
-//       				    console.log("page extjs: ",this.store.currentPage);         					
-//             	 	},
-//                 }
+	                ,{
+                    xtype: 'pagingtoolbar',
+                    store: religionStore, 
+                    dock: 'bottom',
+                    displayInfo: true,
+                    listeners: {
+                        'afterrender': function (component)
+                        {
+                            component.down('#refresh').hide()
+                        },single: true
+                    },
+                    displayMsg: 'Registro {0} al {1} de {2}',
+                    beforePageText: 'P&aacute;gina',
+                    afterPageText : 'de {0}',
+                    moveNext : function(){ 
+                   		page = page + itemsPorPagina;
+                   	 	this.store.currentPage++;
+           				religionStore.load({
+	       				    params:{
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page,      
+	       				    }
+       					});
+                	 },
+                 	 movePrevious : function(){ 
+                 		page = page - itemsPorPagina;
+						this.store.currentPage--;
+						religionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page, 	        
+		   				    }
+   						});
+	       					console.log("page store: ", page);
+	      				    console.log("page extjs: ",this.store.currentPage);	
+            		 },
+             		moveFirst : function(){ 
+             			page = 0;
+						this.store.currentPage = 1;
+						religionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page, 	        
+		   				    }
+   						});
+            	 	},
+            	 	moveLast : function(){                 	 	
+            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+            	 		}
+						else
+						{
+							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+						}
+            	 		religionStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,		        
+		   				    }
+   						});       					
+            	 	},
+                }
 	                ],                       
             layout: 'fit',
             emptyText: "No existen religiones cargadas",
