@@ -9,6 +9,7 @@ class Select extends DbSelect
 {
 	public function _init()
 	{
+		$_s = ",!";
 		$this->_select
 			 ->from(array('op' => 'org_parte'))
 			 ->columns(array('org_parte_id',
@@ -16,9 +17,9 @@ class Select extends DbSelect
 			 	'nombre_organizacion',
 			 	'nombre_persona','apellido_persona','fecha_nacimiento','genero_persona',
 			 	'org_religion_id','org_estado_civil_id','nacionalidad_persona',
-			 	'documentos' => new Expression("string_agg(distinct 'org_documento_id:'||od.org_documento_id||','||'valor:'||od.valor||','||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||',dir_pais_id:'||od.dir_pais_id||',preferencia:'||od.preferencia,';')"),
-			 	'contactos'  => new Expression("string_agg(distinct 'org_contacto_id:'||oc.org_contacto_id||',contacto:'||oc.contacto||',org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||',nombre:'||oct.nombre,';')"),
-			 	'Direcciones' => new Expression("string_agg(distinct 'dir_direccion_id:'||dd.dir_direccion_id||',direccion:'||dd.calle||',dir_barrio_id:'||dd.dir_barrio_id,';')")	
+			 	'documentos' => new Expression("string_agg(distinct 'org_documento_id:'||od.org_documento_id||'{$_s}'||'valor:'||od.valor||'{$_s}'||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||'{$_s}dir_pais_id:'||od.dir_pais_id||'{$_s}preferencia:'||od.preferencia,';*')"),
+			 	'contactos'  => new Expression("string_agg(distinct 'org_contacto_id:'||oc.org_contacto_id||'{$_s}contacto:'||oc.contacto||'{$_s}org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||'{$_s}nombre:'||oct.nombre,';*')"),
+			 	'Direcciones' => new Expression("string_agg(distinct 'dir_direccion_id:'||dd.dir_direccion_id||'{$_s}direccion:'||dd.calle||'{$_s}dir_barrio_id:'||dd.dir_barrio_id,';*')")	
 			 		//'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id,';')")
 			 	))
 			 ->join(

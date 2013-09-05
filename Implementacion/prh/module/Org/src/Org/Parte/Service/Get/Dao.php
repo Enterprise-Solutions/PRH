@@ -8,10 +8,12 @@ class Dao extends GetDao
 	{
 		$record = current($this->_select->execute()->toArray());
 		if(!$record['documentos']){
-			$record['documentos'] = array();
+			$documentos = array();
 			//return $record;
+		}else{
+			$documentos = explode(';*', $record['documentos']);
 		}
-		$documentos = explode(';', $record['documentos']);
+		
 		$documentos = array_map(
 				function($documentoString){
 					/*return array_map(
@@ -21,7 +23,7 @@ class Dao extends GetDao
 							return $keyValueArray;
 							},
 							explode(",", $documento));*/
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
@@ -35,13 +37,16 @@ class Dao extends GetDao
 		$record['documentos'] = $documentos;
 		
 		if(!$record['contactos']){
-			$record['contactos'] = array();
+			//$record['contactos'] = array();
 			//return $record;
+			$contactos = array();
+		}else{
+			$contactos = explode(';*', $record['contactos']);
 		}
-		$contactos = explode(';', $record['contactos']);
+		
 		$contactos = array_map(
 				function($documentoString){
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
@@ -55,13 +60,16 @@ class Dao extends GetDao
 		$record['contactos'] = $contactos;
 		
 		if(!$record['Direcciones']){
-			$record['Direcciones'] = array();
-			return $record;
+			//$record['Direcciones'] = array();
+			//return $record;
+			$direcciones = array();
+		}else{
+			$direcciones = explode(';*', $record['Direcciones']);
 		}
-		$contactos = explode(';', $record['Direcciones']);
-		$contactos = array_map(
+		//$contactos = explode(';', $record['Direcciones']);
+		$direcciones = array_map(
 				function($documentoString){
-					$keyValueTokens = explode(",",$documentoString);
+					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
 					foreach($keyValueTokens as $token){
 						//$tokens = explode(':', $keyValueToken);
@@ -71,8 +79,8 @@ class Dao extends GetDao
 					}
 					return $documento;
 				},
-				$contactos);
-		$record['Direcciones'] = $contactos;
+				$direcciones);
+		$record['Direcciones'] = $direcciones;
 		
 		return $record;
 	} 
