@@ -234,6 +234,7 @@ Ext.onReady(function(){
 				pageSize: itemsPorPagina, 
 				proxy: {
 					type: 'ajax',
+					extraParams: {'p[limit]':'all'},
 					headers: {'Accept':'application/json'},
 					url: baseURL + '/org/combos/dir-barrio?format=json',
 					reader: {
@@ -250,10 +251,7 @@ Ext.onReady(function(){
 				pageSize: itemsPorPagina, 
 				proxy: {
 					type: 'ajax',
-					  extraParams:{
-					    	"p[limit]": itemsPorPagina,
-							"p[page]": page, 
-					  },
+					extraParams: {'p[limit]':'all'},
 					headers: {'Accept':'application/json'},
 					url: baseURL + '/org/profesion/index?format=json',
 					reader: {
@@ -270,10 +268,7 @@ Ext.onReady(function(){
 				pageSize: itemsPorPagina, 
 				proxy: {
 					type: 'ajax',
-					  extraParams:{
-					    	"p[limit]": itemsPorPagina,
-							"p[page]": page, 
-					  },
+					extraParams: {'p[limit]':'all'},
 					headers: {'Accept':'application/json'},
 					url: baseURL + '/org/religion/index?format=json',
 					reader: {
@@ -305,10 +300,7 @@ Ext.onReady(function(){
 				pageSize: itemsPorPagina, 
 				proxy: {
 					type: 'ajax',
-					  extraParams:{
-					    	"p[limit]": itemsPorPagina,
-							"p[page]": page, 
-					  },
+					extraParams: {'p[limit]':'all'},
 					headers: {'Accept':'application/json'},
 					url: baseURL + '/org/estado-civil/index?format=json',
 					reader: {

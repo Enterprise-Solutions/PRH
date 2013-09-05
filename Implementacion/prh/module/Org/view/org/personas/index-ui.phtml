@@ -17,7 +17,7 @@
 
 			var baseURL = '<?=$this->basePath()?>';
 
-			var auxcarrera = null;
+			var auxnombre = null;
 			var titulo = null;
 	
 			var itemsPorPagina = 10;
@@ -139,17 +139,100 @@ Ext.onReady(function(){
 		        minChars: 2,
 		  });
 		  
+			var panelFiltros = Ext.create('Ext.form.Panel', {
+				 type:  'hbox',
+				 collapsible: true,
+				 title:'Filtros de B&uacute;squeda',
+				    width: 'fit',	
+				    height: 'fit',			           
+				    items:[
+					{
+					    xtype: 'container',
+					    id: 'filtros',
+					    height: 40,
+					    layout:'column',
+					    items:[{   	
+						    		xtype: 'textfield',
+							        fieldLabel: 'Nombre',
+							        padding: '10 0 5 15',
+							        labelWidth: 70,
+							        width: 400,
+							        layout:'anchor',
+							        anchor:'90%',
+							        name: 'nombre',       
+					    	  }
+						   ]
+						},{
+							xtype: 'container',
+						    height: 45,
+						    layout:'hbox',
+						    items:[{
+				
+					           		xtype: 'button',
+					           		width: 100,
+					           		margin: '5 0 0 20',
+					            	text: 'Filtrar',
+						            scale   : 'medium',
+						            handler: function(b,e) {
+						            	
+								           var basicForm = b.up('form').getForm();						
+								           var valoresForm = basicForm.getFieldValues();
+
+											auxnombre = valoresForm.nombre;
+											
+								           //inicializo los pages
+								           	page = 0;
+											gridPersonas.store.currentPage = 1;
+											
+							                personasStore.load({
+												params: {
+													"s[nombre]": auxnombre
+										   		} 
+							               });
+							            }//end of handler  
+										        
+									},{
+				
+									  		xtype: 'button',
+									  		width: 100,
+									  		margin: '5 0 0 15',
+						               		text: 'Limpiar',
+							           		scale   : 'medium',
+							           		handler: function(b,e) {
+							           			//inicializo los pages
+									           	page = 0;
+												gridPersonas.store.currentPage = 1;
+												//console.log(this);
+							           			b.up('form').getForm().reset();
+							           			personasStore.load();						   	
+					           		  		}
+									}]}
+					    	]
+			});	
+				  
 		var gridPersonas = Ext.create('Ext.grid.Panel', {
-            title: 'Personas',
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
             },
             width: 'fit',
             padding: 10,
-            height: 450,
+            height: 400,
             region: 'center',  
-	           dockedItems: [{
+	           dockedItems: [{     
+		          	     xtype: 'toolbar',
+	                     dock: 'top',
+	                     items: [
+	                     { 
+	                         xtype: 'tbfill' 
+	                     },{
+	 			            xtype: 'button',	
+				            text: 'Crear Persona',
+				            handler: function() {
+				            	window.location = baseURL+'/org/personas/crear-ui';
+							}
+			            }]
+                	},{
                     xtype: 'pagingtoolbar',
                     store: personasStore, 
                     dock: 'bottom',
@@ -170,11 +253,9 @@ Ext.onReady(function(){
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
-	       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
+	       						"s[nombre]": auxnombre     
 	       				    }
        					});
-           					console.log("page store: ", page);
-          				    console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
@@ -183,11 +264,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   						"s[nombre]": auxnombre        
 		   				    }
    						});
-	       					console.log("page store: ", page);
-	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
@@ -196,11 +275,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
+		   						"s[nombre]": auxnombre	        
 		   				    }
    						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);	
             	 	},
             	 	moveLast : function(){                 	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
@@ -216,11 +293,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   					//	"s[pe_plan_estudio_ver_id]": auxcarrera	 		        
+		   						"s[nombre]": auxnombre
 		   				    }
-   						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);         					
+   						});      					
             	 	},
                 }],                       
             layout: 'fit',
@@ -236,7 +311,6 @@ Ext.onReady(function(){
                 align: 'left',
                 flex: 1.5,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
-                    console.log(metadata);
                     return '<a href="'+baseURL+'/org/personas/get-ui#?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
             	}
             },{
@@ -344,21 +418,18 @@ Ext.onReady(function(){
 		 });
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			//id: 'margen',
-		    //title: ' ',
-		    tbar : [
-		            { xtype: 'tbfill' },
-		            {
-			            xtype: 'button',	
-			            text: 'Crear Persona',
-			            handler: function() {
-			            	window.location = baseURL+'/org/personas/crear-ui';
-						}
-		            }
-		        ],
 		    width: 'fit',
 		    height: 570,
-		    items:[gridPersonas],
+		    items:[
+			         {	
+			        	 xtype: 'panel',
+						 items: [panelFiltros]
+				        
+			         },{
+			        	 xtype: 'container',
+						 items:[gridPersonas],
+			         }
+			    ],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(0);
