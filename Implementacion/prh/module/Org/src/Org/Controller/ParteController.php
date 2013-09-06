@@ -15,6 +15,9 @@ use Org\Parte\Service\Creacion;
 use Org\Parte\Service\Edicion;
 use Org\Parte\Service\Borrado;
 use Org\Parte\Service\Transaccional;
+use EnterpriseSolutions\Simple\Repository\DataSource;
+use Org\Parte\Service\Borrado\Repository as RepositoryParaBorrado;
+use EnterpriseSolutions\Simple\Service\Service as EsService;
 
 class ParteController extends BaseController
 {
@@ -62,13 +65,29 @@ class ParteController extends BaseController
 	
 	public function borrarAction()
 	{
-		$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
-		$repository = new Repository($em);
+		//$em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
+		$adapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$ds = new DataSource($adapter);
+		$repository = new RepositoryParaBorrado($ds);
+		$borrado = new Borrado($repository);
+		
+		$esService = new EsService();
+		$transaccion = $esService->transaccional(
+			function($params)use($repository){
+				$borrado = new Borrado($repository);
+				return $borrado->ejecutar($params);
+			},
+			$ds
+		);
+		$params = $this->SubmitParams()->getParam('delete');
+		$respuesta = $transaccion($params);
+		return $this->_returnAsJson($respuesta);
+		/*$repository = new Repository($em);
 		$actionService = new Borrado($repository);
 		$service = new Transaccional($em,$actionService);
 		$datos = $this->SubmitParams()->getParam('delete');
 		$parte = $service->ejecutar($datos);
-		return $this->_returnAsJson($service->getRespuesta());
+		return $this->_returnAsJson($service->getRespuesta());*/
 	}
 	
 	public function _returnAsJson($respuesta)
