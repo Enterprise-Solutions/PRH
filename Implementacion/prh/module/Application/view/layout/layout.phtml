@@ -243,6 +243,32 @@
 			//renderTo: document.body,
 			items: []
 		});
+
+		var menuAdministracion = Ext.create('Ext.tab.Panel', {
+			autoHeight:true,
+			activeTab: 2,
+			plain: true,
+			style:'background-color: #C8CED8',
+			id: 'administracionTabPanel',
+			items: [{
+		        title: 'Usuarios',
+		        tabConfig: {style:'width:120px'},
+		        pathName: '/adm/usuario/index-ui',
+		    },{
+		        title: 'prueba',
+		        tabConfig: {style:'width:120px'},
+		        hidden: true,
+		    }],
+		    listeners:{
+				'tabchange':function(tabPanel, newTab, oldTab, opciones)
+				{
+					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
+					{
+						window.location = baseURL + newTab.pathName;
+					}	
+				}
+			   }
+		});
 		
 		Ext.onReady(function(){
 			
@@ -373,6 +399,10 @@
 								    tabConfig: {style:'width:120px'},
 								    items:[menuEstadistica],
 								    disabled: true,
+								},{
+								    title: 'Administraci&oacute;n',
+								    tabConfig: {style:'width:125px'},
+								    items:[menuAdministracion],
 								}]
 				          }
 				
