@@ -20,7 +20,7 @@
 			var auxnombre = null;
 			var auxestado = null;
 	
-			var itemsPorPagina = 10;
+			var itemsPorPagina = 11;
 			var page = 0;
 			
 			
@@ -201,7 +201,8 @@ Ext.onReady(function(){
 								   Ext.Msg.show({
 									    title:'Aviso',
 										msg:'Usuario Creado Correctamente',
-										width: 300
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -209,6 +210,9 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxnombre = null;
+								   auxestado = null;
 								   usuariosStore.load();
 							   },
 							   jsonData:{
@@ -338,7 +342,8 @@ Ext.onReady(function(){
 								   Ext.Msg.show({
 									    title:'Aviso',
 										msg:'Usuario Editado Correctamente',
-										width: 300
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -346,6 +351,9 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxnombre = null;
+								   auxestado = null;
 								   usuariosStore.load();
 							   },
 								   jsonData: json_data,
@@ -623,7 +631,8 @@ Ext.onReady(function(){
         								   Ext.Msg.show({
         									    title:'Aviso',
         										msg:'Usuario Borrado Correctamente',
-        										width: 300
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -631,6 +640,9 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
+        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   auxnombre = null;
+        								   auxestado = null;
         								   usuariosStore.load();
         							   },
         							   jsonData:{
@@ -658,8 +670,6 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			//id: 'margen',
-		    //title: ' ',
 		    width: 'fit',
 		    height: 550,
 		    items:[

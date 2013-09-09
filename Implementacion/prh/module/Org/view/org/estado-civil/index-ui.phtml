@@ -96,7 +96,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Estado Civil Cargado Correctamente'
+										msg:'Estado Civil Cargado Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -104,6 +106,8 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxestado_civil = null;
 								   estadoCivilStore.load();
 							   },
 							   jsonData:{
@@ -173,7 +177,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Estado Civil Modificado Correctamente'
+										msg:'Estado Civil Modificado Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -328,7 +334,8 @@ Ext.onReady(function(){
 	                   	 	estadoCivilStore.load({
 		       				    params:{
 		       				    	"p[limit]": itemsPorPagina,
-		       						"p[page]": page,      
+		       						"p[page]": page,
+		       						"s[nombre]": auxestado_civil      
 		       				    }
 	       					});
 	                	 },
@@ -338,7 +345,8 @@ Ext.onReady(function(){
 							estadoCivilStore.load({
 			   				    params:{
 			   				    	"p[limit]": itemsPorPagina,
-			   						"p[page]": page, 	        
+			   						"p[page]": page, 
+			   						"s[nombre]": auxestado_civil	        
 			   				    }
 	   						});
 		       					console.log("page store: ", page);
@@ -350,7 +358,8 @@ Ext.onReady(function(){
 							estadoCivilStore.load({
 			   				    params:{
 			   				    	"p[limit]": itemsPorPagina,
-			   						"p[page]": page, 	        
+			   						"p[page]": page, 
+			   						"s[nombre]": auxestado_civil	        
 			   				    }
 	   						});
 	            	 	},
@@ -367,7 +376,8 @@ Ext.onReady(function(){
 	            	 		estadoCivilStore.load({
 			   				    params:{
 			   				    	"p[limit]": itemsPorPagina,
-			   						"p[page]": page,		        
+			   						"p[page]": page,	
+			   						"s[nombre]": auxestado_civil	        
 			   				    }
 	   						});       					
 	            	 	},
@@ -421,7 +431,9 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Estado Civil Borrado Correctamente'
+        										msg:'Estado Civil Borrado Correctamente',
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -429,6 +441,8 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
+        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   auxestado_civil = null;
         								   estadoCivilStore.load();
         							   },
         							   jsonData:{

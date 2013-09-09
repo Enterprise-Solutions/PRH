@@ -108,7 +108,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Cargada Correctamente'
+										msg:'Profesi&oacute;n Cargada Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -116,6 +118,8 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxprofesion = null;
 								   profesionStore.load();
 							   },
 							   jsonData:{
@@ -194,7 +198,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Profesi&oacute;n Modificada Correctamente'
+										msg:'Profesi&oacute;n Modificada Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -352,7 +358,8 @@ Ext.onReady(function(){
            				profesionStore.load({
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,        
+	       						"p[page]": page, 
+	       						"s[nombre]": auxprofesion       
 	       				    }
        					});
                 	 },
@@ -362,7 +369,8 @@ Ext.onReady(function(){
 						profesionStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page, 	        
+		   						"p[page]": page, 
+		   						"s[nombre]": auxprofesion	        
 		   				    }
    						});
             		 },
@@ -372,7 +380,8 @@ Ext.onReady(function(){
 						profesionStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page, 	        
+		   						"p[page]": page,
+		   						"s[nombre]": auxprofesion 	        
 		   				    }
    						});
             	 	},
@@ -389,7 +398,8 @@ Ext.onReady(function(){
             	 		profesionStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
-		   						"p[page]": page,		        
+		   						"p[page]": page,
+		   						"s[nombre]": auxprofesion		        
 		   				    }
    						});       					
             	 	},
@@ -449,7 +459,9 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Profesi&oacute;n Borrada Correctamente'
+        										msg:'Profesi&oacute;n Borrada Correctamente',
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -457,6 +469,8 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
+        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   auxprofesion = null;
         								   profesionStore.load();
         							   },
         							   jsonData:{

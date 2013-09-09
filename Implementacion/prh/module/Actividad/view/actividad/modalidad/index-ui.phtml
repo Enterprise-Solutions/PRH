@@ -17,10 +17,9 @@
 
 			var baseURL = '<?=$this->basePath()?>';
 
-			var auxcarrera = null;
-			var titulo = null;
+			var auxmodalidad = null;
 	
-			var itemsPorPagina = 10;
+			var itemsPorPagina = 11;
 			var page = 0;
 			
 Ext.onReady(function(){
@@ -106,7 +105,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Modalidad Cargada Correctamente'
+										msg:'Modalidad Cargada Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -114,6 +115,8 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxmodalidad = null;
 								   modalidadStore.load();
 							   },
 							   jsonData:{
@@ -192,7 +195,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-										msg:'Modalidad Modificada Correctamente'
+										msg:'Modalidad Modificada Correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {
@@ -200,6 +205,8 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxmodalidad = null;
 								   modalidadStore.load();
 							   },
 							   jsonData:{
@@ -233,7 +240,77 @@ Ext.onReady(function(){
             }); 
        	 win.show();
     	}  
-    	
+
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 'fit',			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'column',
+				    items:[{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 400,
+						        layout:'anchor',
+						        anchor:'90%',
+						        name: 'nombre',       
+				    	  }
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '5 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+
+										auxmodalidad = valoresForm.nombre;
+										
+							           //inicializo los pages
+							           	page = 0;
+										gridModalidad.store.currentPage = 1;
+										
+						                modalidadStore.load({
+											params: {
+												"s[nombre]": auxmodalidad
+									   		} 
+						               });
+						            }//end of handler  									        
+								},{
+			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '5 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+								           	auxmodalidad = null;
+											gridModalidad.store.currentPage = 1;
+						           			b.up('form').getForm().reset();
+						           			modalidadStore.load();						   	
+				           		  		}
+								}]}
+				    	]
+		});
+		
 		var gridModalidad = Ext.create('Ext.grid.Panel', {
             selModel: {
                 checkOnly: true,
@@ -243,7 +320,7 @@ Ext.onReady(function(){
             padding: '10 10 0 10',
             height: 335,
             region: 'center',  
-	           dockedItems: [
+	        dockedItems: [
 	                {     
 		          	     xtype: 'toolbar',
                          dock: 'top',
@@ -255,75 +332,75 @@ Ext.onReady(function(){
      			            text: 'Agregar',
      		                handler: agregarwindow,
                          }]
-// 	                },{
-// 	                    xtype: 'pagingtoolbar',
-// 	                    store: modalidadStore, 
-// 	                    dock: 'bottom',
-// 	                    displayInfo: true,
-// 	                    listeners: {
-// 	                        'afterrender': function (component)
-// 	                        {
-// 	                            component.down('#refresh').hide()
-// 	                        },single: true
-// 	                    },
-// 	                    displayMsg: 'Registro {0} al {1} de {2}',
-// 	                    beforePageText: 'P&aacute;gina',
-// 	                    afterPageText : 'de {0}',
-// 	                    moveNext : function(){ 
-// 	                   		page = page + itemsPorPagina;
-// 	                   	 	this.store.currentPage++;
-// 	           				modalidadStore.load({
-// 		       				    params:{
-// 		       				    	"p[limit]": itemsPorPagina,
-// 		       						"p[page]": page,
-// 		       						//"s[pe_plan_estudio_ver_id]": auxcarrera	        
-// 		       				    }
-// 	       					});
-// 	                	 },
-// 	                 	 movePrevious : function(){ 
-// 	                 		page = page - itemsPorPagina;
-// 							this.store.currentPage--;
-// 							modalidadStore.load({
-// 			   				    params:{
-// 			   				    	"p[limit]": itemsPorPagina,
-// 			   						"p[page]": page,
-// 			   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 			   				    }
-// 	   						});
-// 	            		 },
-// 	             		moveFirst : function(){ 
-// 	             			page = 0;
-// 							this.store.currentPage = 1;
-// 							modalidadStore.load({
-// 			   				    params:{
-// 			   				    	"p[limit]": itemsPorPagina,
-// 			   						"p[page]": page,
-// 			   						//"s[pe_plan_estudio_ver_id]": auxcarrera	 	        
-// 			   				    }
-// 	   						});
-// 	            	 	},
-// 	            	 	moveLast : function(){                 	 	
-// 	            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
-// 		                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
-// 		                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-// 	            	 		}
-// 							else
-// 							{
-// 								page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
-// 								this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-// 							}
-// 	            	 		modalidadStore.load({
-// 			   				    params:{
-// 			   				    	"p[limit]": itemsPorPagina,
-// 			   						"p[page]": page,	        
-// 			   				    }
-// 	   						});      					
-// 	            	 	},
+	                },{
+	                    xtype: 'pagingtoolbar',
+	                    store: modalidadStore, 
+	                    dock: 'bottom',
+	                    displayInfo: true,
+	                    listeners: {
+	                        'afterrender': function (component)
+	                        {
+	                            component.down('#refresh').hide()
+	                        },single: true
+	                    },
+	                    displayMsg: 'Registro {0} al {1} de {2}',
+	                    beforePageText: 'P&aacute;gina',
+	                    afterPageText : 'de {0}',
+	                    moveNext : function(){ 
+	                   		page = page + itemsPorPagina;
+	                   	 	this.store.currentPage++;
+	           				modalidadStore.load({
+		       				    params:{
+		       				    	"p[limit]": itemsPorPagina,
+		       						"p[page]": page,
+		       						"s[nombre]": auxmodalidad	        
+		       				    }
+	       					});
+	                	 },
+	                 	 movePrevious : function(){ 
+	                 		page = page - itemsPorPagina;
+							this.store.currentPage--;
+							modalidadStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,
+			   						"s[nombre]": auxmodalidad	  	        
+			   				    }
+	   						});
+	            		 },
+	             		moveFirst : function(){ 
+	             			page = 0;
+							this.store.currentPage = 1;
+							modalidadStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,
+			   						"s[nombre]": auxmodalidad	   
+			   				    }
+	   						});
+	            	 	},
+	            	 	moveLast : function(){                 	 	
+	            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+		                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+		                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+	            	 		}
+							else
+							{
+								page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+								this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+							}
+	            	 		modalidadStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,	
+			   						"s[nombre]": auxmodalidad	          
+			   				    }
+	   						});      					
+	            	 	},
 	                }
-	                ],                       
+	        ],                       
             layout: 'fit',
-            emptyText: "No existen Modalidades cargadas",
-            
+            emptyText: "No existen Modalidades cargadas",        
             store: modalidadStore,
             loadMask: true,
             // grid columns
@@ -375,7 +452,9 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Modalidad Borrada Correctamente'
+        										msg:'Modalidad Borrada Correctamente',
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -383,6 +462,8 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
+        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   auxmodalidad = null;
         								   modalidadStore.load();
         							   },
         							   jsonData:{
@@ -407,12 +488,18 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
-			//id: 'margen',
-			padding: '15 5 0 5', 
-		    //title: ' ',
 		    width: 'fit',
-		    height: 570,		    
-		    items:[gridModalidad],
+		    height: 550,		    
+		    items:[
+			         {	
+			        	 xtype: 'panel',
+						 items: [panelFiltros]
+				        
+			         },{
+			        	 xtype: 'container',
+						 items:[gridModalidad],
+			         }
+			],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(1);

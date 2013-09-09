@@ -395,7 +395,9 @@ Ext.onReady(function(){
 										   success: function(response, opt){
 											   Ext.Msg.show({
 												    title:'Aviso',
-													msg:'Persona Creada Correctamente'
+													msg:'Persona Creada Correctamente',
+													closable: false,
+													width: 250
 											   });
 											   function hide_message() {
 											       Ext.defer(function() {

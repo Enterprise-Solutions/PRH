@@ -18,7 +18,6 @@
 			var baseURL = '<?=$this->basePath()?>';
 
 			var auxnombre = null;
-			var titulo = null;
 	
 			var itemsPorPagina = 10;
 			var page = 0;
@@ -68,37 +67,6 @@ Ext.onReady(function(){
 				}
 			]
 		});
-
-// 		Ext.define('ComboPersonas', {
-// 			extend: 'Ext.data.Model',
-// 			fields: [
-// 				{
-// 					type: 'int',
-// 					name: '__'
-// 				},
-// 				{
-// 					type: 'string',
-// 					name: 'nombre'
-// 				}
-// 			]
-// 		});
-
-// 		var ComboPersonasStore = Ext.create('Ext.data.Store', {
-// 			model: 'ComboPersonas',
-// 			pageSize: 10, 
-// 			proxy: {
-// 				type: 'ajax',
-// 				extraParams: {'p[limit]':'10'},
-// 				headers: {'Accept':'application/json'},
-// 				url: baseURL + '/inscripciones/combos/pe-asignatura-prop?format=json',
-// 				reader: {
-// 					type: 'json',
-// 					root: 'records',
-// 					totalProperty: 'numResults',
-// 				}
-// 			},
-// 			autoLoad: true
-// 		});
 		
 		var personasStore = Ext.create('Ext.data.Store', {
 			model: 'personas',
@@ -386,7 +354,9 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Persona Borrada Correctamente'
+        										msg:'Persona Borrada Correctamente',
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -396,6 +366,15 @@ Ext.onReady(function(){
         								   hide_message();
         								   personasStore.load();
         							   },
+        							   failure: function(response, opt){
+										   console.log(response);
+											Ext.MessageBox.show({
+					                            title: 'Error',
+					                            msg: response.responseText,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+										},
         							   jsonData:{
         							       'delete':[
         							    	id_delete

@@ -1076,9 +1076,9 @@ Ext.onReady(function(){
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
-									    height: 'fit',
-									    width: 'fit',
-										msg:'Persona editada correctamente'
+										msg:'Persona editada correctamente',
+										closable: false,
+										width: 250
 								   });
 								   function hide_message() {
 								       Ext.defer(function() {

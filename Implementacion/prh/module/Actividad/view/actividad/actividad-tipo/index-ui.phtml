@@ -16,7 +16,7 @@
 		<script type="text/javascript">
 
 			var baseURL = '<?=$this->basePath()?>';
-
+			   
 			var auxnombre = null;
 			var auxcodigo = null;
 			var auxnivel = null;
@@ -433,7 +433,9 @@ Ext.onReady(function(){
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Tipo de Actividad Borrado Correctamente'
+        										msg:'Tipo de Actividad Borrado Correctamente',
+        										closable: false,
+        										width: 250
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -441,6 +443,12 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
+        									Ext.getCmp('filtros').up('form').getForm().reset();
+        									   auxnombre = null;
+        									   auxcodigo = null;
+        									   auxnivel = null;
+        									   auxmodalidad = null;
+        									   auxcriterio = null;
         								   actividadTipoStore.load();
         							   },
         							   jsonData:{

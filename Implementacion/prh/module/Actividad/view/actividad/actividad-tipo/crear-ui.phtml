@@ -163,7 +163,9 @@ Ext.onReady(function(){
 										   success: function(response, opt){
 											   Ext.Msg.show({
 												    title:'Aviso',
-													msg:'Tipo de Actividad Cargado Correctamente'
+													msg:'Tipo de Actividad Cargado Correctamente',
+													closable: false,
+													width: 250
 											   });
 											   function hide_message() {
 											       Ext.defer(function() {
