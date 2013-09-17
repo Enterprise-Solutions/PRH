@@ -367,10 +367,11 @@ Ext.onReady(function(){
         								   personasStore.load();
         							   },
         							   failure: function(response, opt){
-										   console.log(response);
+										   var aux_mensaje = Ext.decode(response.responseText);
+										   //console.log(aux_mensaje);
 											Ext.MessageBox.show({
-					                            title: 'Error',
-					                            msg: response.responseText,
+					                            title: aux_mensaje.status,
+					                            msg: aux_mensaje.datos,
 					                            icon: Ext.MessageBox.ERROR,
 					                            buttons: Ext.Msg.OK
 					                        });
