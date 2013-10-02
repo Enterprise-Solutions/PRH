@@ -214,15 +214,25 @@ Ext.onReady(function(){
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
 									   },
-									    failure: function(response, opt){
-											   console.log(response);
+// 									    failure: function(response, opt){
+// 											   console.log(response);
+// 												Ext.MessageBox.show({
+// 						                            title: 'Error de Edici&oacute;n',
+// 						                            msg: response.responseText,
+// 						                            icon: Ext.MessageBox.ERROR,
+// 						                            buttons: Ext.Msg.OK
+// 						                        });
+// 										},
+										failure: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   //console.log(aux_mensaje);
 												Ext.MessageBox.show({
-						                            title: 'Error de Edici&oacute;n',
-						                            msg: response.responseText,
+						                            title: aux_mensaje.mensaje,
+						                            msg: Ext.encode(aux_mensaje.datos),
 						                            icon: Ext.MessageBox.ERROR,
 						                            buttons: Ext.Msg.OK
 						                        });
-										},
+											},
 									   jsonData:{
 									       'put':{
 									    	   'act_actividad_tipo_id': aux,
@@ -287,6 +297,7 @@ Ext.onReady(function(){
 				    	},{
 					        	fieldLabel: 'Criterio',
 					        	xtype: 'combobox',
+					        	forceSelection: true,
 						        labelWidth: 110,
 						        store: criterioStore,
 						        displayField: 'nombre',
@@ -309,6 +320,7 @@ Ext.onReady(function(){
 				    	 },{
 						        fieldLabel: 'Asistencia',
 						        xtype: 'combobox',
+						        forceSelection: true,
 						        labelWidth: 110,
 						        store: si_no,
 						        displayField: 'nombre',
@@ -343,6 +355,7 @@ Ext.onReady(function(){
 			    	    },{
 					        fieldLabel: 'Modalidad',
 					        xtype: 'combobox',
+					        forceSelection: true,
 					        labelWidth: 110,
 					        store: modalidadStore,
 					        displayField: 'nombre',
@@ -355,6 +368,7 @@ Ext.onReady(function(){
 			    	    },{
 					        fieldLabel: 'Nivel',
 					        xtype: 'combobox',
+					        forceSelection: true,
 					        labelWidth: 110,
 					        store: nivelStore,
 					        displayField: 'nombre',
@@ -367,6 +381,7 @@ Ext.onReady(function(){
 			    	   },{
 					        fieldLabel: 'Atelier',
 					        xtype: 'combobox',
+					        forceSelection: true,
 					        labelWidth: 110,
 					        store: si_no,
 					        displayField: 'nombre',

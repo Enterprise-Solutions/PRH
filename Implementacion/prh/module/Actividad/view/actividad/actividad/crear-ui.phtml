@@ -230,6 +230,7 @@ Ext.onReady(function(){
 						         },{
 								    	fieldLabel: 'A&ntilde;o de Form.',
 								    	xtype: 'combobox',
+								    	forceSelection: true,
 								        labelWidth: 110,
 								        store: anhoFormacionStore,
 								        displayField: 'anho',
@@ -258,6 +259,7 @@ Ext.onReady(function(){
 				                items: [{
 					    	        fieldLabel: 'Tipo de Act',
 					    	        xtype: 'combobox',
+					    	        forceSelection: true,
 							        labelWidth: 110,
 							        tabIndex: 2,
 							        store: actividadTipoStore,
@@ -282,6 +284,7 @@ Ext.onReady(function(){
 				    	    	},{
 							        fieldLabel: 'Moneda',
 							        xtype: 'combobox',
+							        forceSelection: true,
 							        labelWidth: 110,
 							        store: monedaStore,
 							        displayField: 'nombre',
@@ -354,19 +357,22 @@ Ext.onReady(function(){
 					 items:[
 										{
 											xtype: 'tabpanel',
+											tabPosition: 'left',
+											height: 400,
+										    width: 'fit',
 											//style:'background-color: #C8CED8',
 											//layout: 'fit',
 											items: [{
 										        title: 'Datos de Actividad',
-										        tabConfig: {style:'width:240px'},
+										        //tabConfig: {style:'width:240px'},
 										        items:[panelActividad],
 										    },{
 										        title: 'Formadores',
-										        tabConfig: {style:'width:240px'},
+										       // tabConfig: {style:'width:240px'},
 										        items: []
 										    },{
 										        title: 'Participantes',
-										        tabConfig: {style:'width:240px'},
+										      //  tabConfig: {style:'width:240px'},
 										        items: []								       
 										    }]
 										}

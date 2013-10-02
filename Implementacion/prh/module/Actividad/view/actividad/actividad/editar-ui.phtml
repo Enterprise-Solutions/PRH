@@ -265,6 +265,7 @@ Ext.define('actividadTipo', {
 				         },{
 						    	fieldLabel: 'A&ntilde;o de Form.',
 						    	xtype: 'combobox',
+						    	forceSelection: true,
 						        labelWidth: 110,
 						        tabIndex: 9,
 						        store: anhoFormacionStore,
@@ -293,6 +294,7 @@ Ext.define('actividadTipo', {
 		                items: [{
 			    	        fieldLabel: 'Tipo de Act',
 			    	        xtype: 'combobox',
+			    	        forceSelection: true,
 					        labelWidth: 110,
 					        tabIndex: 2,
 					        store: actividadTipoStore,
@@ -317,6 +319,7 @@ Ext.define('actividadTipo', {
 		    	    	},{
 					        fieldLabel: 'Moneda',
 					        xtype: 'combobox',
+					        forceSelection: true,
 					        labelWidth: 110,
 					        store: monedaStore,
 					        displayField: 'nombre',
@@ -391,18 +394,20 @@ Ext.define('actividadTipo', {
 									{
 										xtype: 'tabpanel',
 										//style:'background-color: #C8CED8',
-										//layout: 'fit',
+										tabPosition: 'left',
+										height: 400,
+									    width: 'fit',
 										items: [{
 									        title: 'Datos de Actividad',
-									        tabConfig: {style:'width:240px'},
+									        //tabConfig: {style:'width:240px'},
 									        items:[pantallaActividad],
 									    },{
 									        title: 'Formadores',
-									        tabConfig: {style:'width:240px'},
+									        //tabConfig: {style:'width:240px'},
 									        items: []
 									    },{
 									        title: 'Participantes',
-									        tabConfig: {style:'width:240px'},
+									        //tabConfig: {style:'width:240px'},
 									        items: []								       
 									    }]
 									}
