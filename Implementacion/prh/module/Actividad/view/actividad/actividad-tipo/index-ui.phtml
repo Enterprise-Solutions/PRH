@@ -124,7 +124,7 @@ Ext.onReady(function(){
 	var nivelStore = createStore('nivel', baseURL, '/actividad/combos/act-nivel',"{'p[limit]':'all'}");
 	var modalidadStore = createStore('modalidad', baseURL, '/actividad/combos/act-modalidad',"{'p[limit]':'all'}");
 	var criterioStore = createStore('criterio', baseURL, '/actividad/combos/act-criterio',"{'p[limit]':'all'}");
-	var actividadTipoStore = createStorePage('actividadTipo', baseURL, '/actividad/actividad-tipo/index', page, itemsPorPagina);
+	var actividadTipoStore = createStorePage('actividadTipo', baseURL, '/actividad/actividad-tipo/index', itemsPorPagina);
 	
 	var comboNivel = createCombo ('Nivel',50,180,nivelStore,'nombre','act_nivel_id','local','0 10 5 0','90%','nivel');
 	var comboModalidad = createCombo ('Modalidad',80,200,modalidadStore,'nombre','act_modalidad_id','local','0 10 5 0','90%','modalidad');
@@ -322,15 +322,17 @@ Ext.onReady(function(){
 		   				    }
    						});
             	 	},
-            	 	moveLast : function(){                 	 	
+            	 	moveLast : function(){            	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+	                	 	console.log("page servidor: "+page+"   page extjs:"+ this.store.currentPage);     
             	 		}
 						else
 						{
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+							console.log("page_servidor: "+page+"   page extjs:"+ this.store.currentPage);   
 						}
             	 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
 				        var valoresForm = basicForm.getFieldValues();
