@@ -180,7 +180,14 @@ class ActividadTipo
     {
         $inputFilter = $this->getInputFilter($data);
         if (!$inputFilter->isValid()) {
-            Thrower::throwValidationException('Error de Validacion', $inputFilter->getMessages());
+            $errorMessages = array();
+            foreach ($inputFilter->getMessages() as $invalidInput => $errors) {
+                $errorsType = array_keys($errors);
+                foreach ($errorsType as $errorType) {
+                    $errorMessages[$invalidInput] = $errors[$errorType];
+                }
+            }
+            Thrower::throwValidationException('Error de Validacion', $errorMessages);
         }
         $data = $inputFilter->getValues();
     
