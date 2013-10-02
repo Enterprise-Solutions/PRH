@@ -123,7 +123,7 @@ class Actividad
                     array('name' => 'Alpha'),
                 ),
                 'validator' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 100)),
+                    array('name' => 'StringLength', 'options' => array('max' => 100, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
             'duracion' => array(
@@ -138,8 +138,8 @@ class Actividad
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty'),
-                    array('name' => 'StringLength', 'options' => array('max' => 1)),
+                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
             'monto' => array(
@@ -161,8 +161,8 @@ class Actividad
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty'),
-                    array('name' => 'StringLength', 'options' => array('max' => 1)),
+                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
             'nro_personas' => array(
