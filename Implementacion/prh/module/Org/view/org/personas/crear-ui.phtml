@@ -206,10 +206,7 @@ Ext.onReady(function(){
 							pageSize: itemsPorPagina, 
 							proxy: {
 								type: 'ajax',
-								  extraParams:{
-								    	"p[limit]": itemsPorPagina,
-										"p[page]": page, 
-								  },
+								extraParams: {'p[limit]':'all'},
 								headers: {'Accept':'application/json'},
 								url: baseURL + '/org/profesion/index?format=json',
 								reader: {
@@ -408,14 +405,14 @@ Ext.onReady(function(){
 											   window.location = baseURL+'/org/personas/index-ui';
 										   },
 										   failure: function(response, opt){
-											   console.log(response);
+											   var aux_mensaje = Ext.decode(response.responseText);
 												Ext.MessageBox.show({
-						                            title: 'Error de Creaci&oacute;n',
-						                            msg: response.responseText,
+						                            title: aux_mensaje.status,
+						                            msg: aux_mensaje.datos,
 						                            icon: Ext.MessageBox.ERROR,
 						                            buttons: Ext.Msg.OK
 						                        });
-										   },
+											},
 										   jsonData:{
 										       'post':{
 												   'org_parte_id':null,
