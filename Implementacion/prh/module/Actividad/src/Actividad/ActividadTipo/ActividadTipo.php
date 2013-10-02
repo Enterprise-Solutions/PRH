@@ -109,7 +109,7 @@ class ActividadTipo
                     array('name' => 'StripTags'),
                 ),
                 'validators' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 80)),
+                    array('name' => 'StringLength', 'options' => array('max' => 80, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
             'nombre' => array(
@@ -119,7 +119,7 @@ class ActividadTipo
                     array('name' => 'StripTags'),
                 ),
                 'validators' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 100)),
+                    array('name' => 'StringLength', 'options' => array('max' => 100, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
             'subtitulo' => array(
@@ -134,7 +134,7 @@ class ActividadTipo
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty'),
+                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
                     array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
                 )
             ),
@@ -146,8 +146,9 @@ class ActividadTipo
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty'),
+                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
                     array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
                 )
             ),
             'duracion' => array(
