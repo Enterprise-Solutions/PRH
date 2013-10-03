@@ -175,16 +175,18 @@ Ext.onReady(function(){
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad-tipo/index-ui';
 									   },
-									   failure: function(response, opt){
-										   var aux_mensaje = Ext.decode(response.responseText);
-										   console.log(aux_mensaje.datos);
-											Ext.MessageBox.show({
-												width: 250,
-					                            title: aux_mensaje.datos.duracion,
-					                            msg: aux_mensaje.datos.duracion.notGreaterThan,
-					                            icon: Ext.MessageBox.ERROR,
-					                            buttons: Ext.Msg.OK
-					                        });
+										failure: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   var mensaje = " ";
+												   for (error in aux_mensaje.datos) {
+					                            		mensaje = mensaje +"- "+ error +": "+aux_mensaje.datos[error]+'<br>';  
+					                                }
+												Ext.MessageBox.show({
+						                            title: aux_mensaje.mensaje,
+						                            msg: mensaje,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
 										},
 // 									   failure: function(response, opt){
 // 											  // console.log(response);

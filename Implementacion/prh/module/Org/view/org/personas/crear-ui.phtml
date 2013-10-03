@@ -404,15 +404,23 @@ Ext.onReady(function(){
 											   hide_message();
 											   window.location = baseURL+'/org/personas/index-ui';
 										   },
-										   failure: function(response, opt){
-											   var aux_mensaje = Ext.decode(response.responseText);
+	 									   failure: function(response, opt){
 												Ext.MessageBox.show({
-						                            title: aux_mensaje.status,
-						                            msg: aux_mensaje.datos,
+						                            title: 'Error de Creaci&oacute;n',
+						                            msg: response.statusText,
 						                            icon: Ext.MessageBox.ERROR,
 						                            buttons: Ext.Msg.OK
 						                        });
 											},
+// 										   failure: function(response, opt){
+// 											   var aux_mensaje = Ext.decode(response.responseText);
+// 												Ext.MessageBox.show({
+// 						                            title: aux_mensaje.status,
+// 						                            msg: aux_mensaje.datos,
+// 						                            icon: Ext.MessageBox.ERROR,
+// 						                            buttons: Ext.Msg.OK
+// 						                        });
+// 											},
 										   jsonData:{
 										       'post':{
 												   'org_parte_id':null,
@@ -489,6 +497,7 @@ Ext.onReady(function(){
 	
 				var aux_tipo = Ext.create('Ext.form.ComboBox', {
 					fieldLabel: 'Tipo Doc',
+					forceSelection: true,
 			        labelWidth: 95,
 			        padding: 15,
 			        anchor:'90%',
@@ -502,6 +511,7 @@ Ext.onReady(function(){
 				var aux_origen = Ext.create('Ext.form.ComboBox', {
 					fieldLabel: 'Origen Doc',
 			        labelWidth: 110,
+			        forceSelection: true,
 			        padding: 15,
 			        anchor:'90%',
 			        store: paisStore2,
@@ -567,6 +577,7 @@ Ext.onReady(function(){
 				var aux_lugar = Ext.create('Ext.form.ComboBox', {
 					fieldLabel: 'Lugar',
 			        xtype: 'combobox',
+			        forceSelection: true,
 			        valueField: 'dir_barrio_id',
 			        displayField: 'search',
 			        labelWidth: 90,
@@ -627,6 +638,7 @@ Ext.onReady(function(){
 						fieldLabel: 'Tipo de Contacto',
 				        labelWidth: 130,
 				        padding: 15,
+				        forceSelection: true,
 				        anchor:'90%',
 				        store: contactoTipoStore,
 				        displayField: 'nombre',
@@ -697,6 +709,7 @@ Ext.onReady(function(){
 									items: [{
 										xtype: 'combobox',
 										fieldLabel: 'Tipo Doc',
+										forceSelection: true,
 								        labelWidth: 95,
 								        padding: 15,
 								        anchor:'90%',
@@ -715,6 +728,7 @@ Ext.onReady(function(){
 									items: [{
 										xtype: 'combobox',
 										fieldLabel: 'Origen Doc',
+										forceSelection: true,
 								        labelWidth: 110,
 								        padding: 15,
 								        anchor:'90%',
@@ -780,6 +794,7 @@ Ext.onReady(function(){
 						         },{
 								        fieldLabel: 'Estado Civil',
 								        xtype: 'combobox',
+								        forceSelection: true,
 								        labelWidth: 110,
 								        padding: 15,
 								        store: estadoCivilStore,
@@ -792,6 +807,7 @@ Ext.onReady(function(){
 								  },{
 								        fieldLabel: 'Religi&oacute;n',
 								        xtype: 'combobox',
+								        forceSelection: true,
 								        labelWidth: 110,
 								        store: comboReligionStore,
 								        queryMode: 'local',
@@ -826,6 +842,7 @@ Ext.onReady(function(){
 					    	    },{
 							        fieldLabel: 'Nacionalidad',
 							        xtype: 'combobox',
+							        forceSelection: true,
 							        labelWidth: 110,
 							        store: nacionalidadStore,
 							        queryMode: 'local',
@@ -862,6 +879,7 @@ Ext.onReady(function(){
 						         },{
 								    	fieldLabel: 'Profesi&oacute;n',
 								    	xtype: 'combobox',
+								    	forceSelection: true,
 								        displayField: 'nombre',
 								        valueField: 'org_profesion_id',
 								        labelWidth: 110,
@@ -911,6 +929,7 @@ Ext.onReady(function(){
 											items: [{
 												xtype: 'combox',
 												fieldLabel: 'Lugar',
+												forceSelection: true,
 										        xtype: 'combobox',
 										        valueField: 'dir_barrio_id',
 										        displayField: 'search',
@@ -966,6 +985,7 @@ Ext.onReady(function(){
 													items: [{
 														xtype: 'combobox',
 														fieldLabel: 'Tipo de Contacto',
+														forceSelection: true,
 												        labelWidth: 130,
 												        padding: 15,
 												        anchor:'90%',

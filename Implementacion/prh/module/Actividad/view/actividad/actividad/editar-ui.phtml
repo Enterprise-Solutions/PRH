@@ -167,14 +167,18 @@ Ext.define('actividadTipo', {
 										   hide_message();
 										   window.location = baseURL+'/actividad/actividad/index-ui';
 									   },
-									   failure: function(response, opt){
-										  // console.log(response);
-											Ext.MessageBox.show({
-					                            title: 'Error de Edici&oacute;n',
-					                            msg: response.statusText,
-					                            icon: Ext.MessageBox.ERROR,
-					                            buttons: Ext.Msg.OK
-					                        });
+										failure: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   var mensaje = " ";
+												   for (error in aux_mensaje.datos) {
+					                            		mensaje = mensaje +"- "+ error +": "+aux_mensaje.datos[error]+'<br>';  
+					                                }
+												Ext.MessageBox.show({
+						                            title: aux_mensaje.mensaje,
+						                            msg: mensaje,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
 										},
 									   jsonData:{
 									       'put':{
