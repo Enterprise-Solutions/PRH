@@ -50,35 +50,36 @@ class FindDatosDePersonaParaCrearUsuarioTest extends PHPUnit_Framework_TestCase 
 	
 	public function testEjecucionDeSelect()
 	{
-		$this->_select->addSearchByOrgParteId(2);
+		/*$this->_select->addSearchByOrgParteId(2);
 		$rs = $this->_select->execute()->toArray();
-		//print_r($rs);
+		print_r($rs);*/
 	}
 	
 	public function testEjecucionDeRequisitosDePassword()
 	{
-		$rs = $this->_selectRequisitos->execute()->toArray();
+		//$rs = $this->_selectRequisitos->execute()->toArray();
 		//print_r($rs);
 	}
 	
 	public function testEjecucionDeSelectDeUsuarios()
 	{
-		$this->_selectDeUsuarios->addSearchByNombre('1284');
+		//$this->_selectDeUsuarios->addSearchByNombre('1284');
+		$this->_selectDeUsuarios->addSearchByAdmUsuarioId(8);
 		$rs = $this->_selectDeUsuarios->execute()->toArray();
-		//print_r($rs);
+		print_r($rs);
 	}
 	
 	public function testEjecucionDeSelectPersonasDisponibles()
 	{
-		$this->_selectPersonasDisponibles->addSearchByNombre('1234');
-		$rs = $this->_selectPersonasDisponibles->execute()->toArray();
+		//$this->_selectPersonasDisponibles->addSearchByNombre('1234');
+		//$rs = $this->_selectPersonasDisponibles->execute()->toArray();
 		//print_r($rs);
 	}
 	
 	public function testEjecucionDeSelectParaCrearUsuario()
 	{
-		$rs = $this->_selectParaCrearUsuario->execute()->toArray();
-		print_r($rs);
+		//$rs = $this->_selectParaCrearUsuario->execute()->toArray();
+		//print_r($rs);
 	}
 }
 
