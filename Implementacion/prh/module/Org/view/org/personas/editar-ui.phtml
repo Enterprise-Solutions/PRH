@@ -437,10 +437,10 @@ Ext.onReady(function(){
 		var editarDoc = function (id, valor, tipo, origen)
 		{	
 				id_edit_doc++;
-				doc_edit_name = 'doc_e'+id_edit_doc;
-				doc_edit_nro = 'nro_e'+id_edit_doc;
-				doc_edit_tipo = 'tipo_e'+id_edit_doc;
-				doc_edit_origen = 'origen_e'+id_edit_doc;
+				var doc_edit_name = 'doc_e'+id_edit_doc;
+				var doc_edit_nro = 'nro_e'+id_edit_doc;
+				var doc_edit_tipo = 'tipo_e'+id_edit_doc;
+				var doc_edit_origen = 'origen_e'+id_edit_doc;
 						
 				var paisStore = Ext.create('Ext.data.Store', {
 					model: 'Pais',
@@ -516,8 +516,8 @@ Ext.onReady(function(){
 			    	        value: id,
 			    	        name: doc_edit_name,
 						});
-						
-						if (id_edit_doc == 1){
+
+						if (doc_edit_name == 'doc_e1'){
 								var aux_button = Ext.create('Ext.Button', {
 									  margin: '13 5 0 5',
 						 	    	  scale: 'medium',
@@ -638,9 +638,9 @@ Ext.onReady(function(){
 		var editarUbic = function (id, direccion, lugar)
 		{	
 				id_edit_ubic++;
-				ubic_edit_name = 'ubic_e'+id_edit_ubic;
-				ubic_edit_dir = 'dir_e'+id_edit_ubic;
-				ubic_edit_lug = 'lug_e'+id_edit_ubic;
+				var ubic_edit_name = 'ubic_e'+id_edit_ubic;
+				var ubic_edit_dir = 'dir_e'+id_edit_ubic;
+				var ubic_edit_lug = 'lug_e'+id_edit_ubic;
 	
 				var comboLugarStore = Ext.create('Ext.data.Store', {
 					model: 'lugar',
@@ -660,6 +660,33 @@ Ext.onReady(function(){
 
 				comboLugarStore.load({
 					callback: function(records, operation, success) {
+						
+							if (ubic_edit_name == 'ubic_e1'){
+								var aux_button = Ext.create('Ext.Button', {
+									  margin: '13 5 0 5',
+						 	    	  scale: 'medium',
+						 	    	  style:'background-color: #C8CED8; border:none',
+						 	    	  icon: baseURL+'/img/icons/grid/add3.png',
+									  handler:function(){ 
+										  crearUbic();
+									  }
+								});
+							}else{
+								var aux_button = Ext.create('Ext.Button', {
+									  margin: '13 5 0 5',
+						 	    	  scale: 'medium',
+						 	    	  style:'background-color: #C8CED8; border:none',
+						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
+									  handler:function() {
+											ubic_delete.push(id);
+											console.log(ubic_delete);
+											Ext.getCmp('ubic_direccion').remove(aux_direccion);
+											Ext.getCmp('ubic_lugar').remove(aux_lugar);
+											Ext.getCmp('ubic_button').remove(aux_button);
+											Ext.getCmp('ubic_id').remove(aux_id);
+									  }
+								});
+							}
 							var aux_direccion = Ext.create('Ext.form.TextField', {
 								fieldLabel: 'Direcci&oacute;n',
 								labelwidth: 40,
@@ -697,32 +724,6 @@ Ext.onReady(function(){
 				    	        name: ubic_edit_name,
 							});
 							
-							if (id_edit_ubic == 1){
-								var aux_button = Ext.create('Ext.Button', {
-									  margin: '13 5 0 5',
-						 	    	  scale: 'medium',
-						 	    	  style:'background-color: #C8CED8; border:none',
-						 	    	  icon: baseURL+'/img/icons/grid/add3.png',
-									  handler:function(){ 
-										  crearUbic();
-									  }
-								});
-							}else{
-								var aux_button = Ext.create('Ext.Button', {
-									  margin: '13 5 0 5',
-						 	    	  scale: 'medium',
-						 	    	  style:'background-color: #C8CED8; border:none',
-						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
-									  handler:function() {
-											ubic_delete.push(id);
-											console.log(ubic_delete);
-											Ext.getCmp('ubic_direccion').remove(aux_direccion);
-											Ext.getCmp('ubic_lugar').remove(aux_lugar);
-											Ext.getCmp('ubic_button').remove(aux_button);
-											Ext.getCmp('ubic_id').remove(aux_id);
-									  }
-								});
-							}
 							Ext.getCmp('ubic_direccion').add(aux_direccion);
 							Ext.getCmp('ubic_lugar').add(aux_lugar);
 							Ext.getCmp('ubic_button').add(aux_button);
@@ -807,9 +808,9 @@ Ext.onReady(function(){
 		var editarCont = function (id, tipo, contacto)
 		{		
 				id_edit_cont++;
-				cont_edit_name = 'cont_e'+id_edit_cont;
-				cont_edit_valor = 'valor_e'+id_edit_cont;
-				cont_edit_tipo = 'tip_e'+id_edit_cont;
+				var cont_edit_name = 'cont_e'+id_edit_cont;
+				var cont_edit_valor = 'valor_e'+id_edit_cont;
+				var cont_edit_tipo = 'tip_e'+id_edit_cont;
 	
 				var contactoTipoStore = Ext.create('Ext.data.Store', {
 					model: 'contactoTipo',
@@ -857,7 +858,7 @@ Ext.onReady(function(){
 				    	        name: cont_edit_name,
 							});
 							
-							if (id_edit_cont == 1){
+							if (cont_edit_name == 'cont_e1'){
 								var aux_button = Ext.create('Ext.Button', {
 									  margin: '13 5 0 5',
 						 	    	  scale: 'medium',
@@ -999,11 +1000,11 @@ Ext.onReady(function(){
 							var aux_doc_edit_origen = 'origen_e'+i;
 
 							 if (valoresForm[aux_doc_edit_nro]){
-				           		var elemento = {"org_documento_id": valoresForm[aux_doc_edit_name], 
+				           		var elemento1 = {"org_documento_id": valoresForm[aux_doc_edit_name], 
 						           		"org_documento_tipo_codigo": valoresForm[aux_doc_edit_tipo], 
 						           		"preferencia": i, "dir_pais_id": valoresForm[aux_doc_edit_origen], 
 						           		"valor": valoresForm[aux_doc_edit_nro]};
-				           		editarDoc.push(elemento);
+				           		editarDoc.push(elemento1);
 							 }
 			           	} 
 			           	
@@ -1015,10 +1016,10 @@ Ext.onReady(function(){
 							var aux_doc_add_origen = 'origen_a'+i;
 							
 							 if (valoresForm[aux_doc_add_nro]){
-				           		var elemento = {"org_documento_tipo_codigo": valoresForm[aux_doc_add_tipo], 
+				           		var elemento11 = {"org_documento_tipo_codigo": valoresForm[aux_doc_add_tipo], 
 						           		"preferencia": i, "dir_pais_id": valoresForm[aux_doc_add_origen], 
 						           		"valor": valoresForm[aux_doc_add_nro]};
-				           		agregarDoc.push(elemento);
+				           		agregarDoc.push(elemento11);
 							 }
 			           	}
 
@@ -1047,10 +1048,10 @@ Ext.onReady(function(){
 							var aux_ubic_edit_lug = 'lug_e'+j;
 
 							if (valoresForm[aux_ubic_edit_dir]){
-					           		var elemento2 = {"dir_direccion_id":valoresForm[aux_ubic_edit_name], 
+					           		var elemento22 = {"dir_direccion_id":valoresForm[aux_ubic_edit_name], 
 							           				"direccion": valoresForm[aux_ubic_edit_dir], 
 							           				"dir_barrio_id": valoresForm[aux_ubic_edit_lug]};
-					           		editarUbic.push(elemento2);
+					           		editarUbic.push(elemento22);
 							}
 			           	} 
 
@@ -1079,11 +1080,11 @@ Ext.onReady(function(){
 							var aux_cont_edit_valor = 'valor_e'+k;
 
 							if (valoresForm[aux_cont_edit_valor]){
-					           		var elemento3 = {
+					           		var elemento33 = {
 					           						"org_contacto_id": valoresForm[aux_cont_edit_name], 
 							           				"org_contacto_tipo_codigo": valoresForm[aux_cont_edit_tipo], 
 							           				"contacto":valoresForm[aux_cont_edit_valor]};
-					           		editarCont.push(elemento3);
+					           		editarCont.push(elemento33);
 							}
 			           	} 
 
