@@ -19,6 +19,8 @@
 
 			var auxnombre = null;
 			var auxestado = null;
+			var auxpersona = null;
+			var auxdocumento = null;
 	
 			var itemsPorPagina = 11;
 			var page = 0;
@@ -78,6 +80,29 @@ Ext.onReady(function(){
 			]
 		});
 
+		Ext.define('documento', {
+			extend: 'Ext.data.Model',
+			fields: [{
+					type: 'int',
+					name: 'org_documento_id'
+				},{
+					type: 'string',
+					name: 'valor'
+				},{
+					type: 'string',
+					name: 'tipo'
+				},{
+					type: 'string',
+					name: 'pais'
+				},{
+		            name: 'mostrar', 
+		            convert: function (v, rec) {
+		               return rec.get('valor') + ', ' + rec.get('tipo') +' / '+rec.get('pais');
+		            }
+		        }
+			]
+		});
+		
 		var estadoStore = Ext.create('Ext.data.Store', {
 		    fields: ['id', 'nombre'],
 		    data : [
@@ -125,6 +150,25 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 
+		var documentoStore = Ext.create('Ext.data.Store', {
+			model: 'documento',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": 'all',
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/adm/usuario/documentos',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: false
+		});
+
 		function agregarwindow() {
 			 
             var form = Ext.widget('form', {
@@ -158,11 +202,40 @@ Ext.onReady(function(){
                     labelWidth: 120,
                     width: 400,  
                     allowBlank: false,
-                    name: 'per_id',   
+                    name: 'per_id',
+                    listeners: {
+    		            select:{
+    		                fn:function(combo, value) {
+    		                	auxpersona = this.getValue();
+    		                	documentoStore.load({
+    									params: {
+    										"p[limit]": 'all',
+    										"s[org_parte_id]": auxpersona	 		
+    							   		} 
+    			             	});
+    		                	//auxdocumento = documentoStore.getAt(0).get('org_documento_id');
+    		                	//Ext.getCmp('documento').setValue(auxdocumento);
+    		                }
+    		            },
+    		        }   
+                },{
+                    xtype: 'combobox',
+                	fieldLabel: 'Documento',
+    		        name: 'documento',
+    		        displayField: 'mostrar',
+    		        valueField: 'org_documento_id',
+    		        autoSelect: true,
+    		        width: 400,
+    		        forceSelection: true,
+    		        labelWidth: 120,
+    		        store: documentoStore,
+    		        queryMode: 'local',
+    		        typeAhead: true,
                 },{
                     xtype: 'combobox',
                 	fieldLabel: 'Estado',
     		        name: 'estado',
+    		        forceSelection: true,
     		        displayField: 'nombre',
     		        valueField: 'id',
     		        value: 'A',
@@ -213,12 +286,27 @@ Ext.onReady(function(){
 								   Ext.getCmp('filtros').up('form').getForm().reset();
 								   auxnombre = null;
 								   auxestado = null;
+								   auxpersona = null;
 								   usuariosStore.load();
 							   },
+							   failure: function(response, opt){
+								   var aux_mensaje = Ext.decode(response.responseText);
+								   var mensaje = " ";
+									   for (error in aux_mensaje.datos) {
+		                            		mensaje = mensaje +"- "+aux_mensaje.datos[error]+'<br>';  
+		                                }
+									Ext.MessageBox.show({
+			                            title: aux_mensaje.mensaje,
+			                            msg: mensaje,
+			                            icon: Ext.MessageBox.ERROR,
+			                            buttons: Ext.Msg.OK
+			                        });
+								},
 							   jsonData:{
 							       'post':{
 									   'org_parte_id': valoresForm.per_id,
 									   'estado': valoresForm.estado,
+									   'org_documento_id': valoresForm.documento,
 									   'contrasenha': valoresForm.contrasenha,
 									   'confirmacion': valoresForm.confirmacion
 							       }
@@ -239,7 +327,7 @@ Ext.onReady(function(){
                 title: 'Crear Usuario',
                 closeAction: 'hide',
                 width: 500,
-                height: 300,
+                height: 350,
                 layout: 'fit',
                 resizable: true,
                 modal: true,
@@ -271,6 +359,18 @@ Ext.onReady(function(){
                             width: 400,  
                             allowBlank: false,
                             name: 'nombre_edit',   
+                       },{
+	                        xtype: 'combobox',
+	                       	fieldLabel: 'Documento',
+	           		        name: 'estado_edit',
+	           		        displayField: 'nombre',
+	           		        valueField: 'id',
+	           		        value: estado_edit,
+	           		        width: 400,
+	           		        labelWidth: 120,
+	           		        store: estadoStore,
+	           		        queryMode: 'local',
+	           		        typeAhead: true,
                        },{
 	                        xtype: 'combobox',
 	                       	fieldLabel: 'Estado',
