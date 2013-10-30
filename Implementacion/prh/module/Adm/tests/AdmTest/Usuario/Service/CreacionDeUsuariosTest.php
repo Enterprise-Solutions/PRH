@@ -43,7 +43,7 @@ class CreacionDeUsuariosTest extends PHPUnit_Framework_TestCase {
 	
 	public function testCreacionDeUsuario()
 	{
-		$params = array('org_parte_id' => 5,'contrasenha' => 'JaJa_123','confirmacion' => 'JaJa_123','estado' => 'A');
+		$params = array('org_parte_id' => 5,'org_documento_id' => 5,'contrasenha' => 'Hola@123','confirmacion' => 'Hola@123','estado' => 'A');
 		$rs = $this->_service->ejecutar($params);
 		print_r($rs);
 	}

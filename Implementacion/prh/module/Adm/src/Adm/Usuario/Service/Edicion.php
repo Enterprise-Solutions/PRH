@@ -33,23 +33,27 @@ class Edicion
 		if(!$admUsuario){
 			Thrower::throwValidationException("Error de validacion",array('No se ha encontrado el usuario'));
 		}
+		$validadores = array();
+		$validacion = new Validacion();
+		
 		if(isset($params['contrasenha'])){
-			$validacion = new Validacion();
 			$validadores = $validacion->crearValidadorDeContrasenhaYConfirmacion($this->_repository->getRequisitosDePassword());
-			$resultado = array_reduce(
-					$validadores,
-					function($resultado,$validador) use($params){
-						$resultado = $validador($params,$resultado);
-						return $resultado;
-					},
-					array(
-							'valido' => true,
-							'mensajes' => array()
-					)
-			);
-			if(!$resultado['valido']){
-				Thrower::throwValidationException('Error de validacion',$resultado['mensajes']);
-			}
+		}
+		$validadores[] = $validacion->crearValidadorDeDocumento($admUsuario['documentos_de_usuario']);
+		
+		$resultado = array_reduce(
+				$validadores,
+				function($resultado,$validador) use($params){
+					$resultado = $validador($params,$resultado);
+					return $resultado;
+				},
+				array(
+						'valido' => true,
+						'mensajes' => array()
+				)
+		);
+		if(!$resultado['valido']){
+			Thrower::throwValidationException('Error de validacion',$resultado['mensajes']);
 		}
 	}
 	

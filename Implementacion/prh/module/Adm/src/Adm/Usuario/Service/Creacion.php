@@ -20,6 +20,7 @@ class Creacion
 	 * @param array $params
 	 * {
 	 *  org_parte_id,
+	 *  org_documento_id,
 	 *  contrasenha,
 	 *  confirmacion,
 	 * }
@@ -51,6 +52,7 @@ class Creacion
 		$validacion = new Validacion();
 		$validadores = array();
 		$validadores[] = $validacion->crearValidadorDePersona();
+		$validadores[] = $validacion->crearValidadorDeDocumento();
 		$validadores = array_merge(
 				$validadores,
 				$validacion->crearValidadorDeContrasenhaYConfirmacion($this->_repository->getRequisitosDePassword())

@@ -4,6 +4,7 @@ namespace Adm\Usuario\Service\Creacion;
 
 class Validacion
 {
+	
 	public function crearValidadorDePersona()
 	{
 		return function($params,$resultado){
@@ -19,10 +20,25 @@ class Validacion
 		};
 	}
 	
+	public function crearValidadorDeDocumento($documentosDeUsuario = null)
+	{
+		return function($params,$resultado) use($documentosDeUsuario){
+			if(!$documentosDeUsuario){
+				$documentosDeUsuario = $params['documentos_de_usuario'];
+			}
+			$documentos = explode(",", $documentosDeUsuario);
+			if(!in_array($params['org_documento_id'], $documentos)){
+				$resultado['valido'] = false;
+				$resultado['mensajes'][] = 'La persona no tiene registrado el documento';
+			};
+			return $resultado;
+		};
+	}
+	
 	public function crearValidadorDeContrasenhaYConfirmacion($requisitos)
 	{
 		$validadores = array();
-		if($requisitos['longitud_minima']){
+		if(isset($requisitos['longitud_minima'])){
 			$validadores[] = $this->_crearValidadorDeLongitudMinima($requisitos['longitud_minima'], 'contrasenha');
 		}
 		if($requisitos['tiene_mayusculas']){

@@ -43,16 +43,16 @@ class EdicionDeUsuariosTest extends PHPUnit_Framework_TestCase {
 		// TODO Auto-generated constructor
 	}
 	
-	/*public function testEditar()
+	public function testEditar()
 	{
-		$resultados = $this->_service->ejecutar(array('adm_usuario_id' => 5,'estado' => 'A','contrasenha' => 'Vilma@2013','confirmacion' => 'Vilma@2013'));
+		$resultados = $this->_service->ejecutar(array('adm_usuario_id' => 8,'org_documento_id' => 5,'estado' => 'A','contrasenha' => 'Hola@2013','confirmacion' => 'Hola@2013'));
 		print_r($resultados);
-	}*/
+	}
 	
 	public function testBorrado()
 	{
-		$resultados = $this->_borrado->ejecutar(array(2,5));
-		print_r($resultados);
+		/*$resultados = $this->_borrado->ejecutar(array(2,5));
+		print_r($resultados);*/
 	}
 }
 

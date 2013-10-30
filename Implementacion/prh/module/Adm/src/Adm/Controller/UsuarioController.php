@@ -12,6 +12,7 @@ use Adm\Usuario\Service\Edicion;
 use Adm\Usuario\Service\Borrado;
 use Adm\Usuario\Repository;
 use EnterpriseSolutions\Db\Dao\Get as GetDao;
+use Adm\Usuario\Service\DocumentosParaLogin\Select as SelectDeDocumentos;
 class UsuarioController extends BaseController
 {
 	public function indexAction()
@@ -25,6 +26,14 @@ class UsuarioController extends BaseController
 	public function personasDisponiblesAction()
 	{
 		$select = new SelectDePersonasDisponibles($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+		$dao = new Dao($select);
+		$template = $this->_crearTemplateParaListado();
+		return $template($dao,array(),array());
+	}
+	
+	public function documentosAction()
+	{
+		$select = new SelectDeDocumentos($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
 		$dao = new Dao($select);
 		$template = $this->_crearTemplateParaListado();
 		return $template($dao,array(),array());
