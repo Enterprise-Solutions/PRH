@@ -24,7 +24,7 @@ class Validacion
 	{
 		return function($params,$resultado) use($documentosDeUsuario){
 			if(!$documentosDeUsuario){
-				$documentosDeUsuario = $params['documentos_de_usuario'];
+				$documentosDeUsuario = $params['documentos'];
 			}
 			$documentos = explode(",", $documentosDeUsuario);
 			if(!in_array($params['org_documento_id'], $documentos)){
