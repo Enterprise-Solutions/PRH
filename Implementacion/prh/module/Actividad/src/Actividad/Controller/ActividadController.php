@@ -7,10 +7,13 @@ use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
 
 use Actividad\Actividad\QueryObject\Select;
+use Actividad\Actividad\QueryObject\Formadores;
+use Actividad\Actividad\QueryObject\Participantes;
 use Actividad\Actividad\QueryObject\Get;
 use Actividad\Actividad\Service\Crear as CrearActividadService;
 use Actividad\Actividad\Service\Editar as EditarActividadService;
 use Actividad\Actividad\Service\Eliminar as EliminarActividadService;
+use Actividad\Actividad\Service\AsociarFormador as AsociarFormadorService;
 
 class ActividadController extends BaseController
 {
@@ -64,6 +67,39 @@ class ActividadController extends BaseController
         $this->getEntityManager()->flush();
         
         return $this->toJson($service->getRespuesta());
+    }
+    
+    public function asociarFormadorAction()
+    {
+        /*$em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParams();
+        
+        $service = new AsociarFormadorService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());*/
+    }
+    
+    public function asociarParticipanteAction()
+    {
+        
+    }
+    
+    public function formadoresAction($overwritedParams = array())
+    {
+        $select = new Formadores($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao = new Dao($select);
+        $template = $this->_crearTemplateParaListado();
+        return $template($dao, array(), $overwritedParams);
+    }
+    
+    public function participantesAction($overwritedParams = array())
+    {
+        $select = new Participantes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao = new Dao($select);
+        $template = $this->_crearTemplateParaListado();
+        return $template($dao, array(), $overwritedParams);
     }
     
     protected function toJson($respuesta)
