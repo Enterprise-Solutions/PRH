@@ -3,11 +3,11 @@
 namespace Actividad\Actividad\Service;
 
 use Actividad\Actividad\Actividad;
-use Actividad\Actividad\Formador;
+use Actividad\Actividad\Participante;
 use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Exceptions\Thrower;
 
-class AsociarFormador
+class AsociarParticipante
 {
     /**
      * Doctrine Entity Manager
@@ -23,17 +23,17 @@ class AsociarFormador
     public function ejecutar($data)
     {
         $actividad = $this->getActividad($data);
-        $formador  = $this->getFormador($data);
-        $this->asignarFormador($actividad, $formador);
+        $participante = $this->getParticipante($data);
+        $this->asignarParticipante($actividad, $participante);
     }
     
-    protected function asignarFormador($actividad, $formador)
+    protected function asignarParticipante($actividad, $participante)
     {
-        $formadorDeActividad = new Formador();
-        $formadorDeActividad->setActividad($actividad);
-        $formadorDeActividad->setFormador($formador);
+        $participanteDeActividad = new Participante();
+        $participanteDeActividad->setActividad($actividad);
+        $participanteDeActividad->setParticipante($participante);
         
-        $this->em->persist($formadorDeActividad);
+        $this->em->persist($participanteDeActividad);
     }
     
     protected function getActividad($data)
@@ -46,10 +46,10 @@ class AsociarFormador
         return $actividad;
     }
     
-    protected function getFormador($data)
+    protected function getParticipante($data)
     {
         if (!isset($data['org_parte_rol_id'])) {
-            Thrower::throwValidationException('Error de Validacion', array('No se recibio el dato del formador'));
+            Thrower::throwValidationException('Error de Validacion', array('No se recibio el dato del participante'));
         }
         
         $formador = $this->em->find('Org\Rol\RolDeParte', $data['org_parte_rol_id']);
