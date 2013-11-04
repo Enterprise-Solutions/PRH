@@ -39,7 +39,7 @@ class AsociarFormador
     protected function getActividad($data)
     {
         if (!isset($data['act_actividad_id'])) {
-            Thrower::throwValidationException('Actividad no especificada');
+            Thrower::throwValidationException('Error de Validacion', array('Actividad no especificada'));
         }
         
         $actividad = $this->em->find('Actividad\Actividad\Actividad', $data['act_actividad_id']);
@@ -49,7 +49,7 @@ class AsociarFormador
     protected function getFormador($data)
     {
         if (!isset($data['org_parte_rol_id'])) {
-            Thrower::throwValidationException('No se recibio el dato del formador');
+            Thrower::throwValidationException('Error de Validacion', array('No se recibio el dato del formador'));
         }
         
         $formador = $this->em->find('Org\Rol\RolDeParte', $data['org_parte_rol_id']);

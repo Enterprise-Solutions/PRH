@@ -11,7 +11,10 @@ use Actividad\Actividad\Service\Crear as CrearActividadService;
 use Actividad\Actividad\Service\Editar as EditarActividadService;
 use Actividad\Actividad\Service\Eliminar as EliminarActividadService;
 use Actividad\Actividad\Service\AsociarFormador as AsociarFormadorService;
+use Actividad\Actividad\Service\DesasociarFormador as DesasociarFormadorService;
 use Actividad\Actividad\Service\AsociarParticipante as AsociarParticipanteService;
+use Actividad\Actividad\Service\DesasociarParticipante as DesasociarParticipanteService;
+use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
@@ -92,7 +95,14 @@ class ActividadController extends BaseController
     
     public function desasociarFormadorAction()
     {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParams();
         
+        $service = new DesasociarFormadorService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
     }
     
     public function asociarParticipanteAction()
@@ -109,7 +119,14 @@ class ActividadController extends BaseController
     
     public function desasociarParticipanteAction()
     {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParams();
         
+        $service = new DesasociarParticipanteService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
     }
     
     public function formadoresAction($overwritedParams = array())
@@ -138,6 +155,9 @@ class ActividadController extends BaseController
         return $viewModel;
     }
     
+    /**
+     * @return EntityManager
+     */
     protected function getEntityManager()
     {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
