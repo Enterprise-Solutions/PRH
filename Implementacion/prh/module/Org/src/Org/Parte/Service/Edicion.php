@@ -18,12 +18,15 @@ use Org\Direccion\Factory as dirFactory;
 use Org\Direccion\Repository as dirRepository;
 use Org\Direccion\Service as dirService;
 
+use Org\Profesion\Service as profService;
+use Org\Profesion\Repository as profRepository;
+
 
 class Edicion
 {
 	public $_em;
 	public $_docFactory;
-	public $_repository,$_docRepository;
+	public $_repository,$_docRepository,$_dirRepository,$_profRepository;
 	public function __construct(EntityManager $em,Adapter $adapter = null)
 	{
 		$this->_repository = new Repository($em,$adapter);
@@ -35,6 +38,8 @@ class Edicion
 		
 		$this->_dirFactory = new dirFactory();
 		$this->_dirRepository = new dirRepository($em);
+		
+		$this->_profRepository = new profRepository($em);
 	}
 	
 	/**
@@ -91,6 +96,16 @@ class Edicion
 		$service = new dirService($this->_dirFactory,$this->_dirRepository);
 		$service->ejecutar($datos);
 		$this->_respuesta['Direcciones'] = $service->getRespuesta();
+	}
+	
+	public function _mantenerProfesionesDeParte($datos)
+	{
+		if(!isset($datos['Profesiones'])){
+			return;
+		}
+		$service = new profService($this->_profRepository);
+		$service->ejecutar($datos);
+		$this->_respuesta['Profesiones'] = $service->getRespuesta();
 	}
 	
 	public function _setRespuesta($parte)

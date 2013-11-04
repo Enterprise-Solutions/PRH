@@ -86,6 +86,30 @@ class Dao extends EsDao
 				$record['Direcciones'] = $direcciones;
 				return $record;
 				
+				if(!$record['Profesiones']){
+					//$record['Direcciones'] = '';
+					//return $record;
+					$profesiones = array();
+				}else{
+					$profesiones = explode(';*', $record['Profesiones']);
+				}
+				//$contactos = explode(';', $record['Direcciones']);
+				$profesiones = array_map(
+						function($documentoString){
+							$keyValueTokens = explode(",!",$documentoString);
+							$documento = array();
+							foreach($keyValueTokens as $token){
+								//$tokens = explode(':', $keyValueToken);
+								list($key,$value) = explode(':', $token);
+								//$documento[$key] = ($key == 'org_documento_id')?(integer)$value:$value;
+								$documento[$key] = (in_array($key, array('org_profesion_id')))?(integer)$value:$value;
+							}
+							return $documento;
+						},
+						$profesiones);
+				$record['Profesiones'] = $profesiones;
+				return $record;
+				
 			}, 
 			$this->_paginator->execute()->toArray()
 		);

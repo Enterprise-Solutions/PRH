@@ -24,6 +24,7 @@
 			var page = 0;
 
 			var aux;
+			var prof;
 			
 			var id_edit_doc = 0;
 			var doc_edit_name = 'doc_e'+id_edit_doc;
@@ -949,7 +950,7 @@ Ext.onReady(function(){
 								}							
 							}
 							continue;
-		    			}	
+		    			}
 				    	var name = form.findField(campo);
 				    		if (name) {
 						    	if (campo == "fecha_nacimiento")
@@ -959,10 +960,13 @@ Ext.onReady(function(){
 				 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
 				 			    	campos[campo] = result;
 				 			    	name.setValue(campos[campo]);
-				 			    	console.log(campos[campo]);
-							    }else{					    
-								    	name.setValue(campos[campo]);
-								    	//console.log(campo);
+							    }else if (campo == "Profesiones")
+						    	{
+							    	var profs = (campos[campo]);
+						    		prof = profs[0].org_profesion_id;
+						    		name.setValue(prof);
+							    }else {					    
+							    	name.setValue(campos[campo]);
 						    	}	
 						    }	
 			    	}
@@ -987,7 +991,7 @@ Ext.onReady(function(){
 			        	var auxreligion = valoresForm.org_religion_id;
 			        	var auxestado_civil = valoresForm.org_estado_civil_id;
 			        	var auxhijos = valoresForm.nro_hijos;
-			        	var auxprofesion = valoresForm.org_profesion_id;
+			        	var auxprofesion = valoresForm.Profesiones;
 						
 			        	
 			        	var editarDoc = [];
@@ -1088,6 +1092,15 @@ Ext.onReady(function(){
 							}
 			           	} 
 
+			           	var agregarProf = [];
+			           	var borrarProf = [];
+
+						if (prof != auxprofesion){
+							var elemento4 = { "org_profesion_id": auxprofesion};
+	           				agregarProf.push(elemento4);
+	           				borrarProf.push(prof);	
+						};
+           				
 						Ext.Ajax.request({
 							   url: baseURL + '/org/personas/editar',
 							   success: function(response, opt){
@@ -1103,7 +1116,7 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   window.location = baseURL+'/org/personas/index-ui';
+								   //window.location = baseURL+'/org/personas/index-ui';
 							   },
 							   failure: function(response, opt){
 									Ext.MessageBox.show({
@@ -1130,7 +1143,7 @@ Ext.onReady(function(){
 									   'apellido': auxapellido,
 									   'nro_hijos': auxhijos,
 									   'genero': auxgenero,
-									   'org_profesion_id': profesion,
+									   'Profesiones': {'agregados':agregarProf, 'borrados': borrarProf},
 									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
 									   'nacionalidad_persona': auxnacionalidad,
 									   'org_religion_id': auxreligion,
@@ -1340,7 +1353,7 @@ Ext.onReady(function(){
 											        padding: 15,
 										 	        anchor:'90%',
 											        allowBlank: true,
-											        name: 'org_profesion_id',	  
+											        name: 'Profesiones',	  
 									    	    }
 								    		]
 								    	}]},{
