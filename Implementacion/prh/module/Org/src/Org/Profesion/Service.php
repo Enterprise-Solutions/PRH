@@ -34,7 +34,7 @@ class Service
 				)),
 				$datos
 		);
-		$parte = $datos['parte'];
+		$parte = $datos['org_parte'];
 		$datosDeProfesiones = $datos['Profesiones'];
 		$profesiones  = $this->_repository->findProfesionesDeParte($parte);
 		
@@ -55,7 +55,9 @@ class Service
 		$profesiones = f\removerElementos($profesiones, $borrados, f\crearGetElementoIdFunction());
 		$this->_repository->persistir($agregados);
 		//$this->_repository->persistir($editados);
-		$this->_repository->borrar($borrados);
+		if($borrados){
+			$this->_repository->borrar($borrados);
+		}
 		$this->_setRepuesta($agregados,/*$editados,*/$borrados);
 	}
 	

@@ -24,6 +24,11 @@ class Profesion
 	protected $org_profesion_id;
 	
 	/**
+	 * @Orm\Column(name="org_parte_id")
+	 */
+	protected $orgParteId;
+	
+	/**
 	 * @var Parte
 	 * @Orm\OneToOne(targetEntity="Org\Parte\Parte")
 	 * @Orm\JoinColumn(name="org_parte_id",referencedColumnName="org_parte_id")

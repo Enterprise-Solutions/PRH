@@ -20,7 +20,7 @@ class Repository
 	{
 		$profesiones = $this->_em
 							->getRepository('Org\Profesion\Profesion')
-							->findBy(array('org_parte_id' => $parte->getId()));
+							->findBy(array('orgParteId' => $parte->getId()));
 		return $profesiones;
 	}
 	
