@@ -46,7 +46,7 @@ class CreacionTest extends PHPUnit_Framework_TestCase {
 			'Direcciones' => array('editados' => array(array('direccion' => 'Rio Pilcomayo 645','dir_barrio_id' => 1)))			
 		);*/
 		$datos = array('org_parte_id' => 2,
-				'Profesiones' => array('agregados' => array(array('org_profesion_id' => 2)))
+				'Profesiones' => array('agregados' => array(array('org_profesion_id' => 20)),'borrados' => array(3))
 		);
 		$parte = $this->_service->ejecutar($datos);
 		$this->assertInstanceOf('Org\Parte\Persona\Persona', $parte);

@@ -35,4 +35,15 @@ class Repository
 		);
 		//return array_map($this->_em->persist($entidad);
 	}
+	
+	public function borrar($entidades)
+	{
+		$em = $this->_em;
+		return array_map(
+				function($entidad) use ($em){
+					$em->remove($entidad);
+					return $entidad;
+				}, $entidades
+		);
+	}
 }

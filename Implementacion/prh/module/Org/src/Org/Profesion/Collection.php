@@ -53,7 +53,7 @@ function crearGetElementoFunction($idIndex,$elementos){
 }
 
 function crearGetElementoIdFunction($method = "getId"){
-	return function($elemento){
+	return function($elemento) use($method){
 		return $elemento->{$method}();
 	};
 }
