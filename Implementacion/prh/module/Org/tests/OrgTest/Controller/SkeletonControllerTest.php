@@ -4,7 +4,8 @@ use Org\Rol\RolDeParte;
 
 use OrgTest\Bootstrap;
 use PHPUnit_Framework_TestCase;
-use Org\Controller\RolesDePartesController;
+//use Org\Controller\RolesDePartesController;
+use Org\Controller\EstadoCivilController;
 use Zend\Http\Request,Zend\Http\Response,Zend\Mvc\MvcEvent,Zend\Mvc\Router\RouteMatch;
 //require_once 'PHPUnit/Framework/TestCase.php';
 
@@ -27,10 +28,10 @@ class SkeletonControllerTest extends PHPUnit_Framework_TestCase {
 		$serviceManager = Bootstrap::getServiceManager();
 		//$serviceManager->setInvokableClass('submitParams','EnterpriseSolutions\Controller\Plugin\SubmitParams');
 		
-		$this->controller = new RolesDePartesController();
+		$this->controller = new EstadoCivilController();
 		$this->controller->getPluginManager()->setInvokableClass('submitParams', 'EnterpriseSolutions\Controller\Plugin\SubmitParams');
 		$this->request = new Request();
-		$this->routeMatch = new RouteMatch(array('controller' => 'roles-de-partes'));
+		$this->routeMatch = new RouteMatch(array('controller' => 'estado-civil'));
 		$this->event = new MvcEvent();
 		$this->event->setRouteMatch($this->routeMatch);
 		$this->controller->setEvent($this->event);
@@ -82,7 +83,7 @@ class SkeletonControllerTest extends PHPUnit_Framework_TestCase {
 		print_r($result);
 	}*/
 	
-	public function testDesactivarRolesDePartes()
+	/*public function testDesactivarRolesDePartes()
 	{
 		$this->routeMatch->setParam('action', 'desactivar');
 		$this->request->setMethod('post');
@@ -90,7 +91,7 @@ class SkeletonControllerTest extends PHPUnit_Framework_TestCase {
 		$this->request->setContent('{"post":[1,2]}');
 		$result = $this->controller->dispatch($this->request);
 		print_r($result);
-	}
+	}*/
 	
 	/*public function testBorrar()
 	{
@@ -107,5 +108,15 @@ class SkeletonControllerTest extends PHPUnit_Framework_TestCase {
 		$result = $this->controller->dispatch($this->request);
 		print_r($result);
 	}*/
+	
+	public function testPostEstadoCivil()
+	{
+		$this->routeMatch->setParam('action', 'delete');
+		$this->request->setMethod('delete');
+		$this->request->getHeaders()->addHeaderLine('Content-Type','application/json');
+		$this->request->setContent('{"delete":[8,9,10,11]}');
+		$result = $this->controller->dispatch($this->request);
+		print_r($result);
+	}
 }
 

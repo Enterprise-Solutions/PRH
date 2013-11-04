@@ -26,7 +26,7 @@ class DocumentosServiceTest extends PHPUnit_Framework_TestCase {
 		$sm = Bootstrap::getServiceManager();
 		$em = $sm->get('doctrine.entitymanager.orm_default');
 		$repoDePartes = new repoDePartes($em);
-		$this->_parte = $repoDePartes->get(42);
+		$this->_parte = $repoDePartes->get(1);
 		$repository = new Repository($em);
 		$factory = new Factory($repository);
 		$this->_service = new Service($factory,$repository);
@@ -48,7 +48,7 @@ class DocumentosServiceTest extends PHPUnit_Framework_TestCase {
 		// TODO Auto-generated constructor
 	}
 	
-	public function testBorrarDocumentos()
+	/*public function testBorrarDocumentos()
 	{
 		$datos = array(
 			'org_parte' => $this->_parte,
@@ -65,7 +65,7 @@ class DocumentosServiceTest extends PHPUnit_Framework_TestCase {
 		$this->assertTrue(isset($respuesta['borrados']));
 		$this->assertCount(1,$respuesta['borrados']);
 		$this->_service->_docRepository->_em->flush();
-	}
+	}*/
 	
 	public function testEditarDocumentos()
 	{
@@ -87,22 +87,22 @@ class DocumentosServiceTest extends PHPUnit_Framework_TestCase {
 	
 	public function testAgregarDocumentos()
 	{
-		/*$datos = array(
+		$datos = array(
 				'org_parte' => $this->_parte,
 				'Documentos' => array(
-						'agregados' => array(array('org_documento_tipo_codigo' => 'ruc','valor' => '1284047-5')),
-						'editados'  => array(array('org_documento_id' => 1,'valor' => '1.284.047')),
-						'borrados'  => array()
+						'agregados' => array(array('org_documento_tipo_codigo' => 'ruc','valor' => '1284047-5','dir_pais_id' => 1,'preferencia' => 1)),
+						//'editados'  => array(array('org_documento_id' => 1,'valor' => '1.284.047','dir_pais_id' => 1)),
+						//'borrados'  => array()
 				)
 		);
 		$this->_service->ejecutar($datos);
 		$respuesta = $this->_service->getRespuesta();
 		$this->assertTrue(isset($respuesta['agregados']));
 		$this->assertFalse(isset($respuesta['borrados']));
-		$this->assertTrue(isset($respuesta['editados']));
-		$this->assertCount(1,$respuesta['editados']);
+		//$this->assertTrue(isset($respuesta['editados']));
+		//$this->assertCount(1,$respuesta['editados']);
 		$this->assertCount(1,$respuesta['agregados']);
-		$this->_service->_docRepository->_em->flush();*/
+		$this->_service->_docRepository->_em->flush();
 	}
 }
 
