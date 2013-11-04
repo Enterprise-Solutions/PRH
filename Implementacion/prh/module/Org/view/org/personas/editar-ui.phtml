@@ -1093,10 +1093,12 @@ Ext.onReady(function(){
 			           	} 
 
 			           	var agregarProf = [];
+			           	var borrarProf = [];
 
 						if (prof != auxprofesion){
 							var elemento4 = { "org_profesion_id": auxprofesion};
 	           				agregarProf.push(elemento4);
+	           				borrarProf.push(prof);	
 						};
            				
 						Ext.Ajax.request({
@@ -1114,7 +1116,7 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   window.location = baseURL+'/org/personas/index-ui';
+								   //window.location = baseURL+'/org/personas/index-ui';
 							   },
 							   failure: function(response, opt){
 									Ext.MessageBox.show({
@@ -1141,7 +1143,7 @@ Ext.onReady(function(){
 									   'apellido': auxapellido,
 									   'nro_hijos': auxhijos,
 									   'genero': auxgenero,
-									   'Profesiones': {'agregados':agregarProf},
+									   'Profesiones': {'agregados':agregarProf, 'borrados': borrarProf},
 									   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
 									   'nacionalidad_persona': auxnacionalidad,
 									   'org_religion_id': auxreligion,

@@ -24,6 +24,7 @@
 			var page = 0;
 
 			var aux;
+			var prof;
 			
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
@@ -244,6 +245,11 @@ Ext.onReady(function(){
 							    		campos[campo] = 'Femenino';
 							    	}
 				 			    		name.setValue(campos[campo]);
+							    } else if (campo == "Profesiones")
+						    	{
+							    	var profs = (campos[campo]);
+						    		prof = profs[0].profesion;
+						    		name.setValue(prof);
 							    } else{
 							    
 								    	name.setValue(campos[campo]);
@@ -326,7 +332,7 @@ Ext.onReady(function(){
 								        labelWidth: 110,
 								        padding: 15,
 							 	        anchor:'90%',
-								        name: 'profesion',	  
+								        name: 'Profesiones',	  
 					    	    }
 					    	]},{
 					    		xtype: 'container',
