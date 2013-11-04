@@ -70,6 +70,7 @@ class Creacion
 		$this->_mantenerDocumentosDeParte($datos);
 		$this->_mantenerContactosDeParte($datos);
 		$this->_mantenerDireccionesDeParte($datos);
+		$this->_mantenerProfesionesDeParte($datos);
 		return $parte;			
 	}
 	
