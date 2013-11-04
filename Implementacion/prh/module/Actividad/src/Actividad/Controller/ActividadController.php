@@ -71,17 +71,27 @@ class ActividadController extends BaseController
     
     public function asociarFormadorAction()
     {
-        /*$em = $this->getEntityManager();
+        $em = $this->getEntityManager();
         $data = $this->SubmitParams()->getParams();
         
         $service = new AsociarFormadorService($em);
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         
-        return $this->toJson($service->getRespuesta());*/
+        return $this->toJson($service->getRespuesta());
+    }
+    
+    public function desasociarFormadorAction()
+    {
+        
     }
     
     public function asociarParticipanteAction()
+    {
+        
+    }
+    
+    public function desasociarParticipanteAction()
     {
         
     }
