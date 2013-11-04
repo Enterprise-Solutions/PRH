@@ -37,7 +37,7 @@ class DocumentosParaLoginSelectTest extends PHPUnit_Framework_TestCase {
 	
 	public function testEjecucion()
 	{
-		$this->_select->addSearchByOrgParteId(3);
+		$this->_select->addSearchByOrgParteId(4);
 		$rs = $this->_select->execute();
 		print_r($rs->toArray());
 	} 

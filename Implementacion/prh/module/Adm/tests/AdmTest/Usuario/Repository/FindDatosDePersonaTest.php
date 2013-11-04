@@ -64,9 +64,9 @@ class FindDatosDePersonaParaCrearUsuarioTest extends PHPUnit_Framework_TestCase 
 	public function testEjecucionDeSelectDeUsuarios()
 	{
 		//$this->_selectDeUsuarios->addSearchByNombre('1284');
-		$this->_selectDeUsuarios->addSearchByAdmUsuarioId(8);
+		/*$this->_selectDeUsuarios->addSearchByAdmUsuarioId(8);
 		$rs = $this->_selectDeUsuarios->execute()->toArray();
-		print_r($rs);
+		print_r($rs);*/
 	}
 	
 	public function testEjecucionDeSelectPersonasDisponibles()
@@ -78,8 +78,9 @@ class FindDatosDePersonaParaCrearUsuarioTest extends PHPUnit_Framework_TestCase 
 	
 	public function testEjecucionDeSelectParaCrearUsuario()
 	{
-		//$rs = $this->_selectParaCrearUsuario->execute()->toArray();
-		//print_r($rs);
+		$this->_selectParaCrearUsuario->addSearchByOrgParteId(3);
+		$rs = $this->_selectParaCrearUsuario->execute()->toArray();
+		print_r($rs);
 	}
 }
 
