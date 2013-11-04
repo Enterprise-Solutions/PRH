@@ -11,6 +11,7 @@ use Actividad\Actividad\Service\Crear as CrearActividadService;
 use Actividad\Actividad\Service\Editar as EditarActividadService;
 use Actividad\Actividad\Service\Eliminar as EliminarActividadService;
 use Actividad\Actividad\Service\AsociarFormador as AsociarFormadorService;
+use Actividad\Actividad\Service\AsociarParticipante as AsociarParticipanteService;
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
@@ -74,7 +75,7 @@ class ActividadController extends BaseController
         $listarPartes = new Partes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao = new Dao($listarPartes);
         $template = $this->_crearTemplateParaListado();
-        return $template($dao, array('s' => array('tipo' => 'all', 'actividad' => 5)), $overritedParams);
+        return $template($dao, array(), $overritedParams);
     }
     
     public function asociarFormadorAction()
@@ -96,7 +97,14 @@ class ActividadController extends BaseController
     
     public function asociarParticipanteAction()
     {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParams();
         
+        $service = new AsociarParticipanteService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
     }
     
     public function desasociarParticipanteAction()
