@@ -381,6 +381,11 @@ Ext.onReady(function(){
 								           		agregarCont.push(elemento3);
 										}
 						           	} 
+
+						           	var agregarProf = [];
+
+									var elemento4 = { "org_profesion_id": auxprofesion };
+			           				agregarProf.push(elemento4);
 						           	
 						        	var auxnacionalidad = valoresForm.nacionalidad;
 						        	var auxreligion = valoresForm.religion;
@@ -428,11 +433,11 @@ Ext.onReady(function(){
 												   'apellido': auxapellido,
 												   'genero': auxgenero,
 												   'nro_hijos': auxhijos,
-												   'org_profesion_id': profesion,
 												   'fechaDeNacimiento': (formatearFecha(auxfechanacimiento, 1)),
 												   'nacionalidad_persona': auxnacionalidad,
 												   'org_religion_id': auxreligion,
-												   'org_estado_civil_id': auxestado_civil,	
+												   'org_estado_civil_id': auxestado_civil,
+												   'Profesiones': {'agregados':agregarProf},
 							 					   'Documentos':{'agregados':agregarDoc},
 						 						   'Direcciones':{'agregados':agregarUbic},
 						 						   'Contactos':{'agregados':agregarCont}									   
