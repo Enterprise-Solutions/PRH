@@ -201,7 +201,6 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 
-
 		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
 			fieldLabel: 'Nivel',
 	        xtype: 'combobox',
@@ -256,43 +255,43 @@ Ext.onReady(function(){
 				    id: 'filtros',
 				    height: 40,
 				    layout:'hbox',
-				    items:[{   	
-					    		xtype: 'textfield',
-						        fieldLabel: 'Nombre',
-						        padding: '10 0 5 15',
-						        labelWidth: 70,
-						        width: 250,
-						        anchor:'90%',
-						        name: 'nombre',
-							    flex: 0.5    
-				    	  },{   	
-					    		xtype: 'textfield',
-						        fieldLabel: 'C&oacute;digo',
-						        padding: '10 0 5 20',
-						        labelWidth: 60,
-						        width: 180,
-						        anchor:'90%',
-						        name: 'codigo',
-							    flex: 0.4    
-				    	  },{
-							    xtype: 'container',
-							    padding: '5 0 0 20', //margen del Form 'arriba lateral abajo'
-							    flex: 0.5,
-							    items: [comboNivel]
-						   }, 
-				    	   {
-						        xtype: 'container',
-						        padding: '5 0 0 0', 
-						        flex: 0.5,
-						        items: [comboModalidad]
-					    	},
-					    	{
-						        xtype: 'container',
-						        padding: '5 0 0 0', 
-						        flex: 0.65,
-						        items: [comboCriterio]
-					    	}
-					   ]
+//				    items:[{   	
+// 					    		xtype: 'textfield',
+// 						        fieldLabel: 'Nombre',
+// 						        padding: '10 0 5 15',
+// 						        labelWidth: 70,
+// 						        width: 250,
+// 						        anchor:'90%',
+// 						        name: 'nombre',
+// 							    flex: 0.5    
+// 				    	  },{   	
+// 					    		xtype: 'textfield',
+// 						        fieldLabel: 'C&oacute;digo',
+// 						        padding: '10 0 5 20',
+// 						        labelWidth: 60,
+// 						        width: 180,
+// 						        anchor:'90%',
+// 						        name: 'codigo',
+// 							    flex: 0.4    
+// 				    	  },{
+// 							    xtype: 'container',
+// 							    padding: '5 0 0 20', //margen del Form 'arriba lateral abajo'
+// 							    flex: 0.5,
+// 							    items: [comboNivel]
+// 						   }, 
+// 				    	   {
+// 						        xtype: 'container',
+// 						        padding: '5 0 0 0', 
+// 						        flex: 0.5,
+// 						        items: [comboModalidad]
+// 					    	},
+// 					    	{
+// 						        xtype: 'container',
+// 						        padding: '5 0 0 0', 
+// 						        flex: 0.65,
+// 						        items: [comboCriterio]
+// 					    	}
+//					   ]
 					},{
 						xtype: 'container',
 					    height: 45,
@@ -331,8 +330,7 @@ Ext.onReady(function(){
 						               });
 						            }//end of handler  
 									        
-								},{
-			
+								},{			
 								  		xtype: 'button',
 								  		width: 100,
 								  		margin: '10 0 0 15',
@@ -357,7 +355,7 @@ Ext.onReady(function(){
                 injectCheckbox: 1
             },
             width: 'fit',
-            padding: '5 0 0 0',
+            padding: 10,
             height: 385,
             region: 'center',  
 	           dockedItems: [
@@ -583,16 +581,15 @@ Ext.onReady(function(){
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			//id: 'margen',
-			padding: '5 0 0 10', 
 		    //title: ' ',
 		    width: 'fit',
 		    height: 510,
 		    items:[
-// 		         {	
-// 		        	 xtype: 'panel',
-// 					 items: [panelFiltros]
+		         {	
+		        	 xtype: 'panel',
+					 //items: [panelFiltros]
 			        
-// 		         }
+		         }
 		         ,{
 		        	 xtype: 'container',
 					 items: [gridActividad]

@@ -963,8 +963,10 @@ Ext.onReady(function(){
 							    }else if (campo == "Profesiones")
 						    	{
 							    	var profs = (campos[campo]);
-						    		prof = profs[0].org_profesion_id;
-						    		name.setValue(prof);
+							    		if (profs[0]){
+							    			prof = profs[0].org_profesion_id;
+							    			name.setValue(prof);
+							    		}
 							    }else {					    
 							    	name.setValue(campos[campo]);
 						    	}	
