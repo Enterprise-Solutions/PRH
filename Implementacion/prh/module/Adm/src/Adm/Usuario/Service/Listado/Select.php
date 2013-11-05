@@ -40,7 +40,7 @@ class Select extends EsSelect
 		     ->columns(array(
 				'adm_usuario_id',
 				'documento_identidad' => new Expression(" od.valor||' ('||odt.nombre||' - '||dp.nombre||')' "),
-		     	'org_documento_id',
+		     	'org_documento_id' => new Expression("od.org_documento_id"),
 				'estado_usuario' => new Expression(" case when estado = 'A' then 'Activo' else 'Bloqueado' end"),
 				'estado',
 				//'roles' => new Expression("''")
@@ -48,7 +48,7 @@ class Select extends EsSelect
 		    ))
 		    ->join(array('odp' => 'org_documento'), 'op.org_parte_id = odp.org_documento_id',array())
 			->where("au.adm_usuario_id = $admUsuarioId")
-			->group(array('adm_usuario_id','documento_identidad','org_documento_id','estado_usuario','estado','nombre_persona','apellido_persona'));
+			->group(array('au.adm_usuario_id','documento_identidad','od.org_documento_id','estado_usuario','estado','nombre_persona','apellido_persona'));
 	}
 	
 	public function addSearchByAdmUsuarioIds($admUsuarioIds)
