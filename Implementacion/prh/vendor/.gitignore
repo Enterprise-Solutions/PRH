@@ -1,0 +1,9 @@
+.composer
+composer/
+zendframework/
+autoload.php
+bin/
+doctrine/
+symfony/
+ZF2/
+/.autoload.php
