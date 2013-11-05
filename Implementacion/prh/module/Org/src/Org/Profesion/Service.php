@@ -51,8 +51,8 @@ class Service
 				$this->_crearEditarFunction(),
 				$getElemento);*/
 		
-		$borrados = f\getElementos($profesiones, $datosDeProfesiones['borrados']);
-		$profesiones = f\removerElementos($profesiones, $borrados, f\crearGetElementoIdFunction());
+		$borrados = f\getElementos($profesiones, $datosDeProfesiones['borrados'],f\crearGetElementoIdFunction('getOrgProfesionId'));
+		$profesiones = f\removerElementos($profesiones, $borrados, f\crearGetElementoIdFunction('getOrgProfesionId'));
 		$this->_repository->persistir($agregados);
 		//$this->_repository->persistir($editados);
 		if($borrados){

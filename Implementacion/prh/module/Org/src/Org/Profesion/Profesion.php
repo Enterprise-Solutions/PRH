@@ -40,6 +40,11 @@ class Profesion
 		return $this->id;
 	}
 	
+	public function getOrgProfesionId()
+	{
+	    return $this->org_profesion_id;
+	}
+	
 	public function setParte(Parte $parte)
 	{
 		if($this->id){
