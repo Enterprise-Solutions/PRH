@@ -28,6 +28,92 @@
 Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
+				Ext.define('formadores', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'act_actividad_formadores_id'
+						},{
+							type: 'int',
+							name: 'act_actividad_id'
+						},{
+							type: 'int',
+							name: 'org_parte_rol_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						},{
+							type: 'string',
+							name: 'apellido'
+						}
+					]
+				});
+
+				Ext.define('posiblesFormadores', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'org_parte_rol_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						},{
+							type: 'string',
+							name: 'apellido'
+						},{
+				            name: 'mostrar', 
+				            convert: function (v, rec) {
+				               return rec.get('nombre') + ', ' + rec.get('apellido');
+				            }
+				        }
+					]
+				});
+				
+				Ext.define('participantes', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'act_actividad_participantes_id'
+						},{
+							type: 'int',
+							name: 'act_actividad_id'
+						},{
+							type: 'int',
+							name: 'org_parte_rol_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						},{
+							type: 'string',
+							name: 'apellido'
+						}
+					]
+				});
+
+				Ext.define('posiblesParticipantes', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'org_parte_rol_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						},{
+							type: 'string',
+							name: 'apellido'
+						},{
+				            name: 'mostrar', 
+				            convert: function (v, rec) {
+				               return rec.get('nombre') + ', ' + rec.get('apellido');
+				        	}
+						}
+					]
+				});
+				
 		var cargarDatos = function (){
 			aux = buscarId();
 			Ext.Ajax.request({
@@ -67,13 +153,72 @@ Ext.onReady(function(){
 								 	} else{
 								    
 									    	name.setValue(campos[campo]);
-									    	console.log(campo);
 							     }
 					    }	}	
 			    	}
 				});
 		};
 
+		var formadoresStore = Ext.create('Ext.data.Store', {
+			model: 'formadores',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'s[actividad]':aux, 'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/actividad/formadores',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
+			model: 'posiblesFormadores',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'s[actividad]':aux, 's[tipo]':'formador'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/actividad/listar-partes',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var participantesStore = Ext.create('Ext.data.Store', {
+			model: 'participantes',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'s[actividad]':aux, 'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/actividad/participantes',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var posiblesParticipantesStore = Ext.create('Ext.data.Store', {
+			model: 'posiblesParticipantes',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'s[actividad]':aux, 's[tipo]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/actividad/listar-partes',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+		
 		var pantallaActividad = Ext.create('Ext.form.Panel', {
 			id: 'form',
 			items:[{
@@ -82,7 +227,7 @@ Ext.onReady(function(){
 		        	background: '#C8CED8',
 		        },
 			    title: 'Datos de la Actividad',
-			    height: 'fit',
+			    height: 380,
 			    width: 'fit',
 			    border: 1,
 			    padding: 10,
@@ -180,40 +325,61 @@ Ext.onReady(function(){
 							    	name: 'observaciones',
 							  }
 			    		]
-			    	}]},{
-		    	xtype: 'container',
-		 	    height: 200,
-		 	    width: 'fit',
-		 	   layout: 'hbox',
-		 	   // flex: 1,
-		 	   // padding: '5 0 10 440',
-		 	    items:[
-				  { xtype: 'tbfill' },
-		 	      {	  
-		 	    	  xtype: 'button',
-		 	    	  margin: '5 0 15 0',
-				      scale: 'large',
-				      width: 100,
-				      text: 'Editar',
-				      handler: function() {
-	                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+aux;  
-	                   		window.location = url;     
-				      }
-		 	      },{
-		 	    	  xtype: 'button',
-		 	    	  margin: '5 15 15 20',
-				      scale: 'large',
-				      width: 100,
-				      text: 'Volver',
-					  //disabled: true,
-					  handler: function() {
-						  window.location = baseURL+'/actividad/actividad/index-ui';
-					}
-		 	      }
-			    ]
-		     }],
+			    	}]}],
 			});
-		
+
+		var gridFormadores = Ext.create('Ext.grid.Panel', {
+            width: 'fit',
+            padding: '10 10 0 10',
+            height: 380,
+            title: 'Formadores de la Actividad',
+            region: 'center',              
+            layout: 'fit',
+            emptyText: "No existen Formadores para esta actividad",        
+            store: formadoresStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+		                text: "Nombre",
+		                dataIndex: 'nombre',
+		                align: 'left',
+		                width: 180,
+	            	},{
+		                text: "Apellido",
+		                dataIndex: 'apellido',
+		                align: 'left',
+		                flex: 1,
+		            }   
+            ]
+            	        	
+		 });
+
+		var gridParticipantes = Ext.create('Ext.grid.Panel', {
+            width: 'fit',
+            padding: '10 10 0 10',
+            height: 380,
+            title: 'Participantes de la Actividad',
+            region: 'center',              
+            layout: 'fit',
+            emptyText: "No existen Participantes para esta actividad",        
+            store: participantesStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+		                text: "Nombre",
+		                dataIndex: 'nombre',
+		                align: 'left',
+		                width: 180,
+	            	},{
+		                text: "Apellido",
+		                dataIndex: 'apellido',
+		                align: 'left',
+		                flex: 1,
+		            }
+            ]
+            	        	
+		 });
+	
 		var pantalla = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
 			 
@@ -223,7 +389,7 @@ Ext.onReady(function(){
 								{
 									xtype: 'tabpanel',
 									tabPosition: 'left',
-									height: 400,
+									height: 390,
 								    width: 'fit',
 									//style:'background-color: #C8CED8',
 									//layout: 'fit',
@@ -234,13 +400,44 @@ Ext.onReady(function(){
 								    },{
 								        title: 'Formadores',
 								        //tabConfig: {style:'width:240px'},
-								        items: []
+								        items: [gridFormadores]
 								    },{
 								        title: 'Participantes',
 								        //tabConfig: {style:'width:240px'},
-								        items: []								       
+								        items: [gridParticipantes]								       
 								    }]
-								}
+								},{
+							    	xtype: 'container',
+							 	    height: 200,
+							 	    width: 'fit',
+							 	   layout: 'hbox',
+							 	   // flex: 1,
+							 	   // padding: '5 0 10 440',
+							 	    items:[
+									  { xtype: 'tbfill' },
+							 	      {	  
+							 	    	  xtype: 'button',
+							 	    	  margin: '5 0 15 0',
+									      scale: 'large',
+									      width: 100,
+									      text: 'Editar',
+									      handler: function() {
+						                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+aux;  
+						                   		window.location = url;     
+									      }
+							 	      },{
+							 	    	  xtype: 'button',
+							 	    	  margin: '5 15 15 20',
+									      scale: 'large',
+									      width: 100,
+									      text: 'Volver',
+										  //disabled: true,
+										  handler: function() {
+											  window.location = baseURL+'/actividad/actividad/index-ui';
+										}
+							 	      }
+								    ]
+							     }
 								
 			  ],
 			  listeners:{

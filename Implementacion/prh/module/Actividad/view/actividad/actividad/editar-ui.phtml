@@ -575,7 +575,7 @@ Ext.onReady(function(){
 									           var basicForm = b.up('form').getForm();						
 									           var valoresForm = basicForm.getFieldValues();
 		
-												nuevoFormador = valoresForm.auxformador;
+												var nuevoFormador = valoresForm.auxformador;
 												Ext.Ajax.request({
 			 	        							   url: baseURL + '/actividad/actividad/asociar-formador',
 			 	        							   success: function(response, opt){
@@ -647,7 +647,7 @@ Ext.onReady(function(){
 									           var basicForm = b.up('form').getForm();						
 									           var valoresForm = basicForm.getFieldValues();
 		
-												nuevoParticipante = valoresForm.auxparticipante;
+												var nuevoParticipante = valoresForm.auxparticipante;
 												Ext.Ajax.request({
 			 	        							   url: baseURL + '/actividad/actividad/asociar-participante',
 			 	        							   success: function(response, opt){

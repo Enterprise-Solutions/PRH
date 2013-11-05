@@ -267,6 +267,8 @@ Ext.onReady(function(){
 									Ext.Ajax.request({
 										   url: baseURL + '/actividad/actividad/post',
 										   success: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   aux = aux_mensaje['act_actividad_id'];
 											   Ext.Msg.show({
 												    title:'Aviso',
 													msg:'Actividad Creada Correctamente'
@@ -279,9 +281,26 @@ Ext.onReady(function(){
 										   hide_message();
 										   Ext.getCmp('tabFormadores').enable();
 										   Ext.getCmp('tabParticipantes').enable();
-										   //obtener el id
-										   //cargar los stores
-										   
+										    formadoresStore.load({
+										        params: {
+										            "s[actividad]":aux,
+										            'p[limit]':'all'	
+											}});
+										    participantesStore.load({
+												params: {
+												    "s[actividad]":aux,
+												    'p[limit]':'all'	
+										    }});
+							                posiblesFormadoresStore.load({
+								                params: {
+								                    "s[actividad]":aux,
+								                    's[tipo]':'formador'
+							                }});
+	        								posiblesParticipantesStore.load({
+		        								params: {
+		        								    "s[actividad]":aux,
+		        								    's[tipo]':'all'
+	        								}});
 										   
 										   
 										   
@@ -548,7 +567,7 @@ Ext.onReady(function(){
 										           var basicForm = b.up('form').getForm();						
 										           var valoresForm = basicForm.getFieldValues();
 			
-													nuevoFormador = valoresForm.auxformador;
+													var nuevoFormador = valoresForm.auxformador;
 													Ext.Ajax.request({
 				 	        							   url: baseURL + '/actividad/actividad/asociar-formador',
 				 	        							   success: function(response, opt){
@@ -620,7 +639,7 @@ Ext.onReady(function(){
 										           var basicForm = b.up('form').getForm();						
 										           var valoresForm = basicForm.getFieldValues();
 			
-													nuevoParticipante = valoresForm.auxparticipante;
+													var nuevoParticipante = valoresForm.auxparticipante;
 													Ext.Ajax.request({
 				 	        							   url: baseURL + '/actividad/actividad/asociar-participante',
 				 	        							   success: function(response, opt){
