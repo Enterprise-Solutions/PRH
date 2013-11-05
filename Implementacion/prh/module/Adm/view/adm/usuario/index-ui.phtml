@@ -74,7 +74,7 @@ Ext.onReady(function(){
 				},{
 		            name: 'mostrar', 
 		            convert: function (v, rec) {
-		               return rec.get('apellido') + ', ' + rec.get('nombre') +' / '+rec.get('documento_identidad');
+		               return rec.get('apellido') + ', ' + rec.get('nombre');
 		            }
 		        }
 			]
@@ -211,10 +211,12 @@ Ext.onReady(function(){
     									params: {
     										"p[limit]": 'all',
     										"s[org_parte_id]": auxpersona	 		
-    							   		} 
+    							   		},
+    							   		callback: function(records, operation, success) {
+    							   			auxdocumento = documentoStore.getAt(0).get('org_documento_id');
+    		    		                	Ext.getCmp('documento').setValue(auxdocumento);
+    							   	    } 
     			             	});
-    		                	//auxdocumento = documentoStore.getAt(0).get('org_documento_id');
-    		                	//Ext.getCmp('documento').setValue(auxdocumento);
     		                }
     		            },
     		        }   
@@ -222,9 +224,10 @@ Ext.onReady(function(){
                     xtype: 'combobox',
                 	fieldLabel: 'Documento',
     		        name: 'documento',
+    		        id: 'documento',
     		        displayField: 'mostrar',
     		        valueField: 'org_documento_id',
-    		        autoSelect: true,
+    		        //autoSelect: true,
     		        width: 400,
     		        forceSelection: true,
     		        labelWidth: 120,
