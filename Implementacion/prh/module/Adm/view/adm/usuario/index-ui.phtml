@@ -45,6 +45,9 @@ Ext.onReady(function(){
 					type: 'int',
 					name: 'org_documento_id'
 				},{
+					type: 'int',
+					name: 'org_parte_id'
+				},{
 					type: 'string',
 					name: 'documento_identidad'
 				},{
@@ -340,20 +343,6 @@ Ext.onReady(function(){
     	}  
 
 		function editarwindow (id_edit, nombre_edit, estado_edit, id_doc) {
-			console.log(documentoStore);
-// 			Ext.Ajax.request({
-// 				   url: baseURL +'/adm/usuario/get?adm_usuario_id='+id_edit,
-// 				   success: function(response, opt){
-// 					   var aux_cedula = Ext.decode(response.responseText);
-// 					   aux = aux_cedula['org_documento_id'];
-// 					   documentoStore.load({
-// 							params: {
-// 								"p[limit]": 'all',
-// 								"s[org_parte_id]": id_edit	
-// 					   		}
-// 	             	  });
-// 				   }
-// 			 });
             var form = Ext.widget('form', {
                 layout: {
                     type: 'vbox',
@@ -382,6 +371,7 @@ Ext.onReady(function(){
 	           		        displayField: 'mostrar',
 	           		        valueField: 'org_documento_id',
 	           		        value: id_doc,
+	           		     	forceSelection: true,
 	           		        width: 400,
 	           		        labelWidth: 120,
 	           		        store: documentoStore,
@@ -437,7 +427,8 @@ Ext.onReady(function(){
 								var json_data = {
 									       'put':{
 									    	   'adm_usuario_id': id_edit,
-											   'estado': valoresForm.estado_edit
+											   'estado': valoresForm.estado_edit,
+											   'org_documento_id':  valoresForm.documento_edit,
 									       }
 									   };
 
@@ -446,6 +437,7 @@ Ext.onReady(function(){
 									       'put':{
 									    	   'adm_usuario_id': id_edit,
 											   'estado': valoresForm.estado_edit,
+											   'org_documento_id':  valoresForm.documento_edit,
 											   'contrasenha': valoresForm.contrasenha_edit,
 											   'confirmacion': valoresForm.confirmacion_edit
 									       }
@@ -645,8 +637,6 @@ Ext.onReady(function(){
 								"s[estado]": auxestado	        
 		   				    }
    						});
-	       					console.log("page store: ", page);
-	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
@@ -716,12 +706,13 @@ Ext.onReady(function(){
                     //tooltip: 'Edit',
                 handler: function(grid, rowIndex, colIndex) {
                     	var id_edit = usuariosStore.getAt(rowIndex).get('adm_usuario_id');
+                    	var org_parte_edit = usuariosStore.getAt(rowIndex).get('org_parte_id');
                     	var nombre_edit = ' '+usuariosStore.getAt(rowIndex).get('apellido')+', '+usuariosStore.getAt(rowIndex).get('nombre')+' ';
                     	var estado_edit = usuariosStore.getAt(rowIndex).get('estado');
                     	var id_doc = usuariosStore.getAt(rowIndex).get('org_documento_id');
            			 	documentoStore.load({
 							params: {
-								"s[org_parte_id]": id_edit	
+								"s[org_parte_id]": org_parte_edit	
 					   		},
 					   		callback: function(records, operation, success) {	
 				   				editarwindow(id_edit, nombre_edit, estado_edit, id_doc);       
