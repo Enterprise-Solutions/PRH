@@ -122,6 +122,26 @@ Ext.onReady(function(){
 			        'id': aux,
 			    },
 			    success: function(response) {
+			    	formadoresStore.load({
+				        params: {
+				            "s[actividad]":aux,
+				            'p[limit]':'all'	
+					}});
+				    participantesStore.load({
+						params: {
+						    "s[actividad]":aux,
+						    'p[limit]':'all'	
+				    }});
+	                posiblesFormadoresStore.load({
+		                params: {
+		                    "s[actividad]":aux,
+		                    's[tipo]':'formador'
+	                }});
+					posiblesParticipantesStore.load({
+						params: {
+						    "s[actividad]":aux,
+						    's[tipo]':'all'
+					}});
 			    	var campos = Ext.decode(response.responseText);
 			    	var form = Ext.getCmp('form').getForm();
 			    	
@@ -171,7 +191,7 @@ Ext.onReady(function(){
 					root: 'records'
 				}
 			},
-			autoLoad: true
+			autoLoad: false
 		});
 
 		var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
@@ -186,7 +206,7 @@ Ext.onReady(function(){
 					root: 'records'
 				}
 			},
-			autoLoad: true
+			autoLoad: false
 		});
 
 		var participantesStore = Ext.create('Ext.data.Store', {
@@ -201,7 +221,7 @@ Ext.onReady(function(){
 					root: 'records'
 				}
 			},
-			autoLoad: true
+			autoLoad: false
 		});
 
 		var posiblesParticipantesStore = Ext.create('Ext.data.Store', {
@@ -216,7 +236,7 @@ Ext.onReady(function(){
 					root: 'records'
 				}
 			},
-			autoLoad: true
+			autoLoad: false
 		});
 		
 		var pantallaActividad = Ext.create('Ext.form.Panel', {
