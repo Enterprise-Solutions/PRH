@@ -571,9 +571,21 @@ Ext.onReady(function(){
 													Ext.Ajax.request({
 				 	        							   url: baseURL + '/actividad/actividad/asociar-formador',
 				 	        							   success: function(response, opt){
-				 	        								    formadoresStore.load();
-												                posiblesFormadoresStore.load();
-						        								posiblesParticipantesStore.load();
+				 	        								    formadoresStore.load({
+				 											        params: {
+				 											            "s[actividad]":aux,
+				 											            'p[limit]':'all'	
+				 												}});
+				 								                posiblesFormadoresStore.load({
+				 									                params: {
+				 									                    "s[actividad]":aux,
+				 									                    's[tipo]':'formador'
+				 								                }});
+				 		        								posiblesParticipantesStore.load({
+				 			        								params: {
+				 			        								    "s[actividad]":aux,
+				 			        								    's[tipo]':'all'
+				 		        								}});
 				 	        								   Ext.Msg.show({
 				 	        									    title:'Aviso',
 				 	        										msg:'Formador Asignado a la Actividad',
@@ -587,8 +599,7 @@ Ext.onReady(function(){
 				 	        								   }
 				 	        								  hide_message();
 				 	        							   },
-				 	        							   jsonData:{
-				 	        							       
+				 	        							   jsonData:{ 	        							       
 				 	        							    	    'act_actividad_id': aux,
 				 													'org_parte_rol_id': nuevoFormador,
 				 	        							   }
@@ -642,9 +653,21 @@ Ext.onReady(function(){
 													Ext.Ajax.request({
 				 	        							   url: baseURL + '/actividad/actividad/asociar-participante',
 				 	        							   success: function(response, opt){
-												                participantesStore.load();
-												                posiblesFormadoresStore.load();
-						        								posiblesParticipantesStore.load();
+				 											    participantesStore.load({
+				 													params: {
+				 													    "s[actividad]":aux,
+				 													    'p[limit]':'all'	
+				 											    }});
+				 								                posiblesFormadoresStore.load({
+				 									                params: {
+				 									                    "s[actividad]":aux,
+				 									                    's[tipo]':'formador'
+				 								                }});
+				 		        								posiblesParticipantesStore.load({
+				 			        								params: {
+				 			        								    "s[actividad]":aux,
+				 			        								    's[tipo]':'all'
+				 		        								}});
 				 	        								   Ext.Msg.show({
 				 	        									    title:'Aviso',
 				 	        										msg:'Participante Asignado a la Actividad',
