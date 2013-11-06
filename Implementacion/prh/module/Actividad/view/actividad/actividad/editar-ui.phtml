@@ -579,6 +579,9 @@ Ext.onReady(function(){
 												Ext.Ajax.request({
 			 	        							   url: baseURL + '/actividad/actividad/asociar-formador',
 			 	        							   success: function(response, opt){
+			 	        								  	formadoresStore.load();
+											                posiblesFormadoresStore.load();
+					        								posiblesParticipantesStore.load();
 			 	        								   Ext.Msg.show({
 			 	        									    title:'Aviso',
 			 	        										msg:'Formador Asignado a la Actividad',
@@ -599,9 +602,6 @@ Ext.onReady(function(){
 			 	        							       
 			 	        							   }
 			 	        						 });
-								                formadoresStore.load();
-								                posiblesFormadoresStore.load();
-		        								posiblesParticipantesStore.load();
 								            }  									        
 									}
 							   ]
@@ -651,6 +651,9 @@ Ext.onReady(function(){
 												Ext.Ajax.request({
 			 	        							   url: baseURL + '/actividad/actividad/asociar-participante',
 			 	        							   success: function(response, opt){
+											                participantesStore.load();
+											                posiblesFormadoresStore.load();
+					        								posiblesParticipantesStore.load();
 			 	        								   Ext.Msg.show({
 			 	        									    title:'Aviso',
 			 	        										msg:'Participante Asignado a la Actividad',
@@ -670,9 +673,6 @@ Ext.onReady(function(){
 			 													'org_parte_rol_id': nuevoParticipante,			 	        							       
 			 	        							   }
 			 	        						 });
-								                participantesStore.load();
-								                posiblesFormadoresStore.load();
-		        								posiblesParticipantesStore.load();
 								            }  									        
 									}
 							   ]
@@ -725,6 +725,9 @@ Ext.onReady(function(){
 			                            	   Ext.Ajax.request({
 			        							   url: baseURL + '/actividad/actividad/desasociar-formador',
 			        							   success: function(response, opt){
+			        								   formadoresStore.load();
+			        								   posiblesFormadoresStore.load();
+			        								   posiblesParticipantesStore.load();
 			        								   Ext.Msg.show({
 			        									    title:'Aviso',
 			        										msg:'Formador eliminado de la Actividad',
@@ -739,9 +742,6 @@ Ext.onReady(function(){
 			        								   hide_message();
 			        								   Ext.getCmp('filtros').up('form').getForm().reset();
 			        								   id_delete = null;
-			        								   formadoresStore.load();
-			        								   posiblesFormadoresStore.load();
-			        								   posiblesParticipantesStore.load();
 			        							   },
 			        							   jsonData:{
 															'formador': id_delete,
@@ -805,6 +805,9 @@ Ext.onReady(function(){
 			                            	   Ext.Ajax.request({
 			        							   url: baseURL + '/actividad/actividad/desasociar-participante',
 			        							   success: function(response, opt){
+			        								   participantesStore.load();
+			        								   posiblesFormadoresStore.load();
+			        								   posiblesParticipantesStore.load();
 			        								   Ext.Msg.show({
 			        									    title:'Aviso',
 			        										msg:'Participante eliminado de la Actividad',
@@ -819,9 +822,6 @@ Ext.onReady(function(){
 			        								   hide_message();
 			        								   Ext.getCmp('filtros').up('form').getForm().reset();
 			        								   id_delete = null;
-			        								   participantesStore.load();
-			        								   posiblesFormadoresStore.load();
-			        								   posiblesParticipantesStore.load();
 			        							   },
 			        							   jsonData:{
 															'participante': id_delete,
