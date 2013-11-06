@@ -17,6 +17,23 @@ class Cambios
         return $deltas;
     }
     
+    public function mapearComoCambios($datos,$keys = null)
+    {
+    	if(!$keys){
+    		$keys = array_keys($datos,$keys);
+    	}else{
+    		$keys = array_intersect($keys, array_keys($datos));
+    	}
+    	return array_map(
+    			function($key) use($datos){
+    				return array(
+    						$key => $datos[$key]
+    				);
+    			},
+    			$keys
+    	);
+    }
+    
     public function generarCambiosDeBorrado($datos)
     {
     	$keys = array_keys($datos);

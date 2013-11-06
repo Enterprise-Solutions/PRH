@@ -59,17 +59,18 @@ class Edicion
 	
 	public function _editarAdmUsuario($admUsuario,$params,$repository,$passwordEncoder)
 	{
-		$cambiosEnviados = array();
+		/*$cambiosEnviados = array();
 		if(isset($params['estado'])){
 			$cambiosEnviados[] = array('estado' => $params['estado']);
-		}
-		
+		}*/
+	    $cambios = new Cambios();
+		$cambiosEnviados = $cambios->mapearComoCambios($params,array('estado','org_documento_id'));
 		if(isset($params['contrasenha'])){
 			$cambiosEnviados[] = array('contrasenha' => $passwordEncoder($params['contrasenha']));
 			$cambiosEnviados[] = array('fecha_modif_contrasenha' => date('Y-m-d'));
 		}
 		
-		$cambios = new Cambios();
+		
 		$cambiosAdmUsuario = $cambios->cambiar($admUsuario, $cambiosEnviados);
 		return $repository->persistirCambiosADatos($cambiosAdmUsuario,$admUsuario,'adm_usuario','adm_usuario_id');
 	}
