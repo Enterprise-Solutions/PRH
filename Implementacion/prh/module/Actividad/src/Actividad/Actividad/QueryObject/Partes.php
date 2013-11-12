@@ -52,4 +52,12 @@ class Partes extends DbSelect
                  ->where("opr.org_parte_rol_id NOT IN ($partesDeActividad)");
         }
     }
+    
+    public function addSearchByParte($parte)
+    {
+        if ($parte && $parte != "") {
+            $this->_select
+                 ->where("(op.nombre_persona || ' ' || op.apellido_persona) ILIKE '%$parte%'");
+        }
+    }
 }
