@@ -26,7 +26,7 @@ class Participantes extends DbSelect
         }
     }
     
-    public function addSearchByParticipante($participante)
+    public function addSearchByParte($participante)
     {
         if ($participante && $participante != "") {
             $this->_select

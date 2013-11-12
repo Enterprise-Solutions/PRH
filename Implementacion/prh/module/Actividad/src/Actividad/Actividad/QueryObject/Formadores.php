@@ -26,7 +26,7 @@ class Formadores extends DbSelect
         }
     }
     
-    public function addSearchByFormador($formador)
+    public function addSearchByParte($formador)
     {
         if ($formador && $formador != "") {
             $this->_select
