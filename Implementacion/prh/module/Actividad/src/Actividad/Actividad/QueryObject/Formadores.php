@@ -25,4 +25,12 @@ class Formadores extends DbSelect
             Thrower::throwValidationException('Error de Validacion', 'No se especifico la actividad para listar los formadores');
         }
     }
+    
+    public function addSearchByFormador($formador)
+    {
+        if ($formador && $formador != "") {
+            $this->_select
+                 ->where("(op.nombre || ' ' || op.apellido) ILIKE '%$formador%'");
+        }
+    }
 }

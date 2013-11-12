@@ -25,4 +25,12 @@ class Participantes extends DbSelect
             Thrower::throwValidationException('Error de Validacion', 'No se especifico la actividad para listar los participantes');
         }
     }
+    
+    public function addSearchByParticipante($participante)
+    {
+        if ($participante && $participante != "") {
+            $this->_select
+                 ->where("(op.nombre || ' ' || op.apellido) ILIKE '%$participante%'");
+        }
+    }
 }
