@@ -70,7 +70,7 @@ class UsuarioControllerTest extends PHPUnit_Framework_TestCase {
 		print_r($result);
 	}*/
 	
-	public function testBorradoDeUsuario()
+	/*public function testBorradoDeUsuario()
 	{
 		$this->routeMatch->setParam('action', 'delete');
 		$this->request->setMethod('post');
@@ -78,6 +78,16 @@ class UsuarioControllerTest extends PHPUnit_Framework_TestCase {
 		$this->request->setContent('{"delete":[6]}');
 		$result = $this->controller->dispatch($this->request);
 		print_r($result);
+	}*/
+	
+	public function testGetDeUsuario()
+	{
+	    $this->routeMatch->setParam('action', 'get');
+	    $this->request->setMethod('post');
+	    $this->request->getHeaders()->addHeaderLine('Content-Type','application/json');
+	    $this->request->setContent('{"get":{"adm_usuario_id":1}}');
+	    $result = $this->controller->dispatch($this->request);
+	    print_r($result);
 	}
 }
 

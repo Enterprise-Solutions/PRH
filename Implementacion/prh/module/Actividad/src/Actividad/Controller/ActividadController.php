@@ -1,7 +1,7 @@
 <?php
 
 namespace Actividad\Controller;
-
+require_once 'Implementacion/prh/module/Actividad/src/Actividad/Actividad/Service/AgregarParticipante.php';
 use Actividad\Actividad\QueryObject\Select;
 use Actividad\Actividad\QueryObject\Partes;
 use Actividad\Actividad\QueryObject\Formadores;
@@ -18,6 +18,10 @@ use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
+
+use Actividad\Actividad\Service\AgregarParticipante as serviceParticipantes;
+use Actividad\Actividad\Service\AgregarParticipante\Repository as repositoryParticipantes;
+use EnterpriseSolutions\Simple\Repository\DataSource;
 
 class ActividadController extends BaseController
 {
@@ -162,5 +166,21 @@ class ActividadController extends BaseController
     {
         $em = $this->getServiceLocator()->get('doctrine.entitymanager.orm_default');
         return $em;
+    }
+    
+    /**
+     * {org_parte_id:int,act_actividad_id:int}
+     * @return
+     */
+    public function setParticipanteAction()
+    {
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $ds = new DataSource($dbAdapter);
+        $repository = new repositoryParticipantes($ds);
+        $params = $this->SubmitParams()->getParam('post');
+        $service = function($params) use($repository){
+        	return serviceParticipantes\ejecutar($repository, $params);
+        };
+        $this->_returnAsJson($service($params));
     }
 }
