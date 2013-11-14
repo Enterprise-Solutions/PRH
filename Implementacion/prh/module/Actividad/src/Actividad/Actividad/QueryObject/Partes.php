@@ -12,7 +12,7 @@ class Partes extends DbSelect
         $this->_select
              ->from(array('opr' => 'org_parte_rol'))
              ->columns(array('org_parte_rol_id'))
-             ->join(array('op' => 'org_parte'), 'opr.org_parte_id = op.org_parte_id', array('nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
+             ->join(array('op' => 'org_parte'), 'opr.org_parte_id = op.org_parte_id', array('org_parte_id', 'nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
     }
     
     public function addSearchByTipo($tipo)
@@ -33,7 +33,7 @@ class Partes extends DbSelect
     {
         if ($actividad) {
             $partesDeActividad = "
-                SELECT opr.org_parte_rol_id
+                SELECT DISTINCT op.org_parte_id
                 FROM act_actividad_formadores aaf
                 INNER JOIN org_parte_rol opr ON aaf.org_parte_rol_id = opr.org_parte_rol_id
                 INNER JOIN org_parte op ON opr.org_parte_id = op.org_parte_id
@@ -41,7 +41,7 @@ class Partes extends DbSelect
                     
                     UNION
                     
-                SELECT opr.org_parte_rol_id
+                SELECT DISTINCT op.org_parte_id
                 FROM act_actividad_participantes aap
                 INNER JOIN org_parte_rol opr ON aap.org_parte_rol_id = opr.org_parte_rol_id
                 INNER JOIN org_parte op ON opr.org_parte_id = op.org_parte_id
@@ -49,7 +49,7 @@ class Partes extends DbSelect
             ";
             
             $this->_select
-                 ->where("opr.org_parte_rol_id NOT IN ($partesDeActividad)");
+                 ->where("op.org_parte_id NOT IN ($partesDeActividad)");
         }
     }
     
