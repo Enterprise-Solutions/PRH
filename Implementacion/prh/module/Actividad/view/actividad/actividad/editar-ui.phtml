@@ -141,9 +141,6 @@ Ext.onReady(function(){
 						fields: [
 							{
 								type: 'int',
-								name: 'org_parte_rol_id'
-							},{
-								type: 'int',
 								name: 'org_parte_id'
 							},{
 								type: 'string',
@@ -286,7 +283,7 @@ Ext.onReady(function(){
 					model: 'posiblesParticipantes',
 					proxy: {
 						type: 'ajax',
-						extraParams: {'s[actividad]':aux, 's[tipo]':'all'},
+						extraParams: {'s[actividad]':aux},
 						headers: {'Accept':'application/json'},
 						url: baseURL + '/actividad/actividad/listar-partes',
 						reader: {
