@@ -95,6 +95,9 @@ Ext.onReady(function(){
 								type: 'int',
 								name: 'org_parte_rol_id'
 							},{
+								type: 'int',
+								name: 'org_parte_id'
+							},{
 								type: 'string',
 								name: 'nombre'
 							},{
@@ -137,6 +140,9 @@ Ext.onReady(function(){
 							{
 								type: 'int',
 								name: 'org_parte_rol_id'
+							},{
+								type: 'int',
+								name: 'org_parte_id'
 							},{
 								type: 'string',
 								name: 'nombre'
@@ -632,12 +638,17 @@ Ext.onReady(function(){
 									        labelWidth: 90,
 									        store: posiblesParticipantesStore,
 									        displayField: 'mostrar',
-									        queryMode: 'local',
-									        valueField: 'org_parte_rol_id',
+									        queryMode: 'remote',
+									        valueField: 'org_parte_id',
 									        width: 300,
 									        padding: '10 0 5 15',
 								 	        anchor:'90%',
-									    	name: 'auxparticipante',     
+									    	name: 'auxparticipante',
+									    	typeAhead: true,								        
+									        loadingText: 'Buscando...',
+									        hideTrigger: true,
+									        queryParam: 's[parte]',
+									        minChars: 1,      
 							    	  },{					
 							           		xtype: 'button',
 							           		width: 100,
@@ -651,7 +662,7 @@ Ext.onReady(function(){
 			
 													var nuevoParticipante = valoresForm.auxparticipante;
 													Ext.Ajax.request({
-				 	        							   url: baseURL + '/actividad/actividad/asociar-participante',
+				 	        							   url: baseURL + '/actividad/actividad/set-participante',
 				 	        							   success: function(response, opt){
 				 											    participantesStore.load({
 				 													params: {
@@ -682,9 +693,10 @@ Ext.onReady(function(){
 				 	        								  hide_message();
 				 	        							   },
 				 	        							   jsonData:{
-				 	        							       
+				 	        								  'post':{		 
 				 	        							    	    'act_actividad_id': aux,
-				 													'org_parte_rol_id': nuevoParticipante,			 	        							       
+				 													'org_parte_id': nuevoParticipante	
+				 	        								  }		 	        							       
 				 	        							   }
 				 	        						 });
 									            }  									        
