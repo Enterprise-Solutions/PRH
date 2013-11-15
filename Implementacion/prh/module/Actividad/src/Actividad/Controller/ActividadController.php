@@ -1,7 +1,8 @@
 <?php
 
 namespace Actividad\Controller;
-require_once 'Implementacion/prh/module/Actividad/src/Actividad/Actividad/Service/AgregarParticipante.php';
+use Actividad\Actividad\Actividad;
+
 use Actividad\Actividad\QueryObject\Select;
 use Actividad\Actividad\QueryObject\Partes;
 use Actividad\Actividad\QueryObject\Formadores;
@@ -19,7 +20,7 @@ use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
 
-use Actividad\Actividad\Service\AgregarParticipante as serviceParticipantes;
+use Actividad\Actividad\Service\AgregarParticipante;
 use Actividad\Actividad\Service\AgregarParticipante\Repository as repositoryParticipantes;
 use EnterpriseSolutions\Simple\Repository\DataSource;
 
@@ -179,7 +180,8 @@ class ActividadController extends BaseController
         $repository = new repositoryParticipantes($ds);
         $params = $this->SubmitParams()->getParam('post');
         $service = function($params) use($repository){
-        	return serviceParticipantes\ejecutar($repository, $params);
+            $service = new AgregarParticipante();
+        	return $service->ejecutar($repository, $params);
         };
         $this->_returnAsJson($service($params));
     }

@@ -1,9 +1,18 @@
 <?php
-namespace Actividad\Actividad\Service\AgregarParticipante;
-require_once 'Implementacion/prh/module/Org/src/Org/RolesDePersonas/GetOCrear/Service.php';
+namespace Actividad\Actividad\Service;
 use Actividad\Actividad\Service\AgregarParticipante\Repository;
-use Org\RolesDePersonas\GetOCrear\Service as crearORecuperarRol;
+use Org\RolesDePersonas\GetOCrear\Service;
 use EnterpriseSolutions\Simple\Cambios\Cambios;
+
+
+
+class AgregarParticipante
+{
+    public function ejecutar(Repository $repository,$params)
+    {
+        return ejecutar($repository, $params);
+    }
+}
 
 /**
  * @param Repository $repository
@@ -34,7 +43,9 @@ function ejecutar(Repository $repository,$params){
 
 function _crearORecuperarParticipante($repository,$params){
     $params['org_rol_codigo'] = 'participante';
-    $orgParteRolId = crearORecuperarRol\ejecutar($repository, $params);
+    $service = new Service();
+    $orgParteRolId = $service->ejecutar($repository, $params);
+    //$orgParteRolId = crearORecuperarRol\ejecutar($repository, $params);
     return $orgParteRolId;
 }
 

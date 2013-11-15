@@ -1,7 +1,15 @@
 <?php
-namespace Org\RolesDePersonas\GetOCrear\Service;
+namespace Org\RolesDePersonas\GetOCrear;
 use EnterpriseSolutions\Simple\Cambios\Cambios;
 use Org\RolesDePersonas\GetOCrear\Repository;
+
+class Service{
+    public function ejecutar(Repository $repository,$params){
+        return ejecutar($repository, $params);
+    }
+}
+
+
 /**
  * @param Repository $repository
  * @param array $params
