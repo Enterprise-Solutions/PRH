@@ -23,6 +23,7 @@ use EnterpriseSolutions\Db\Dao\Get as DaoGet;
 use Actividad\Actividad\Service\AgregarParticipante;
 use Actividad\Actividad\Service\AgregarParticipante\Repository as repositoryParticipantes;
 use EnterpriseSolutions\Simple\Repository\DataSource;
+use EnterpriseSolutions\Exceptions\Thrower;
 
 class ActividadController extends BaseController
 {
@@ -179,6 +180,9 @@ class ActividadController extends BaseController
         $ds = new DataSource($dbAdapter);
         $repository = new repositoryParticipantes($ds);
         $params = $this->SubmitParams()->getParam('post');
+        if(!$params){
+            Thrower::throwValidationException('Formato invalido de parametros, se espera {post:{org_parte_id:int,act_actividad_id:int}}');
+        }
         $service = function($params) use($repository){
             $service = new AgregarParticipante();
         	return $service->ejecutar($repository, $params);
