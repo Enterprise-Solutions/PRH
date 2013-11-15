@@ -10,22 +10,16 @@ class Partes extends DbSelect
     public function _init()
     {
         $this->_select
-             ->from(array('opr' => 'org_parte_rol'))
-             ->columns(array('org_parte_rol_id'))
-             ->join(array('op' => 'org_parte'), 'opr.org_parte_id = op.org_parte_id', array('org_parte_id', 'nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
+             ->from(array('op' => 'org_parte'))
+             ->columns(array('org_parte_id', 'nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
     }
     
     public function addSearchByTipo($tipo)
     {
-        switch ($tipo) {
-        	case 'all':
-        	    $this->_select
-        	         ->where("(opr.org_rol_codigo = 'formador' OR opr.org_rol_codigo = 'participante')");
-        	    break;
-        	default:
-        	    $this->_select
-        	         ->where("(opr.org_rol_codigo = '$tipo')");
-    	        break;
+        if ($tipo === 'formador') {
+            $this->_select
+                 ->join(array('opr' => 'org_parte_rol'), 'op.org_parte_id = opr.org_parte_id', array('org_parte_rol_id'))
+                 ->where("(opr.org_rol_codigo = 'formador')");
         }
     }
     
