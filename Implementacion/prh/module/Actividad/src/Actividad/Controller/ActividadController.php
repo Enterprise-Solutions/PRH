@@ -187,6 +187,6 @@ class ActividadController extends BaseController
             $service = new AgregarParticipante();
         	return $service->ejecutar($repository, $params);
         };
-        $this->_returnAsJson($service($params));
+        return $this->_returnAsJson($service($params));
     }
 }
