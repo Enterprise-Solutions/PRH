@@ -11,7 +11,8 @@ class Partes extends DbSelect
     {
         $this->_select
              ->from(array('op' => 'org_parte'))
-             ->columns(array('org_parte_id', 'nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
+             ->columns(array('org_parte_id', 'nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'))
+             ->where("op.org_parte_tipo_codigo = 'per'");
     }
     
     public function addSearchByTipo($tipo)
