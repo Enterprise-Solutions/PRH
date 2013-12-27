@@ -12,8 +12,6 @@ use Actividad\ActividadTipo\Service\Crear as CrearActividadTipoService;
 use Actividad\ActividadTipo\Service\Editar as EditarActividadTipoService;
 use Actividad\ActividadTipo\Service\Eliminar as EliminarActividadTipoService;
 
-use EnterpriseSolutions\Exceptions\Thrower;
-
 class ActividadTipoController extends BaseController
 {
     public function indexAction($overwritedParams = array())

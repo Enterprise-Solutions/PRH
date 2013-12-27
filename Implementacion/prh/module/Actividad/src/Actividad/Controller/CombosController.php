@@ -8,34 +8,7 @@ use EnterpriseSolutions\Db\Dao;
 
 class CombosController extends BaseController
 {
-    public function actNivelAction()
-    {
-        $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $select->_select->from('act_nivel');
-        $dao = new Dao($select);
-        $template = $this->_crearTemplateParaListado();
-        return $template($dao);
-    }
-    
-    public function actModalidadAction()
-    {
-        $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $select->_select->from('act_modalidad');
-        $dao = new Dao($select);
-        $template = $this->_crearTemplateParaListado();
-        return $template($dao);
-    }
-    
-    public function actCriterioAction()
-    {
-        $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $select->_select->from('act_criterio');
-        $dao = new Dao($select);
-        $template = $this->_crearTemplateParaListado();
-        return $template($dao);
-    }
-    
-    public function actActividadTipoAction()
+	public function actActividadTipoAction()
     {
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $select->_select->from('act_actividad_tipo')->columns(array('act_actividad_tipo_id', 'nombre'));
