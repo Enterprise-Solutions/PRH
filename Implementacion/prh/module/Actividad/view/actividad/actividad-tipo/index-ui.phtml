@@ -18,10 +18,7 @@
 			var baseURL = '<?=$this->basePath()?>';
 			   
 			var auxnombre = null;
-			var auxcodigo = null;
-			var auxnivel = null;
 			var auxmodalidad = null;
-			var auxcriterio = null;
 	
 			var itemsPorPagina = 10
 			var page = 0;
@@ -38,98 +35,37 @@ Ext.onReady(function(){
 					name: 'act_actividad_tipo_id'
 				},{
 					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'codigo'
-				},{
-					type: 'string',
-					name: 'atelier'
-				},{
-					type: 'string',
-					name: 'asistencia'
-				},{
-					type: 'float',
-					name: 'duracion'
-				},{
-					type: 'string',
-					name: 'nivel'
+					name: 'titulo'
 				},{
 					type: 'string',
 					name: 'modalidad'
 				},{
-					type: 'string',
-					name: 'criterio'
-				}
-			]
-		});
-
-		Ext.define('nivel', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_nivel_id'
+					type: 'boolean',
+					name: 'relacion_ayuda'
 				},{
-					type: 'string',
-					name: 'nombre'
+					type: 'boolean',
+					name: 'homologada'
 				},{
-					type: 'string',
-					name: 'descripcion'
-				}
-			]
-		});
-
-		Ext.define('modalidad', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_modalidad_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'descripcion'
-				}
-			]
-		});
-
-		Ext.define('criterio', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_criterio_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'codigo'
+					type: 'boolean',
+					name: 'activo'
 				},{
 					type: 'float',
 					name: 'horas'
-				},{
-					type: 'date',
-					name: 'fecha_alta'
-				},{
-					type: 'date',
-					name: 'fecha_baja'
 				}
 			]
 		});
+
+
+		var comboModalidad = Ext.create('Ext.data.Store', {
+				    fields: ['id', 'nombre'],
+				    data : [
+					        {"id": "D", "nombre":"Dias de Formacion"},
+					        {"id": "H", "nombre":"Horas de Formacion"}
+				        ]
+		});
 		
-	var nivelStore = createStore('nivel', baseURL, '/actividad/combos/act-nivel',"{'p[limit]':'all'}");
-	var modalidadStore = createStore('modalidad', baseURL, '/actividad/combos/act-modalidad',"{'p[limit]':'all'}");
-	var criterioStore = createStore('criterio', baseURL, '/actividad/combos/act-criterio',"{'p[limit]':'all'}");
 	var actividadTipoStore = createStorePage('actividadTipo', baseURL, '/actividad/actividad-tipo/index', itemsPorPagina);
-	
-	var comboNivel = createCombo ('Nivel',50,180,nivelStore,'nombre','act_nivel_id','local','0 10 5 0','90%','nivel');
-	var comboModalidad = createCombo ('Modalidad',80,200,modalidadStore,'nombre','act_modalidad_id','local','0 10 5 0','90%','modalidad');
-	var comboCriterio = createCombo ('Criterio',70,280,criterioStore,'nombre','act_criterio_id','local','0 10 5 0','90%','criterio');
-		  
+			  
 		var panelFiltros = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
 			 collapsible: true,
@@ -145,41 +81,23 @@ Ext.onReady(function(){
 				    items:[{   	
 					    		xtype: 'textfield',
 						        fieldLabel: 'Nombre',
-						        padding: '10 0 5 15',
-						        labelWidth: 70,
+						        padding: '10 20 5 15',
+						        labelWidth: 75,
 						        layout:'anchor',
 						        anchor:'90%',
 						        name: 'nombre',
-							    flex: 0.5    
-				    	  },{   	
-					    		xtype: 'textfield',
-						        fieldLabel: 'C&oacute;digo',
-						        padding: '10 0 5 20',
-						        labelWidth: 60,
-						        layout:'anchor',
-						        anchor:'90%',
-						        name: 'codigo',
-							    flex: 0.4    
+							    flex: 1  
 				    	  },{
-							    xtype: 'container',
-							    padding: '10 0 0 20',
-							    layout:'anchor',
-							    flex: 0.5,
-							    items: [comboNivel]
-						   }, 
-				    	   {
-						        xtype: 'container',
-						        padding: '10 0 0 0', 
-						        layout:'anchor',
-						        flex: 0.5,
-						        items: [comboModalidad]
-					    	},
-					    	{
-						        xtype: 'container',
-						        padding: '10 0 0 0',
-						        layout:'anchor', 
-						        flex: 0.65,
-						        items: [comboCriterio]
+				    		    xtype: 'combobox',
+				    		    fieldLabel: 'Modalidad',
+						        labelWidth: 90,
+						        store: comboModalidad,
+						        displayField: 'nombre',
+						        valueField: 'id',
+						        padding: '10 30 5 15',
+					 	        anchor:'90%',
+					 	        name: 'modalidad',
+					 	        flex: 1 
 					    	}
 					   ]
 					},{
@@ -205,10 +123,7 @@ Ext.onReady(function(){
 						                actividadTipoStore.load({
 											params: {
 												"s[nombre]": valoresForm.nombre,
-												"s[codigo]": valoresForm.codigo,
-												"s[nivel]": valoresForm.nivel,
-												"s[modalidad]": valoresForm.modalidad,
-												"s[criterio]": valoresForm.criterio
+												"s[modalidad]": valoresForm.modalidad
 									   		} 
 						               });
 						            }//end of handler  
@@ -281,10 +196,7 @@ Ext.onReady(function(){
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
 	       						"s[nombre]": valoresForm.nombre,
-								"s[codigo]": valoresForm.codigo,
-								"s[nivel]": valoresForm.nivel,
-								"s[modalidad]": valoresForm.modalidad,
-								"s[criterio]": valoresForm.criterio
+								"s[modalidad]": valoresForm.modalidad
 	       				    }
        					});
                 	 },
@@ -298,10 +210,7 @@ Ext.onReady(function(){
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
 	       						"s[nombre]": valoresForm.nombre,
-								"s[codigo]": valoresForm.codigo,
-								"s[nivel]": valoresForm.nivel,
-								"s[modalidad]": valoresForm.modalidad,
-								"s[criterio]": valoresForm.criterio       
+								"s[modalidad]": valoresForm.modalidad     
 		   				    }
    						});
             		 },
@@ -315,10 +224,7 @@ Ext.onReady(function(){
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
 	       						"s[nombre]": valoresForm.nombre,
-								"s[codigo]": valoresForm.codigo,
-								"s[nivel]": valoresForm.nivel,
-								"s[modalidad]": valoresForm.modalidad,
-								"s[criterio]": valoresForm.criterio 
+								"s[modalidad]": valoresForm.modalidad
 		   				    }
    						});
             	 	},
@@ -341,10 +247,7 @@ Ext.onReady(function(){
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page,
 	       						"s[nombre]": valoresForm.nombre,
-								"s[codigo]": valoresForm.codigo,
-								"s[nivel]": valoresForm.nivel,
-								"s[modalidad]": valoresForm.modalidad,
-								"s[criterio]": valoresForm.criterio
+								"s[modalidad]": valoresForm.modalidad
 		   				    }
    						});      					
             	 	},
@@ -358,35 +261,25 @@ Ext.onReady(function(){
             // grid columns
             columns:[{
                 text: "Tipo de Actividad",
-                dataIndex: 'nombre',
+                dataIndex: 'titulo',
                 align: 'left',
                 flex: 2.2,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
             	}
             },{
-                text: "C&oacute;digo",
-                dataIndex: 'codigo',
+                text: "Homologada",
+                dataIndex: 'homologada',
                 align: 'center',
                 flex: 1,
             },{
-                text: "Atelier",
-                dataIndex: 'atelier',
+                text: "Activo",
+                dataIndex: 'activo',
                 align: 'center',
-                flex: 0.6,
+                flex: 1,
             },{
-                text: "Asistencia",
-                dataIndex: 'asistencia',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: 'Duraci&oacute;n (hs)',
-                dataIndex: 'duracion',
-                align: 'center',
-                flex: 0.5,
-            },{
-                text: "Nivel",
-                dataIndex: 'nivel',
+                text: 'Duraci&oacute;n (d&iacuteas;/hs)',
+                dataIndex: 'horas',
                 align: 'center',
                 flex: 0.5,
             },{
@@ -394,11 +287,6 @@ Ext.onReady(function(){
                 dataIndex: 'modalidad',
                 align: 'center',
                 flex: 0.5,
-            },{
-                text: "Criterio",
-                dataIndex: 'criterio',
-                align: 'center',
-                flex: 0.4,
             },{
                 xtype:'actioncolumn',
                 width:35,
@@ -446,11 +334,8 @@ Ext.onReady(function(){
         								   }
         								   hide_message();
         									Ext.getCmp('filtros').up('form').getForm().reset();
-        									   auxnombre = null;
-        									   auxcodigo = null;
-        									   auxnivel = null;
+        									   auxnombre = null;   									   
         									   auxmodalidad = null;
-        									   auxcriterio = null;
         								   actividadTipoStore.load();
         							   },
         							   jsonData:{
