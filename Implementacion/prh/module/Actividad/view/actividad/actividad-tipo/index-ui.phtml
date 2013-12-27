@@ -43,14 +43,11 @@ Ext.onReady(function(){
 					type: 'boolean',
 					name: 'relacion_ayuda'
 				},{
-					type: 'boolean',
+					type: 'string',
 					name: 'homologada'
 				},{
-					type: 'boolean',
+					type: 'string',
 					name: 'activo'
-				},{
-					type: 'float',
-					name: 'horas'
 				}
 			]
 		});
@@ -59,8 +56,8 @@ Ext.onReady(function(){
 		var comboModalidad = Ext.create('Ext.data.Store', {
 				    fields: ['id', 'nombre'],
 				    data : [
-					        {"id": "D", "nombre":"Dias de Formacion"},
-					        {"id": "H", "nombre":"Horas de Formacion"}
+					        {"id": "D", "nombre":"D&iacute;as de Formaci&oacute;n"},
+					        {"id": "H", "nombre":"Horas de Formaci&oacute;n"}
 				        ]
 		});
 		
@@ -268,25 +265,23 @@ Ext.onReady(function(){
                     return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
             	}
             },{
+                text: "Modalidad",
+                dataIndex: 'modalidad',
+                align: 'center',
+                flex: 0.7,
+                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.modalidad) {case 'D':return 'D&iacute;as de Formaci&oacute;n'; case 'H': return 'Horas de Formaci&oacute;n'; default: return '-';}},
+            },{
                 text: "Homologada",
                 dataIndex: 'homologada',
                 align: 'center',
                 flex: 1,
+                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.homologada) {case 'true':return 'Si'; case 'false': return 'No'; default: return '-';}},
             },{
                 text: "Activo",
                 dataIndex: 'activo',
                 align: 'center',
                 flex: 1,
-            },{
-                text: 'Duraci&oacute;n (d&iacuteas;/hs)',
-                dataIndex: 'horas',
-                align: 'center',
-                flex: 0.5,
-            },{
-                text: "Modalidad",
-                dataIndex: 'modalidad',
-                align: 'center',
-                flex: 0.5,
+                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.activo) {case 'true':return 'Si'; case 'false': return 'No'; default: return '-';}},
             },{
                 xtype:'actioncolumn',
                 width:35,
