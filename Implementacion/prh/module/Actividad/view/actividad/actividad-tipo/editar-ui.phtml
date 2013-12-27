@@ -27,114 +27,35 @@ Ext.onReady(function(){
 
 		//modelos
 						var si_no = Ext.create('Ext.data.Store', {
-				    fields: ['id', 'nombre'],
-				    data : [
-					        {"id": "S", "nombre":"Si"},
-					        {"id": "N", "nombre":"No"}
-				        ]
-					});
-				
+						    fields: ['id', 'nombre'],
+						    data : [
+							        {"id": "S", "nombre":"Si"},
+							        {"id": "N", "nombre":"No"}
+						        ]
+						});
+						
+						var si_no2 = Ext.create('Ext.data.Store', {
+						    fields: ['id', 'nombre'],
+						    data : [
+							        {"id": "S", "nombre":"Si"},
+							        {"id": "N", "nombre":"No"}
+						        ]
+						});
 
-					Ext.define('nivel', {
-						extend: 'Ext.data.Model',
-						fields: [
-							{
-								type: 'int',
-								name: 'act_nivel_id'
-							},{
-								type: 'string',
-								name: 'nombre'
-							},{
-								type: 'string',
-								name: 'descripcion'
-							}
-						]
-					});
+						var si_no3 = Ext.create('Ext.data.Store', {
+						    fields: ['id', 'nombre'],
+						    data : [
+							        {"id": "S", "nombre":"Si"},
+							        {"id": "N", "nombre":"No"}
+						        ]
+						});
 
-					Ext.define('modalidad', {
-						extend: 'Ext.data.Model',
-						fields: [
-							{
-								type: 'int',
-								name: 'act_modalidad_id'
-							},{
-								type: 'string',
-								name: 'nombre'
-							},{
-								type: 'string',
-								name: 'descripcion'
-							}
-						]
-					});
-
-					Ext.define('criterio', {
-						extend: 'Ext.data.Model',
-						fields: [
-							{
-								type: 'int',
-								name: 'act_criterio_id'
-							},{
-								type: 'string',
-								name: 'nombre'
-							},{
-								type: 'string',
-								name: 'codigo'
-							},{
-								type: 'float',
-								name: 'horas'
-							},{
-								type: 'date',
-								name: 'fecha_alta'
-							},{
-								type: 'date',
-								name: 'fecha_baja'
-							}
-						]
-					});
-					
-					var nivelStore = Ext.create('Ext.data.Store', {
-						model: 'nivel',
-						proxy: {
-							type: 'ajax',
-							extraParams: {'p[limit]':'all'},
-							headers: {'Accept':'application/json'},
-							url: baseURL + '/actividad/combos/act-nivel?format=json',
-							reader: {
-								type: 'json',
-								root: 'records'
-							}
-						},
-						autoLoad: true
-					});
-
-					var modalidadStore = Ext.create('Ext.data.Store', {
-						model: 'modalidad',
-						proxy: {
-							type: 'ajax',
-							extraParams: {'p[limit]':'all'},
-							headers: {'Accept':'application/json'},
-							url: baseURL + '/actividad/combos/act-modalidad?format=json',
-							reader: {
-								type: 'json',
-								root: 'records'
-							}
-						},
-						autoLoad: true
-					});
-
-					var criterioStore = Ext.create('Ext.data.Store', {
-						model: 'criterio',
-						proxy: {
-							type: 'ajax',
-							extraParams: {'p[limit]':'all'},
-							headers: {'Accept':'application/json'},
-							url: baseURL + '/actividad/combos/act-criterio?format=json',
-							reader: {
-								type: 'json',
-								root: 'records'
-							}
-						},
-						autoLoad: true
+						var comboModalidad = Ext.create('Ext.data.Store', {
+						    fields: ['id', 'nombre'],
+						    data : [
+							        {"id": "D", "nombre":"D&iacute;as de Formaci&oacute;n"},
+							        {"id": "H", "nombre":"Horas de Formaci&oacute;n"}
+						        ]
 					});
 					
 					var buscarId = function(){
@@ -158,20 +79,8 @@ Ext.onReady(function(){
 					    	
 					    	for (campo in campos) {
 						    	var name = form.findField(campo);
-						    		if (name) {
-						    			if (campo == "fecha_alta" || campo == "fecha_baja")
-								    	{
-						    				if (campos[campo]){
-									    		var fecha = campos[campo];
-							 			    	var fecha2 = fecha.split("-");
-							 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
-							 			    	campos[campo] = result;
-							 			    	name.setValue(campos[campo]);
-						    				}
-										 } else{				    
-											    name.setValue(campos[campo]);
-									     }
-							    					
+						    		if (name) {			    
+											    name.setValue(campos[campo]);						    					
 					    			}
 					    	}
 					    }
@@ -184,18 +93,6 @@ Ext.onReady(function(){
 					if(basicForm.isValid())
 					{  						
 					            var valoresForm = basicForm.getFieldValues();
-
-					           	var auxnombre = valoresForm.nombre;
-					           	var auxcodigo = valoresForm.codigo;
-					           	var auxsubtitulo = valoresForm.subtitulo;
-					           	var auxcriterio = valoresForm.act_criterio_id;
-					        	var auxmodalidad = valoresForm.act_modalidad_id;
-					           	var auxnivel = valoresForm.act_nivel_id;
-					        	var auxatelier = valoresForm.atelier;
-					        	var auxasistencia = valoresForm.asistencia;
-					        	var auxduracion = valoresForm.duracion;
-					        	var auxfecha_alta = valoresForm.fecha_alta;
-					        	var auxfecha_baja = valoresForm.fecha_baja;
 
 								Ext.Ajax.request({
 									   url: baseURL + '/actividad/actividad-tipo/put',
@@ -239,17 +136,13 @@ Ext.onReady(function(){
 									   jsonData:{
 									       'put':{
 									    	   'act_actividad_tipo_id': aux,
-											   'act_nivel_id':auxnivel,
-											   'nombre': auxnombre,
-											   'codigo': auxcodigo,
-											   'subtitulo': auxsubtitulo,
-											   'act_criterio_id': auxcriterio,
-											   'act_modalidad_id': auxmodalidad,
-											   'atelier': auxatelier,
-											   'asistencia': auxasistencia,
-											   'duracion': auxduracion,
-											   'fecha_alta': (formatearFecha(auxfecha_alta, 1)),
-											   'fecha_baja': (formatearFecha(auxfecha_baja, 1))			   
+											   'titulo': valoresForm.titulo,
+											   'modalidad': valoresForm.modalidad,
+											   'horas':  valoresForm.horas,
+											   'activo':  valoresForm.activo,
+											   'homologada':  valoresForm.homologada,	  
+											   'relacion_ayuda':  valoresForm.relacion_ayuda,
+											   'descripcion': valoresForm.descripcion,	  	  	   
 									       }
 									   }
 								 });
@@ -289,39 +182,9 @@ Ext.onReady(function(){
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'nombre'
+						        name: 'titulo'
 					    },{
-						        fieldLabel: 'Subtitulo',
-						        allowBlank: true,
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'subtitulo'
-				    	},{
-					        	fieldLabel: 'Criterio',
-					        	xtype: 'combobox',
-					        	forceSelection: true,
-						        labelWidth: 110,
-						        store: criterioStore,
-						        displayField: 'nombre',
-						        queryMode: 'local',
-						        valueField: 'act_criterio_id',
-						        allowBlank: false,
-						        padding: 15,
-					 	        anchor:'90%',
-					 	        name: 'act_criterio_id', 
-				         },{
-						    	fieldLabel: 'Duraci&oacute;n (hs)',
-						    	labelWidth: 110,
-						    	xtype: 'numberfield',
-						    	minvalue: 0,
-						    	value: 0,
-						    	step: 0.25,
-						    	anchor:'90%',
-						    	padding: 15,
-						    	name: 'duracion',
-				    	 },{
-						        fieldLabel: 'Asistencia',
+						        fieldLabel: 'Activo',
 						        xtype: 'combobox',
 						        forceSelection: true,
 						        labelWidth: 110,
@@ -331,79 +194,61 @@ Ext.onReady(function(){
 						        valueField: 'id',
 						        allowBlank: false,
 						        padding: 15,
+						        name: 'activo',
 					 	        anchor:'90%',
-					 	        name: 'asistencia', 
-				    	  },{
-	                			fieldLabel: 'Fecha de alta',
-					 	        xtype: 'datefield',
-					 	       	format: 'd/m/Y',
-					 	        allowBlank: true,
-					 	       	padding: 15,
-					 	        labelWidth: 110,
-					 	        anchor:'90%',
-					 	        name: 'fecha_alta'  
-						  }
+						},{
+						    	xtype: 'textarea',
+						        fieldLabel: 'Descripci&oacute;n',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'descripcion',
+						}
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
 		                layout: 'anchor',
 		                defaultType: 'textfield',
 		                items: [{
-			    	        fieldLabel: 'C&oacute;digo',
-			    	        labelWidth: 110,
-			    	        allowBlank: true,
-			    	        padding: 15,
-					        anchor:'90%',
-					        name: 'codigo'
-			    	    },{
 					        fieldLabel: 'Modalidad',
 					        xtype: 'combobox',
 					        forceSelection: true,
 					        labelWidth: 110,
-					        store: modalidadStore,
-					        displayField: 'nombre',
-					        queryMode: 'local',
-					        valueField: 'act_modalidad_id',
-					        allowBlank: false,
-					        padding: 15,
-				 	        anchor:'90%',
-				 	        name: 'act_modalidad_id', 
-			    	    },{
-					        fieldLabel: 'Nivel',
-					        xtype: 'combobox',
-					        forceSelection: true,
-					        labelWidth: 110,
-					        store: nivelStore,
-					        displayField: 'nombre',
-					        queryMode: 'local',
-					        valueField: 'act_nivel_id',
-					        allowBlank: false,
-					        padding: 15,
-				 	        anchor:'90%',
-				 	        name: 'act_nivel_id', 
-			    	   },{
-					        fieldLabel: 'Atelier',
-					        xtype: 'combobox',
-					        forceSelection: true,
-					        labelWidth: 110,
-					        store: si_no,
+					        store: comboModalidad,
 					        displayField: 'nombre',
 					        queryMode: 'local',
 					        valueField: 'id',
 					        allowBlank: false,
 					        padding: 15,
 				 	        anchor:'90%',
-				 	        name: 'atelier', 
-			    	  	},{
-                			fieldLabel: 'Fecha de baja',
-				 	        xtype: 'datefield',
-				 	       	format: 'd/m/Y',
-				 	        allowBlank: true,
-					 	   	padding: 15,
-				 	        labelWidth: 110,
+				 	        name: 'modalidad', 
+			    	    },{
+					        fieldLabel: 'Homologada',
+					        xtype: 'combobox',
+					        forceSelection: true,
+					        labelWidth: 110,
+					        store: si_no2,
+					        displayField: 'nombre',
+					        queryMode: 'local',
+					        valueField: 'id',
+					        allowBlank: false,
+					        padding: 15,
 				 	        anchor:'90%',
-				 	        name: 'fecha_baja'  
-                	}]
+				 	        name: 'homologada',
+						},{
+					        fieldLabel: 'Es R.A.',
+					        xtype: 'combobox',
+					        forceSelection: true,
+					        labelWidth: 110,
+					        store: si_no3,
+					        displayField: 'nombre',
+					        queryMode: 'local',
+					        valueField: 'id',
+					        allowBlank: false,
+					        padding: 15,
+				 	        anchor:'90%',
+				 	        name: 'relacion_ayuda',
+						}]
 			    	}]},{
 		    	xtype: 'container',
 		 	    height: 200,

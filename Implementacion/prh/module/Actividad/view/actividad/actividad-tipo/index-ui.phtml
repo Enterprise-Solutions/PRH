@@ -40,7 +40,7 @@ Ext.onReady(function(){
 					type: 'string',
 					name: 'modalidad'
 				},{
-					type: 'boolean',
+					type: 'string',
 					name: 'relacion_ayuda'
 				},{
 					type: 'string',
@@ -275,13 +275,13 @@ Ext.onReady(function(){
                 dataIndex: 'homologada',
                 align: 'center',
                 flex: 1,
-                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.homologada) {case 'true':return 'Si'; case 'false': return 'No'; default: return '-';}},
+                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.homologada) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
             },{
                 text: "Activo",
                 dataIndex: 'activo',
                 align: 'center',
                 flex: 1,
-                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.activo) {case 'true':return 'Si'; case 'false': return 'No'; default: return '-';}},
+                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.activo) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
             },{
                 xtype:'actioncolumn',
                 width:35,
