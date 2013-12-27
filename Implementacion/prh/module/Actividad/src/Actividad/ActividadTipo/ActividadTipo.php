@@ -23,64 +23,37 @@ class ActividadTipo
     protected $act_actividad_tipo_id;
     
     /**
-     * @ORM\Column(type="integer")
-     */
-    protected $act_nivel_id;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $act_modalidad_id;
-    
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $act_criterio_id;
-    
-    /**
      * @ORM\Column(type="string")
-     * @ORM\Column(length=80)
+     * @ORM\Column(length=1)
      */
-    protected $codigo;
+    protected $modalidad;
     
     /**
      * @ORM\Column(type="string")
      * @ORM\Column(length=100)
      */
-    protected $nombre;
+    protected $titulo;
     
     /**
      * @ORM\Column(type="string")
-     * @ORM\Column(length=100)
+     * @ORM\Column(length=250)
      */
-    protected $subtitulo;
+    protected $descripcion;
     
     /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=1)
+     * @ORM\Column(type="boolean")
      */
-    protected $atelier;
+    protected $relacion_ayuda;
     
     /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=1)
+     * @ORM\Column(type="boolean")
      */
-    protected $asistencia;
+    protected $homologada;
     
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="boolean")
      */
-    protected $duracion;
-    
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $fecha_baja;
-    
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $fecha_alta;
+    protected $activo;
     
     /**
      * Input Filter
@@ -90,30 +63,19 @@ class ActividadTipo
     {
         $inputFilterFactory = new InputFilterFactory();
         $spec = array(
-            'act_nivel_id' => array(
-                'name'     => 'act_nivel_id',
-                'required' => true,
-            ),
-            'act_modalidad_id' => array(
-                'name'     => 'act_modalidad_id',
-                'required' => true,
-            ),
-            'act_criterio_id' => array(
-                'name'     => 'act_criterio_id',
-                'required' => true,
-            ),
-            'codigo' => array(
-                'name'       => 'codigo',
+            'modalidad' => array(
+                'name'       => 'modalidad',
                 'required'   => false,
                 'filters'    => array(
                     array('name' => 'StripTags'),
                 ),
                 'validators' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 80, 'message' => 'Solo se permiten %max% caracteres')),
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+                	array('name' => 'Regex', 'options' => array('pattern' => "/^(H|D)$/", 'message' => 'El valor debe ser D (Dias de Formacion) o H (Horas de Formacion)')),
                 ),
             ),
-            'nombre' => array(
-                'name'       => 'nombre',
+            'titulo' => array(
+                'name'       => 'titulo',
                 'required'   => false,
                 'filters'    => array(
                     array('name' => 'StripTags'),
@@ -122,50 +84,49 @@ class ActividadTipo
                     array('name' => 'StringLength', 'options' => array('max' => 100, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
-            'subtitulo' => array(
-                'name'     => 'subtitulo',
-                'required' => false,
-            ),
-            'atelier' => array(
-                'name'       => 'atelier',
-                'required'   => true,
-                'filters'    => array(
-                    array('name' => 'StringToUpper'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
-                    array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
-                )
-            ),
-            'asistencia' => array(
-                'name'       => 'asistencia',
-                'required'   => true,
-                'filters'    => array(
-                    array('name' => 'StringToUpper'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
-                    array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
-                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
-                )
-            ),
-            'duracion' => array(
-                'name'     => 'duracion',
-                'required' => false,
-                'validators' => array(
-                    array('name' => 'GreaterThan', 'options' => array('min' => 0, 'message' => 'La duracion debe ser mayor a cero')),
-                )
-            ),
-            'fecha_baja' => array(
-                'name'     => 'fecha_baja',
-                'required' => false,
-            ),
-            'fecha_alta' => array(
-                'name'     => 'fecha_alta',
-                'required' => false,
-            ),
+        	'descripcion' => array(
+        		'name'       => 'descripcion',
+        		'required'   => false,
+        		'filters'    => array(
+        			array('name' => 'StripTags'),
+        		),
+        		'validators' => array(
+        			array('name' => 'StringLength', 'options' => array('max' => 250, 'message' => 'Solo se permiten %max% caracteres')),
+        		),
+        	),
+        	'relacion_ayuda' => array(
+        		'name'       => 'relacion_ayuda',
+        		'required'   => false,
+        		'filters'    => array(
+        			array('name' => 'StripTags'),
+        		),
+        		'validators' => array(
+        			array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+        			array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
+        		),
+        	),
+        	'homologada' => array(
+        		'name'       => 'homologada',
+        		'required'   => false,
+        		'filters'    => array(
+        			array('name' => 'StripTags'),
+        		),
+        		'validators' => array(
+        			array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+        			array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
+        		),
+        	),
+        	'activo' => array(
+        		'name'       => 'activo',
+        		'required'   => false,
+        		'filters'    => array(
+        			array('name' => 'StripTags'),
+        		),
+        		'validators' => array(
+        			array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+        			array('name' => 'Regex', 'options' => array('pattern' => "/^(S|N)$/", 'message' => 'El valor debe ser S (Si) o N (No)')),
+        		),
+        	),
         );
         
         $inputFilter = $inputFilterFactory->createInputFilter($spec);
