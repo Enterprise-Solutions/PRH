@@ -37,33 +37,29 @@ Ext.onReady(function(){
 			    	var form = Ext.getCmp('form').getForm();
 			    	
 			    	for (campo in campos) {
-				    	if (campo == "documentos"){
-							var doc = (campos[campo]);
-							console.log(doc["org_documento_id"]);
-			    		}	
 				    	var name = form.findField(campo);
 				    		if (name) {
-				    			if (campo == "fecha_alta" || campo == "fecha_baja")
-						    	{
-				    				if (campos[campo]){
-							    		var fecha = campos[campo];
-					 			    	var fecha2 = fecha.split("-");
-					 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
-					 			    	campos[campo] = result;
-					 			    	name.setValue(campos[campo]);
-				    				}
-						    	 }else if (campo == "asistencia" || campo == "atelier")
-							    	{
-								    	if (campos[campo] == 'S'){
+				    			 if (campo == "homologada" || campo == "activo")
+							     {
+								    	if (campos[campo] == 1){
 								    		campos[campo] = 'Si';
 								    	}
-								    	else if (campos[campo] == 'N'){
+								    	else if (campos[campo] == 0){
 								    		campos[campo] = 'No';
 								    	}
 					 			    	name.setValue(campos[campo]);
-								 	} else{
+								 } else if (campo == "modalidad")
+							     {
+								    	if (campos[campo] == 'D'){
+								    		campos[campo] = 'D&iacute;as de Formaci&oacute;n';
+								    	}
+								    	else if (campos[campo] == 'H'){
+								    		campos[campo] = 'Horas de Formaci&oacute;n';
+								    	}
+								    	name.setValue(campos[campo]);
+								 } else{
 								    
-									    	name.setValue(campos[campo]);
+									    name.setValue(campos[campo]);
 							     }
 					    }	}	
 			    	}
@@ -99,92 +95,43 @@ Ext.onReady(function(){
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'nombre',
+						        name: 'titulo',
 						},{
-				    	    	fieldLabel: 'Nivel',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-				    	        name: 'nivel',
-				    	},{
-				    		 	fieldLabel: 'Duraci&oacute;n (hs)',
-						        xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'duracion',
-						},{
-						    	fieldLabel: 'Fecha de alta',
 						    	xtype: 'displayfield',
+						        fieldLabel: 'Activo',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'fecha_alta',	  
-				    	 }
+						        name: 'activo',
+						},{
+						    	xtype: 'displayfield',
+						        fieldLabel: 'Descripci&oacute;n',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'descripcion',
+						}
 			    	]},{
 					xtype: 'container',
 					flex: 1,
 					layout: 'anchor',
 					defaultType: 'textfield',
 					items: [{
-				    	        fieldLabel: 'C&oacute;digo',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						        name: 'codigo'
-				    	 },{
 						        fieldLabel: 'Modalidad',
 					        	xtype: 'displayfield',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
 					 	        name: 'modalidad',
-				    	 },{
-				    			fieldLabel: 'Atelier',
-					        	xtype: 'displayfield',
+				    	 	},{
+						    	xtype: 'displayfield',
+						        fieldLabel: 'Homologada',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'atelier',
-						 },{
-						    	fieldLabel: 'Fecha de baja',
-					        	xtype: 'displayfield',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						    	name: 'fecha_baja',
-					   	 }
-			    	]},{
-			    		xtype: 'container',
-		                flex: 1,
-		                layout: 'anchor',
-		                defaultType: 'textfield',
-		                items: [{
-							        fieldLabel: 'Subtitulo',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-						 	        name: 'subtitulo', 
-					    	    },{
-						        	fieldLabel: 'Criterio',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-						 	        name: 'criterio'
-						    	},{
-							    	fieldLabel: 'Asistencia',
-						        	xtype: 'displayfield',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'asistencia',
-						         }
-			    		]
-			    	}]},{
+						        name: 'homologada',
+							}
+			    	]}]},{
 		    	xtype: 'container',
 		 	    height: 200,
 		 	    width: 'fit',
