@@ -24,7 +24,7 @@ class Select extends DbSelect
     {
         if ($modalidad && $modalidad != "") {
             $this->_select
-                 ->where("aat.act_modalidad_id = $modalidad");
+                 ->where("aat.modalidad = '$modalidad'");
         }
     }
 }
