@@ -39,9 +39,7 @@ return array(
         'invokables' => array(  // Se invoca el controlador
             'Actividad\Controller\Actividad'     => 'Actividad\Controller\ActividadController',
             'Actividad\Controller\ActividadTipo' => 'Actividad\Controller\ActividadTipoController',
-            'Actividad\Controller\Nivel'         => 'Actividad\Controller\NivelController',
-            'Actividad\Controller\Modalidad'     => 'Actividad\Controller\ModalidadController',
-            'Actividad\Controller\Criterio'      => 'Actividad\Controller\CriterioController',
+            'Actividad\Controller\Ciclo'         => 'Actividad\Controller\CicloController',
             'Actividad\Controller\Combos'        => 'Actividad\Controller\CombosController',
         ),
     ),
