@@ -8,6 +8,15 @@ use EnterpriseSolutions\Db\Dao;
 
 class CombosController extends BaseController
 {
+	public function actCicloAction()
+	{
+		$select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+		$select->_select->from('act_ciclo');
+		$dao = new Dao($select);
+		$template = $this->_crearTemplateParaListado();
+		return $template($dao);
+	}
+	
 	public function actActividadTipoAction()
     {
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
