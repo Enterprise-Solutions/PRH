@@ -41,10 +41,10 @@ Ext.onReady(function(){
 				    		if (name) {
 				    			 if (campo == "homologada" || campo == "activo")
 							     {
-								    	if (campos[campo] == 1){
+								    	if (campos[campo] == 'S'){
 								    		campos[campo] = 'Si';
 								    	}
-								    	else if (campos[campo] == 0){
+								    	else if (campos[campo] == 'N'){
 								    		campos[campo] = 'No';
 								    	}
 					 			    	name.setValue(campos[campo]);
