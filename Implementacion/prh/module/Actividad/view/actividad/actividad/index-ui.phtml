@@ -366,12 +366,29 @@ Ext.onReady(function(){
                          { 
                              xtype: 'tbfill' 
                          },{
-     			            xtype: 'button',	
-    			            text: 'Crear Actividad',
-    			            handler: function() {
-    			            	window.location = baseURL+'/actividad/actividad/crear-ui';
-    						}
-    		            }]
+// 							 if(1)
+// 							 { 
+			                             xtype: 'button',
+			                        	 text: 'Crear Actividad',
+			                        	 renderTo: Ext.getBody(),
+			                        	 arrowAlign: 'right',
+			                        	 menu:[  
+			                        		 {
+			                            		text: 'Otras Actividades',
+			             			            handler: function() {
+			         			            	     window.location = baseURL+'/actividad/actividad/crear-ui';
+			         						    }
+			                            	 },
+			                        		 {text: 'Acompa&ntilde;amiento'},
+			                             ]
+			                        		 
+			//      			            xtype: 'button',	
+			//     			            text: 'Crear Actividad',
+			//     			            handler: function() {
+			//     			            	window.location = baseURL+'/actividad/actividad/crear-ui';
+			//     						}
+			    		            }]
+                    //      }
 	                }
 	                ,{
                     xtype: 'pagingtoolbar',
@@ -396,8 +413,8 @@ Ext.onReady(function(){
 		   						"p[page]": page,
 	       				    }
        					});
-           					console.log("page store: ", page);
-          				    console.log("page extjs: ",this.store.currentPage);	
+           					//console.log("page store: ", page);
+          				    //console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;

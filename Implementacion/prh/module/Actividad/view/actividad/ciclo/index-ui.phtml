@@ -1,0 +1,521 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Actividad - Ciclo </title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+
+			var auxciclo = null;
+	
+			var itemsPorPagina = 11;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+		Ext.define('ciclo', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_ciclo_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
+		});
+		
+		var cicloStore = Ext.create('Ext.data.Store', {
+			model: 'ciclo',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]": page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/ciclo/index?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: true
+		});
+
+		function agregarwindow() {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Ciclo',   
+		                    allowBlank: true,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Descripci&oacute;n del Ciclo',   
+		                    allowBlank: true,
+		                    name: 'descripcion',   
+                		}
+                       ],
+
+                buttons: [{
+                    text: 'Agregar',
+                    handler: function(b,e) {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+			           	var auxdescripcion = valoresForm.descripcion
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/actividad/ciclo/post',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Ciclo Creado Correctamente',
+										closable: false,
+										width: 250
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, delay);
+								   }
+								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxciclo = null;
+								   cicloStore.load();
+							   },
+							   jsonData:{
+							       'post':{
+									   'nombre': auxnombre,
+									   'descripcion': auxdescripcion
+							       }
+							   }
+						 });
+						 this.up('window').close();
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').close();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Crear Ciclo',
+                closeAction: 'hide',
+                width: 400,
+                height: 200,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+
+		function editarwindow (id_edit, nombre_edit, descripcion_edit) {
+			 
+            var form = Ext.widget('form', {
+                layout: {
+                    type: 'vbox',
+                    align: 'stretch'
+                },
+                border: false,
+                bodyPadding: 10,
+
+                fieldDefaults: {
+                    labelAlign: 'top',
+                    labelWidth: 100,
+                    labelStyle: 'font-weight:bold'
+                },
+                items: [
+                       	{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Nombre del Ciclo',   
+		                    allowBlank: true,
+		                    value: nombre_edit,
+		                    name: 'nombre',   
+                		},{
+		                    xtype: 'textfield',
+		                    fieldLabel: 'Descripci&oacute;n del Ciclo',   
+		                    allowBlank: true,
+		                    value: descripcion_edit,
+		                    name: 'descripcion',   
+                		}
+                ],
+
+                buttons: [{
+                    text: 'Guardar',
+                    handler: function(b,e) {
+                    	var basicForm = b.up('form').getForm();  						
+			            var valoresForm = basicForm.getFieldValues();
+
+			           	var auxnombre = valoresForm.nombre;
+			        	var auxdescripcion = valoresForm.descripcion
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/actividad/ciclo/put',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Ciclo Modificado Correctamente',
+										closable: false,
+										width: 250
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, delay);
+								   }
+								   hide_message();
+								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   auxciclo = null;
+								   cicloStore.load();
+							   },
+							   jsonData:{
+							       'put':{
+							    	   'act_ciclo_id': id_edit,
+							    	   'nombre': auxnombre,
+									   'descripcion': auxdescripcion
+							       }
+							   }
+						 });
+						 this.up('window').close();
+                    }
+                },{
+                    text: 'Cancelar',
+                    handler: function() {
+                        this.up('form').getForm().reset();
+                        this.up('window').close();
+                    }
+                }]
+            });
+
+            win = Ext.widget('window', {
+                title: 'Editar Ciclo',
+                closeAction: 'hide',
+                width: 400,
+                height: 200,
+                layout: 'fit',
+                resizable: true,
+                modal: true,
+                items: form
+            }); 
+       	 win.show();
+    	}  
+
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 'fit',			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'column',
+				    items:[{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 400,
+						        layout:'anchor',
+						        anchor:'90%',
+						        name: 'nombre',       
+				    	  }
+					   ]
+					},{
+						xtype: 'container',
+					    height: 45,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '5 0 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+
+										auxciclo = valoresForm.nombre;
+										
+							           //inicializo los pages
+							           	page = 0;
+										gridCiclo.store.currentPage = 1;
+										
+						                cicloStore.load({
+											params: {
+												"s[nombre]": auxciclo
+									   		} 
+						               });
+						            }//end of handler  									        
+								},{
+			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '5 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+								           	auxciclo = null;
+											gridCiclo.store.currentPage = 1;
+						           			b.up('form').getForm().reset();
+						           			cicloStore.load();						   	
+				           		  		}
+								}]}
+				    	]
+		});
+		
+		var gridCiclo = Ext.create('Ext.grid.Panel', {
+            selModel: {
+                checkOnly: true,
+                injectCheckbox: 1
+            },
+            width: 'fit',
+            padding: '10 10 0 10',
+            height: 335,
+            region: 'center',  
+	           dockedItems: [
+	                {     
+		          	     xtype: 'toolbar',
+                         dock: 'top',
+                         items: [
+                         { 
+                             xtype: 'tbfill' 
+                         },{
+                        	xtype: 'button',	
+     			            text: 'Agregar',
+     		                handler: agregarwindow,
+                         }]
+	                },{
+	                    xtype: 'pagingtoolbar',
+	                    store: cicloStore, 
+	                    dock: 'bottom',
+	                    displayInfo: true,
+	                    listeners: {
+	                        'afterrender': function (component)
+	                        {
+	                            component.down('#refresh').hide()
+	                        },single: true
+	                    },
+	                    displayMsg: 'Registro {0} al {1} de {2}',
+	                    beforePageText: 'P&aacute;gina',
+	                    afterPageText : 'de {0}',
+	                    moveNext : function(){ 
+	                   		page = page + itemsPorPagina;
+	                   	 	this.store.currentPage++;
+	           				cicloStore.load({
+		       				    params:{
+		       				    	"p[limit]": itemsPorPagina,
+		       						"p[page]": page,
+		       						"s[nombre]": auxciclo
+		       				    }
+	       					});
+	                	 },
+	                 	 movePrevious : function(){ 
+	                 		page = page - itemsPorPagina;
+							this.store.currentPage--;
+							cicloStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,
+			   						"s[nombre]": auxciclo
+			   				    }
+	   						});
+	            		 },
+	             		moveFirst : function(){ 
+	             			page = 0;
+							this.store.currentPage = 1;
+							cicloStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,
+			   						"s[nombre]": auxciclo	        
+			   				    }
+	   						});
+	            	 	},
+	            	 	moveLast : function(){                 	 	
+	            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+		                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+		                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+	            	 		}
+							else
+							{
+								page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+								this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+							}
+	            	 		cicloStore.load({
+			   				    params:{
+			   				    	"p[limit]": itemsPorPagina,
+			   						"p[page]": page,
+			   						"s[nombre]": auxciclo	        
+			   				    }
+	   						});      					
+	            	 	},
+	                }
+	        ],                       
+            layout: 'fit',
+            emptyText: "No existen Ciclos cargados",        
+            store: cicloStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+	                text: "Ciclo",
+	                dataIndex: 'nombre',
+	                align: 'left',
+                flex: 1,
+            	},{
+                    text: "Descripci&oacute;n",
+                    dataIndex: 'descripcion',
+                    align: 'left',
+                    flex: 1,
+                },{
+                xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    //tooltip: 'Edit',
+                handler: function(grid, rowIndex, colIndex) {
+                    	var id_edit = cicloStore.getAt(rowIndex).get('act_ciclo_id');
+                    	var nombre_edit = cicloStore.getAt(rowIndex).get('nombre');
+                    	var descripcion_edit = cicloStore.getAt(rowIndex).get('descripcion');
+						editarwindow(id_edit, nombre_edit, descripcion_edit);                        
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
+                width: 35,
+                align: 'center',
+                items: [{
+                	icon: baseURL+'/img/icons/grid/delete.png',  
+                    //tooltip: 'Delete',
+                    handler: function(grid, rowIndex, colIndex) {
+                    	var id_delete = cicloStore.getAt(rowIndex).get('act_ciclo_id');
+                    	var nombre_delete = cicloStore.getAt(rowIndex).get('nombre');
+                    	var auxmensaje = 'Confirma que desea borrar el ciclo '+nombre_delete+'?';
+                    	Ext.Msg.show({
+                            title:'Consulta',
+                            msg: auxmensaje,
+                            width: 250,
+                            buttons: Ext.Msg.YESNO,
+                            icon: Ext.Msg.QUESTION,
+                            fn: function(rec) {
+                               if (rec === "yes") {
+                            	   Ext.Ajax.request({
+        							   url: baseURL + '/actividad/ciclo/delete',
+        							   success: function(response, opt){
+        								   Ext.Msg.show({
+        									    title:'Aviso',
+        										msg:'Ciclo Borrado Correctamente',
+        										closable: false,
+        										width: 250
+        								   });
+        								   function hide_message() {
+        								       Ext.defer(function() {
+        								           Ext.MessageBox.hide();
+        								       }, delay);
+        								   }
+        								   hide_message();
+        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   auxciclo = null;
+        								   cicloStore.load();
+        							   },
+        							   jsonData:{
+        							       'delete':{
+												'act_ciclo_id': id_delete,
+        							       }
+        							   }
+        						 });
+                              }
+                               else{
+                            	   this.close();
+                               }	                               
+                           }
+                       }); 
+                    }
+                }]
+            }       
+            ]
+            	        	
+		 });
+			
+		var pantalla = Ext.create('Ext.panel.Panel', {
+		    width: 'fit',
+		    height: 550,
+		    items:[
+			         {	
+			        	 xtype: 'panel',
+						 items: [panelFiltros]
+				        
+			         },{
+			        	 xtype: 'container',
+						 items:[gridCiclo],
+			         }
+			],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('actividadTabPanel').setActiveTab(2);
+				}
+			}
+		});
+			
+		Ext.getCmp('centerPanel').add(pantalla);
+		
+
+
+				
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
