@@ -44,38 +44,36 @@ Ext.onReady(function(){
 					name: 'fecha_fin'
 				},{
 					type: 'string',
-					name: 'nombre_identificador'
+					name: 'titulo'
 				},{
 					type: 'float',
 					name: 'duracion'
 				},{
-					type: 'string',
-					name: 'estado'
-				},{
 					type: 'float',
-					name: 'monto'
-				},{
-					type: 'string',
-					name: 'observaciones'
-				},{
-					type: 'string',
-					name: 'tipo'
-				},{
-					type: 'int',
-					name: 'nro_personas'
-				},{
-					type: 'string',
-					name: 'nombre'
+					name: 'monto_referencial'
 				},{
 					type: 'string',
 					name: 'actividad_tipo'
 				},{
 					type: 'int',
-					name: 'anho'
+					name: 'anho_formacion'
 				},{
 					type: 'string',
 					name: 'moneda'
-				},
+				},{
+					type: 'string',
+					name: 'ciclo'
+				},{
+		            name: 'monto', 
+		            convert: function (v, rec) {
+		               return rec.get('monto_referencial') + ' (' + rec.get('moneda')+')';
+		            }
+		        },{
+		            name: 'fechas', 
+		            convert: function (v, rec) {
+		               return rec.get('fecha_inicio') + ' / ' + rec.get('fecha_fin');
+		            }
+		        }
 			]
 		});
 
@@ -93,92 +91,6 @@ Ext.onReady(function(){
 					name: 'descripcion'
 				}
 			]
-		});
-
-		Ext.define('modalidad', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_modalidad_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'descripcion'
-				}
-			]
-		});
-
-		Ext.define('criterio', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_criterio_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'codigo'
-				},{
-					type: 'float',
-					name: 'horas'
-				},{
-					type: 'date',
-					name: 'fecha_alta'
-				},{
-					type: 'date',
-					name: 'fecha_baja'
-				}
-			]
-		});
-
-		var nivelStore = Ext.create('Ext.data.Store', {
-			model: 'nivel',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-nivel?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
-
-		var modalidadStore = Ext.create('Ext.data.Store', {
-			model: 'modalidad',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-modalidad?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
-
-		var criterioStore = Ext.create('Ext.data.Store', {
-			model: 'criterio',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-criterio?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
 		});
 		
 		var actividadStore = Ext.create('Ext.data.Store', {
@@ -200,48 +112,6 @@ Ext.onReady(function(){
 			},
 			autoLoad: true
 		});
-
-		var comboNivel = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Nivel',
-	        xtype: 'combobox',
-	        labelWidth: 50,
-	        width: 180,
-	        store: nivelStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_nivel_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'nivel',
-	  	});
-
-		var comboModalidad = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Modalidad',
-	        xtype: 'combobox',
-	        labelWidth: 80,
-	        width: 200,
-	        store: modalidadStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_modalidad_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'modalidad',
-	  	});
-
-		var comboCriterio = Ext.create('Ext.form.field.ComboBox', {
-			fieldLabel: 'Criterio',
-	        xtype: 'combobox',
-	        labelWidth: 70,
-	        width: 280,
-	        store: criterioStore,
-	        displayField: 'nombre',
-	        queryMode: 'local',
-	        valueField: 'act_criterio_id',
-	        padding: '5 10 5 0',
- 	        anchor:'90%',
- 	        name: 'criterio',
-	  	});
 		  
 		var panelFiltros = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
@@ -264,33 +134,7 @@ Ext.onReady(function(){
 // 						        anchor:'90%',
 // 						        name: 'nombre',
 // 							    flex: 0.5    
-// 				    	  },{   	
-// 					    		xtype: 'textfield',
-// 						        fieldLabel: 'C&oacute;digo',
-// 						        padding: '10 0 5 20',
-// 						        labelWidth: 60,
-// 						        width: 180,
-// 						        anchor:'90%',
-// 						        name: 'codigo',
-// 							    flex: 0.4    
-// 				    	  },{
-// 							    xtype: 'container',
-// 							    padding: '5 0 0 20', //margen del Form 'arriba lateral abajo'
-// 							    flex: 0.5,
-// 							    items: [comboNivel]
-// 						   }, 
-// 				    	   {
-// 						        xtype: 'container',
-// 						        padding: '5 0 0 0', 
-// 						        flex: 0.5,
-// 						        items: [comboModalidad]
-// 					    	},
-// 					    	{
-// 						        xtype: 'container',
-// 						        padding: '5 0 0 0', 
-// 						        flex: 0.65,
-// 						        items: [comboCriterio]
-// 					    	}
+// 				    	  }
 //					   ]
 					},{
 						xtype: 'container',
@@ -349,7 +193,6 @@ Ext.onReady(function(){
 		});
     	
 		var gridActividad = Ext.create('Ext.grid.Panel', {
-            //title: 'Profesi&oacute;n',
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
@@ -469,9 +312,9 @@ Ext.onReady(function(){
             // grid columns
             columns:[{
                 text: "Actividad",
-                dataIndex: 'nombre_identificador',
+                dataIndex: 'titulo',
                 align: 'left',
-                flex: 1,
+                flex: 1.2,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
@@ -482,17 +325,12 @@ Ext.onReady(function(){
                 align: 'center',
                 flex: 1,
             },{
-                text: "Estado",
-                dataIndex: 'estado',
+                text: "Ciclo",
+                dataIndex: 'ciclo',
                 align: 'center',
-                flex: 0.5,
+                flex: 1.2,
             },{
-                text: "Tipo",
-                dataIndex: 'tipo',
-                align: 'center',
-                flex: 0.4,
-            },{
-                text: "Duraci&oacute;n (hs)",
+                text: "Duraci&oacute;n",
                 dataIndex: 'duracion',
                 align: 'center',
                 flex: 0.6,
@@ -500,30 +338,10 @@ Ext.onReady(function(){
                 text: "Monto",
                 dataIndex: 'monto',
                 align: 'center',
-                flex: 0.6,
+                flex: 0.9,
             },{
-                text: "Moneda",
-                dataIndex: 'moneda',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: "Participantes",
-                dataIndex: 'nro_personas',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: "Inicio",
-                dataIndex: 'fecha_inicio',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: "Fin",
-                dataIndex: 'fecha_fin',
-                align: 'center',
-                flex: 0.6,
-            },{
-                text: "Observaci&oacute;n",
-                dataIndex: 'observaciones',
+                text: "Inicio/Fin",
+                dataIndex: 'fechas',
                 align: 'center',
                 flex: 1,
             },{
