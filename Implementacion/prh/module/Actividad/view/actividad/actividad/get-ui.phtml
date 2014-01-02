@@ -49,27 +49,6 @@ Ext.onReady(function(){
 						}
 					]
 				});
-
-				Ext.define('posiblesFormadores', {
-					extend: 'Ext.data.Model',
-					fields: [
-						{
-							type: 'int',
-							name: 'org_parte_rol_id'
-						},{
-							type: 'string',
-							name: 'nombre'
-						},{
-							type: 'string',
-							name: 'apellido'
-						},{
-				            name: 'mostrar', 
-				            convert: function (v, rec) {
-				               return rec.get('nombre') + ', ' + rec.get('apellido');
-				            }
-				        }
-					]
-				});
 				
 				Ext.define('participantes', {
 					extend: 'Ext.data.Model',
@@ -93,27 +72,6 @@ Ext.onReady(function(){
 					]
 				});
 
-				Ext.define('posiblesParticipantes', {
-					extend: 'Ext.data.Model',
-					fields: [
-						{
-							type: 'int',
-							name: 'org_parte_rol_id'
-						},{
-							type: 'string',
-							name: 'nombre'
-						},{
-							type: 'string',
-							name: 'apellido'
-						},{
-				            name: 'mostrar', 
-				            convert: function (v, rec) {
-				               return rec.get('nombre') + ', ' + rec.get('apellido');
-				        	}
-						}
-					]
-				});
-				
 		var cargarDatos = function (){
 			aux = buscarId();
 			Ext.Ajax.request({
@@ -132,16 +90,7 @@ Ext.onReady(function(){
 						    "s[actividad]":aux,
 						    'p[limit]':'all'	
 				    }});
-	                posiblesFormadoresStore.load({
-		                params: {
-		                    "s[actividad]":aux,
-		                    's[tipo]':'formador'
-	                }});
-					posiblesParticipantesStore.load({
-						params: {
-						    "s[actividad]":aux,
-						    's[tipo]':'all'
-					}});
+	                
 			    	var campos = Ext.decode(response.responseText);
 			    	var form = Ext.getCmp('form').getForm();
 			    	
@@ -170,8 +119,16 @@ Ext.onReady(function(){
 								    		campos[campo] = 'No';
 								    	}
 					 			    	name.setValue(campos[campo]);
-								 	} else{
-								    
+								 	} else if (campo == "duracion")
+							    	{
+								 		if (campos["modalidad_act"] == 'D'){
+								    		campos[campo] = campos[campo] + ' d&iacute;as';
+								    	}
+								    	else if (campos["modalidad_act"] == 'H'){
+								    		campos[campo] = campos[campo] + ' horas';
+								    	}
+									    	name.setValue(campos[campo]);
+								 	} else{ 								    
 									    	name.setValue(campos[campo]);
 							     }
 					    }	}	
@@ -194,21 +151,6 @@ Ext.onReady(function(){
 			autoLoad: false
 		});
 
-		var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
-			model: 'posiblesFormadores',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'s[actividad]':aux, 's[tipo]':'formador'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/actividad/listar-partes',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: false
-		});
-
 		var participantesStore = Ext.create('Ext.data.Store', {
 			model: 'participantes',
 			proxy: {
@@ -216,21 +158,6 @@ Ext.onReady(function(){
 				extraParams: {'s[actividad]':aux, 'p[limit]':'all'},
 				headers: {'Accept':'application/json'},
 				url: baseURL + '/actividad/actividad/participantes',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: false
-		});
-
-		var posiblesParticipantesStore = Ext.create('Ext.data.Store', {
-			model: 'posiblesParticipantes',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'s[actividad]':aux, 's[tipo]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/actividad/listar-partes',
 				reader: {
 					type: 'json',
 					root: 'records'
@@ -264,63 +191,81 @@ Ext.onReady(function(){
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-						        name: 'nombre_identificador',
+						        name: 'titulo',
 						},{
-						        fieldLabel: 'Costo',
+				    		 	fieldLabel: 'Ciclo',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
-					 	        name: 'monto',
-			    	 	},{
-						        fieldLabel: 'Estado',
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-					 	        name: 'estado', 
-			    	    },{
+						        name: 'ciclo',
+						},{
 						    	fieldLabel: 'Inicio',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
 						    	name: 'fecha_inicio',
-				   	 	}
+				   	 	},{
+						    	fieldLabel: 'Fin',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						    	name: 'fecha_fin',
+					   	},{
+						    	fieldLabel: "Observaci&oacute;n",
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						    	name: 'observaciones',
+					 	 }
 			    	]},{
 					xtype: 'container',
 					flex: 1,
 					layout: 'anchor',
 					defaultType: 'displayfield',
 					items: [{
-				    	        fieldLabel: 'Tipo de Act.',
+				    	        fieldLabel: 'Tipo de Actividad',
 						        padding: 15,
-						        labelWidth: 110,
+						        labelWidth: 140,
 						        anchor:'90%',
 						        name: 'actividad_tipo'
 				    	 },{
-					        	fieldLabel: 'Moneda',
+						        fieldLabel: 'Costo Referencial',
 						        padding: 15,
-						        labelWidth: 110,
+						        labelWidth: 140,
 						        anchor:'90%',
-					 	        name: 'moneda'
-					     },{
-						        fieldLabel: 'Tipo',
+					 	        name: 'precio',
+			    	 	 },{
+						    	fieldLabel: 'A&ntilde;o de Formaci&oacute;n',
 						        padding: 15,
-						        labelWidth: 110,
+						        labelWidth: 140,
 						        anchor:'90%',
-					 	        name: 'tipo', 
-			    	     },{
-						    	fieldLabel: 'Fin',
+						        name: 'anho_formacion',	  
+				    	 },{
+						        fieldLabel: 'Atelier',
 						        padding: 15,
-						        labelWidth: 110,
+						        labelWidth: 140,
 						        anchor:'90%',
-						    	name: 'fecha_fin',
-					   	  }
+						        name: 'atelier',
+						},
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
 		                layout: 'anchor',
 		                defaultType: 'displayfield',
 		                items: [{
-					    		 	fieldLabel: 'Duraci&oacute;n (hs)',
+					    		 	fieldLabel: 'Formador',
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+							        name: 'formador',
+							  },{
+					    		 	fieldLabel: 'Recaudaci&oacute;n',
+							        padding: 15,
+							        labelWidth: 110,
+							        anchor:'90%',
+							        name: 'recaudacion',
+							  },{
+					    		 	fieldLabel: 'Duraci&oacute;n',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
@@ -331,48 +276,35 @@ Ext.onReady(function(){
 							        labelWidth: 110,
 							        anchor:'90%',
 							        name: 'nro_personas',	  
-					    	  },{
-							    	fieldLabel: 'A&ntilde;o',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'anho_formacion',	  
-					    	  },{
-							    	fieldLabel: "Observaci&oacute;n",
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							    	name: 'observaciones',
-							  }
+					    	  }
 			    		]
 			    	}]}],
 			});
 
-		var gridFormadores = Ext.create('Ext.grid.Panel', {
-            width: 'fit',
-            padding: '10 10 0 10',
-            height: 380,
-            title: 'Formadores de la Actividad',
-            region: 'center',              
-            layout: 'fit',
-            emptyText: "No existen Formadores para esta actividad",        
-            store: formadoresStore,
-            loadMask: true,
-            // grid columns
-            columns:[{
-		                text: "Nombre",
-		                dataIndex: 'nombre',
-		                align: 'left',
-		                width: 180,
-	            	},{
-		                text: "Apellido",
-		                dataIndex: 'apellido',
-		                align: 'left',
-		                flex: 1,
-		            }   
-            ]
-            	        	
-		 });
+// 		var gridFormadores = Ext.create('Ext.grid.Panel', {
+//             width: 'fit',
+//             padding: '10 10 0 10',
+//             height: 380,
+//             title: 'Formadores de la Actividad',
+//             region: 'center',              
+//             layout: 'fit',
+//             emptyText: "No existen Formadores para esta actividad",        
+//             store: formadoresStore,
+//             loadMask: true,
+//             // grid columns
+//             columns:[{
+// 		                text: "Nombre",
+// 		                dataIndex: 'nombre',
+// 		                align: 'left',
+// 		                width: 180,
+// 	            	},{
+// 		                text: "Apellido",
+// 		                dataIndex: 'apellido',
+// 		                align: 'left',
+// 		                flex: 1,
+// 		            }   
+//             ]         	        	
+// 		 });
 
 		var gridParticipantes = Ext.create('Ext.grid.Panel', {
             width: 'fit',
@@ -396,8 +328,7 @@ Ext.onReady(function(){
 		                align: 'left',
 		                flex: 1,
 		            }
-            ]
-            	        	
+            ]         	        	
 		 });
 	
 		var pantalla = Ext.create('Ext.form.Panel', {
@@ -417,10 +348,10 @@ Ext.onReady(function(){
 								        title: 'Datos de Actividad',
 								        //tabConfig: {style:'width:240px'},
 								        items:[pantallaActividad],
-								    },{
-								        title: 'Formadores',
+								    //},{
+								      //  title: 'Formadores',
 								        //tabConfig: {style:'width:240px'},
-								        items: [gridFormadores]
+								       // items: [gridFormadores]
 								    },{
 								        title: 'Participantes',
 								        //tabConfig: {style:'width:240px'},
