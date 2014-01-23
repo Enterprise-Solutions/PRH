@@ -32,13 +32,20 @@ class Formador
      */
     protected $formador;
     
+    /**
+     * @Orm\Column(type="string")
+     * @Orm\Column(length=1)
+     */
+    protected $es_principal;
+    
     public function setActividad($actividad)
     {
         $this->actividad = $actividad;
     }
     
-    public function setFormador($formador)
+    public function setFormador($formador, $es_principal)
     {
         $this->formador = $formador;
+        $this->es_principal = $es_principal;
     }
 }

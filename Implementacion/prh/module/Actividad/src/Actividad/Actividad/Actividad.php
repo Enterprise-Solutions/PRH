@@ -36,6 +36,17 @@ class Actividad
     protected $cal_anho_formacion_id;
     
     /**
+     * @Orm\Column(type="integer")
+     */
+    protected $act_ciclo_id;
+    
+    /**
+     * @Orm\Column(type="string")
+     * @ORM\Column(length=100)
+     */
+    protected $titulo;
+    
+    /**
      * @Orm\Column(type="string")
      */
     protected $fecha_inicio;
@@ -46,24 +57,25 @@ class Actividad
     protected $fecha_fin;
     
     /**
-     * @Orm\Column(type="string")
-     */
-    protected $nombre_identificador;
-    
-    /**
      * @Orm\Column(type="float")
      */
     protected $duracion;
     
     /**
-     * @Orm\Column(type="string")
-     */
-    protected $estado;
-    
-    /**
      * @Orm\Column(type="float")
      */
-    protected $monto;
+    protected $monto_referencial;
+    
+    /**
+     * @Orm\Column(type="integer")
+     */
+    protected $nro_personas;
+    
+    /**
+     * @Orm\Column(type="string")
+     * @Orm\Column(length=1)
+     */
+    protected $requiere_certificado;
     
     /**
      * @Orm\Column(type="string")
@@ -72,13 +84,27 @@ class Actividad
     
     /**
      * @Orm\Column(type="string")
+     * @Orm\Column(length=1)
      */
-    protected $tipo;
+    protected $atelier;
     
     /**
-     * @Orm\Column(type="integer")
+     * @Orm\Column(type="string")
+     * @Orm\Column(length=1)
      */
-    protected $nro_personas;
+    protected $asistencia;
+    
+    /**
+     * @Orm\Column(type="string")
+     * @Orm\Column(length=1)
+     */
+    protected $modalidad_act;
+    
+    /**
+     * @Orm\Column(type="string")
+     * @Orm\Column(length=80)
+     */
+    protected $codigo;
     
     /**
      * Input Filter
@@ -101,6 +127,21 @@ class Actividad
                 'name'     => 'cal_anho_formacion_id',
                 'required' => true,
             ),
+            'act_ciclo_id' => array(
+                'name'     => 'act_ciclo_id',
+                'required' => true,
+            ),
+            'titulo' => array(
+                'name'     => 'titulo',
+                'required' => false,
+                'filter' => array(
+                    array('name' => 'StripTags'),
+                    array('name' => 'Alpha'),
+                ),
+                'validator' => array(
+                    array('name' => 'StringLength', 'options' => array('max' => 100, 'message' => 'Solo se permiten %max% caracteres')),
+                ),
+            ),
             'fecha_inicio' => array(
                 'name'      => 'fecha_inicio',
                 'required'  => false,
@@ -115,36 +156,31 @@ class Actividad
                     array('name'=>'Date','options'=>array('format'=>'yyyy-MM-dd','message'=>'No es una fecha valida. El formato tiene que ser anho-mes-dia'))
                 )
             ),
-            'nombre_identificador' => array(
-                'name'      => 'nombre_identificador',
-                'required'  => false,
-                'filter' => array(
-                    array('name' => 'StripTags'),
-                    array('name' => 'Alpha'),
-                ),
-                'validator' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 100, 'message' => 'Solo se permiten %max% caracteres')),
-                ),
-            ),
             'duracion' => array(
                 'name'       => 'duracion',
                 'required'   => false,
             ),
-            'estado' => array(
-                'name'       => 'estado',
-                'required'   => false,
+            'monto_referencial' => array(
+                'name'      => 'monto_referencial',
+                'required'  => false,
+            ),
+            'nro_personas' => array(
+                'name'      => 'nro_personas',
+                'required'  => false,
+                'validators' => array(
+                    array('name' => 'Digits', 'options' => array('message' => 'Esta mal')),
+                ),
+            ),
+            'requiere_certificado' => array(
+                'name'      => 'requiere_certificado',
+                'required'  => false,
                 'filters'    => array(
                     array('name' => 'StringToUpper'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
                     array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
-            ),
-            'monto' => array(
-                'name'      => 'monto',
-                'required'  => false,
             ),
             'observaciones' => array(
                 'name'      => 'observaciones',
@@ -153,23 +189,47 @@ class Actividad
                     array('name' => 'StripTags'),
                 ),
             ),
-            'tipo' => array(
-                'name'      => 'tipo',
+            'atelier' => array(
+                'name'      => 'atelier',
                 'required'  => false,
                 'filters'    => array(
                     array('name' => 'StringToUpper'),
                     array('name' => 'StringTrim'),
                 ),
                 'validators' => array(
-                    array('name' => 'NotEmpty', 'options' => array('message' => 'El campo es Obligatorio')),
                     array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
-            'nro_personas' => array(
-                'name'      => 'nro_personas',
+            'asistencia' => array(
+                'name'      => 'asistencia',
                 'required'  => false,
+                'filters'    => array(
+                    array('name' => 'StringToUpper'),
+                    array('name' => 'StringTrim'),
+                ),
                 'validators' => array(
-                    array('name' => 'Digits', 'options' => array('message' => 'Esta mal')),
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+                ),
+            ),
+            'modalidad_act' => array(
+                'name'      => 'modalidad_act',
+                'required'  => false,
+                'filters'    => array(
+                    array('name' => 'StringToUpper'),
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
+                ),
+            ),
+            'codigo' => array(
+                'name'      => 'codigo',
+                'required'  => false,
+                'filters'    => array(
+                    array('name' => 'StringTrim'),
+                ),
+                'validators' => array(
+                    array('name' => 'StringLength', 'options' => array('max' => 80, 'message' => 'Solo se permiten %max% caracteres')),
                 ),
             ),
         );
