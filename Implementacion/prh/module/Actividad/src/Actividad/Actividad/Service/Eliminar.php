@@ -52,6 +52,23 @@ class Eliminar
          * @todo Agregar control de Formadores de Actividad
          * @todo Agregar control de Participantes de Actividad
          */
+        if (count($this->actividad->getFormadores())) {
+            foreach ($this->actividad->getFormadores() as $formador) {
+                $this->em->remove($formador);
+            }
+        }
+        
+        if (count($this->actividad->getParticipantes())) {
+            Thrower::throwValidationException('Error de Validacion', "La actividad no puede eliminarse, tiene participantes asociados");
+        }
+        
+        if (count($this->actividad->getMovimientos())) {
+            Thrower::throwValidationException('Error de Validacion', "La actividad no puede eliminarse, tiene movimientos asociados");
+        }
+        
+        if (count($this->actividad->getEventos())) {
+            Thrower::throwValidationException('Error de Validacion', "La actividad no puede eliminarse, tiene eventos asociados");
+        }
         
         $this->actividadId = $act_actividad_id;
     }

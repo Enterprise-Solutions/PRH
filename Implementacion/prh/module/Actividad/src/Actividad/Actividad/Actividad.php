@@ -2,6 +2,7 @@
 
 namespace Actividad\Actividad;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as Orm;
 use Zend\InputFilter\Factory as InputFilterFactory;
 use EnterpriseSolutions\Exceptions\Thrower;
@@ -105,6 +106,54 @@ class Actividad
      */
     protected $codigo;
     
+    /**
+     * @Orm\OneToMany(targetEntity="Actividad\Actividad\Formador", mappedBy="actividad")
+     */
+    protected $formadores;
+    
+    /**
+     * @Orm\OneToMany(targetEntity="Actividad\Actividad\Participante", mappedBy="actividad")
+     */
+    protected $participantes;
+    
+    /**
+     * @Orm\OneToMany(targetEntity="Actividad\Actividad\Movimiento", mappedBy="actividad")
+     */
+    protected $movimientos;
+    
+    /**
+     * @Orm\OneToMany(targetEntity="Actividad\Actividad\Evento", mappedBy="actividad")
+     */
+    protected $eventos;
+    
+    public function getFormadores()
+    {
+        return $this->formadores;
+    }
+    
+    public function getParticipantes()
+    {
+        return $this->participantes;
+    }
+    
+    public function getMovimientos()
+    {
+        return $this->movimientos;
+    }
+    
+    public function getEventos()
+    {
+        return $this->eventos;
+    }
+    
+    public function __construct()
+    {
+        $this->formadores    = new ArrayCollection();
+        $this->participantes = new ArrayCollection();
+        $this->movimientos   = new ArrayCollection();
+        $this->eventos       = new ArrayCollection();
+    }
+
     /**
      * Input Filter
      * @param array $data
