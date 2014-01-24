@@ -72,8 +72,7 @@ class Actividad
     protected $nro_personas;
     
     /**
-     * @Orm\Column(type="string")
-     * @Orm\Column(length=1)
+     * @Orm\Column(type="boolean")
      */
     protected $requiere_certificado;
     

@@ -57,10 +57,11 @@ class ActividadController extends BaseController
     
     public function putAction()
     {
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
         $em = $this->getEntityManager();
         $data = $this->SubmitParams()->getParam('put');
         
-        $service = new EditarActividadService($em);
+        $service = new EditarActividadService($em, $dbAdapter);
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         

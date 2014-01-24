@@ -42,14 +42,14 @@ class Crear
     
     protected function asociarFormadores($data)
     {
-        $esFormadorPrincipal = true;
     	for ($i=0; $i<count($data); $i++) {
+    	    $esFormadorPrincipal = $data[$i]['es_principal'] == 'S' ? true : false;
+    	    
     		$formadorDeActividad = new Formador();
     		$formadorDeActividad->setActividad($this->actividad);
     		$formadorDeActividad->setFormador($this->getFormador($data[$i]), $esFormadorPrincipal);
     		
     		$this->em->persist($formadorDeActividad);
-    		$esFormadorPrincipal = false;
     	}
     }
     

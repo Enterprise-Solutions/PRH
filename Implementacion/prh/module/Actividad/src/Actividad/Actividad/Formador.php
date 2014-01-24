@@ -33,8 +33,7 @@ class Formador
     protected $formador;
     
     /**
-     * @Orm\Column(type="string")
-     * @Orm\Column(length=1)
+     * @Orm\Column(type="boolean")
      */
     protected $es_principal;
     
