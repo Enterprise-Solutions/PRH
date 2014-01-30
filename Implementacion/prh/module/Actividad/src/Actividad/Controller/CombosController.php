@@ -20,7 +20,7 @@ class CombosController extends BaseController
 	public function actActividadTipoAction()
     {
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $select->_select->from('act_actividad_tipo')->columns(array('act_actividad_tipo_id', 'nombre'));
+        $select->_select->from('act_actividad_tipo')->columns(array('act_actividad_tipo_id', 'titulo', 'modalidad'));
         $dao = new Dao($select);
         $template = $this->_crearTemplateParaListado();
         return $template($dao);
