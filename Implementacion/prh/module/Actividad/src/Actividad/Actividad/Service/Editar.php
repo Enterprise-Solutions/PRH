@@ -48,6 +48,7 @@ class Editar
             Thrower::throwValidationException('Error de Validacion', "No existe la actividad solicitada");
         }
         
+        $data['requiere_certificado'] = $data['requiere_certificado'] == 'S' ? true : false;
         $this->actividad->fromArray($data);
     }
     

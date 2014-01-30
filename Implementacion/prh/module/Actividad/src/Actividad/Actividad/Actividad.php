@@ -222,13 +222,6 @@ class Actividad
             'requiere_certificado' => array(
                 'name'      => 'requiere_certificado',
                 'required'  => false,
-                'filters'    => array(
-                    array('name' => 'StringToUpper'),
-                    array('name' => 'StringTrim'),
-                ),
-                'validators' => array(
-                    array('name' => 'StringLength', 'options' => array('max' => 1, 'message' => 'Solo se permiten %max% caracteres')),
-                ),
             ),
             'observaciones' => array(
                 'name'      => 'observaciones',
