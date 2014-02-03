@@ -1,13 +1,13 @@
 <?php
 
-namespace Actividad\Actividad\QueryObject;
+namespace Actividad\RelacionAyuda\QueryObject;
 
 use EnterpriseSolutions\Db\Select as DbSelect;
 
 class Select extends DbSelect
 {
-	public function _init()
-	{
+    public function _init()
+    {
         $this->_select
              ->from(array('aa' => 'act_actividad'))
              ->columns(array('act_actividad_id', 'fecha_inicio', 'fecha_fin',
@@ -18,6 +18,6 @@ class Select extends DbSelect
              ->join(array('caf' => 'cal_anho_formacion'), 'aa.cal_anho_formacion_id = caf.cal_anho_formacion_id', array('anho_formacion' => 'anho'))
              ->join(array('ac' => 'act_ciclo'), 'aa.act_ciclo_id = ac.act_ciclo_id', array('ciclo' => 'nombre'))
              
-             ->where("act.relacion_ayuda is false");
-	}
+             ->where("act.relacion_ayuda is true");
+    }
 }
