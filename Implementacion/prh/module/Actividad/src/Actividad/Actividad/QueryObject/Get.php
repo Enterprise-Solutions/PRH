@@ -30,6 +30,8 @@ class Get extends DbSelect
         	 // Participantes
              ->join(array('aap' => 'act_actividad_participantes'), 'aa.act_actividad_id = aap.act_actividad_id', array('recaudacion' => $recaudacion), ZfSelect::JOIN_LEFT)
              
+             ->where("aat.relacion_ayuda is false")
+             
              ->group(array(
                  'aa.act_actividad_id', 'aa.act_actividad_tipo_id', 'aa.cont_moneda_id', 'aa.cal_anho_formacion_id',
                  'aa.act_ciclo_id', 'aa.titulo', 'aa.fecha_inicio', 'aa.fecha_fin', 'aa.duracion', 'aa.monto_referencial',
