@@ -32,6 +32,60 @@ class Participante
      */
     protected $participante;
     
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $cont_moneda_id;
+    
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $act_actividad_formadores_id;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=80)
+     */
+    protected $identificador_participante;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=100)
+     */
+    protected $sobrenombre;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=250)
+     */
+    protected $descripcion;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=250)
+     */
+    protected $otra_info;
+    
+    /**
+     * @Orm\Column(type="float")
+     */
+    protected $monto_participante;
+    
+    /**
+     * @Orm\Column(type="boolean")
+     */
+    protected $se_imprimio_certificado;
+    
+    /**
+     * @Orm\Column(type="boolean")
+     */
+    protected $se_entrego_certificado;
+    
+    /**
+     * @Orm\Column(type="string")
+     */
+    protected $fecha_entrega_certificado;
+    
     public function setActividad($actividad)
     {
         $this->actividad = $actividad;
@@ -40,5 +94,12 @@ class Participante
     public function setParticipante($participante)
     {
         $this->participante = $participante;
+    }
+    
+    public function setParticipanteRA($data)
+    {
+        foreach ($data as $campo => $valor) {
+            $this->$campo = $valor;
+        }
     }
 }
