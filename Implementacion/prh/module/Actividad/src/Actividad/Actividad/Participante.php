@@ -98,17 +98,8 @@ class Participante
     
     public function setParticipanteRA($data)
     {
-        foreach ($data as $participante) {
-            $this->act_actividad_participantes_id = $participante['act_actividad_participantes_id'] == 'new_id' ? null : $participante['act_actividad_participantes_id'];
-            $this->cont_moneda_id = $participante['cont_moneda_id'];
-            $this->identificador_participante = $participante['identificador_participante'];
-            $this->sobrenombre = $participante['sobrenombre'];
-            $this->descripcion = $participante['descripcion'];
-            $this->otra_info = $participante['otra_info'];
-            $this->monto_participante = $participante['monto_participante'];
-            $this->se_imprimio_certificado = $participante['se_imprimio_certificado'];
-            $this->se_entrego_certificado = $participante['se_entrego_certificado'];
-            $this->fecha_entrega_certificado = $participante['fecha_entrega_certificado'];
+        foreach ($data as $campo => $valor) {
+            $this->$campo = $valor;
         }
     }
 }

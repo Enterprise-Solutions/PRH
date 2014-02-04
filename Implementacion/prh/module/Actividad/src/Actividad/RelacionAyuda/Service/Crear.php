@@ -40,7 +40,6 @@ class Crear
     protected function crearRelacionAyuda($data)
     {
         $this->actividad = new Actividad();
-        $data['requiere_certificado'] = $data['requiere_certificado'] == 'S' ? true : false;
         $this->actividad->fromArray($data);
     }
     
