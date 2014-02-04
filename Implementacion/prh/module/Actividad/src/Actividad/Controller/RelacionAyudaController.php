@@ -5,6 +5,7 @@ namespace Actividad\Controller;
 use Actividad\RelacionAyuda\QueryObject\Get;
 use Actividad\RelacionAyuda\QueryObject\Select;
 use Actividad\RelacionAyuda\Service\Crear as CrearRelacionAyudaService;
+use Actividad\RelacionAyuda\Service\Editar as EditarRelacionAyudaService;
 use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
@@ -34,6 +35,19 @@ class RelacionAyudaController extends BaseController
         $data = $this->SubmitParams()->getParam('post');
         
         $service = new CrearRelacionAyudaService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
+    }
+    
+    public function putAction()
+    {
+        $dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParam('put');
+        
+        $service = new EditarRelacionAyudaService($em, $dbAdapter);
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         
