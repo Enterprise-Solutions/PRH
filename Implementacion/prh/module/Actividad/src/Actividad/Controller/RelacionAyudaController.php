@@ -6,6 +6,7 @@ use Actividad\RelacionAyuda\QueryObject\Get;
 use Actividad\RelacionAyuda\QueryObject\Select;
 use Actividad\RelacionAyuda\Service\Crear as CrearRelacionAyudaService;
 use Actividad\RelacionAyuda\Service\Editar as EditarRelacionAyudaService;
+use Actividad\RelacionAyuda\Service\Eliminar as EliminarRelacionAyudaService;
 use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
@@ -48,6 +49,18 @@ class RelacionAyudaController extends BaseController
         $data = $this->SubmitParams()->getParam('put');
         
         $service = new EditarRelacionAyudaService($em, $dbAdapter);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
+    }
+    
+    public function deleteAction()
+    {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParam('delete');
+        
+        $service = new EliminarRelacionAyudaService($em);
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         
