@@ -121,10 +121,10 @@ Ext.onReady(function(){
 					 			    	name.setValue(campos[campo]);
 								 	} else if (campo == "duracion")
 							    	{
-								 		if (campos["modalidad_act"] == 'D'){
+								 		if (campos["modalidad"] == 'D'){
 								    		campos[campo] = campos[campo] + ' d&iacute;as';
 								    	}
-								    	else if (campos["modalidad_act"] == 'H'){
+								    	else if (campos["modalidad"] == 'H'){
 								    		campos[campo] = campos[campo] + ' horas';
 								    	}
 									    	name.setValue(campos[campo]);
@@ -210,13 +210,7 @@ Ext.onReady(function(){
 						        labelWidth: 110,
 						        anchor:'90%',
 						    	name: 'fecha_fin',
-					   	},{
-						    	fieldLabel: "Observaci&oacute;n",
-						        padding: 15,
-						        labelWidth: 110,
-						        anchor:'90%',
-						    	name: 'observaciones',
-					 	 }
+					   	}
 			    	]},{
 					xtype: 'container',
 					flex: 1,
@@ -241,12 +235,12 @@ Ext.onReady(function(){
 						        anchor:'90%',
 						        name: 'anho_formacion',	  
 				    	 },{
-						        fieldLabel: 'Atelier',
-						        padding: 15,
-						        labelWidth: 140,
-						        anchor:'90%',
-						        name: 'atelier',
-						}
+                                                        fieldLabel: 'Participantes',
+                                                        padding: 15,
+                                                        labelWidth: 140,
+                                                        anchor:'90%',
+                                                        name: 'nro_personas',	  
+                                        }
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
@@ -271,12 +265,12 @@ Ext.onReady(function(){
 							        anchor:'90%',
 							        name: 'duracion',
 							  },{
-							    	fieldLabel: 'Participantes',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'nro_personas',	  
-					    	  }
+                                                                fieldLabel: "Observaci&oacute;n",
+                                                                padding: 15,
+                                                                labelWidth: 110,
+                                                                anchor:'90%',
+                                                                name: 'observaciones',
+                                                         }
 			    		]
 			    	}]}],
 			});
