@@ -53,6 +53,12 @@ Ext.onReady(function(){
 					name: 'monto_referencial'
 				},{
 					type: 'string',
+					name: 'modalidad_act'
+				},{
+					type: 'string',
+					name: 'modalidad'
+				},{
+					type: 'string',
 					name: 'actividad_tipo'
 				},{
 					type: 'int',
@@ -72,6 +78,14 @@ Ext.onReady(function(){
 		            name: 'fechas', 
 		            convert: function (v, rec) {
 		               return rec.get('fecha_inicio') + ' / ' + rec.get('fecha_fin');
+		            }
+		        },{
+		            name: 'tiempo', 
+		            convert: function (v, rec) {
+                               if (rec.get('modalidad') == 'D') 
+		               return rec.get('duracion') + ' d&iacute;as';
+                               else
+                               return rec.get('duracion') + ' horas';
 		            }
 		        }
 			]
@@ -209,30 +223,13 @@ Ext.onReady(function(){
                          { 
                              xtype: 'tbfill' 
                          },{
-// 							 if(1)
-// 							 { 
-			                             xtype: 'button',
-			                        	 text: 'Crear Actividad',
-			                        	 renderTo: Ext.getBody(),
-			                        	 arrowAlign: 'right',
-			                        	 menu:[  
-			                        		 {
-			                            		text: 'Otras Actividades',
-			             			            handler: function() {
-			         			            	     window.location = baseURL+'/actividad/actividad/crear-ui';
-			         						    }
-			                            	 },
-			                        		 {text: 'Acompa&ntilde;amiento'},
-			                             ]
-			                        		 
-			//      			            xtype: 'button',	
-			//     			            text: 'Crear Actividad',
-			//     			            handler: function() {
-			//     			            	window.location = baseURL+'/actividad/actividad/crear-ui';
-			//     						}
-			    		            }]
-                    //      }
-	                }
+                            xtype: 'button',	
+                            text: 'Crear Actividad',
+                            handler: function() {
+                                window.location = baseURL+'/actividad/actividad/crear-ui';
+                                        }
+                        }
+	                ]},
 	                ,{
                     xtype: 'pagingtoolbar',
                     store: actividadStore, 
@@ -314,7 +311,7 @@ Ext.onReady(function(){
                 text: "Actividad",
                 dataIndex: 'titulo',
                 align: 'left',
-                flex: 1.2,
+                flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
@@ -328,19 +325,19 @@ Ext.onReady(function(){
                 text: "Ciclo",
                 dataIndex: 'ciclo',
                 align: 'center',
-                flex: 1.2,
+                flex: 1.5,
             },{
                 text: "Duraci&oacute;n",
-                dataIndex: 'duracion',
+                dataIndex: 'tiempo',
                 align: 'center',
-                flex: 0.6,
+                flex: 1,
             },{
                 text: "Monto",
                 dataIndex: 'monto',
                 align: 'center',
                 flex: 0.9,
             },{
-                text: "Inicio/Fin",
+                text: "Inicio / Fin",
                 dataIndex: 'fechas',
                 align: 'center',
                 flex: 1,
@@ -365,7 +362,7 @@ Ext.onReady(function(){
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
                     	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_id');
-                    	var nombre_delete = actividadStore.getAt(rowIndex).get('nombre_identificador');
+                    	var nombre_delete = actividadStore.getAt(rowIndex).get('titulo');
                     	var auxmensaje = 'Confirma que desea borrar la Actividad '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
@@ -392,7 +389,7 @@ Ext.onReady(function(){
         							   },
         							   jsonData:{
         							       'delete':{
-												'act_actividad_id': id_delete,
+                                                                        'act_actividad_id': id_delete,
         							       }
         							   }
         						 });

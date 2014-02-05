@@ -3,7 +3,7 @@
 <html lang="es">
     <head>
         <meta charset="utf-8">
-        <title>PRH - Tipo de Actividad</title>
+        <title>PRH - Actividad</title>
 
 		<style type="text/css">
 		
@@ -16,9 +16,12 @@
 		<script type="text/javascript">
 
 			var baseURL = '<?=$this->basePath()?>';
-			   
+
 			var auxnombre = null;
+			var auxcodigo = null;
+			var auxnivel = null;
 			var auxmodalidad = null;
+			var auxcriterio = null;
 	
 			var itemsPorPagina = 10
 			var page = 0;
@@ -27,42 +30,103 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('actividadTipo', {
+		Ext.define('actividad', {
 			extend: 'Ext.data.Model',
 			fields: [
 				{
 					type: 'int',
-					name: 'act_actividad_tipo_id'
+					name: 'act_actividad_id'
+				},{
+					type: 'string',
+					name: 'fecha_inicio'
+				},{
+					type: 'string',
+					name: 'fecha_fin'
 				},{
 					type: 'string',
 					name: 'titulo'
+				},{
+					type: 'float',
+					name: 'duracion'
+				},{
+					type: 'float',
+					name: 'monto_referencial'
+				},{
+					type: 'string',
+					name: 'modalidad_act'
 				},{
 					type: 'string',
 					name: 'modalidad'
 				},{
 					type: 'string',
-					name: 'relacion_ayuda'
+					name: 'actividad_tipo'
+				},{
+					type: 'int',
+					name: 'anho_formacion'
 				},{
 					type: 'string',
-					name: 'homologada'
+					name: 'moneda'
 				},{
 					type: 'string',
-					name: 'activo'
-				}
+					name: 'ciclo'
+				},{
+		            name: 'monto', 
+		            convert: function (v, rec) {
+		               return rec.get('monto_referencial') + ' (' + rec.get('moneda')+')';
+		            }
+		        },{
+		            name: 'fechas', 
+		            convert: function (v, rec) {
+		               return rec.get('fecha_inicio') + ' / ' + rec.get('fecha_fin');
+		            }
+		        },{
+		            name: 'tiempo', 
+		            convert: function (v, rec) {
+                               if (rec.get('modalidad') == 'D') 
+		               return rec.get('duracion') + ' d&iacute;as';
+                               else
+                               return rec.get('duracion') + ' horas';
+		            }
+		        }
 			]
 		});
 
-
-		var comboModalidad = Ext.create('Ext.data.Store', {
-				    fields: ['id', 'nombre'],
-				    data : [
-					        {"id": "D", "nombre":"D&iacute;as de Formaci&oacute;n"},
-					        {"id": "H", "nombre":"Horas de Formaci&oacute;n"}
-				        ]
+		Ext.define('nivel', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_nivel_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				},{
+					type: 'string',
+					name: 'descripcion'
+				}
+			]
 		});
 		
-	var actividadTipoStore = createStorePage('actividadTipo', baseURL, '/actividad/actividad-tipo/index', itemsPorPagina);
-			  
+		var actividadStore = Ext.create('Ext.data.Store', {
+			model: 'actividad',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]":  page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/relacion-ayuda/index?format=json',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+                        autoload: true
+		});
+                      
 		var panelFiltros = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
 			 collapsible: true,
@@ -75,28 +139,17 @@ Ext.onReady(function(){
 				    id: 'filtros',
 				    height: 40,
 				    layout:'hbox',
-				    items:[{   	
-					    		xtype: 'textfield',
-						        fieldLabel: 'Nombre',
-						        padding: '10 20 5 15',
-						        labelWidth: 75,
-						        layout:'anchor',
-						        anchor:'90%',
-						        name: 'nombre',
-							    flex: 1  
-				    	  },{
-				    		    xtype: 'combobox',
-				    		    fieldLabel: 'Modalidad',
-						        labelWidth: 90,
-						        store: comboModalidad,
-						        displayField: 'nombre',
-						        valueField: 'id',
-						        padding: '10 30 5 15',
-					 	        anchor:'90%',
-					 	        name: 'modalidad',
-					 	        flex: 1 
-					    	}
-					   ]
+//				    items:[{   	
+// 					    		xtype: 'textfield',
+// 						        fieldLabel: 'Nombre',
+// 						        padding: '10 0 5 15',
+// 						        labelWidth: 70,
+// 						        width: 250,
+// 						        anchor:'90%',
+// 						        name: 'nombre',
+// 							    flex: 0.5    
+// 				    	  }
+//					   ]
 					},{
 						xtype: 'container',
 					    height: 45,
@@ -105,7 +158,7 @@ Ext.onReady(function(){
 			
 				           		xtype: 'button',
 				           		width: 100,
-				           		margin: '5 0 0 20',
+				           		margin: '10 0 0 20',
 				            	text: 'Filtrar',
 					            scale   : 'medium',
 					            handler: function(b,e) {
@@ -113,29 +166,38 @@ Ext.onReady(function(){
 							           var basicForm = b.up('form').getForm();						
 							           var valoresForm = basicForm.getFieldValues();
 
-							           //inicializo los pages
+					           		    var auxnombre = valoresForm.nombre;
+					           		    var auxcodigo = valoresForm.codigo;
+					           			
+							           	auxnivel = valoresForm.nivel;
+							           	auxmodalidad = valoresForm.modalidad;
+							           	auxcriterio = valoresForm.criterio;
+			
+										//inicializo los pages
 							           	page = 0;
-										gridActividadTipo.store.currentPage = 1;
+										gridActividad.store.currentPage = 1;
 										
-						                actividadTipoStore.load({
+						                actividadStore.load({
 											params: {
-												"s[nombre]": valoresForm.nombre,
-												"s[modalidad]": valoresForm.modalidad
+												"s[nombre]": auxnombre,
+												"s[codigo]": auxcodigo,
+												"s[nivel]": auxnivel,
+												"s[modalidad]": auxmodalidad,
+												"s[criterio]": auxcriterio
 									   		} 
 						               });
 						            }//end of handler  
 									        
-								},{
-			
+								},{			
 								  		xtype: 'button',
 								  		width: 100,
-								  		margin: '5 0 0 15',
+								  		margin: '10 0 0 15',
 					               		text: 'Limpiar',
 						           		scale   : 'medium',
 						           		handler: function(b,e) {
 						           			//inicializo los pages
 								           	page = 0;
-											gridActividadTipo.store.currentPage = 1;
+											gridActividad.store.currentPage = 1;
 											//console.log(this);
 						           			b.up('form').getForm().reset();
 						           			actividadTipoStore.load();						   	
@@ -144,8 +206,7 @@ Ext.onReady(function(){
 				    	]
 		});
     	
-		var gridActividadTipo = Ext.create('Ext.grid.Panel', {
-            //title: 'Tipo de Actividades',
+		var gridActividad = Ext.create('Ext.grid.Panel', {
             selModel: {
                 checkOnly: true,
                 injectCheckbox: 1
@@ -162,16 +223,16 @@ Ext.onReady(function(){
                          { 
                              xtype: 'tbfill' 
                          },{
-     			            xtype: 'button',	
-    			            text: 'Crear Tipo de Actividad',
-    			            handler: function() {
-    			            	window.location = baseURL+'/actividad/actividad-tipo/crear-ui';
-    						}
-    		            }]
-	                }
+                            xtype: 'button',	
+                            text: 'Crear Actividad',
+                            handler: function() {
+                                window.location = baseURL+'/actividad/relacion-ayuda/crear-ui';
+                                        }
+                        }
+	                ]},
 	                ,{
                     xtype: 'pagingtoolbar',
-                    store: actividadTipoStore, 
+                    store: actividadStore, 
                     dock: 'bottom',
                     displayInfo: true,
                     listeners: {
@@ -186,102 +247,100 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
-                   	 	var basicForm = Ext.getCmp('filtros').up('form').getForm();						
-			           	var valoresForm = basicForm.getFieldValues();
-           				actividadTipoStore.load({
+           				actividadStore.load({
 	       				    params:{
-	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,
-	       						"s[nombre]": valoresForm.nombre,
-								"s[modalidad]": valoresForm.modalidad
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
 	       				    }
        					});
+           					//console.log("page store: ", page);
+          				    //console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
-                 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
-				        var valoresForm = basicForm.getFieldValues();
 						this.store.currentPage--;
-						actividadTipoStore.load({
+						actividadStore.load({
 		   				    params:{
-	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,
-	       						"s[nombre]": valoresForm.nombre,
-								"s[modalidad]": valoresForm.modalidad     
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,        
 		   				    }
    						});
+	       					console.log("page store: ", page);
+	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
-             			var basicForm = Ext.getCmp('filtros').up('form').getForm();						
-				        var valoresForm = basicForm.getFieldValues();
 						this.store.currentPage = 1;
-						actividadTipoStore.load({
+						actividadStore.load({
 		   				    params:{
-	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,
-	       						"s[nombre]": valoresForm.nombre,
-								"s[modalidad]": valoresForm.modalidad
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
 		   				    }
    						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);	
             	 	},
-            	 	moveLast : function(){            	 	
+            	 	moveLast : function(){                 	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
 	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
 	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
-	                	 	console.log("page servidor: "+page+"   page extjs:"+ this.store.currentPage);     
             	 		}
 						else
 						{
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
-							console.log("page_servidor: "+page+"   page extjs:"+ this.store.currentPage);   
 						}
-            	 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
-				        var valoresForm = basicForm.getFieldValues();
-            	 		actividadTipoStore.load({
+            	 		actividadStore.load({
 		   				    params:{
-	       				    	"p[limit]": itemsPorPagina,
-	       						"p[page]": page,
-	       						"s[nombre]": valoresForm.nombre,
-								"s[modalidad]": valoresForm.modalidad
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
 		   				    }
-   						});      					
+   						});
+       					console.log("page store: ", page);
+      				    console.log("page extjs: ",this.store.currentPage);         					
             	 	},
                 }
 	                ],                       
             layout: 'fit',
             emptyText: "No existen tipo de actividades cargadas",
             
-            store: actividadTipoStore,
+            store: actividadStore,
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Tipo de Actividad",
+                text: "Actividad",
                 dataIndex: 'titulo',
                 align: 'left',
-                flex: 2.2,
+                flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
-                    return '<a href="'+baseURL+'/actividad/actividad-tipo/get-ui#?id=' + metadata.record.data.act_actividad_tipo_id +'">'+ val +'</a>';
+                    console.log(metadata);
+                    return '<a href="'+baseURL+'/actividad/actividad/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
             	}
             },{
-                text: "Modalidad",
-                dataIndex: 'modalidad',
-                align: 'center',
-                flex: 0.7,
-                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.modalidad) {case 'D':return 'D&iacute;as de Formaci&oacute;n'; case 'H': return 'Horas de Formaci&oacute;n'; default: return '-';}},
-            },{
-                text: "Homologada",
-                dataIndex: 'homologada',
+                text: "Tipo de Act.",
+                dataIndex: 'actividad_tipo',
                 align: 'center',
                 flex: 1,
-                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.homologada) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
             },{
-                text: "Activo",
-                dataIndex: 'activo',
+                text: "Ciclo",
+                dataIndex: 'ciclo',
+                align: 'center',
+                flex: 1.5,
+            },{
+                text: "Duraci&oacute;n",
+                dataIndex: 'tiempo',
                 align: 'center',
                 flex: 1,
-                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.activo) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
+            },{
+                text: "Monto",
+                dataIndex: 'monto',
+                align: 'center',
+                flex: 0.9,
+            },{
+                text: "Inicio / Fin",
+                dataIndex: 'fechas',
+                align: 'center',
+                flex: 1,
             },{
                 xtype:'actioncolumn',
                 width:35,
@@ -290,7 +349,7 @@ Ext.onReady(function(){
                     icon: baseURL+'/img/icons/grid/edit.png',  
                     tooltip: 'Edit',
                		handler: function(grid, rowIndex, colIndex) {
-                   		var url = baseURL+'/actividad/actividad-tipo/editar-ui#?id='+actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');  
+                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_id');  
                    		window.location = url;                     
                     }
                 }]
@@ -302,9 +361,9 @@ Ext.onReady(function(){
                 	icon: baseURL+'/img/icons/grid/delete.png',  
                     //tooltip: 'Delete',
                     handler: function(grid, rowIndex, colIndex) {
-                    	var id_delete = actividadTipoStore.getAt(rowIndex).get('act_actividad_tipo_id');
-                    	var nombre_delete = actividadTipoStore.getAt(rowIndex).get('nombre');
-                    	var auxmensaje = 'Confirma que desea borrar el Tipo de Actividad '+nombre_delete+'?';
+                    	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_id');
+                    	var nombre_delete = actividadStore.getAt(rowIndex).get('titulo');
+                    	var auxmensaje = 'Confirma que desea borrar la Actividad '+nombre_delete+'?';
                     	Ext.Msg.show({
                             title:'Consulta',
                             msg: auxmensaje,
@@ -314,13 +373,11 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/actividad/actividad-tipo/delete',
+        							   url: baseURL + '/actividad/actividad/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
-        										msg:'Tipo de Actividad Borrado Correctamente',
-        										closable: false,
-        										width: 250
+        										msg:'Actividad Borrada Correctamente'
         								   });
         								   function hide_message() {
         								       Ext.defer(function() {
@@ -328,14 +385,11 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        									Ext.getCmp('filtros').up('form').getForm().reset();
-        									   auxnombre = null;   									   
-        									   auxmodalidad = null;
-        								   actividadTipoStore.load();
+        								   actividadStore.load();
         							   },
         							   jsonData:{
         							       'delete':{
-												'act_actividad_tipo_id': id_delete,
+                                                                        'act_actividad_id': id_delete,
         							       }
         							   }
         						 });
@@ -358,22 +412,25 @@ Ext.onReady(function(){
 		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
+			//id: 'margen',
+		    //title: ' ',
 		    width: 'fit',
 		    height: 510,
 		    items:[
 		         {	
 		        	 xtype: 'panel',
-					 items: [panelFiltros]
+					 //items: [panelFiltros]
 			        
-		         },{
+		         }
+		         ,{
 		        	 xtype: 'container',
-					 items: [gridActividadTipo]
+					 items: [gridActividad]
 		         }
 		    ],
 		    listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(1);
-					Ext.getCmp('actividadTabPanel').setActiveTab(3);
+					Ext.getCmp('actividadTabPanel').setActiveTab(1);
 				}
 			}
 		});
