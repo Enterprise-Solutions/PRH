@@ -18,6 +18,6 @@ class Select extends DbSelect
              ->join(array('caf' => 'cal_anho_formacion'), 'aa.cal_anho_formacion_id = caf.cal_anho_formacion_id', array('anho_formacion' => 'anho'))
              ->join(array('ac' => 'act_ciclo'), 'aa.act_ciclo_id = ac.act_ciclo_id', array('ciclo' => 'nombre'))
              
-             ->where("act.relacion_ayuda is false");
+             ->where("act.relacion_ayuda = 'N'");
 	}
 }
