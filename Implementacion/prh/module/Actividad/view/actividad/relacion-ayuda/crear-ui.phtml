@@ -186,9 +186,107 @@ Ext.onReady(function(){
 								type: 'json',
 								root: 'records'
 							}
-						}
+						},
+                                                autoLoad: true
 					});
 					
+                                        
+                                        		function agregarwindow() {
+			 
+                                                        var form = Ext.widget('form', {
+                                                            layout: {
+                                                                type: 'vbox',
+                                                                align: 'stretch'
+                                                            },
+                                                            border: false,
+                                                            bodyPadding: 10,
+
+                                                            fieldDefaults: {
+                                                                labelAlign: 'top',
+                                                                labelWidth: 100,
+                                                                labelStyle: 'font-weight:bold'
+                                                            },
+                                                            items: [
+                                                            {	
+                                                                xtype: 'textfield',
+                                                                fieldLabel: 'Alias',   
+                                                                allowBlank: false,
+                                                                labelWidth: 120,
+                                                                width: 400,  
+                                                                name: 'nuevo_alias',   
+                                                            }],
+
+                                                            buttons: [{
+                                                                text: 'Crear',
+                                                                handler: function(b,e) {
+                                                                    var basicForm = b.up('form').getForm();  						
+                                                                                var valoresForm = basicForm.getFieldValues();
+                                                    
+                                                                                            Ext.Ajax.request({
+                                                                                                       //url: baseURL + '/adm/usuario/post',
+                                                                                                       success: function(response, opt){
+                                                                                                               Ext.Msg.show({
+                                                                                                                        title:'Aviso',
+                                                                                                                            msg:'Participante Creado Correctamente',
+                                                                                                                            closable: false,
+                                                                                                                            width: 250
+                                                                                                               });
+                                                                                                               function hide_message() {
+                                                                                                                   Ext.defer(function() {
+                                                                                                                       Ext.MessageBox.hide();
+                                                                                                                   }, delay);
+                                                                                                               }
+                                                                                                               hide_message();
+                                                                                                               Ext.getCmp('filtros').up('form').getForm().reset();
+                                                                                                               auxnombre = null;
+                                                                                                               auxestado = null;
+                                                                                                               auxpersona = null;
+                                                                                                               usuariosStore.load();
+                                                                                                       },
+                                                                                                       failure: function(response, opt){
+                                                                                                               var aux_mensaje = Ext.decode(response.responseText);
+                                                                                                               var mensaje = " ";
+                                                                                                                       for (error in aux_mensaje.datos) {
+                                                                                                    mensaje = mensaje +"- "+aux_mensaje.datos[error]+'<br>';  
+                                                                                            }
+                                                                                                                    Ext.MessageBox.show({
+                                                                                                title: aux_mensaje.mensaje,
+                                                                                                msg: mensaje,
+                                                                                                icon: Ext.MessageBox.ERROR,
+                                                                                                buttons: Ext.Msg.OK
+                                                                                            });
+                                                                                                            },
+                                                                                                       jsonData:{
+                                                                                                           'post':{
+                                                                                                                       'identificador_participante': 'new',
+                                                                                                                       'sobrenombre': valoresForm.nuevo_alias,
+                                                                                                           }
+                                                                                                       }
+                                                                                             });
+                                                                                             this.up('window').close();
+                                                                }
+                                                            },{
+                                                                text: 'Cancelar',
+                                                                handler: function() {
+                                                                    this.up('form').getForm().reset();
+                                                                    this.up('window').close();
+                                                                }
+                                                            }]
+                                                        });
+
+                                                        win = Ext.widget('window', {
+                                                            title: 'Crear Participante',
+                                                            closeAction: 'hide',
+                                                            width: 300,
+                                                            height: 150,
+                                                            layout: 'fit',
+                                                            resizable: true,
+                                                            modal: true,
+                                                            items: form
+                                                        }); 
+                                                     win.show();
+                                                    }  
+                                        
 					var buttonCrear = function(b,e)
 					{
 									var basicForm = b.up('form').getForm();
@@ -237,18 +335,13 @@ Ext.onReady(function(){
 												   'duracion': valoresForm.duracion,
 												   'monto_referencial': valoresForm.monto,
 												   'cont_moneda_id': valoresForm.cont_moneda_id,
+                                                                                                   'requiere_certificado': 'N',
 												   'nro_personas': 1,
-												   //'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
+												   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
 												   'fecha_inicio': (formatearFecha(valoresForm.fecha, 1)),
 												   'fecha_fin': (formatearFecha(valoresForm.fecha, 1)),
 												   'observaciones': valoresForm.observaciones
 										       },
-										       'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': "new_id",
-                                                                                                    'org_parte_rol_id': valoresForm.org_parte_rol_id,
-                                                                                                    'es_principal': "S"
-                                                                                                    }
-											    ],
                                                                                        'Participantes':[{
                                                                                                     'act_actividad_participantes_id': "new_id",
                                                                                                     'org_parte_rol_id': valoresForm.org_parte_rol_id,
@@ -325,6 +418,15 @@ Ext.onReady(function(){
 								    	anchor:'90%',
 								    	padding: 15,
 								    	name: 'duracion',
+                                                            },{
+                                                                        fieldLabel: 'Fecha',
+                                                                        xtype: 'datefield',
+                                                                        format: 'd/m/Y',
+                                                                        tabIndex: 9,
+                                                                        padding: 15,
+                                                                        labelWidth: 110,
+                                                                        anchor:'90%',
+                                                                        name: 'fecha' 
                                                             }
 					    	]},{
 					    		xtype: 'container',
@@ -361,33 +463,49 @@ Ext.onReady(function(){
 						 	        anchor:'90%',
 						 	        name: 'cont_moneda_id',
                                                     },{
-                                                                fieldLabel: 'Fecha',
-                                                                xtype: 'datefield',
-                                                                format: 'd/m/Y',
-                                                                tabIndex: 9,
-                                                                padding: 15,
+                                                                fieldLabel: 'A&ntilde;o de Form.',
+                                                                xtype: 'combobox',
+                                                                forceSelection: true,
                                                                 labelWidth: 110,
+                                                                store: anhoFormacionStore,
+                                                                displayField: 'anho',
+                                                                queryMode: 'local',
+                                                                valueField: 'cal_anho_formacion_id',
+                                                                allowBlank: false,
+                                                                padding: 15,
+                                                                tabIndex: 7,
                                                                 anchor:'90%',
-                                                                name: 'fecha'  				    	  	
-		                	}]
+                                                                name: 'cal_anho_formacion_id'  
+                                                    }]
 					    	}]},{
                                             items:[{
                                                 xtype: 'panel',
                                                 bodyStyle: {
                                                     background: '#C8CED8',
                                             },
-				 	    title: 'Formador',
+				 	    title: 'Datos del Participante',
 					    //anchor:'90%',
+                                            tools: [{
+                                                type: 'plus',
+                                                height: 15,
+                                                handler: agregarwindow,
+
+                                            }],
 					    height: 'fit',
 					    width: 'fit',
 					    border: 1,
 					//    flex: 1,
 					    padding: 10,
-					    //layout: 'hbox',
+					    layout: 'hbox',
 					    defaultType: 'textfield',
 					    items: [{
+							xtype: 'container',
+							flex: 1,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [{
 
-								    	fieldLabel: 'Formador',
+								    	fieldLabel: 'Alias',
 								    	xtype: 'combobox',
 								    	forceSelection: true,
 								        labelWidth: 110,
@@ -401,7 +519,34 @@ Ext.onReady(function(){
 								        tabIndex: 12,
 							 	        anchor:'90%',
 								    	name: 'org_parte_rol_id',
+                                                        },{
+                                                                        fieldLabel: 'Observaci&oacute;n',
+                                                                        xtype: 'textarea',
+                                                                        padding: 15,
+                                                                        tabIndex: 11,
+                                                                        labelWidth: 110,
+                                                                        anchor:'190%',
+                                                                        name: 'observaciones', 
+                                                                
+                                                            }
+					    	]},{
+							xtype: 'container',
+							flex: 1,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [{
+
+								    	fieldLabel: 'Monto Pagado',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minValue: 0,
+								    	tabIndex: 5,
+								    	hideTrigger: true,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'precio',
                                                         }
+					    	]}
 					    	]
 					    
 				     }]},{
@@ -439,28 +584,7 @@ Ext.onReady(function(){
 					 type:  'hbox',			 
 					 width: 'fit',
 					 height: 'fit',		           
-					 items:[
-										{
-											xtype: 'tabpanel',
-											tabPosition: 'left',
-											height: 520,
-                                                                                        width: 'fit',
-											//style:'background-color: #C8CED8',
-											//layout: 'fit',
-											items: [{
-										        title: 'Datos de Actividad',
-										        //tabConfig: {style:'width:240px'},
-										        items:[panelActividad],
-										    },{
-										        title: 'Participantes',
-										        id: 'tabParticipantes',
-										    //  tabConfig: {style:'width:240px'},
-										        disabled: true,
-										        items: []							       
-										    }]
-										}
-										
-					  ],
+					 items:[panelActividad],
 					  listeners:{
 								'render':function(){
 										Ext.getCmp('topTabPanel').setActiveTab(1);
@@ -469,12 +593,6 @@ Ext.onReady(function(){
                                                                                     callback: function(records, operation, success) {
                                                                                                  var aux = actividadTipoStore.getAt(0).get('act_actividad_tipo_id');
                                                                                                  Ext.getCmp('act_actividad_tipo_id').setValue(aux);
-                                                                                    }
-                                                                                });
-                                                                                cicloStore.load({
-                                                                                    callback: function(records, operation, success) {
-                                                                                                // var aux2 = cicloStore.getAt(0).get('act_ciclo_id');
-                                                                                                 Ext.getCmp('act_ciclo_id').setValue(6);
                                                                                     }
                                                                                 });
                                                                                  

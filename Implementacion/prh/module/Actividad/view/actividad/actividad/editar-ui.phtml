@@ -47,6 +47,9 @@ Ext.onReady(function(){
 							},{
 								type: 'string',
 								name: 'titulo'
+							},{
+								type: 'string',
+								name: 'modalidad'
 							}
 						]
 					});
@@ -214,7 +217,7 @@ Ext.onReady(function(){
 						model: 'actividadTipo',
 						proxy: {
 							type: 'ajax',
-							extraParams: {'p[limit]':'all'},
+							extraParams: {'p[limit]':'all', 'relacion_ayuda': 'N'},
 							headers: {'Accept':'application/json'},
 							url: baseURL + '/actividad/combos/act-actividad-tipo',
 							reader: {
@@ -301,7 +304,6 @@ Ext.onReady(function(){
                                                                                                 },
                                                                                                 callback:function(records, options, success)
                                                                                                 {
-                                                                                                    console.log(records, success, options);
                                                                                                     var id = options.params.id;
                                                                                                     var valor = options.params.valor;
                                                                                                     
@@ -395,7 +397,7 @@ Ext.onReady(function(){
                                                                                                    'act_ciclo_id': valoresForm.act_ciclo_id,
                                                                                                    'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
                                                                                                    'duracion': valoresForm.duracion,
-                                                                                                   'monto': valoresForm.monto_referencial,
+                                                                                                   'monto_referencial': valoresForm.monto_referencial,
                                                                                                    'cont_moneda_id': valoresForm.cont_moneda_id,
                                                                                                    'requiere_certificado': valoresForm.requiere_certificado,
                                                                                                    'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
@@ -412,32 +414,6 @@ Ext.onReady(function(){
 									       }
 									   }
                                                                            
-                                                                           /*
-                                                                           jsonData:{
-									       'post':{
-										       'Actividad':{
-												   'titulo': valoresForm.titulo,
-												   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
-                                                                                                   'act_ciclo_id': valoresForm.act_ciclo_id,
-												   'duracion': valoresForm.duracion,
-												   'monto_referencial': valoresForm.monto,
-												   'cont_moneda_id': valoresForm.cont_moneda_id,
-                                                                                                   'requiere_certificado': valoresForm.certificado,
-												   'nro_personas': 0,
-												   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
-												   'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
-												   'fecha_fin': (formatearFecha(valoresForm.fecha_fin, 1)),
-												   'observaciones': valoresForm.observaciones
-										       },
-										       'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': "new_id",
-                                                                                                    'org_parte_rol_id': valoresForm.org_parte_rol_id,
-                                                                                                    'es_principal': "S"
-                                                                                                    }
-											    ]	   
-									       }
-									   }
-                                                                           */
 								 });
 					}
 					else
@@ -475,7 +451,7 @@ Ext.onReady(function(){
 						        allowBlank: false,
 						        padding: 15,
 						        tabIndex: 1,
-						        labelWidth: 110,
+						        labelWidth: 160,
 						        anchor:'90%',
 						        name: 'titulo'
 					    },{
@@ -483,7 +459,7 @@ Ext.onReady(function(){
                                                         fieldLabel: 'Formador',
                                                         xtype: 'combobox',
                                                         //forceSelection: true,
-                                                        labelWidth: 110,
+                                                        labelWidth: 160,
                                                         width: 500,
                                                         store: posiblesFormadoresStore,
                                                         displayField: 'mostrar',
@@ -496,7 +472,7 @@ Ext.onReady(function(){
                                                         name: 'org_parte_rol_id',
                                             },{
 						    	fieldLabel: 'Costo',
-						    	labelWidth: 110,
+						    	labelWidth: 160,
 						    	xtype: 'numberfield',
 						    	tabIndex: 5,
 						    	minValue: 0,
@@ -506,10 +482,10 @@ Ext.onReady(function(){
 						    	padding: 15,
 						    	name: 'monto_referencial',
                                             },{
-						    	fieldLabel: 'A&ntilde;o de Form.',
+						    	fieldLabel: 'A&ntilde;o de Formaci&oacute;n',
 						    	xtype: 'combobox',
 						    	forceSelection: true,
-						        labelWidth: 110,
+						        labelWidth: 160,
 						        tabIndex: 7,
 						        store: anhoFormacionStore,
 						        displayField: 'anho',
@@ -525,27 +501,34 @@ Ext.onReady(function(){
 					 	       	format: 'd/m/Y',
 					 	        tabIndex: 9,
 					 	       	padding: 15,
-					 	        labelWidth: 110,
+					 	        labelWidth: 160,
 					 	        anchor:'90%',
 					 	        name: 'fecha_inicio'  
                                         },{
-                                                        fieldLabel: 'Observaci&oacute;n',
+                                                        fieldLabel: 'Requiere Certificado',
+                                                        xtype: 'combobox',
+                                                        forceSelection: true,
+                                                        labelWidth: 160,
+                                                        store: si_no,
+                                                        tabIndex: 10,
+                                                        displayField: 'nombre',
+                                                        queryMode: 'local',
+                                                        valueField: 'id',
+                                                        allowBlank: false,
                                                         padding: 15,
-                                                        labelWidth: 110,
+                                                        name: 'requiere_certificado',
                                                         anchor:'90%',
-                                                        tabIndex: 11,
-                                                        name: 'observaciones', 
-                                    }
+                                        }
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
 		                layout: 'anchor',
 		                defaultType: 'textfield',
 		                items: [{
-                                                fieldLabel: 'Tipo de Act',
+                                                fieldLabel: 'Tipo de Actividad',
                                                 xtype: 'combobox',
                                                 forceSelection: true,
-					        labelWidth: 110,
+					        labelWidth: 140,
 					        tabIndex: 2,
 					        store: actividadTipoStore,
 					        displayField: 'titulo',
@@ -554,12 +537,26 @@ Ext.onReady(function(){
 					        allowBlank: false,
 					        padding: 15,
 				 	        anchor:'90%',
-					        name: 'act_actividad_tipo_id'
+					        name: 'act_actividad_tipo_id',
+                                                listeners: {
+                                                             change: {
+                                                                 fn:function() {
+                                                                         var aux_act = this.getValue();
+                                                                         var aux_obj = actividadTipoStore.findRecord('act_actividad_tipo_id', aux_act);
+                                                                         var var_mod = aux_obj.get('modalidad');
+                                                                         if (var_mod == 'D'){
+                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (d&iacute;as)');
+                                                                         } else if(var_mod == 'H'){
+                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (horas)');
+                                                                         }
+                                                                    }
+                                                            }
+                                                }
 			    	    },{
                                                 fieldLabel: 'Ciclo',
                                                 xtype: 'combobox',
                                                 forceSelection: true,
-                                                labelWidth: 110,
+                                                labelWidth: 140,
                                                 tabIndex: 4,
                                                 store: cicloStore,
                                                 displayField: 'nombre',
@@ -573,7 +570,7 @@ Ext.onReady(function(){
 					        fieldLabel: 'Moneda',
 					        xtype: 'combobox',
 					        forceSelection: true,
-					        labelWidth: 110,
+					        labelWidth: 140,
 					        store: monedaStore,
 					        displayField: 'nombre',
 					        queryMode: 'local',
@@ -585,7 +582,7 @@ Ext.onReady(function(){
 				 	        name: 'cont_moneda_id', 
 			    	    },{
                                                 fieldLabel: 'Duraci&oacute;n',
-                                                labelWidth: 110,
+                                                labelWidth: 140,
                                                 tabIndex: 8,
                                                 xtype: 'numberfield',
                                                 minValue: 0,
@@ -594,30 +591,24 @@ Ext.onReady(function(){
                                                 anchor:'90%',
                                                 padding: 15,
                                                 name: 'duracion',
-                                    },{
-                                                fieldLabel: 'Requiere Cert.',
-                                                xtype: 'combobox',
-                                                forceSelection: true,
-                                                labelWidth: 110,
-                                                store: si_no,
-                                                tabIndex: 10,
-                                                displayField: 'nombre',
-                                                queryMode: 'local',
-                                                valueField: 'id',
-                                                allowBlank: false,
-                                                padding: 15,
-                                                name: 'requiere_certificado',
-                                                anchor:'90%',
+                                                id: 'duracion'
                                     },{
                                                 fieldLabel: 'Fin',
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
                                                 padding: 15,
                                                 tabIndex: 12,
-				 	        labelWidth: 110,
+				 	        labelWidth: 140,
 				 	        anchor:'90%',
 				 	        name: 'fecha_fin'  
-                	}]
+                                    },{
+                                                fieldLabel: 'Observaci&oacute;n',
+                                                padding: 15,
+                                                labelWidth: 140,
+                                                anchor:'90%',
+                                                tabIndex: 11,
+                                                name: 'observaciones', 
+                                    }]
 			    	}]},{
 		    	xtype: 'container',
 		 	    height: 'fit',
