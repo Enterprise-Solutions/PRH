@@ -210,7 +210,7 @@ class Actividad
             ),
             'monto_referencial' => array(
                 'name'      => 'monto_referencial',
-                'required'  => false,
+                'required'  => true,
             ),
             'nro_personas' => array(
                 'name'      => 'nro_personas',

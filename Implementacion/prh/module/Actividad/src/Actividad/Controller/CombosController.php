@@ -20,12 +20,11 @@ class CombosController extends BaseController
 	public function actActividadTipoAction()
     {
         $param = $this->SubmitParams()->getParam('relacion_ayuda');
-        $param = $param == 'S' ? 'true' : 'false';
         
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $select->_select->from('act_actividad_tipo')
                ->columns(array('act_actividad_tipo_id', 'titulo', 'modalidad'))
-               ->where("relacion_ayuda is $param");
+               ->where("relacion_ayuda = '$param'");
         
         $dao = new Dao($select);
         $template = $this->_crearTemplateParaListado();
