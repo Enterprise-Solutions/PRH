@@ -40,6 +40,9 @@ Ext.onReady(function(){
 							},{
 								type: 'string',
 								name: 'titulo'
+							},{
+								type: 'string',
+								name: 'modalidad'
 							}
 						]
 					});
@@ -191,101 +194,6 @@ Ext.onReady(function(){
 					});
 					
                                         
-                                        		function agregarwindow() {
-			 
-                                                        var form = Ext.widget('form', {
-                                                            layout: {
-                                                                type: 'vbox',
-                                                                align: 'stretch'
-                                                            },
-                                                            border: false,
-                                                            bodyPadding: 10,
-
-                                                            fieldDefaults: {
-                                                                labelAlign: 'top',
-                                                                labelWidth: 100,
-                                                                labelStyle: 'font-weight:bold'
-                                                            },
-                                                            items: [
-                                                            {	
-                                                                xtype: 'textfield',
-                                                                fieldLabel: 'Alias',   
-                                                                allowBlank: false,
-                                                                labelWidth: 120,
-                                                                width: 400,  
-                                                                name: 'nuevo_alias',   
-                                                            }],
-
-                                                            buttons: [{
-                                                                text: 'Crear',
-                                                                handler: function(b,e) {
-                                                                    var basicForm = b.up('form').getForm();  						
-                                                                                var valoresForm = basicForm.getFieldValues();
-                                                    
-                                                                                            Ext.Ajax.request({
-                                                                                                       //url: baseURL + '/adm/usuario/post',
-                                                                                                       success: function(response, opt){
-                                                                                                               Ext.Msg.show({
-                                                                                                                        title:'Aviso',
-                                                                                                                            msg:'Participante Creado Correctamente',
-                                                                                                                            closable: false,
-                                                                                                                            width: 250
-                                                                                                               });
-                                                                                                               function hide_message() {
-                                                                                                                   Ext.defer(function() {
-                                                                                                                       Ext.MessageBox.hide();
-                                                                                                                   }, delay);
-                                                                                                               }
-                                                                                                               hide_message();
-                                                                                                               Ext.getCmp('filtros').up('form').getForm().reset();
-                                                                                                               auxnombre = null;
-                                                                                                               auxestado = null;
-                                                                                                               auxpersona = null;
-                                                                                                               usuariosStore.load();
-                                                                                                       },
-                                                                                                       failure: function(response, opt){
-                                                                                                               var aux_mensaje = Ext.decode(response.responseText);
-                                                                                                               var mensaje = " ";
-                                                                                                                       for (error in aux_mensaje.datos) {
-                                                                                                    mensaje = mensaje +"- "+aux_mensaje.datos[error]+'<br>';  
-                                                                                            }
-                                                                                                                    Ext.MessageBox.show({
-                                                                                                title: aux_mensaje.mensaje,
-                                                                                                msg: mensaje,
-                                                                                                icon: Ext.MessageBox.ERROR,
-                                                                                                buttons: Ext.Msg.OK
-                                                                                            });
-                                                                                                            },
-                                                                                                       jsonData:{
-                                                                                                           'post':{
-                                                                                                                       'identificador_participante': 'new',
-                                                                                                                       'sobrenombre': valoresForm.nuevo_alias,
-                                                                                                           }
-                                                                                                       }
-                                                                                             });
-                                                                                             this.up('window').close();
-                                                                }
-                                                            },{
-                                                                text: 'Cancelar',
-                                                                handler: function() {
-                                                                    this.up('form').getForm().reset();
-                                                                    this.up('window').close();
-                                                                }
-                                                            }]
-                                                        });
-
-                                                        win = Ext.widget('window', {
-                                                            title: 'Crear Participante',
-                                                            closeAction: 'hide',
-                                                            width: 300,
-                                                            height: 150,
-                                                            layout: 'fit',
-                                                            resizable: true,
-                                                            modal: true,
-                                                            items: form
-                                                        }); 
-                                                     win.show();
-                                                    }  
                                         
 					var buttonCrear = function(b,e)
 					{
@@ -485,12 +393,6 @@ Ext.onReady(function(){
                                             },
 				 	    title: 'Datos del Participante',
 					    //anchor:'90%',
-                                            tools: [{
-                                                type: 'plus',
-                                                height: 15,
-                                                handler: agregarwindow,
-
-                                            }],
 					    height: 'fit',
 					    width: 'fit',
 					    border: 1,
@@ -505,20 +407,25 @@ Ext.onReady(function(){
 							defaultType: 'textfield',
 							items: [{
 
-								    	fieldLabel: 'Alias',
+								    	fieldLabel: 'Sobrenombre',
 								    	xtype: 'combobox',
-								    	forceSelection: true,
+								    	forceSelection: false,
 								        labelWidth: 110,
                                                                         width: 500,
 								        store: posiblesFormadoresStore,
 								        displayField: 'mostrar',
-								        queryMode: 'local',
+								        queryMode: 'remote',
 								        valueField: 'org_parte_rol_id',
 								        allowBlank: false,
 								        padding: 15,
 								        tabIndex: 12,
 							 	        anchor:'90%',
-								    	name: 'org_parte_rol_id',
+								    	name: 'org_parte_rol_id',                                                                                                                    
+								        typeAhead: true,								        
+								        loadingText: 'Buscando...',
+								        hideTrigger: true,
+								        queryParam: 's[parte]',
+								        minChars: 1,
                                                         },{
                                                                         fieldLabel: 'Observaci&oacute;n',
                                                                         xtype: 'textarea',

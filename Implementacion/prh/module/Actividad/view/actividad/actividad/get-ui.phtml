@@ -110,7 +110,7 @@ Ext.onReady(function(){
 					 			    	campos[campo] = result;
 					 			    	name.setValue(campos[campo]);
 				    				}
-						    	 }else if (campo == "asistencia" || campo == "atelier")
+						    	 }else if (campo == "requiere_certificado")
 							    	{
 								    	if (campos[campo] == 'S'){
 								    		campos[campo] = 'Si';
@@ -210,7 +210,13 @@ Ext.onReady(function(){
 						        labelWidth: 110,
 						        anchor:'90%',
 						    	name: 'fecha_fin',
-					   	}
+					   	},{
+                                                        fieldLabel: "Observaci&oacute;n",
+                                                        padding: 15,
+                                                        labelWidth: 110,
+                                                        anchor:'90%',
+                                                        name: 'observaciones',
+                                                }
 			    	]},{
 					xtype: 'container',
 					flex: 1,
@@ -265,12 +271,12 @@ Ext.onReady(function(){
 							        anchor:'90%',
 							        name: 'duracion',
 							  },{
-                                                                fieldLabel: "Observaci&oacute;n",
+                                                                fieldLabel: 'Requiere Certificado',
                                                                 padding: 15,
-                                                                labelWidth: 110,
-                                                                anchor:'90%',
-                                                                name: 'observaciones',
-                                                         }
+							        labelWidth: 110,
+							        anchor:'90%',
+                                                                name: 'requiere_certificado',   
+                                                        }
 			    		]
 			    	}]}],
 			});
