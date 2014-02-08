@@ -3,6 +3,7 @@
 namespace Actividad\Controller;
 
 use Actividad\RelacionAyuda\QueryObject\Get;
+use Actividad\RelacionAyuda\QueryObject\Participante;
 use Actividad\RelacionAyuda\QueryObject\Select;
 use Actividad\RelacionAyuda\Service\Crear as CrearRelacionAyudaService;
 use Actividad\RelacionAyuda\Service\Editar as EditarRelacionAyudaService;
@@ -28,6 +29,18 @@ class RelacionAyudaController extends BaseController
         $dao = new DaoGet($query);
         $template = $this->_crearTemplateParaGet();
         return $template($dao, array());
+    }
+    
+    public function getParticipanteAction($overwritedParams = array())
+    {
+        $loggedUser = $this->getServiceLocator()->get('Identidad');
+        $identificador = substr(strtoupper($loggedUser->nombre_persona),0,1) . substr(strtoupper($loggedUser->apellido_persona),0,1);
+        $overwritedParams = array('s' => array('identificador' => $identificador));
+        
+        $select = new Participante($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao = new Dao($select);
+        $template = $this->_crearTemplateParaListado();
+        return $template($dao, array(), $overwritedParams);
     }
     
     public function postAction()

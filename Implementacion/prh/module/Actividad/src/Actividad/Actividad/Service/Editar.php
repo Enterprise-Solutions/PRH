@@ -48,7 +48,6 @@ class Editar
             Thrower::throwValidationException('Error de Validacion', "No existe la actividad solicitada");
         }
         
-        //$data['requiere_certificado'] = $data['requiere_certificado'] == 'S' ? true : false;
         $this->actividad->fromArray($data);
     }
     
@@ -74,7 +73,7 @@ class Editar
     	
     	for ($i=0; $i<count($formadores); $i++) {
     	    if ($formadores[$i]['act_actividad_formadores_id'] == 'new_id') {
-    	        $esFormadorPrincipal = $formadores[$i]['es_principal'] == 'S' ? true : false;
+    	        $esFormadorPrincipal = $formadores[$i]['es_principal'];
     	        
     	        $formador = new Formador();
     	        $formador->setActividad($this->actividad);

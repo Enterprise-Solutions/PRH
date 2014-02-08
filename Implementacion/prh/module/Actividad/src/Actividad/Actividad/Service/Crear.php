@@ -37,14 +37,13 @@ class Crear
     protected function crearActividad($data)
     {
         $this->actividad = new Actividad();
-        $data['requiere_certificado'] = $data['requiere_certificado'] == 'S' ? true : false;
         $this->actividad->fromArray($data);
     }
     
     protected function asociarFormadores($data)
     {
     	for ($i=0; $i<count($data); $i++) {
-    	    $esFormadorPrincipal = $data[$i]['es_principal'] == 'S' ? true : false;
+    	    $esFormadorPrincipal = $data[$i]['es_principal'];
     	    
     		$formadorDeActividad = new Formador();
     		$formadorDeActividad->setActividad($this->actividad);
