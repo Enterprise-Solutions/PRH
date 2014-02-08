@@ -406,7 +406,7 @@ Ext.onReady(function(){
                                                                                                    'observaciones': valoresForm.observaciones	
                                                                                         },
                                                                                         'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': aux_formador_id,
+                                                                                                    'act_actividad_formadores_id': (aux_formador_id) ? aux_formador_id : 'new_id',
                                                                                                     'org_parte_rol_id': valoresForm.org_parte_rol_id,
                                                                                                     'es_principal': "S"
                                                                                                     }
