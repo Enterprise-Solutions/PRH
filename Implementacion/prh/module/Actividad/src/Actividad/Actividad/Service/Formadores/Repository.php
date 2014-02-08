@@ -14,7 +14,7 @@ class Repository extends EsRepository
 		
 		$records = $select->execute()->toArray();
 		if (count($records) == 0) {
-			return false;
+			return array();
 		}
 		return $records;
 	}

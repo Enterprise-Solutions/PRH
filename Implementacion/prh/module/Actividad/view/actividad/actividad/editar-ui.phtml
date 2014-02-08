@@ -311,7 +311,7 @@ Ext.onReady(function(){
                                                                                                 }
                                                                                                 })    
                                                                         }else if (campo == "act_actividad_formadores_id") {
-                                                                                aux_formador_id = campos[campo];
+                                                                        	campos[campo] = campos[campo] ? $campos[campo] : 'new_id';
                                                                          }   else {		
                                                                                             //console.log(campos[campo]);
 											    name.setValue(campos[campo]);
