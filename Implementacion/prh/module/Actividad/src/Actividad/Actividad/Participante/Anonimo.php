@@ -1,0 +1,40 @@
+<?php
+
+namespace Actividad\Actividad\Participante;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Participante de las actividades de Relacion de Ayuda
+ * @author guido
+ * 
+ * @ORM\Entity
+ * @ORM\Table(name="act_participante_anonimo")
+ */
+class Anonimo
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     */
+    protected $act_actividad_anonimo_id;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=80)
+     */
+    protected $identificador;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=100)
+     */
+    protected $alias;
+    
+    /**
+     * @ORM\Column(type="string")
+     * @ORM\Column(length=250)
+     */
+    protected $descripcion;
+}

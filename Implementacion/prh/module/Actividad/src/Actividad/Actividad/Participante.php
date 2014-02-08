@@ -43,30 +43,6 @@ class Participante
     protected $act_actividad_formadores_id;
     
     /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=80)
-     */
-    protected $identificador_participante;
-    
-    /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=100)
-     */
-    protected $sobrenombre;
-    
-    /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=250)
-     */
-    protected $descripcion;
-    
-    /**
-     * @ORM\Column(type="string")
-     * @ORM\Column(length=250)
-     */
-    protected $otra_info;
-    
-    /**
      * @Orm\Column(type="float")
      */
     protected $monto_participante;
