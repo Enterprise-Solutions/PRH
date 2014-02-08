@@ -310,9 +310,7 @@ Ext.onReady(function(){
                                                                                                     Ext.getCmp(id).setValue(valor);
                                                                                                 }
                                                                                                 })    
-                                                                        }else if (campo == "act_actividad_formadores_id") {
-                                                                        	campos[campo] = campos[campo] ? $campos[campo] : 'new_id';
-                                                                         }   else {		
+                                                                        }else {		
                                                                                             //console.log(campos[campo]);
 											    name.setValue(campos[campo]);
                                                                         }
@@ -406,7 +404,7 @@ Ext.onReady(function(){
                                                                                                    'observaciones': valoresForm.observaciones	
                                                                                         },
                                                                                         'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': (aux_formador_id) ? aux_formador_id : 'new_id',
+                                                                                                    'act_actividad_formadores_id': valoresForm.act_actividad_formadores_id,
                                                                                                     'org_parte_rol_id': valoresForm.org_parte_rol_id,
                                                                                                     'es_principal': "S"
                                                                                                     }
