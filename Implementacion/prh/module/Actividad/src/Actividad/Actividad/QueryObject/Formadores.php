@@ -12,7 +12,7 @@ class Formadores extends DbSelect
         $this->_select
              ->from(array('aaf' => 'act_actividad_formadores'))
              ->columns(array('act_actividad_formadores_id'))
-             ->join(array('opr' => 'org_parte_rol'), 'aaf.org_parte_rol_id = opr.org_parte_rol_id', array())
+             ->join(array('opr' => 'org_parte_rol'), 'aaf.org_parte_rol_id = opr.org_parte_rol_id', array('org_parte_rol_id'))
              ->join(array('op' => 'org_parte'), 'opr.org_parte_id = op.org_parte_id', array('nombre' => 'nombre_persona', 'apellido' => 'apellido_persona'));
     }
     
