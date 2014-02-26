@@ -66,7 +66,10 @@ function _agregarActActividadParticipante($repository,$orgParteRolId,$actActivid
     	array('org_parte_rol_id'   => $orgParteRolId),
         array('act_actividad_id'   => $actActividadId),
         array('monto_participante' => $montoParticipante),
-        array('cont_moneda_id'     => $contMonedaId)
+        array('cont_moneda_id'     => $contMonedaId),
+        array('se_imprimio_certificado'   => 'N'),
+        array('se_entrego_certificado'    => 'N'),
+        array('fecha_entrega_certificado' => '')
     );
     $cambiosUtil = new Cambios();
     $cambiosActActividadParticipante = $cambiosUtil->cambiar(array(), $cambiosActActividadParticipante);
