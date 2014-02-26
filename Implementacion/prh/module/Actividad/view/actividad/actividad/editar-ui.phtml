@@ -188,6 +188,26 @@ Ext.onReady(function(){
 							},{
 								type: 'string',
 								name: 'apellido'
+							},{
+								type: 'string',
+								name: 'monto_participante'
+							},{
+								type: 'string',
+								name: 'moneda'
+							},{
+								type: 'string',
+								name: 'se_imprimio_certificado'
+							},{
+								type: 'string',
+								name: 'se_entrego_certificado'
+							},{
+								type: 'string',
+								name: 'fecha_entrega_certificado'
+							},{
+					            name: 'monto', 
+					            convert: function (v, rec) {
+					               return rec.get('monto_participante') + ' ' + rec.get('moneda');
+					        	}
 							}
 						]
 					});
@@ -286,9 +306,7 @@ Ext.onReady(function(){
 					    	for (campo in campos) {
                                                     //console.log(campo);
                                                     if (campo == "act_actividad_formadores_id"){
-                                                                aux_formador_id  = campos[campo];
-                                                                console.log(campo);
-                                                                                            
+                                                                aux_formador_id  = campos[campo];                                                                                            
                                                     }                 
 						    	var name = form.findField(campo);
 						    		if (name) {
@@ -450,7 +468,6 @@ Ext.onReady(function(){
 					flex: 1,
 					layout: 'anchor',
 					defaultType: 'textfield',
-                                        useThousandSeparator: true,
 					items: [    
 					    {
 						        fieldLabel: 'Nombre',
@@ -462,21 +479,21 @@ Ext.onReady(function(){
 						        name: 'titulo'
 					    },{
 
-                                                        fieldLabel: 'Formador',
-                                                        xtype: 'combobox',
-                                                        //forceSelection: true,
-                                                        labelWidth: 160,
-                                                        width: 500,
-                                                        store: posiblesFormadoresStore,
-                                                        displayField: 'mostrar',
-                                                        queryMode: 'local',
-                                                        valueField: 'org_parte_rol_id',
-                                                        allowBlank: false,
-                                                        padding: 15,
-                                                        tabIndex: 3,
-                                                        anchor:'90%',
-                                                        name: 'org_parte_rol_id',
-                                            },{
+                                fieldLabel: 'Formador',
+                                xtype: 'combobox',
+                                //forceSelection: true,
+                                labelWidth: 160,
+                                width: 500,
+                                store: posiblesFormadoresStore,
+                                displayField: 'mostrar',
+                                queryMode: 'local',
+                                valueField: 'org_parte_rol_id',
+                                allowBlank: false,
+                                padding: 15,
+                                tabIndex: 3,
+                                anchor:'90%',
+                                name: 'org_parte_rol_id',
+					    },{
 						    	fieldLabel: 'Costo',
 						    	labelWidth: 160,
 						    	xtype: 'numberfield',
@@ -487,7 +504,7 @@ Ext.onReady(function(){
 						    	anchor:'90%',
 						    	padding: 15,
 						    	name: 'monto_referencial',
-                                            },{
+                       },{
 						    	fieldLabel: 'A&ntilde;o de Formaci&oacute;n',
 						    	xtype: 'combobox',
 						    	forceSelection: true,
@@ -501,8 +518,8 @@ Ext.onReady(function(){
 						        padding: 15,
 					 	        anchor:'90%',
 						    	name: 'cal_anho_formacion_id',
-                                        },{
-                                                        fieldLabel: 'Inicio',
+                       },{
+                                fieldLabel: 'Inicio',
 					 	        xtype: 'datefield',
 					 	       	format: 'd/m/Y',
 					 	        tabIndex: 9,
@@ -510,21 +527,21 @@ Ext.onReady(function(){
 					 	        labelWidth: 160,
 					 	        anchor:'90%',
 					 	        name: 'fecha_inicio'  
-                                        },{
-                                                        fieldLabel: 'Requiere Certificado',
-                                                        xtype: 'combobox',
-                                                        forceSelection: true,
-                                                        labelWidth: 160,
-                                                        store: si_no,
-                                                        tabIndex: 10,
-                                                        displayField: 'nombre',
-                                                        queryMode: 'local',
-                                                        valueField: 'id',
-                                                        allowBlank: false,
-                                                        padding: 15,
-                                                        name: 'requiere_certificado',
-                                                        anchor:'90%',
-                                        }
+                       },{
+                                fieldLabel: 'Requiere Certificado',
+                                xtype: 'combobox',
+                                forceSelection: true,
+                                labelWidth: 160,
+                                store: si_no,
+                                tabIndex: 10,
+                                displayField: 'nombre',
+                                queryMode: 'local',
+                                valueField: 'id',
+                                allowBlank: false,
+                                padding: 15,
+                                name: 'requiere_certificado',
+                                anchor:'90%',
+                	}
 			    	]},{
 			    		xtype: 'container',
 		                flex: 1,
@@ -534,31 +551,31 @@ Ext.onReady(function(){
                                                 fieldLabel: 'Tipo de Actividad',
                                                 xtype: 'combobox',
                                                 forceSelection: true,
-					        labelWidth: 140,
-					        tabIndex: 2,
-					        store: actividadTipoStore,
-					        displayField: 'titulo',
-					        queryMode: 'local',
-					        valueField: 'act_actividad_tipo_id',
-					        allowBlank: false,
-					        padding: 15,
-				 	        anchor:'90%',
-					        name: 'act_actividad_tipo_id',
-                                                listeners: {
-                                                             change: {
-                                                                 fn:function() {
-                                                                         var aux_act = this.getValue();
-                                                                         var aux_obj = actividadTipoStore.findRecord('act_actividad_tipo_id', aux_act);
-                                                                         var var_mod = aux_obj.get('modalidad');
-                                                                         if (var_mod == 'D'){
-                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (d&iacute;as)');
-                                                                         } else if(var_mod == 'H'){
-                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (horas)');
-                                                                         }
-                                                                    }
-                                                            }
-                                                }
-			    	    },{
+										        labelWidth: 140,
+										        tabIndex: 2,
+										        store: actividadTipoStore,
+										        displayField: 'titulo',
+										        queryMode: 'local',
+										        valueField: 'act_actividad_tipo_id',
+										        allowBlank: false,
+										        padding: 15,
+									 	        anchor:'90%',
+										        name: 'act_actividad_tipo_id',
+					                                                listeners: {
+					                                                             change: {
+					                                                                 fn:function() {
+					                                                                         var aux_act = this.getValue();
+					                                                                         var aux_obj = actividadTipoStore.findRecord('act_actividad_tipo_id', aux_act);
+					                                                                         var var_mod = aux_obj.get('modalidad');
+					                                                                         if (var_mod == 'D'){
+					                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (d&iacute;as)');
+					                                                                         } else if(var_mod == 'H'){
+					                                                                            Ext.getCmp('duracion').setFieldLabel('Duraci&oacute;n (horas)');
+					                                                                         }
+					                                                                    }
+					                                                            }
+					                                                }
+			    	    			},{
                                                 fieldLabel: 'Ciclo',
                                                 xtype: 'combobox',
                                                 forceSelection: true,
@@ -573,20 +590,21 @@ Ext.onReady(function(){
                                                 anchor:'90%',
                                                 name: 'act_ciclo_id'
                                     },{
-					        fieldLabel: 'Moneda',
-					        xtype: 'combobox',
-					        forceSelection: true,
-					        labelWidth: 140,
-					        store: monedaStore,
-					        displayField: 'nombre',
-					        queryMode: 'local',
-					        valueField: 'cont_moneda_id',
-					        allowBlank: false,
-					        padding: 15,
-					        tabIndex: 6,
-				 	        anchor:'90%',
-				 	        name: 'cont_moneda_id', 
-			    	    },{
+										        fieldLabel: 'Moneda',
+										        xtype: 'combobox',
+										        forceSelection: true,
+										        labelWidth: 140,
+										        store: monedaStore,
+										        displayField: 'nombre',
+										        queryMode: 'local',
+										        valueField: 'cont_moneda_id',
+										        allowBlank: false,
+										        padding: 15,
+										        tabIndex: 6,
+									 	        anchor:'90%',
+									 	        name: 'cont_moneda_id',
+									 	        id: 'cont_moneda_id'
+								    },{
                                                 fieldLabel: 'Duraci&oacute;n',
                                                 labelWidth: 140,
                                                 tabIndex: 8,
@@ -600,13 +618,13 @@ Ext.onReady(function(){
                                                 id: 'duracion'
                                     },{
                                                 fieldLabel: 'Fin',
-				 	        xtype: 'datefield',
-				 	       	format: 'd/m/Y',
+									 	        xtype: 'datefield',
+									 	       	format: 'd/m/Y',
                                                 padding: 15,
                                                 tabIndex: 12,
-				 	        labelWidth: 140,
-				 	        anchor:'90%',
-				 	        name: 'fecha_fin'  
+									 	        labelWidth: 140,
+									 	        anchor:'90%',
+									 	        name: 'fecha_fin'  
                                     },{
                                                 fieldLabel: 'Observaci&oacute;n',
                                                 padding: 15,
@@ -659,7 +677,7 @@ Ext.onReady(function(){
 						    xtype: 'container',
 						    id: 'filtros2',
 						    height: 45,
-						    layout:'column',
+						    layout:'hbox',
 						    items:[{   	
 								    	fieldLabel: 'Nombre',
 								    	xtype: 'combobox',
@@ -669,6 +687,7 @@ Ext.onReady(function(){
 								        displayField: 'mostrar',
 								        valueField: 'org_parte_id',
 								        width: 300,
+								        tabIndex: 1,
 								        padding: '10 0 5 15',
 							 	        anchor:'90%',
 								    	name: 'auxparticipante',
@@ -678,10 +697,23 @@ Ext.onReady(function(){
 								        hideTrigger: true,
 								        queryParam: 's[parte]',
 								        minChars: 1,          
-						    	  },{					
+						    	  },{
+						    		  	fieldLabel: 'Monto Pagado',
+								    	labelWidth: 110,
+								    	xtype: 'numberfield',
+								    	minValue: 0,
+								    	width: 300,
+								    	tabIndex: 2,
+								    	hideTrigger: true,
+								    	anchor:'90%',
+								    	padding: '10 0 5 15',
+								    	name: 'monto', 
+						    	  },{ 
+			                             xtype: 'tbfill' 
+			                      },{					
 						           		xtype: 'button',
 						           		width: 100,
-						           		margin: '10 0 0 20',
+						           		margin: '10 20 0 20',
 						            	text: 'Agregar',
 							            scale   : 'small',
 							            handler: function(b,e) {
@@ -690,9 +722,13 @@ Ext.onReady(function(){
 									           var valoresForm = basicForm.getFieldValues();
 		
 												var nuevoParticipante = valoresForm.auxparticipante;
+												var monto = valoresForm.monto;
+												var moneda = Ext.getCmp('cont_moneda_id').getValue();
+												
 												Ext.Ajax.request({
 			 	        							   url: baseURL + '/actividad/actividad/set-participante',
 			 	        							   success: function(response, opt){
+			 	        								  Ext.getCmp('filtros2').up('form').getForm().reset();
 											                participantesStore.load();
 											                posiblesFormadoresStore.load();
 					        								posiblesParticipantesStore.load();
@@ -712,7 +748,9 @@ Ext.onReady(function(){
 			 	        							   jsonData:{
 			 	        								   'post':{		 	        							       
 			 	        							    	    'act_actividad_id': aux,
-			 													'org_parte_id': nuevoParticipante
+			 													'org_parte_id': nuevoParticipante,
+			 													'monto_participante': monto,
+			 													'cont_moneda_id': moneda
 			 	        								   }			 	        							       
 			 	        							   }
 			 	        						 });
@@ -738,12 +776,34 @@ Ext.onReady(function(){
 			                text: "Nombre",
 			                dataIndex: 'nombre',
 			                align: 'left',
-			                width: 180,
+			                flex: 1,
 		            	},{
 			                text: "Apellido",
 			                dataIndex: 'apellido',
 			                align: 'left',
+			                flex: 1
+			            },{
+			                text: "Monto Pagado",
+			                dataIndex: 'monto',
+			                align: 'center',
+			                flex: 1
+			            },{
+			                text: "Certificado Impreso",
+			                dataIndex: 'se_imprimio_certificado',
+			                align: 'center',
 			                flex: 1,
+			                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.se_imprimio_certificado) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
+			            },{
+			            	text: "Certificado Entregado",
+			                dataIndex: 'se_entrego_certificado',
+			                align: 'center',
+			                flex: 1,
+			                renderer: function(val, metadata, record, rowIndex, colIndex) {switch(metadata.record.data.se_entrego_certificado) {case 'S':return 'Si'; case 'N': return 'No'; default: return '-';}},
+			            },{
+			                text: "Fecha Entrega",
+			                dataIndex: 'fecha_entrega_certificado',
+			                align: 'center',
+			                flex: 1
 			            },{
 			                xtype:'actioncolumn',
 			                width: 40,
@@ -780,7 +840,7 @@ Ext.onReady(function(){
 			        								       }, delay);
 			        								   }
 			        								   hide_message();
-			        								   Ext.getCmp('filtros').up('form').getForm().reset();
+			        								   Ext.getCmp('filtros2').up('form').getForm().reset();
 			        								   id_delete = null;
 			        								   participantesStore.load();
 			        								   posiblesFormadoresStore.load();
