@@ -12,6 +12,7 @@ use Actividad\Actividad\Service\Crear as CrearActividadService;
 use Actividad\Actividad\Service\Editar as EditarActividadService;
 use Actividad\Actividad\Service\Eliminar as EliminarActividadService;
 use Actividad\Actividad\Service\AsociarFormador as AsociarFormadorService;
+use Actividad\Actividad\Service\EditarParticipante as EditarParticipanteService;
 use Actividad\Actividad\Service\DesasociarFormador as DesasociarFormadorService;
 use Actividad\Actividad\Service\AsociarParticipante as AsociarParticipanteService;
 use Actividad\Actividad\Service\DesasociarParticipante as DesasociarParticipanteService;
@@ -118,6 +119,18 @@ class ActividadController extends BaseController
         $data = $this->SubmitParams()->getParams();
         
         $service = new AsociarParticipanteService($em);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
+    }
+    
+    public function editarParticipanteAction()
+    {
+        $em = $this->getEntityManager();
+        $data = $this->SubmitParams()->getParam('put');
+        
+        $service = new EditarParticipanteService($em);
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         

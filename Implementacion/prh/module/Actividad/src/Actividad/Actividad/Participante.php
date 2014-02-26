@@ -62,6 +62,28 @@ class Participante
      */
     protected $fecha_entrega_certificado;
     
+    public function setMonto($monto)
+    {
+        $this->monto_participante = $monto;
+    }
+    
+    public function setImprimirCertificado($value)
+    {
+        $value = in_array($value, array('S','N')) ? $value : 'N';
+        $this->se_imprimio_certificado = $value;
+    }
+    
+    public function setEntregarCertificado($value)
+    {
+        $value = in_array($value, array('S','N')) ? $value : 'N';
+        $this->se_entrego_certificado = $value;
+    }
+    
+    public function setFechaEntregaCertificado($fecha)
+    {
+        $this->fecha_entrega_certificado = $fecha;
+    }
+    
     public function setActividad($actividad)
     {
         $this->actividad = $actividad;
@@ -77,5 +99,10 @@ class Participante
         foreach ($data as $campo => $valor) {
             $this->$campo = $valor;
         }
+    }
+    
+    public function getId()
+    {
+        return $this->act_actividad_participantes_id;
     }
 }
