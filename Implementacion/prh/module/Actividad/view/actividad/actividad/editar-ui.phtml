@@ -134,7 +134,7 @@ Ext.onReady(function(){
 							},{
 					            name: 'mostrar', 
 					            convert: function (v, rec) {
-					               return rec.get('nombre') + ', ' + rec.get('apellido');
+					               return rec.get('nombre') + ' ' + rec.get('apellido');
 					            }
 					        }
 						]
@@ -764,7 +764,7 @@ Ext.onReady(function(){
 									       }, delay);
 									   }
 									   hide_message();
-									   Ext.getCmp('filtros2').up('form').getForm().reset();
+									   //Ext.getCmp('filtros2').up('form').getForm().reset();
 									   participantesStore.load();
 								   },
 								   jsonData:{
@@ -778,7 +778,7 @@ Ext.onReady(function(){
 								       }
 								   }
 							 });
-							 this.up('window').close();
+							 this.up('window').destroy();
 	                    }
 	                },{
 	                    text: 'Cancelar',
