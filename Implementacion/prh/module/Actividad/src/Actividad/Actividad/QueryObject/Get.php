@@ -10,7 +10,7 @@ class Get extends DbSelect
 {
     public function _init()
     {
-        $recaudacion = new Expression("coalesce(sum(aap.monto_participante),0)");
+        $recaudacion = new Expression("cm.simbolo || ' ' || coalesce(sum(aap.monto_participante),0)");
         
         $this->_select
              // Actividad

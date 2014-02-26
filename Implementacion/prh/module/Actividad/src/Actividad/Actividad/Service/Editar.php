@@ -55,23 +55,27 @@ class Editar
     {
         $ds = new DataSource($this->dbAdapter);
     	$formadoresRepository = new FormadoresRepository($ds);
-    	$formadoresAsociados = $formadoresRepository->find($this->actividad->getId());
+    	$formadoresAsociados  = $formadoresRepository->find($this->actividad->getId());
     	
     	for ($i=0; $i<count($formadoresAsociados); $i++) {
-    		$found = false;
+    		//$found = false;
     		for ($j=0; $j<count($formadores); $j++) {
-    		    if ($formadoresAsociados[$i]['org_parte_rol_id'] == $formadores[$j]['org_parte_rol_id']) {
-    				$found = true;
+    		    if ($formadoresAsociados[$i]['act_actividad_formadores_id'] == $formadores[$j]['act_actividad_formadores_id']) {
+    		        $esFormadorPrincipal = $formadores[$j]['es_principal'];
+    		        
+    		        $formador = $this->em->find('Actividad\Actividad\Formador', $formadoresAsociados[$i]['act_actividad_formadores_id']);
+    		        $formador->setFormador($this->getFormador($formadores[$i]), $esFormadorPrincipal);
+    				//$found = true;
     			}
     		}
     		
-    		if (!$found) {
+    		/*if (!$found) {
     			$formador = $this->em->find('Actividad\Actividad\Formador', $formadoresAsociados[$i]['act_actividad_formadores_id']);
     			$this->em->remove($formador);
-    		}
+    		}*/
     	}
     	
-    	for ($i=0; $i<count($formadores); $i++) {
+    	/*for ($i=0; $i<count($formadores); $i++) {
     	    if ($formadores[$i]['act_actividad_formadores_id'] == 'new_id') {
     	        $esFormadorPrincipal = $formadores[$i]['es_principal'];
     	        
@@ -80,7 +84,7 @@ class Editar
     	        $formador->setFormador($this->getFormador($formadores[$i]), $esFormadorPrincipal);
     	        $this->em->persist($formador);
     	    }
-    	}
+    	}*/
     }
     
     protected function getFormador($data)
