@@ -68,8 +68,7 @@ function _agregarActActividadParticipante($repository,$orgParteRolId,$actActivid
         array('monto_participante' => $montoParticipante),
         array('cont_moneda_id'     => $contMonedaId),
         array('se_imprimio_certificado'   => 'N'),
-        array('se_entrego_certificado'    => 'N'),
-        array('fecha_entrega_certificado' => '')
+        array('se_entrego_certificado'    => 'N')
     );
     $cambiosUtil = new Cambios();
     $cambiosActActividadParticipante = $cambiosUtil->cambiar(array(), $cambiosActActividadParticipante);
