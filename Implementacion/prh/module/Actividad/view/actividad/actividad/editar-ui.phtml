@@ -284,8 +284,15 @@ Ext.onReady(function(){
 					    	var form = Ext.getCmp('form').getForm();
 					    	
 					    	for (campo in campos) {
+                                                    //console.log(campo);
+                                                    if (campo == "act_actividad_formadores_id"){
+                                                                aux_formador_id  = campos[campo];
+                                                                console.log(campo);
+                                                                                            
+                                                    }                 
 						    	var name = form.findField(campo);
 						    		if (name) {
+                                                                    //console.log(campo);
 						    			if (campo == "fecha_inicio" || campo == "fecha_fin")
 								    	{
 						    				if (campos[campo]){
@@ -311,7 +318,7 @@ Ext.onReady(function(){
                                                                                                 }
                                                                                                 })    
                                                                         }else {		
-                                                                                            //console.log(campos[campo]);
+                                                                                            //console.log(campo);
 											    name.setValue(campos[campo]);
                                                                         }
 							    					
@@ -372,7 +379,7 @@ Ext.onReady(function(){
 										       }, delay);
 										   }
 										   hide_message();
-										   window.location = baseURL+'/actividad/actividad/index-ui';
+										   //window.location = baseURL+'/actividad/actividad/index-ui';
 									   },
 										failure: function(response, opt){
 											   var aux_mensaje = Ext.decode(response.responseText);
@@ -404,7 +411,7 @@ Ext.onReady(function(){
                                                                                                    'observaciones': valoresForm.observaciones	
                                                                                         },
                                                                                         'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': valoresForm.act_actividad_formadores_id,
+                                                                                                    'act_actividad_formadores_id': aux_formador_id,
                                                                                                     'org_parte_rol_id': valoresForm.org_parte_rol_id,
                                                                                                     'es_principal': "S"
                                                                                                     }
@@ -443,6 +450,7 @@ Ext.onReady(function(){
 					flex: 1,
 					layout: 'anchor',
 					defaultType: 'textfield',
+                                        useThousandSeparator: true,
 					items: [    
 					    {
 						        fieldLabel: 'Nombre',
