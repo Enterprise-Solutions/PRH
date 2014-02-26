@@ -208,7 +208,12 @@ Ext.onReady(function(){
 					            convert: function (v, rec) {
 					               return rec.get('monto_participante') + ' ' + rec.get('moneda');
 					        	}
-							}
+							},{
+					            name: 'mostrar', 
+					            convert: function (v, rec) {
+					               return rec.get('nombre') + ', ' + rec.get('apellido');
+					            }
+					        }
 						]
 					});
 
@@ -663,7 +668,150 @@ Ext.onReady(function(){
 			    ]
 		     }],
 			});
-
+			
+			function editarwindow (id_edit, nombre_edit, monto_edit, cert_impr_edit, cert_ent_edit, cert_fecha_edit) {
+				
+	            var form = Ext.widget('form', {
+	                layout: {
+	                    type: 'vbox',
+	                    align: 'stretch'
+	                },
+	                border: false,
+	                bodyPadding: 10,
+	
+	                fieldDefaults: {
+	                    labelAlign: 'left',
+	                    labelWidth: 100,
+	                    labelStyle: 'font-weight:bold'
+	                },
+	                items: [
+	                       	{
+			                    xtype: 'displayfield',
+			                    fieldLabel: 'Nombre',	                    
+			                    labelWidth: 120,
+			                    value: nombre_edit,  
+	                		},{
+			                    fieldLabel: 'Monto Pagado',   			                    
+			                    xtype: 'numberfield',
+						    	minValue: 0,
+						    	labelWidth: 120,
+						    	width: 250,
+						    	tabIndex: 2,
+						    	hideTrigger: true,
+						    	//anchor:'90%',
+						    	name: 'monto', 
+			                    value: monto_edit  
+	                		},{
+	                			xtype: 'fieldcontainer',
+	                            fieldLabel: 'Certificado',
+	                            labelWidth: 120,
+	                            defaultType: 'checkboxfield',
+	                            items: [
+	                                {
+	                                    boxLabel  : 'Se imprimio',
+	                                    name      : 'imprimio',
+	                                    inputValue: '1',
+	                                    value: cert_impr_edit, 
+	                                    uncheckedValue : 'N',
+	                                    id        : 'imprimio'
+	                                }, {
+	                                    boxLabel  : 'Se entrego',
+	                                    name      : 'entrego',
+	                                    inputValue: '1',
+	                                    value: cert_ent_edit,
+	                                    uncheckedValue : 'N',
+	                                    id        : 'entrego',
+                                    	handler: function (checkbox, checked) {
+                                             if (checked) {
+                                            	 Ext.getCmp('fecha').show();
+                                             }
+                                             else if (!checked) {
+                                            	 Ext.getCmp('fecha').hide();
+                                             }
+                                         }
+	                                }
+	                            ]	
+	                		},{
+                                fieldLabel: 'Fecha Entrega',
+					 	        xtype: 'datefield',
+					 	        hidden: true,
+					 	       	format: 'd/m/Y',
+                                tabIndex: 4,
+					 	        labelWidth: 120,
+					 	        name: 'fecha',
+					 	        id: 'fecha'
+	                		}
+	                ],
+	
+	                buttons: [{
+	                    text: 'Guardar',
+	                    handler: function(b,e) {
+	                    	var basicForm = b.up('form').getForm();  						
+				            var valoresForm = basicForm.getFieldValues();
+		
+							Ext.Ajax.request({
+								   url: baseURL + '/actividad/actividad/editar-participante',
+								   success: function(response, opt){
+									   Ext.Msg.show({
+										    title:'Aviso',
+											msg:'Participante Modificado Correctamente',
+											closable: false,
+											width: 250
+									   });
+									   function hide_message() {
+									       Ext.defer(function() {
+									           Ext.MessageBox.hide();
+									       }, delay);
+									   }
+									   hide_message();
+									   Ext.getCmp('filtros2').up('form').getForm().reset();
+									   participantesStore.load();
+								   },
+								   jsonData:{
+								       'put':{
+								    	   'act_actividad_participantes_id': id_edit,
+								    	   'monto_participante': valoresForm.monto,
+								    	   'se_imprimio_certificado': (valoresForm.imprimio) ? 'S' : 'N',
+								    	   'se_entrego_certificado': (valoresForm.entrego) ? 'S' : 'N',
+								    	   'fecha_entrega_certificado': (formatearFecha(valoresForm.fecha, 1))
+										   
+								       }
+								   }
+							 });
+							 this.up('window').close();
+	                    }
+	                },{
+	                    text: 'Cancelar',
+	                    handler: function() {
+	                        this.up('form').getForm().reset();
+	                        this.up('window').close();
+	                    }
+	                }]
+	                
+	            });
+	            
+                if (cert_impr_edit == 'S')
+				{
+					Ext.getCmp('imprimio').setValue(true);
+				}					 
+				if (cert_ent_edit == 'S')
+				{
+					Ext.getCmp('entrego').setValue(true);
+				}
+				
+	            win = Ext.widget('window', {
+	                title: 'Editar Participante',
+	                closeAction: 'hide',
+	                width: 400,
+	                height: 260,
+	                layout: 'fit',
+	                resizable: true,
+	                modal: true,
+	                items: form
+	            }); 
+	       	 win.show();
+	    	}
+			
 			var agregarParticipante = Ext.create('Ext.form.Panel', {
 				 type:  'hbox',
 				 padding: '10 10 10 10',
@@ -774,15 +922,10 @@ Ext.onReady(function(){
 	            // grid columns
 	            columns:[{
 			                text: "Nombre",
-			                dataIndex: 'nombre',
+			                dataIndex: 'mostrar',
 			                align: 'left',
 			                flex: 1,
 		            	},{
-			                text: "Apellido",
-			                dataIndex: 'apellido',
-			                align: 'left',
-			                flex: 1
-			            },{
 			                text: "Monto Pagado",
 			                dataIndex: 'monto',
 			                align: 'center',
@@ -806,8 +949,24 @@ Ext.onReady(function(){
 			                flex: 1
 			            },{
 			                xtype:'actioncolumn',
-			                width: 40,
-			                title: 'Eliminar',
+			                width:35,
+			                align: 'center',
+			                items: [{
+			                    icon: baseURL+'/img/icons/grid/edit.png',  
+			                    //tooltip: 'Edit',
+			                handler: function(grid, rowIndex, colIndex) {
+			                    	var id_edit = participantesStore.getAt(rowIndex).get('act_actividad_participantes_id');
+			                    	var nombre_edit = participantesStore.getAt(rowIndex).get('mostrar');
+			                    	var monto_edit = participantesStore.getAt(rowIndex).get('monto_participante');
+			                    	var cert_impr_edit = participantesStore.getAt(rowIndex).get('se_imprimio_certificado');
+			                    	var cert_ent_edit = participantesStore.getAt(rowIndex).get('se_entrego_certificado');
+			                    	var cert_fecha_edit = participantesStore.getAt(rowIndex).get('fecha_entrega_certificado');
+									editarwindow(id_edit, nombre_edit, monto_edit, cert_impr_edit, cert_ent_edit, cert_fecha_edit);                        
+			                    }
+			                }]
+			            },{
+			                xtype:'actioncolumn',
+			                width: 35,
 			                align: 'center',
 			                items: [{
 			                	icon: baseURL+'/img/icons/grid/delete.png',  
