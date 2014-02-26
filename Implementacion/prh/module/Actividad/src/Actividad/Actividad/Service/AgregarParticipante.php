@@ -21,8 +21,11 @@ class AgregarParticipante
  * 
  */
 function ejecutar(Repository $repository,$params){
-    $orgParteId = $params['org_parte_id'];
-    $actActividadId = $params['act_actividad_id'];
+    $orgParteId        = $params['org_parte_id'];
+    $actActividadId    = $params['act_actividad_id'];
+    $montoParticipante = $params['monto_participante'];
+    $contMonedaId      = $params['cont_moneda_id'];
+    
     $actActividadParticipantesId = $repository->findParticipanteDeActividad($orgParteId, $actActividadId);
     if($actActividadParticipantesId){
         return _crearRespuesta(array(
@@ -31,8 +34,12 @@ function ejecutar(Repository $repository,$params){
             'mensaje' => 'Ya esta como participante')
         );
     }
+    
     $orgParteRolId = _crearORecuperarParticipante($repository, $params);
-    $actActividadParticipantesId = _agregarActActividadParticipante($repository, $orgParteRolId, $actActividadId);
+    $actActividadParticipantesId = _agregarActActividadParticipante(
+        $repository, $orgParteRolId, $actActividadId,
+        $montoParticipante, $contMonedaId
+    );
     return _crearRespuesta(array(
         'act_actividad_participantes_id' => $actActividadParticipantesId,
         'act_actividad_id' => $actActividadId,
@@ -54,10 +61,12 @@ function _crearORecuperarParticipante($repository,$params){
  * @param int $orgParteRolId
  * @param int $actActividadId
  */
-function _agregarActActividadParticipante($repository,$orgParteRolId,$actActividadId){
+function _agregarActActividadParticipante($repository,$orgParteRolId,$actActividadId,$montoParticipante, $contMonedaId){
     $cambiosActActividadParticipante = array(
-    	array('org_parte_rol_id' => $orgParteRolId),
-        array('act_actividad_id' => $actActividadId)
+    	array('org_parte_rol_id'   => $orgParteRolId),
+        array('act_actividad_id'   => $actActividadId),
+        array('monto_participante' => $montoParticipante),
+        array('cont_moneda_id'     => $contMonedaId)
     );
     $cambiosUtil = new Cambios();
     $cambiosActActividadParticipante = $cambiosUtil->cambiar(array(), $cambiosActActividadParticipante);

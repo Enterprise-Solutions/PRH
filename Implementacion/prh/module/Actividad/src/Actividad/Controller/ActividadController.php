@@ -182,7 +182,7 @@ class ActividadController extends BaseController
         $repository = new repositoryParticipantes($ds);
         $params = $this->SubmitParams()->getParam('post');
         if(!$params){
-            Thrower::throwValidationException('Formato invalido de parametros, se espera {post:{org_parte_id:int,act_actividad_id:int}}');
+            Thrower::throwValidationException('Formato invalido de parametros, se espera {post:{org_parte_id:int,act_actividad_id:int,monto_participante:float,cont_moneda_id:1}}');
         }
         $service = function($params) use($repository){
             $service = new AgregarParticipante();
