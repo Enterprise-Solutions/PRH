@@ -13,7 +13,5 @@ function formatearFecha(date, formato)
 			fecha = date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
 			break;
 	}
-	
-	console.log(fecha);
 	return fecha;
 }
