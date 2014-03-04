@@ -332,25 +332,12 @@ Ext.onReady(function(){
 			 height: 'fit',		           
 			 items:[
 								{
-									xtype: 'tabpanel',
-									tabPosition: 'left',
+									xtype: 'panel',
 									height: 390,
 								    width: 'fit',
 									//style:'background-color: #C8CED8',
 									//layout: 'fit',
-									items: [{
-								        title: 'Datos de Actividad',
-								        //tabConfig: {style:'width:240px'},
-								        items:[pantallaActividad],
-								    //},{
-								      //  title: 'Formadores',
-								        //tabConfig: {style:'width:240px'},
-								       // items: [gridFormadores]
-								    },{
-								        title: 'Participantes',
-								        //tabConfig: {style:'width:240px'},
-								        items: [gridParticipantes]								       
-								    }]
+									items: [pantallaActividad]
 								},{
 							    	xtype: 'container',
 							 	    height: 200,
