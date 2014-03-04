@@ -8,6 +8,7 @@ use Actividad\Actividad\Participante;
 use Actividad\Actividad\Participante\Anonimo as ParticipanteAnonimo;
 use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Exceptions\Thrower;
+use Application\Authentication\Identidad;
 
 class Crear
 {
@@ -23,7 +24,34 @@ class Crear
      */
     protected $actividad;
     
+    /**
+     * Formador de la Actividad
+     * @var Formador
+     */
+    protected $formadorDeActividad;
+    
+    /**
+     * Participante de la Actividad
+     * @var Participante
+     */
+    protected $participanteDeActividad;
+    
+    /**
+     * Participante Anonimo
+     * @var ParticipanteAnonimo
+     */
+    protected $participanteAnonimo;
+    
+    /**
+     * Usuario logueado
+     * @var Identidad
+     */
     protected $loggedUser;
+    
+    /**
+     * Prefijo del usuario logueado
+     * @var string
+     */
     protected $prefijoIdentificador;
     
     public function __construct($em)
@@ -44,24 +72,23 @@ class Crear
     public function ejecutar($data)
     {
         $this->crearRelacionAyuda($data['Actividad']);
-        $this->em->persist($this->actividad);
-        $this->asociarFormador();
-        $this->em->persist($this->actividad);
         $this->asociarParticipantes($data['Participantes']);
-        $this->em->persist($this->actividad);
+        $this->asociarFormador();
     }
     
     protected function crearRelacionAyuda($data)
     {
         $this->actividad = new Actividad();
         $this->actividad->fromArray($data);
+        $this->em->persist($this->actividad);
     }
     
     protected function asociarFormador()
     {
-        $formadorDeActividad = new Formador();
-        $formadorDeActividad->setActividad($this->actividad);
-        $formadorDeActividad->setFormador($this->getFormador(), 'S');
+        $this->formadorDeActividad = new Formador();
+        $this->formadorDeActividad->setActividad($this->actividad);
+        $this->formadorDeActividad->setFormador($this->getFormador(), 'S');
+        $this->em->persist($this->formadorDeActividad);
     }
     
     protected function getFormador()
@@ -91,19 +118,19 @@ class Crear
     
     protected function actualizarParticipanteAnonimo($data)
     {
-        if (!is_int($data['act_participante_anonimo_id'])) {
-            $participanteAnonimo = new ParticipanteAnonimo();
+        if ($data['act_participante_anonimo_id'] == 'new_id') {
+            $this->participanteAnonimo = new ParticipanteAnonimo();
+            $identificador = $this->prefijoIdentificador . $data['identificador'];
         } else {
-            $participanteAnonimo = $this->em->find('Actividad\Actividad\Participante\Anonimo', $data['act_participante_anonimo_id']);
+            $this->participanteAnonimo = $this->em->find('Actividad\Actividad\Participante\Anonimo', $data['act_participante_anonimo_id']);
+            $identificador = $data['identificador'];
         }
         
-        $identificador = $this->prefijoIdentificador . $data['identificador']; 
-        $participanteAnonimo->setIdentificador($identificador);
-        $participanteAnonimo->setAlias($data['alias']);
-        $participanteAnonimo->setDescripcion($data['descripcion']);
+        $this->participanteAnonimo->setIdentificador($identificador);
+        $this->participanteAnonimo->setAlias($data['alias']);
+        $this->participanteAnonimo->setDescripcion($data['descripcion']);
         
-        $this->em->persist($participanteAnonimo);
-        return $participanteAnonimo;
+        $this->em->persist($this->participanteAnonimo);
     }
     
     protected function asociarParticipantes($data)
@@ -113,15 +140,16 @@ class Crear
                 Thrower::throwValidationException('Error de Validacion', array('El identificador del participante es obligatorio'));
             }
             
-            $participanteAnonimo = $this->actualizarParticipanteAnonimo($data[$i]);
+            $this->actualizarParticipanteAnonimo($data[$i]);
             
-            $participanteDeActividad = new Participante();
-            $participanteDeActividad->setActividad($this->actividad);
-            $participanteDeActividad->setParticipanteAnonimo($participanteAnonimo);
-            $participanteDeActividad->setMoneda($data[$i]['cont_moneda_id']);
-            $participanteDeActividad->setMonto($data[$i]['monto_participante']);
-            $participanteDeActividad->setDefaultValues();
-            $this->em->persist($participanteDeActividad);
+            $this->participanteDeActividad = new Participante();
+            $this->participanteDeActividad->setActividad($this->actividad);
+            $this->participanteDeActividad->setParticipanteAnonimo($this->participanteAnonimo);
+            $this->participanteDeActividad->setMoneda($data[$i]['cont_moneda_id']);
+            $this->participanteDeActividad->setMonto($data[$i]['monto_participante']);
+            $this->participanteDeActividad->setDefaultValues();
+            
+            $this->em->persist($this->participanteDeActividad);
         }
     }
     

@@ -201,7 +201,7 @@ Ext.onReady(function(){
 								            var valoresForm = basicForm.getFieldValues();
 		
 									Ext.Ajax.request({
-										   url: baseURL + '/actividad/actividad/post',
+										   url: baseURL + '/actividad/relacion-ayuda/post',
 										   success: function(response, opt){
 											   var aux_mensaje = Ext.decode(response.responseText);
 											   aux = aux_mensaje['act_actividad_id'];
@@ -213,7 +213,7 @@ Ext.onReady(function(){
 											       Ext.defer(function() {
 											           Ext.MessageBox.hide();
 										       }, delay);
-											   var url = baseURL+'/actividad/actividad/get-ui#?id='+aux;  
+											   var url = baseURL+'/actividad/relacion-ayuda/get-ui#?id='+aux;  
 							                   //window.location = url;
 										   }
 										   hide_message();										   
@@ -235,7 +235,7 @@ Ext.onReady(function(){
 									   jsonData:{
 									       'post':{
 										       'Actividad':{
-												   'titulo': 'Relaci&oacute;n Ayuda',
+												   'titulo': 'Relacion Ayuda',
 												   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
                                                    'act_ciclo_id': valoresForm.act_ciclo_id,
 												   'duracion': valoresForm.duracion,
@@ -249,9 +249,11 @@ Ext.onReady(function(){
 												   'observaciones': valoresForm.observaciones
 										         },
                                                    'Participantes':[{
-                                                        'act_actividad_participantes_id': valoresForm.act_participante_anonimo_id,
+                                                        'act_actividad_participantes_id': 'new_id',
                                                         'cont_moneda_id': valoresForm.cont_moneda_id,
-                                                        'identificador_participantes': valoresForm.act_participante_anonimo_id,
+                                                        'monto_participante': valoresForm.monto_participante,
+                                                        'act_participante_anonimo_id': valoresForm.act_participante_anonimo_id,
+                                                        'identificador': valoresForm.identificador,
                                                         'alias': valoresForm.alias,
                                                         'descripcion': valoresForm.descripcion
                                                     }]
@@ -406,37 +408,50 @@ Ext.onReady(function(){
 							layout: 'anchor',
 							defaultType: 'textfield',
 							items: [{
+								xtype: 'hiddenfield',
+								hidden: true,
+								value: 'new_id',
+								name: 'act_participante_anonimo_id',
+								id: 'act_participante_anonimo_id'
+							},{
 
 								    	fieldLabel: 'Identificador',
 								    	xtype: 'combobox',
-								    	forceSelection: true,
+								    	//forceSelection: true,
 								        labelWidth: 110,
-	                                    valueNotFoundText: 'new_id',
+	                                    //valueNotFoundText: 'new_id',
                                         width: 200,
 								        store: participantesStore,
 								        displayField: 'identificador',
 								        queryMode: 'remote',
-								        valueField: 'act_participante_anonimo_id',
+								        valueField: 'identificador',
 								        //allowBlank: false,
 								        padding: 15,
 								        tabIndex: 8,
 							 	        anchor:'90%',
-								    	name: 'act_participante_anonimo_id',                                                                                                                    
+								    	name: 'identificador',                                                                                                                    
 								        typeAhead: true,								        
 								        loadingText: 'Buscando...',
 								        hideTrigger: true,
 								        queryParam: 's[identificador]',
 								        minChars: 1,
 								        listeners: {
+								        	select: {
+								        		fn:function() {
+								        			identificador = this.getValue();
+								        			if (identificador) {
+								        				var aux_obj = participantesStore.findRecord('identificador', identificador);
+								        				Ext.getCmp('act_participante_anonimo_id').setValue(aux_obj.data.act_participante_anonimo_id);
+								        				Ext.getCmp('alias').setValue(aux_obj.data.alias);
+								        				Ext.getCmp('descripcion').setValue(aux_obj.data.descripcion);
+								        			}
+								        		}
+								        	},
                                             change: {
                                                 fn:function() {
-                                                        alias_aux = this.getValue();
-                                                        console.log(alias_aux);
-                                                        if(alias_aux){
-	                                                        var aux_obj = participantesStore.findRecord('act_participante_anonimo_id', alias_aux);
-	                                                        Ext.getCmp('alias').setValue(aux_obj.data.alias);
-	                                                        Ext.getCmp('descripcion').setValue(aux_obj.data.descripcion);
-                                                        }                      
+                                                		Ext.getCmp('act_participante_anonimo_id').setValue('new_id');
+                                                        Ext.getCmp('alias').setValue('');
+                                                        Ext.getCmp('descripcion').setValue('');
                                                    }
                                            }
                                }
@@ -482,7 +497,7 @@ Ext.onReady(function(){
 								    	hideTrigger: true,
 								    	anchor:'90%',
 								    	padding: 15,
-								    	name: 'precio',
+								    	name: 'monto_participante',
                                     }
 					    	]}
 					    	]
