@@ -91,7 +91,7 @@ class Crear
     
     protected function actualizarParticipanteAnonimo($data)
     {
-        if ($data['act_participante_anonimo_id'] == 'new_id') {
+        if (!is_int($data['act_participante_anonimo_id'])) {
             $participanteAnonimo = new ParticipanteAnonimo();
         } else {
             $participanteAnonimo = $this->em->find('Actividad\Actividad\Participante\Anonimo', $data['act_participante_anonimo_id']);
