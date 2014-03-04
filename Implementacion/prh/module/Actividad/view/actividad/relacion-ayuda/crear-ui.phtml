@@ -252,7 +252,7 @@ Ext.onReady(function(){
                                                         'act_actividad_participantes_id': valoresForm.act_participante_anonimo_id,
                                                         'cont_moneda_id': valoresForm.cont_moneda_id,
                                                         'identificador_participantes': valoresForm.act_participante_anonimo_id,
-                                                        'sobrenomnbre': valoresForm.alias,
+                                                        'alias': valoresForm.alias,
                                                         'descripcion': valoresForm.descripcion
                                                     }]
 											    	
@@ -409,7 +409,7 @@ Ext.onReady(function(){
 
 								    	fieldLabel: 'Identificador',
 								    	xtype: 'combobox',
-								    	forceSelection: false,
+								    	forceSelection: true,
 								        labelWidth: 110,
 	                                    valueNotFoundText: 'new_id',
                                         width: 200,
