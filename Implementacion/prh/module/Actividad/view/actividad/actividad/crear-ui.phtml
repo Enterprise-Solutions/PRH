@@ -234,11 +234,11 @@ Ext.onReady(function(){
 										       'Actividad':{
 												   'titulo': valoresForm.titulo,
 												   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
-                                                                                                   'act_ciclo_id': valoresForm.act_ciclo_id,
+                                                   'act_ciclo_id': valoresForm.act_ciclo_id,
 												   'duracion': valoresForm.duracion,
 												   'monto_referencial': valoresForm.monto,
 												   'cont_moneda_id': valoresForm.cont_moneda_id,
-                                                                                                   'requiere_certificado': valoresForm.certificado,
+                                                   'requiere_certificado': valoresForm.certificado,
 												   'nro_personas': 0,
 												   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
 												   'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
@@ -246,10 +246,10 @@ Ext.onReady(function(){
 												   'observaciones': valoresForm.observaciones
 										       },
 										       'Formadores':[{
-                                                                                                    'act_actividad_formadores_id': "new_id",
-                                                                                                    'org_parte_rol_id': valoresForm.org_parte_rol_id,
-                                                                                                    'es_principal': "S"
-                                                                                                    }
+                                                    'act_actividad_formadores_id': "new_id",
+                                                    'org_parte_rol_id': valoresForm.org_parte_rol_id,
+                                                    'es_principal': "S"
+                                                    }
 											    ]	   
 									       }
 									   }
@@ -315,7 +315,7 @@ Ext.onReady(function(){
 								    	anchor:'90%',
 								    	padding: 15,
 								    	name: 'monto',
-                                                    },{
+                                },{
 								    	fieldLabel: 'A&ntilde;o de Form.',
 								    	xtype: 'combobox',
 								    	forceSelection: true,
@@ -330,7 +330,7 @@ Ext.onReady(function(){
 							 	        anchor:'90%',
 								    	name: 'cal_anho_formacion_id',
 					    	     },{
-                                                                        fieldLabel: 'Inicio',
+                                        fieldLabel: 'Inicio',
 							 	        xtype: 'datefield',
 							 	       	format: 'd/m/Y',
 							 	        tabIndex: 9,
@@ -338,14 +338,14 @@ Ext.onReady(function(){
 							 	        labelWidth: 110,
 							 	        anchor:'90%',
 							 	        name: 'fecha_inicio'  
-                                                    },{
-                                                                        fieldLabel: 'Observaci&oacute;n',
-                                                                        padding: 15,
-                                                                        tabIndex: 11,
-                                                                        labelWidth: 110,
-                                                                        anchor:'90%',
-                                                                        name: 'observaciones', 
-                                                    }
+                                },{
+                                        fieldLabel: 'Observaci&oacute;n',
+                                        padding: 15,
+                                        tabIndex: 11,
+                                        labelWidth: 110,
+                                        anchor:'90%',
+                                        name: 'observaciones', 
+                                }
 					    	]},{
 					    		xtype: 'container',
 				                flex: 1,
@@ -368,7 +368,7 @@ Ext.onReady(function(){
 					    	    },{
 							    	fieldLabel: 'Ciclo',
 							    	xtype: 'combobox',
-                                                                forceSelection: true,
+                                    forceSelection: true,
 							        labelWidth: 110,
 							        tabIndex: 4,
 							        store: cicloStore,
@@ -379,7 +379,7 @@ Ext.onReady(function(){
 							        padding: 15,
 						 	        anchor:'90%',
 							        name: 'act_ciclo_id'
-                                                    },{
+                                },{
 							        fieldLabel: 'Moneda',
 							        xtype: 'combobox',
 							        forceSelection: true,
@@ -394,25 +394,25 @@ Ext.onReady(function(){
 						 	        anchor:'90%',
 						 	        name: 'cont_moneda_id', 
 					    	    },{
-                                                                fieldLabel: 'Requiere Cert.',
-                                                                xtype: 'combobox',
-                                                                forceSelection: true,
-                                                                labelWidth: 110,
-                                                                store: si_no,
-                                                                tabIndex: 8,
-                                                                displayField: 'nombre',
-                                                                queryMode: 'local',
-                                                                valueField: 'id',
-                                                                allowBlank: false,
-                                                                padding: 15,
-                                                                name: 'certificado',
-                                                                anchor:'90%',
-                                                    },{
-                                                                fieldLabel: 'Fin',
+                                    fieldLabel: 'Requiere Cert.',
+                                    xtype: 'combobox',
+                                    forceSelection: true,
+                                    labelWidth: 110,
+                                    store: si_no,
+                                    tabIndex: 8,
+                                    displayField: 'nombre',
+                                    queryMode: 'local',
+                                    valueField: 'id',
+                                    allowBlank: false,
+                                    padding: 15,
+                                    name: 'certificado',
+                                    anchor:'90%',
+					    	    },{
+                                    fieldLabel: 'Fin',
 						 	        xtype: 'datefield',
 						 	       	format: 'd/m/Y',
-                                                                padding: 15,
-                                                                tabIndex: 10,
+                                    padding: 15,
+                                    tabIndex: 10,
 						 	        labelWidth: 110,
 						 	        anchor:'90%',
 						 	        name: 'fecha_fin'  
@@ -439,7 +439,7 @@ Ext.onReady(function(){
 								    	xtype: 'combobox',
 								    	forceSelection: true,
 								        labelWidth: 110,
-                                                                        width: 500,
+                                        width: 500,
 								        store: posiblesFormadoresStore,
 								        displayField: 'mostrar',
 								        queryMode: 'local',
