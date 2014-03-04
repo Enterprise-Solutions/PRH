@@ -31,9 +31,14 @@ class RelacionAyudaController extends BaseController
         return $template($dao, array());
     }
     
+    protected function getLoggedUser()
+    {
+        return $this->getServiceLocator()->get('Identidad');
+    }
+    
     protected function getPrefijo()
     {
-        $loggedUser = $this->getServiceLocator()->get('Identidad');
+        $loggedUser = $this->getLoggedUser();
         $prefijo = substr(strtoupper($loggedUser->nombre_persona),0,1) .
                    substr(strtoupper($loggedUser->apellido_persona),0,1) .
                    $loggedUser->org_parte_id;
@@ -56,6 +61,8 @@ class RelacionAyudaController extends BaseController
         $data = $this->SubmitParams()->getParam('post');
         
         $service = new CrearRelacionAyudaService($em);
+        $service->setLoggedUser($this->getLoggedUser());
+        $service->setPrefijoIdentificador($this->getPrefijo());
         $service->ejecutar($data);
         $this->getEntityManager()->flush();
         

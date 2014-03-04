@@ -18,7 +18,7 @@ class Anonimo
      * @ORM\GeneratedValue(strategy="AUTO")
      * @ORM\Column(type="integer")
      */
-    protected $act_actividad_anonimo_id;
+    protected $act_participante_anonimo_id;
     
     /**
      * @ORM\Column(type="string")
@@ -37,4 +37,19 @@ class Anonimo
      * @ORM\Column(length=250)
      */
     protected $descripcion;
+    
+    public function setIdentificador($identificador)
+    {
+        $this->identificador = $identificador;
+    }
+    
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+    }
+    
+    public function setDescripcion($descripcion)
+    {
+        $this->descripcion = $descripcion;
+    }
 }

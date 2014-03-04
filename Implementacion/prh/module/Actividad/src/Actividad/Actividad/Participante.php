@@ -33,6 +33,12 @@ class Participante
     protected $participante;
     
     /**
+     * @ORM\ManyToOne(targetEntity="Actividad\Actividad\Participante\Anonimo")
+     * @ORM\JoinColumn(name="act_participante_anonimo_id", referencedColumnName="act_participante_anonimo_id")
+     */
+    protected $participante_anonimo;
+    
+    /**
      * @ORM\Column(type="integer")
      */
     protected $cont_moneda_id;
@@ -67,6 +73,17 @@ class Participante
         $this->monto_participante = $monto;
     }
     
+    public function setMoneda($cont_moneda_id)
+    {
+        $this->cont_moneda_id = $cont_moneda_id;
+    }
+    
+    public function setDefaultValues()
+    {
+        $this->setImprimirCertificado('N');
+        $this->setEntregarCertificado('N');
+    }
+    
     public function setImprimirCertificado($value)
     {
         $value = in_array($value, array('S','N')) ? $value : 'N';
@@ -94,11 +111,9 @@ class Participante
         $this->participante = $participante;
     }
     
-    public function setParticipanteRA($data)
+    public function setParticipanteAnonimo($participanteAnonimo)
     {
-        foreach ($data as $campo => $valor) {
-            $this->$campo = $valor;
-        }
+        $this->participante_anonimo = $participanteAnonimo;
     }
     
     public function getId()
