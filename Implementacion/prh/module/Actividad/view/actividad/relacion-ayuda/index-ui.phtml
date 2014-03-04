@@ -56,10 +56,10 @@ Ext.onReady(function(){
 					name: 'modalidad_act'
 				},{
 					type: 'string',
-					name: 'modalidad'
+					name: 'actividad_tipo'
 				},{
 					type: 'string',
-					name: 'actividad_tipo'
+					name: 'modalidad'
 				},{
 					type: 'int',
 					name: 'anho_formacion'
@@ -124,7 +124,7 @@ Ext.onReady(function(){
 					totalProperty: 'numResults'
 				}
 			},
-                        autoload: true
+                 autoload: true
 		});
                       
 		var panelFiltros = Ext.create('Ext.form.Panel', {
@@ -398,10 +398,7 @@ Ext.onReady(function(){
                             	   this.close();
                                }	                               
                            }
-                       });
-
-                    	
-                        
+                       });                        
                     }
                 }]
             }       
