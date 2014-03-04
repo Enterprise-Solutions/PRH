@@ -31,13 +31,20 @@ class RelacionAyudaController extends BaseController
         return $template($dao, array());
     }
     
-    public function getParticipanteAction($overwritedParams = array())
+    protected function getPrefijo()
     {
         $loggedUser = $this->getServiceLocator()->get('Identidad');
-        $identificador = substr(strtoupper($loggedUser->nombre_persona),0,1) . substr(strtoupper($loggedUser->apellido_persona),0,1);
-        $overwritedParams = array('s' => array('identificador' => $identificador));
+        $prefijo = substr(strtoupper($loggedUser->nombre_persona),0,1) .
+                   substr(strtoupper($loggedUser->apellido_persona),0,1) .
+                   $loggedUser->org_parte_id;
         
+        return $prefijo;
+    }
+    
+    public function listarParticipantesAction($overwritedParams = array())
+    {
         $select = new Participante($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $select->setPrefijoIdentificador($this->getPrefijo());
         $dao = new Dao($select);
         $template = $this->_crearTemplateParaListado();
         return $template($dao, array(), $overwritedParams);
