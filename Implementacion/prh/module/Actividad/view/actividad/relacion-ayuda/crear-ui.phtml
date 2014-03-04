@@ -252,8 +252,8 @@ Ext.onReady(function(){
                                                         'act_actividad_participantes_id': valoresForm.act_participante_anonimo_id,
                                                         'cont_moneda_id': valoresForm.cont_moneda_id,
                                                         'identificador_participantes': valoresForm.act_participante_anonimo_id,
-                                                        'sobrenomnbre': "Santigo",
-                                                        'observaciones': valoresForm.observaciones,
+                                                        'sobrenomnbre': valoresForm.alias,
+                                                        'descripcion': valoresForm.descripcion
                                                     }]
 											    	
 									       	}
@@ -293,7 +293,7 @@ Ext.onReady(function(){
 							items: [{
 	                                    fieldLabel: 'Tipo de Act',
 	                                    xtype: 'combobox',
-	                                    forceSelection: true,
+	                                    //forceSelection: true,
 	                                    labelWidth: 110,
 	                                    tabIndex: 1,
 	                                    store: actividadTipoStore,
@@ -411,12 +411,13 @@ Ext.onReady(function(){
 								    	xtype: 'combobox',
 								    	forceSelection: false,
 								        labelWidth: 110,
+	                                    valueNotFoundText: 'new_id',
                                         width: 200,
 								        store: participantesStore,
 								        displayField: 'identificador',
 								        queryMode: 'remote',
 								        valueField: 'act_participante_anonimo_id',
-								        allowBlank: false,
+								        //allowBlank: false,
 								        padding: 15,
 								        tabIndex: 8,
 							 	        anchor:'90%',
@@ -430,24 +431,25 @@ Ext.onReady(function(){
                                             change: {
                                                 fn:function() {
                                                         alias_aux = this.getValue();
+                                                        console.log(alias_aux);
                                                         if(alias_aux){
 	                                                        var aux_obj = participantesStore.findRecord('act_participante_anonimo_id', alias_aux);
 	                                                        Ext.getCmp('alias').setValue(aux_obj.data.alias);
-	                                                        Ext.getCmp('observaciones').setValue(aux_obj.data.descripcion);
+	                                                        Ext.getCmp('descripcion').setValue(aux_obj.data.descripcion);
                                                         }                      
                                                    }
                                            }
                                }
 								},{
-                                        fieldLabel: 'Observaci&oacute;n',
+                                        fieldLabel: 'Descripci&oacute;n',
                                         xtype: 'textarea',
-                                        tabIndex: 10,
+                                        tabIndex: 11,
                                         padding: 15,
                                         tabIndex: 11,
                                         labelWidth: 110,
                                         anchor:'290%',
-                                        name: 'observaciones',
-                                        id: 'observaciones'
+                                        name: 'descripcion',
+                                        id: 'descripcion'
                                 
                                     }
 					    	]},{
@@ -461,7 +463,7 @@ Ext.onReady(function(){
 								        padding: 15,
 								        labelWidth: 110,
 								        anchor:'90%',
-								        tabIndex: 1,
+								        tabIndex: 9,
 								        name: 'alias',
 								        id: 'alias'
                                     }
@@ -476,7 +478,7 @@ Ext.onReady(function(){
 								    	labelWidth: 110,
 								    	xtype: 'numberfield',
 								    	minValue: 0,
-								    	tabIndex: 9,
+								    	tabIndex: 10,
 								    	hideTrigger: true,
 								    	anchor:'90%',
 								    	padding: 15,
