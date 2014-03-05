@@ -157,8 +157,7 @@ Ext.onReady(function(){
 								type: 'json',
 								root: 'records'
 							}
-						},
-						autoLoad: true
+						}
 					});
 
 					var monedaStore = Ext.create('Ext.data.Store', {
@@ -214,7 +213,7 @@ Ext.onReady(function(){
 											           Ext.MessageBox.hide();
 										       }, delay);
 											   var url = baseURL+'/actividad/relacion-ayuda/get-ui#?id='+aux;  
-							                   //window.location = url;
+							                   window.location = url;
 										   }
 										   hide_message();										   
 										   
@@ -313,6 +312,7 @@ Ext.onReady(function(){
 								    	xtype: 'numberfield',
 								    	minValue: 0,
 								    	tabIndex: 3,
+								    	allowBlank: false,
 								    	hideTrigger: true,
 								    	anchor:'90%',
 								    	padding: 15,
@@ -372,6 +372,7 @@ Ext.onReady(function(){
 									        tabIndex: 4,
 								 	        anchor:'90%',
 								 	        name: 'cont_moneda_id',
+								 	        id: 'cont_moneda_id'
                                         },{
                                             fieldLabel: 'A&ntilde;o de Form.',
                                             xtype: 'combobox',
@@ -385,7 +386,8 @@ Ext.onReady(function(){
                                             padding: 15,
                                             tabIndex: 6,
                                             anchor:'90%',
-                                            name: 'cal_anho_formacion_id'  
+                                            name: 'cal_anho_formacion_id',
+                                            id: 'cal_anho_formacion_id'	
                                         }]
 					    	}]},{
                                             items:[{
@@ -438,7 +440,7 @@ Ext.onReady(function(){
 								        listeners: {
 								        	select: {
 								        		fn:function() {
-								        			identificador = this.getValue();
+								        			var identificador = this.getValue();
 								        			if (identificador) {
 								        				var aux_obj = participantesStore.findRecord('identificador', identificador);
 								        				Ext.getCmp('act_participante_anonimo_id').setValue(aux_obj.data.act_participante_anonimo_id);
@@ -542,12 +544,24 @@ Ext.onReady(function(){
 								'render':function(){
 										Ext.getCmp('topTabPanel').setActiveTab(1);
 //										Ext.getCmp('actividadTabPanel').setActiveTab(0);
-                                                                                actividadTipoStore.load({
-                                                                                    callback: function(records, operation, success) {
-                                                                                                 var aux = actividadTipoStore.getAt(0).get('act_actividad_tipo_id');
-                                                                                                 Ext.getCmp('act_actividad_tipo_id').setValue(aux);
-                                                                                    }
-                                                                                });
+                                        actividadTipoStore.load({
+                                            callback: function(records, operation, success) {
+                                                         var aux = actividadTipoStore.getAt(0).get('act_actividad_tipo_id');
+                                                         Ext.getCmp('act_actividad_tipo_id').setValue(aux);
+                                            }
+                                        });
+                                        anhoFormacionStore.load({
+                                            callback: function(records, operation, success) {
+                                                         var aux2 = anhoFormacionStore.getAt(0).get('cal_anho_formacion_id');
+                                                         Ext.getCmp('cal_anho_formacion_id').setValue(aux2);
+                                            }
+                                        });
+                                        monedaStore.load({
+                                            callback: function(records, operation, success) {
+                                                         var aux3 = monedaStore.getAt(0).get('cont_moneda_id');
+                                                         Ext.getCmp('cont_moneda_id').setValue(aux3);
+                                            }
+                                        });
                                                                                  
 								}
 					  }	    	
