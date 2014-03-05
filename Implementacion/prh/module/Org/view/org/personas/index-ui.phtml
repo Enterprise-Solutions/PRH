@@ -312,6 +312,9 @@ Ext.onReady(function(){
                 dataIndex: 'fecha_nacimiento',
                 align: 'center',
                 flex: 1,
+                renderer: function(val, metadata, record, rowIndex, colIndex){ 
+                	return  formatearFecha(val, 2);
+                }
             },{
                 text: "Sexo",
                 dataIndex: 'genero_persona',

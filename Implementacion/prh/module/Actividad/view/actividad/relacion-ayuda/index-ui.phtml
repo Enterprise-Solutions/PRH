@@ -84,22 +84,6 @@ Ext.onReady(function(){
 		        }
 			]
 		});
-
-		Ext.define('nivel', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_nivel_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				},{
-					type: 'string',
-					name: 'descripcion'
-				}
-			]
-		});
 		
 		Ext.define('ciclo', {
 			extend: 'Ext.data.Model',
@@ -189,16 +173,7 @@ Ext.onReady(function(){
 				    id: 'filtros',
 				    height: 40,
 				    layout:'hbox',
-				    items:[{   	
- 					    		xtype: 'textfield',
- 						        fieldLabel: 'Nombre',
- 						        padding: '10 0 5 15',
- 						        labelWidth: 70,
- 						        width: 250,
- 						        anchor:'90%',
- 						        name: 'titulo',
-                                flex: 0.5    
- 				    	  },{
+				    items:[{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Ciclo',
 						        labelWidth: 50,
@@ -208,18 +183,8 @@ Ext.onReady(function(){
 						        padding: '10 0 5 15',
 					 	        anchor:'90%',
 					 	        name: 'ciclo',
-					 	        flex: 0.7 
-					     },{
-				    		    xtype: 'combobox',
-				    		    fieldLabel: 'Tipo Actividad',
-						        labelWidth: 120,
-						        anchor:'90%',
-						        store: actividadTipoStore,
-						        displayField: 'titulo',
-						        valueField: 'act_actividad_tipo_id',
-						        padding: '10 20 5 15',
-					 	        name: 'actividad_tipo',
-					 	        flex: 0.9
+					 	        width: 300,
+					 	        //flex: 0.7 
 					     }
 					   ]
 					},{
@@ -245,9 +210,7 @@ Ext.onReady(function(){
 										
 						                actividadStore.load({
 											params: {
-												"s[titulo]": valoresForm.titulo,
-												"s[ciclo]": valoresForm.ciclo,
-												"s[actividad_tipo]": valoresForm.actividad_tipo
+												"s[ciclo]": valoresForm.ciclo
 									   		} 
 						               });
 						            }//end of handler  
@@ -318,13 +281,9 @@ Ext.onReady(function(){
 	       				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo,
-								"s[actividad_tipo]": valoresForm.actividad_tipo
+		   						"s[ciclo]": valoresForm.ciclo
 	       				    }
        					});
-           					//console.log("page store: ", page);
-          				    //console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
@@ -335,13 +294,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,   
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo,
-								"s[actividad_tipo]": valoresForm.actividad_tipo
+		   						"s[ciclo]": valoresForm.ciclo
 		   				    }
    						});
-	       					console.log("page store: ", page);
-	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
@@ -352,13 +307,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo,
-								"s[actividad_tipo]": valoresForm.actividad_tipo
+		   						"s[ciclo]": valoresForm.ciclo
 		   				    }
    						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);	
             	 	},
             	 	moveLast : function(){                 	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
@@ -376,13 +327,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo,
-								"s[actividad_tipo]": valoresForm.actividad_tipo
+		   						"s[ciclo]": valoresForm.ciclo
 		   				    }
-   						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);         					
+   						});     					
             	 	},
                 }
 	                ],                       
@@ -396,7 +343,7 @@ Ext.onReady(function(){
                 text: "Actividad",
                 dataIndex: 'titulo',
                 align: 'left',
-                flex: 1,
+                flex: 0.7,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/relacion-ayuda/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
@@ -409,23 +356,26 @@ Ext.onReady(function(){
             },{
                 text: "Ciclo",
                 dataIndex: 'ciclo',
-                align: 'center',
+                align: 'left',
                 flex: 1.5,
             },{
                 text: "Duraci&oacute;n",
                 dataIndex: 'tiempo',
                 align: 'center',
-                flex: 1,
+                flex: 0.7,
             },{
                 text: "Monto",
                 dataIndex: 'monto',
-                align: 'center',
+                align: 'right',
                 flex: 0.9,
             },{
                 text: "Fecha",
                 dataIndex: 'fecha_inicio',
                 align: 'center',
                 flex: 0.7,
+                renderer: function(val, metadata, record, rowIndex, colIndex){ 
+                	return  formatearFecha(val, 2);
+                }
             },{
                 xtype:'actioncolumn',
                 width:35,
@@ -474,7 +424,7 @@ Ext.onReady(function(){
         							   },
         							   jsonData:{
         							       'delete':{
-                                                                        'act_actividad_id': id_delete,
+                                                'act_actividad_id': id_delete,
         							       }
         							   }
         						 });
@@ -492,9 +442,7 @@ Ext.onReady(function(){
             }       
             ]
             	        	
-		 });
-
-		 
+		 });		 
 			
 		var pantalla = Ext.create('Ext.panel.Panel', {
 			//id: 'margen',
@@ -504,10 +452,8 @@ Ext.onReady(function(){
 		    items:[
 		         {	
 		        	 xtype: 'panel',
-					 items: [panelFiltros]
-			        
-		         }
-		         ,{
+					 items: [panelFiltros]  
+		         },{
 		        	 xtype: 'container',
 					 items: [gridActividad]
 		         }
