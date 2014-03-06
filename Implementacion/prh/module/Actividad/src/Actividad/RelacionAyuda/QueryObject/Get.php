@@ -26,7 +26,7 @@ class Get extends DbSelect
              ->join(array('op' => 'org_parte'), 'opr.org_parte_id = op.org_parte_id', array('formador' => new Expression("nombre_persona || ' ' || apellido_persona")), ZfSelect::JOIN_LEFT)
              
              // Participantes
-             ->join(array('aap' => 'act_actividad_participantes'), 'aa.act_actividad_id = aap.act_actividad_id', array('act_actividad_participantes_id', 'monto_participante'), ZfSelect::JOIN_LEFT)
+             ->join(array('aap' => 'act_actividad_participantes'), 'aa.act_actividad_id = aap.act_actividad_id', array('act_actividad_participantes_id', 'monto_participante' => new Expression("cm.simbolo || ' ' || aap.monto_participante")), ZfSelect::JOIN_LEFT)
              ->join(array('apa' => 'act_participante_anonimo'), 'aap.act_participante_anonimo_id = apa.act_participante_anonimo_id', array('identificador', 'alias', 'descripcion'))
              
              ->where("aat.relacion_ayuda = 'S'");
