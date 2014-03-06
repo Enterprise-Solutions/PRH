@@ -173,7 +173,15 @@ Ext.onReady(function(){
 				    id: 'filtros',
 				    height: 40,
 				    layout:'hbox',
-				    items:[{
+				    items:[{   	
+				    			xtype: 'textfield',
+						        fieldLabel: 'Nombre',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 250,
+						        anchor:'90%',
+						        name: 'titulo',					         
+				    	  },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Ciclo',
 						        labelWidth: 50,
@@ -184,7 +192,6 @@ Ext.onReady(function(){
 					 	        anchor:'90%',
 					 	        name: 'ciclo',
 					 	        width: 300,
-					 	        //flex: 0.7 
 					     }
 					   ]
 					},{
@@ -210,6 +217,7 @@ Ext.onReady(function(){
 										
 						                actividadStore.load({
 											params: {
+												"s[titulo]": valoresForm.titulo,
 												"s[ciclo]": valoresForm.ciclo
 									   		} 
 						               });
@@ -281,7 +289,8 @@ Ext.onReady(function(){
 	       				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[ciclo]": valoresForm.ciclo
+		   						"s[titulo]": valoresForm.titulo,
+								"s[ciclo]": valoresForm.ciclo
 	       				    }
        					});
                 	 },
@@ -294,7 +303,8 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,   
-		   						"s[ciclo]": valoresForm.ciclo
+		   						"s[titulo]": valoresForm.titulo,
+								"s[ciclo]": valoresForm.ciclo
 		   				    }
    						});
             		 },
@@ -307,7 +317,8 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[ciclo]": valoresForm.ciclo
+		   						"s[titulo]": valoresForm.titulo,
+								"s[ciclo]": valoresForm.ciclo
 		   				    }
    						});
             	 	},
@@ -327,7 +338,8 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[ciclo]": valoresForm.ciclo
+		   						"s[titulo]": valoresForm.titulo,
+								"s[ciclo]": valoresForm.ciclo
 		   				    }
    						});     					
             	 	},
