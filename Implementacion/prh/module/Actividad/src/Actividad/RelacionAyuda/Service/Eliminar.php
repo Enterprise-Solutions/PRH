@@ -59,7 +59,9 @@ class Eliminar
     	}
     	
     	if (count($this->actividad->getParticipantes())) {
-    	    Thrower::throwValidationException('Error de Validacion', "La actividad no puede eliminarse, tiene participantes asociados");
+    	    foreach ($this->actividad->getParticipantes() as $participante) {
+    	        $this->em->remove($participante);
+    	    }
     	}
     	
     	if (count($this->actividad->getMovimientos())) {

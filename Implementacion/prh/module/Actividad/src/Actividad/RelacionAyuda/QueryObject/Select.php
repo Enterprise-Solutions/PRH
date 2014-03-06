@@ -20,4 +20,20 @@ class Select extends DbSelect
              
              ->where("act.relacion_ayuda = 'S'");
     }
+    
+    public function addSearchByCiclo($act_ciclo_id)
+    {
+        if ($act_ciclo_id) {
+            $this->_select
+                 ->where("aa.act_ciclo_id = $act_ciclo_id");
+        }
+    }
+    
+    public function addSearchByTitulo($titulo)
+    {
+        if ($titulo && $titulo != "") {
+            $this->_select
+                 ->where("aa.titulo ILIKE '%$titulo%'");
+        }
+    }
 }
