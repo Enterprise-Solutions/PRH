@@ -234,7 +234,7 @@ Ext.onReady(function(){
 									   jsonData:{
 									       'post':{
 										       'Actividad':{
-												   'titulo': 'Relacion Ayuda',
+												   'titulo': valoresForm.titulo,
 												   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
                                                    'act_ciclo_id': valoresForm.act_ciclo_id,
 												   'duracion': valoresForm.duracion,
@@ -245,7 +245,7 @@ Ext.onReady(function(){
 												   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
 												   'fecha_inicio': (formatearFecha(valoresForm.fecha, 1)),
 												   'fecha_fin': (formatearFecha(valoresForm.fecha, 1)),
-												   'observaciones': valoresForm.observaciones
+												   'observaciones': valoresForm.observacion
 										         },
                                                    'Participantes':[{
                                                         'act_actividad_participantes_id': 'new_id',
@@ -292,42 +292,39 @@ Ext.onReady(function(){
 							layout: 'anchor',
 							defaultType: 'textfield',
 							items: [{
-	                                    fieldLabel: 'Tipo de Act',
-	                                    xtype: 'combobox',
-	                                    //forceSelection: true,
-	                                    labelWidth: 110,
-	                                    tabIndex: 1,
-	                                    store: actividadTipoStore,
-	                                    displayField: 'titulo',
-	                                    queryMode: 'local',
-	                                    valueField: 'act_actividad_tipo_id',
-	                                    allowBlank: false,
-	                                    padding: 15,
-	                                    anchor:'90%',
-	                                    id : 'act_actividad_tipo_id',
-	                                    name: 'act_actividad_tipo_id'
-	                        		},{
+								        fieldLabel: 'Nombre',
+								        allowBlank: false,
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        tabIndex: 1,
+								        name: 'titulo'
+							    	},{
+								    	fieldLabel: 'Ciclo',
+								    	xtype: 'combobox',
+		                                forceSelection: true,
+								        labelWidth: 110,
+								        tabIndex: 3,
+								        store: cicloStore,
+								        displayField: 'nombre',
+								        queryMode: 'local',
+								        valueField: 'act_ciclo_id',
+								        allowBlank: false,
+								        padding: 15,
+							 	        anchor:'90%',
+		                                id: 'act_ciclo_id',
+		                                name: 'act_ciclo_id'
+		                            },{
 								    	fieldLabel: 'Costo',
 								    	labelWidth: 110,
 								    	xtype: 'numberfield',
 								    	minValue: 0,
-								    	tabIndex: 3,
+								    	tabIndex: 5,
 								    	allowBlank: false,
 								    	hideTrigger: true,
 								    	anchor:'90%',
 								    	padding: 15,
 								    	name: 'monto',
-                                    },{
-								    	fieldLabel: 'Duraci&oacute;n (hs.)',
-								    	labelWidth: 110,
-								    	xtype: 'numberfield',
-								    	minValue: 0,
-								    	value: 0,
-								    	step: 0.25,
-								    	tabIndex: 5,
-								    	anchor:'90%',
-								    	padding: 15,
-								    	name: 'duracion',
                                     },{
                                         fieldLabel: 'Fecha',
                                         xtype: 'datefield',
@@ -337,6 +334,16 @@ Ext.onReady(function(){
                                         labelWidth: 110,
                                         anchor:'90%',
                                         name: 'fecha' 
+                                    },{
+		                                fieldLabel: 'Observaci&oacute;n',
+		                                xtype: 'textarea',
+		                                padding: 15,
+		                                tabIndex: 9,
+		                                labelWidth: 110,
+		                                anchor:'190%',
+		                                name: 'observacion',
+		                                //id: 'descripcion'
+                        
                             }
 					    	]},{
 					    		xtype: 'container',
@@ -344,21 +351,32 @@ Ext.onReady(function(){
 				                layout: 'anchor',
 				                defaultType: 'textfield',
 				                items: [{
-									    	fieldLabel: 'Ciclo',
-									    	xtype: 'combobox',
-		                                    forceSelection: true,
-									        labelWidth: 110,
-									        tabIndex: 2,
-									        store: cicloStore,
-									        displayField: 'nombre',
-									        queryMode: 'local',
-									        valueField: 'act_ciclo_id',
-									        allowBlank: false,
-									        padding: 15,
-								 	        anchor:'90%',
-		                                    id: 'act_ciclo_id',
-		                                    name: 'act_ciclo_id'
-                                        },{
+		                                    fieldLabel: 'Tipo de Act',
+		                                    xtype: 'combobox',
+		                                    //forceSelection: true,
+		                                    labelWidth: 110,
+		                                    tabIndex: 2,
+		                                    store: actividadTipoStore,
+		                                    displayField: 'titulo',
+		                                    queryMode: 'local',
+		                                    valueField: 'act_actividad_tipo_id',
+		                                    allowBlank: false,
+		                                    padding: 15,
+		                                    anchor:'90%',
+		                                    id : 'act_actividad_tipo_id',
+		                                    name: 'act_actividad_tipo_id'
+		                        		},{
+									    	fieldLabel: 'Duraci&oacute;n (hs.)',
+									    	labelWidth: 110,
+									    	xtype: 'numberfield',
+									    	minValue: 0,
+									    	value: 0,
+									    	step: 0.25,
+									    	tabIndex: 4,
+									    	anchor:'90%',
+									    	padding: 15,
+									    	name: 'duracion',
+	                                    },{
 									        fieldLabel: 'Moneda',
 									        xtype: 'combobox',
 									        forceSelection: true,
@@ -369,7 +387,7 @@ Ext.onReady(function(){
 									        valueField: 'cont_moneda_id',
 									        allowBlank: false,
 									        padding: 15,
-									        tabIndex: 4,
+									        tabIndex: 6,
 								 	        anchor:'90%',
 								 	        name: 'cont_moneda_id',
 								 	        id: 'cont_moneda_id'
@@ -384,7 +402,7 @@ Ext.onReady(function(){
                                             valueField: 'cal_anho_formacion_id',
                                             allowBlank: false,
                                             padding: 15,
-                                            tabIndex: 6,
+                                            tabIndex: 8,
                                             anchor:'90%',
                                             name: 'cal_anho_formacion_id',
                                             id: 'cal_anho_formacion_id'	
@@ -429,7 +447,7 @@ Ext.onReady(function(){
 								        valueField: 'identificador',
 								        //allowBlank: false,
 								        padding: 15,
-								        tabIndex: 8,
+								        tabIndex: 10,
 							 	        anchor:'90%',
 								    	name: 'identificador',                                                                                                                    
 								        typeAhead: true,								        
@@ -460,9 +478,8 @@ Ext.onReady(function(){
 								},{
                                         fieldLabel: 'Descripci&oacute;n',
                                         xtype: 'textarea',
-                                        tabIndex: 11,
                                         padding: 15,
-                                        tabIndex: 11,
+                                        tabIndex: 13,
                                         labelWidth: 110,
                                         anchor:'290%',
                                         name: 'descripcion',
@@ -480,7 +497,7 @@ Ext.onReady(function(){
 								        padding: 15,
 								        labelWidth: 110,
 								        anchor:'90%',
-								        tabIndex: 9,
+								        tabIndex: 11,
 								        name: 'alias',
 								        id: 'alias'
                                     }
@@ -495,7 +512,7 @@ Ext.onReady(function(){
 								    	labelWidth: 110,
 								    	xtype: 'numberfield',
 								    	minValue: 0,
-								    	tabIndex: 10,
+								    	tabIndex: 12,
 								    	hideTrigger: true,
 								    	anchor:'90%',
 								    	padding: 15,
@@ -506,7 +523,7 @@ Ext.onReady(function(){
 					    
 				     }]},{
 				    	xtype: 'container',
-				 	    height: 200,
+				 	    height: 60,
 				 	    width: 'fit',
 				 	   layout: 'hbox',
 				 	    items:[
