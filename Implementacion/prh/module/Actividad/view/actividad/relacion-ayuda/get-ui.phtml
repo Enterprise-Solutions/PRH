@@ -91,7 +91,7 @@ Ext.onReady(function(){
 		        	background: '#C8CED8',
 		        },
 			    title: 'Datos de la Actividad',
-			    height: 250,
+			    height: 210,
 			    width: 'fit',
 			    border: 1,
 			    padding: 10,
@@ -121,13 +121,7 @@ Ext.onReady(function(){
 						        labelWidth: 110,
 						        anchor:'90%',
 						    	name: 'fecha_inicio',
-				   	 	},{
-	                            fieldLabel: "Observaci&oacute;n",
-	                            padding: 15,
-	                            labelWidth: 110,
-	                            anchor:'90%',
-	                            name: 'observaciones',
-	                     }
+				   	 	}
 			    	]},{
 					xtype: 'container',
 					flex: 1,
@@ -165,17 +159,17 @@ Ext.onReady(function(){
 							        anchor:'100%',
 							        name: 'ciclo',
 							  },{
-					    		 	fieldLabel: 'Monto Pagado',
+					    		 	fieldLabel: 'Duraci&oacute;n',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        name: 'monto_participante',
+							        name: 'duracion',
 							  },{
 							        fieldLabel: 'Observaci&oacute;n',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
-							        name: 'observacion',
+							        name: 'observaciones',
 					   	 	 }
 			    		]
 			    	}]},{
@@ -184,7 +178,7 @@ Ext.onReady(function(){
 				        	background: '#C8CED8',
 				        },
 					    title: 'Datos de la Persona',
-					    height: 100,
+					    height: 150,
 					    width: 'fit',
 					    border: 1,
 					    padding: '0 10 10 10',
@@ -192,7 +186,7 @@ Ext.onReady(function(){
 					    defaultType: 'textfield',
 					    items: [{
 							xtype: 'container',
-							flex: 0.5,
+							flex: 1,
 							layout: 'anchor',
 							defaultType: 'displayfield',
 							items: [    
@@ -202,10 +196,16 @@ Ext.onReady(function(){
 								        labelWidth: 110,
 								        anchor:'90%',
 								        name: 'identificador',
-						   	 	}
+						   	 	},{
+								        fieldLabel: 'Descripci&oacute;n',
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        name: 'descripcion',
+					   	 	 }
 					    	]},{
 							xtype: 'container',
-							flex: 0.5,
+							flex: 1,
 							layout: 'anchor',
 							defaultType: 'displayfield',
 							items: [{
@@ -218,16 +218,16 @@ Ext.onReady(function(){
 		                                                        
 					    	]},{
 					    		xtype: 'container',
-				                flex: 0.9,
+				                flex: 1.5,
 				                layout: 'anchor',
 				                defaultType: 'displayfield',
 				                items: [{
-									        fieldLabel: 'Observaci&oacute;n',
-									        padding: 15,
-									        labelWidth: 110,
-									        anchor:'90%',
-									        name: 'observacion',
-							   	 	 }
+						    		 	fieldLabel: 'Monto Pagado',
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        name: 'monto_participante',
+				                }
 					    		]
 					    	}]}],
 			});
@@ -240,7 +240,7 @@ Ext.onReady(function(){
 			 items:[
 								{
 									xtype: 'panel',
-									height: 390,
+									height: 360,
 								    width: 'fit',
 									//style:'background-color: #C8CED8',
 									//layout: 'fit',
