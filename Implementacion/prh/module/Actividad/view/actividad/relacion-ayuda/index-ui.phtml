@@ -378,18 +378,6 @@ Ext.onReady(function(){
                 }
             },{
                 xtype:'actioncolumn',
-                width:35,
-                align: 'center',
-                items: [{
-                    icon: baseURL+'/img/icons/grid/edit.png',  
-                    tooltip: 'Edit',
-               		handler: function(grid, rowIndex, colIndex) {
-                   		var url = baseURL+'/actividad/actividad/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_id');  
-                   		window.location = url;                     
-                    }
-                }]
-            },{
-                xtype:'actioncolumn',
                 width: 35,
                 align: 'center',
                 items: [{
@@ -408,7 +396,7 @@ Ext.onReady(function(){
                             fn: function(rec) {
                                if (rec === "yes") {
                             	   Ext.Ajax.request({
-        							   url: baseURL + '/actividad/actividad/delete',
+        							   url: baseURL + '/actividad/relacion-ayuda/delete',
         							   success: function(response, opt){
         								   Ext.Msg.show({
         									    title:'Aviso',
