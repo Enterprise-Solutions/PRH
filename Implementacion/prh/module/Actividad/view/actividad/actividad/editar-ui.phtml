@@ -325,9 +325,9 @@ Ext.onReady(function(){
 							 			    	campos[campo] = result;
 							 			    	name.setValue(campos[campo]);
                                                                                 }
-                                                                        } else if (campo == "org_parte_rol_id") {		
+                                                                        } else if (campo == "org_parte_rol_id" || campo == "act_actividad_tipo_id" || campo == "cal_anho_formacion_id" || campo == "cont_moneda_id" || campo == "act_ciclo_id") {		
                                                                                             //console.log(campos[campo]);
-											    name.getStore().load({
+                                                                        			name.getStore().load({
                                                                                                 params:{
                                                                                                     id: name.id,
                                                                                                     valor: campos[campo]   
