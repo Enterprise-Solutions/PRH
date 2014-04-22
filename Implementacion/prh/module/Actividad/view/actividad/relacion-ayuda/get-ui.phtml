@@ -104,18 +104,18 @@ Ext.onReady(function(){
 					defaultType: 'displayfield',
 					items: [    
 					    {
-						        fieldLabel: 'Nombre',
+						        fieldLabel: 'Tipo',
 						        padding: 15,
 						        labelWidth: 110,
 						        anchor:'90%',
 						        name: 'titulo',
 						},{
-				    		 	fieldLabel: 'Formador',
+						        fieldLabel: 'Costo Referencial',
 						        padding: 15,
-						        labelWidth: 110,
+						        labelWidth: 140,
 						        anchor:'90%',
-						        name: 'formador',
-						  },{
+					 	        name: 'precio',
+			    	 	 },{
 						    	fieldLabel: 'Fecha',
 						        padding: 15,
 						        labelWidth: 110,
@@ -134,18 +134,18 @@ Ext.onReady(function(){
 						        anchor:'90%',
 						        name: 'actividad_tipo'
 				    	 },{
-						        fieldLabel: 'Costo Referencial',
-						        padding: 15,
-						        labelWidth: 140,
-						        anchor:'90%',
-					 	        name: 'precio',
-			    	 	 },{
 						    	fieldLabel: 'A&ntilde;o de Formaci&oacute;n',
 						        padding: 15,
 						        labelWidth: 140,
 						        anchor:'90%',
 						        name: 'anho_formacion',	  
-				    	 }
+				    	 },{
+						        fieldLabel: 'Observaci&oacute;n',
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',
+						        name: 'observaciones',
+				   	 	 }
                                                         
 			    	]},{
 			    		xtype: 'container',
@@ -153,24 +153,18 @@ Ext.onReady(function(){
 		                layout: 'anchor',
 		                defaultType: 'displayfield',
 		                items: [{
-					    		 	fieldLabel: 'Ciclo',
+					    		 	fieldLabel: 'Formador',
 							        padding: 15,
 							        labelWidth: 110,
-							        anchor:'100%',
-							        name: 'ciclo',
+							        anchor:'90%',
+							        name: 'formador',
 							  },{
 					    		 	fieldLabel: 'Duraci&oacute;n',
 							        padding: 15,
 							        labelWidth: 110,
 							        anchor:'90%',
 							        name: 'duracion',
-							  },{
-							        fieldLabel: 'Observaci&oacute;n',
-							        padding: 15,
-							        labelWidth: 110,
-							        anchor:'90%',
-							        name: 'observaciones',
-					   	 	 }
+							  }
 			    		]
 			    	}]},{
 					    xtype: 'panel',
