@@ -44,9 +44,9 @@ Ext.onReady(function(){
 						]
 					});
                                         
-                                        var si_no = Ext.create('Ext.data.Store', {
-                                        fields: ['id', 'nombre'],
-                                        data : [
+                    var si_no = Ext.create('Ext.data.Store', {
+                    fields: ['id', 'nombre'],
+                    data : [
 					        {"id": "S", "nombre":"Si"},
 					        {"id": "N" , "nombre":"No"}
 				        ]
@@ -78,7 +78,7 @@ Ext.onReady(function(){
 						]
 					});
 					
-                                        Ext.define('ciclo', {
+                    Ext.define('ciclo', {
 						extend: 'Ext.data.Model',
 						fields: [
 							{
@@ -91,7 +91,7 @@ Ext.onReady(function(){
 						]
 					});
                                         
-                                        Ext.define('posiblesFormadores', {
+                   Ext.define('posiblesFormadores', {
 						extend: 'Ext.data.Model',
 						fields: [
 							{
@@ -115,7 +115,7 @@ Ext.onReady(function(){
 						]
 					});
                                         
-                                        var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
+                  var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
 					model: 'posiblesFormadores',
 					proxy: {
 						type: 'ajax',
@@ -128,7 +128,7 @@ Ext.onReady(function(){
 						}
 					},
 					autoLoad: true
-                                        });
+                 });
                                         
 					var actividadTipoStore = Ext.create('Ext.data.Store', {
 						model: 'actividadTipo',
@@ -175,7 +175,7 @@ Ext.onReady(function(){
 						autoLoad: true
 					});
                                         
-                                        var cicloStore = Ext.create('Ext.data.Store', {
+                    var cicloStore = Ext.create('Ext.data.Store', {
 						model: 'ciclo',
 						proxy: {
 							type: 'ajax',
@@ -225,6 +225,7 @@ Ext.onReady(function(){
 												Ext.MessageBox.show({
 						                            title: aux_mensaje.mensaje,
 						                            msg: mensaje,
+						                            width: 250,
 						                            icon: Ext.MessageBox.ERROR,
 						                            buttons: Ext.Msg.OK
 						                        });
@@ -419,21 +420,21 @@ Ext.onReady(function(){
 					    	  	
 		                	}]
 					    	}]},{
-                                            items:[{
-                                                xtype: 'panel',
-                                                bodyStyle: {
-                                                    background: '#C8CED8',
-                                            },
-				 	    title: 'Formador',
-					    //anchor:'90%',
-					    height: 'fit',
-					    width: 'fit',
-					    border: 1,
-					//    flex: 1,
-					    padding: 10,
-					    //layout: 'hbox',
-					    defaultType: 'textfield',
-					    items: [{
+                        items:[{
+                            xtype: 'panel',
+                            bodyStyle: {
+                                background: '#C8CED8',
+                        },
+					 	    title: 'Formador',
+						    //anchor:'90%',
+						    height: 'fit',
+						    width: 'fit',
+						    border: 1,
+						//    flex: 1,
+						    padding: 10,
+						    //layout: 'hbox',
+						    defaultType: 'textfield',
+						    items: [{
 
 								    	fieldLabel: 'Formador',
 								    	xtype: 'combobox',
@@ -492,7 +493,7 @@ Ext.onReady(function(){
 											xtype: 'tabpanel',
 											tabPosition: 'left',
 											height: 520,
-                                                                                        width: 'fit',
+                                            width: 'fit',
 											//style:'background-color: #C8CED8',
 											//layout: 'fit',
 											items: [{

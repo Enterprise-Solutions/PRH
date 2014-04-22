@@ -54,27 +54,27 @@ Ext.onReady(function(){
 						]
 					});
                                         
-                                        Ext.define('formadores', {
-					extend: 'Ext.data.Model',
-					fields: [
-						{
-							type: 'int',
-							name: 'act_actividad_formadores_id'
-						},{
-							type: 'int',
-							name: 'act_actividad_id'
-						},{
-							type: 'int',
-							name: 'org_parte_rol_id'
-						},{
-							type: 'string',
-							name: 'nombre'
-						},{
-							type: 'string',
-							name: 'apellido'
-						}
-                                                ]
-                                        });
+                    Ext.define('formadores', {
+						extend: 'Ext.data.Model',
+						fields: [
+							{
+								type: 'int',
+								name: 'act_actividad_formadores_id'
+							},{
+								type: 'int',
+								name: 'act_actividad_id'
+							},{
+								type: 'int',
+								name: 'org_parte_rol_id'
+							},{
+								type: 'string',
+								name: 'nombre'
+							},{
+								type: 'string',
+								name: 'apellido'
+							}
+                        ]
+                   });
 
 					Ext.define('anhoFormacion', {
 						extend: 'Ext.data.Model',
@@ -103,7 +103,7 @@ Ext.onReady(function(){
 					});
 
                                         
-                                        Ext.define('ciclo', {
+                    Ext.define('ciclo', {
 						extend: 'Ext.data.Model',
 						fields: [
 							{
@@ -140,35 +140,35 @@ Ext.onReady(function(){
 						]
 					});
 					
-                                        var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
-					model: 'posiblesFormadores',
-					proxy: {
-						type: 'ajax',
-						extraParams: {'s[tipo]':'formador'},
-						headers: {'Accept':'application/json'},
-						url: baseURL + '/actividad/actividad/listar-partes',
-						reader: {
-							type: 'json',
-							root: 'records'
-						}
+                    var posiblesFormadoresStore = Ext.create('Ext.data.Store', {
+						model: 'posiblesFormadores',
+						proxy: {
+							type: 'ajax',
+							extraParams: {'s[tipo]':'formador'},
+							headers: {'Accept':'application/json'},
+							url: baseURL + '/actividad/actividad/listar-partes',
+							reader: {
+								type: 'json',
+								root: 'records'
+							}
 					}
                                             //autoLoad: true
-                                        });
+                    });
                                         
-                                        var formadoresStore = Ext.create('Ext.data.Store', {
-                                                model: 'formadores',
-                                                proxy: {
-                                                        type: 'ajax',
-                                                        extraParams: {'s[actividad]':aux, 'p[limit]':'all'},
-                                                        headers: {'Accept':'application/json'},
-                                                        url: baseURL + '/actividad/actividad/formadores',
-                                                        reader: {
-                                                                type: 'json',
-                                                                root: 'records'
-                                                        }
-                                                }
-                                                //autoLoad: false
-                                        });
+                    var formadoresStore = Ext.create('Ext.data.Store', {
+                            model: 'formadores',
+                            proxy: {
+                                    type: 'ajax',
+                                    extraParams: {'s[actividad]':aux, 'p[limit]':'all'},
+                                    headers: {'Accept':'application/json'},
+                                    url: baseURL + '/actividad/actividad/formadores',
+                                    reader: {
+                                            type: 'json',
+                                            root: 'records'
+                                    }
+                            }
+                            //autoLoad: false
+                    });
 
 					Ext.define('participantes', {
 						extend: 'Ext.data.Model',
@@ -283,7 +283,7 @@ Ext.onReady(function(){
 						autoLoad: true
 					});
                                                                                 
-                                        var cicloStore = Ext.create('Ext.data.Store', {
+                    var cicloStore = Ext.create('Ext.data.Store', {
 						model: 'ciclo',
 						proxy: {
 							type: 'ajax',

@@ -167,7 +167,7 @@ Ext.onReady(function(){
 						"p[page]":  page, 
 				  },
 				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/actividad/index?format=json',
+				url: baseURL + '/actividad/actividad/index',
 				reader: {
 					type: 'json',
 					root: 'records',
@@ -192,34 +192,33 @@ Ext.onReady(function(){
 				    items:[{   	
  					    		xtype: 'textfield',
  						        fieldLabel: 'Nombre',
- 						        padding: '10 0 5 15',
+ 						        padding: '10 20 5 15',
  						        labelWidth: 70,
  						        width: 250,
  						        anchor:'90%',
  						        name: 'titulo',
-                                flex: 0.5    
  				    	  },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Ciclo',
 						        labelWidth: 50,
+						        width: 270,
 						        store: cicloStore,
 						        displayField: 'nombre',
 						        valueField: 'act_ciclo_id',
-						        padding: '10 0 5 15',
+						        padding: '10 20 5 15',
 					 	        anchor:'90%',
 					 	        name: 'ciclo',
-					 	        flex: 0.7 
 					     },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Tipo Actividad',
 						        labelWidth: 120,
+						        width: 410,
 						        anchor:'90%',
 						        store: actividadTipoStore,
 						        displayField: 'titulo',
 						        valueField: 'act_actividad_tipo_id',
 						        padding: '10 20 5 15',
 					 	        name: 'actividad_tipo',
-					 	        flex: 0.9
 					     }
 					   ]
 					},{
@@ -262,7 +261,6 @@ Ext.onReady(function(){
 						           			//inicializo los pages
 								           	page = 0;
 											gridActividad.store.currentPage = 1;
-											//console.log(this);
 						           			b.up('form').getForm().reset();
 						           			actividadStore.load();		
 						           			
@@ -323,8 +321,6 @@ Ext.onReady(function(){
 								"s[actividad_tipo]": valoresForm.actividad_tipo
 	       				    }
        					});
-           					//console.log("page store: ", page);
-          				    //console.log("page extjs: ",this.store.currentPage);	
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
@@ -340,8 +336,6 @@ Ext.onReady(function(){
 								"s[actividad_tipo]": valoresForm.actividad_tipo
 		   				    }
    						});
-	       					console.log("page store: ", page);
-	      				    console.log("page extjs: ",this.store.currentPage);	
             		 },
              		moveFirst : function(){ 
              			page = 0;
@@ -357,8 +351,6 @@ Ext.onReady(function(){
 								"s[actividad_tipo]": valoresForm.actividad_tipo
 		   				    }
    						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);	
             	 	},
             	 	moveLast : function(){                 	 	
             	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
@@ -380,9 +372,7 @@ Ext.onReady(function(){
 								"s[ciclo]": valoresForm.ciclo,
 								"s[actividad_tipo]": valoresForm.actividad_tipo
 		   				    }
-   						});
-       					console.log("page store: ", page);
-      				    console.log("page extjs: ",this.store.currentPage);         					
+   						});      					
             	 	},
                 }
 	                ],                       
@@ -398,7 +388,6 @@ Ext.onReady(function(){
                 align: 'left',
                 flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
-                    console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/actividad/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
             	}
             },{

@@ -62,7 +62,10 @@ Ext.onReady(function(){
 					name: 'moneda'
 				},{
 					type: 'string',
-					name: 'ciclo'
+					name: 'identificador'
+				},{
+					type: 'string',
+					name: 'alias'
 				},{
 		            name: 'monto', 
 		            convert: function (v, rec) {
@@ -84,20 +87,7 @@ Ext.onReady(function(){
 		        }
 			]
 		});
-		
-		Ext.define('ciclo', {
-			extend: 'Ext.data.Model',
-			fields: [
-				{
-					type: 'int',
-					name: 'act_ciclo_id'
-				},{
-					type: 'string',
-					name: 'nombre'
-				}
-			]
-		});
-		
+			
 		Ext.define('actividadTipo', {
 			extend: 'Ext.data.Model',
 			fields: [
@@ -109,21 +99,6 @@ Ext.onReady(function(){
 					name: 'titulo'
 				}
 			]
-		});
-		
-		var cicloStore = Ext.create('Ext.data.Store', {
-			model: 'ciclo',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/actividad/combos/act-ciclo',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
 		});
 		
 		var actividadTipoStore = Ext.create('Ext.data.Store', {
@@ -176,23 +151,32 @@ Ext.onReady(function(){
 				    items:[{   	
 				    			xtype: 'textfield',
 						        fieldLabel: 'Nombre',
-						        padding: '10 0 5 15',
+						        padding: '10 10 5 15',
+						        tabIndex: 1,
 						        labelWidth: 70,
 						        width: 250,
 						        anchor:'90%',
-						        name: 'titulo',					         
+						        name: 'filtro_alias',					         
+				    	  },{   	
+				    			xtype: 'textfield',
+						        fieldLabel: 'Identificador',
+						        padding: '10 10 5 15',
+						        labelWidth: 100,
+						        tabIndex: 2,
+						        width: 280,
+						        anchor:'90%',
+						        name: 'filtro_identificador',					         
 				    	  },{
-				    		    xtype: 'combobox',
-				    		    fieldLabel: 'Ciclo',
-						        labelWidth: 50,
-						        store: cicloStore,
-						        displayField: 'nombre',
-						        valueField: 'act_ciclo_id',
-						        padding: '10 0 5 15',
-					 	        anchor:'90%',
-					 	        name: 'ciclo',
-					 	        width: 300,
-					     }
+					    		fieldLabel: 'Fecha',
+	                            xtype: 'datefield',
+	                            format: 'd/m/Y',
+	                            tabIndex: 3,
+	                            padding: '10 10 5 15',
+	                            labelWidth: 70,
+	                            width: 250,
+	                            anchor:'90%',
+	                            name: 'filtro_fecha' 		    		  
+				    	  }
 					   ]
 					},{
 						xtype: 'container',
@@ -217,8 +201,9 @@ Ext.onReady(function(){
 										
 						                actividadStore.load({
 											params: {
-												"s[titulo]": valoresForm.titulo,
-												"s[ciclo]": valoresForm.ciclo
+												"s[alias]": valoresForm.filtro_alias,
+												"s[identificador]": valoresForm.filtro_identificador,
+												"s[fecha]": valoresForm.filtro_fecha
 									   		} 
 						               });
 						            }//end of handler  
@@ -289,8 +274,9 @@ Ext.onReady(function(){
 	       				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo
+		   						"s[alias]": valoresForm.filtro_alias,
+		   						"s[identificador]": valoresForm.filtro_identificador,
+								"s[fecha]": valoresForm.filtro_fecha
 	       				    }
        					});
                 	 },
@@ -303,8 +289,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,   
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo
+		   						"s[alias]": valoresForm.filtro_alias,
+		   						"s[identificador]": valoresForm.filtro_identificador,
+								"s[fecha]": valoresForm.filtro_fecha
 		   				    }
    						});
             		 },
@@ -317,8 +304,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo
+		   						"s[alias]": valoresForm.filtro_alias,
+		   						"s[identificador]": valoresForm.filtro_identificador,
+								"s[fecha]": valoresForm.filtro_fecha
 		   				    }
    						});
             	 	},
@@ -338,8 +326,9 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[titulo]": valoresForm.titulo,
-								"s[ciclo]": valoresForm.ciclo
+		   						"s[alias]": valoresForm.filtro_alias,
+		   						"s[identificador]": valoresForm.filtro_identificador,
+								"s[fecha]": valoresForm.filtro_fecha
 		   				    }
    						});     					
             	 	},
@@ -352,29 +341,29 @@ Ext.onReady(function(){
             loadMask: true,
             // grid columns
             columns:[{
-                text: "Actividad",
-                dataIndex: 'titulo',
+                text: "Nombre",
+                dataIndex: 'alias',
                 align: 'left',
-                flex: 0.7,
+                flex: 1,
                 renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
                     console.log(metadata);
                     return '<a href="'+baseURL+'/actividad/relacion-ayuda/get-ui#?id=' + metadata.record.data.act_actividad_id +'">'+ val +'</a>';
             	}
+            },{
+                text: "Identificador",
+                dataIndex: 'identificador',
+                align: 'center',
+                flex: 0.7,
             },{
                 text: "Tipo de Act.",
                 dataIndex: 'actividad_tipo',
                 align: 'center',
                 flex: 1,
             },{
-                text: "Ciclo",
-                dataIndex: 'ciclo',
-                align: 'left',
-                flex: 1.5,
-            },{
                 text: "Duraci&oacute;n",
                 dataIndex: 'tiempo',
                 align: 'center',
-                flex: 0.7,
+                flex: 1,
             },{
                 text: "Monto",
                 dataIndex: 'monto',
