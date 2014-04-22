@@ -177,7 +177,7 @@ class Actividad
             ),
             'act_ciclo_id' => array(
                 'name'     => 'act_ciclo_id',
-                'required' => true,
+                'required' => false,
             ),
             'titulo' => array(
                 'name'     => 'titulo',
