@@ -11,10 +11,18 @@ class Get extends DbSelect
     public function _init()
     {
         $recaudacion = new Expression("cm.simbolo || ' ' || coalesce(sum(aap.monto_participante),0)");
+        $nroPersonas = new Expression("coalesce(count(aap.act_actividad_participantes_id),0)");
         
         $this->_select
              // Actividad
              ->from(array('aa' => 'act_actividad'))
+             ->columns(array(
+                 'act_actividad_tipo_id', 'cont_moneda_id', 'cal_anho_formacion_id',
+                 'act_ciclo_id', 'titulo', 'fecha_inicio', 'fecha_fin', 'duracion',
+                 'monto_referencial', 'requiere_certificado', 'observaciones',
+                 'atelier', 'asistencia', 'modalidad_act', 'codigo',
+                 'nro_personas' => $nroPersonas,
+             ))
              
              // Detalles de la actividad
              ->join(array('aat' => 'act_actividad_tipo'), 'aa.act_actividad_tipo_id = aat.act_actividad_tipo_id', array('actividad_tipo' => 'titulo', 'modalidad'))
