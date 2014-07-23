@@ -1482,11 +1482,11 @@ Ext.onReady(function(){
 			listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(0);
+					cargarDatos();
 //					Ext.getCmp('personaTabPanel').setActiveTab(0);
 				}
 			}
 		});	
-		cargarDatos();
 		Ext.getCmp('centerPanel').add(pantalla);
 });
 			
