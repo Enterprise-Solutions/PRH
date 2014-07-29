@@ -1471,7 +1471,12 @@ Ext.onReady(function(){
 							}
 				 	      }
 					    ]
-				     }]
+				     }],
+				     listeners:{
+							'render':function(){
+								cargarDatos();
+							}
+					 }
 					});
 		
 		var pantalla = Ext.create('Ext.form.Panel', {
@@ -1482,7 +1487,7 @@ Ext.onReady(function(){
 			listeners:{
 				'render':function(){
 					Ext.getCmp('topTabPanel').setActiveTab(0);
-					cargarDatos();
+//					cargarDatos();
 //					Ext.getCmp('personaTabPanel').setActiveTab(0);
 				}
 			}
