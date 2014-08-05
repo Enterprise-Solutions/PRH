@@ -64,4 +64,12 @@ class Select extends DbSelect
                  ->where("aa.fecha_inicio = '$fecha'");
         }
     }
+    
+    public function addSearchByPrefijo($prefijo)
+    {
+        if ($prefijo && $prefijo != "") {
+            $this->_select
+                 ->where("apa.identificador ILIKE '$prefijo%'");
+        }
+    }
 }

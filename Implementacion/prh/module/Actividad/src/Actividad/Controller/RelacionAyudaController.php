@@ -19,7 +19,7 @@ class RelacionAyudaController extends BaseController
         $select = new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao = new Dao($select);
         $template = $this->_crearTemplateParaListado();
-        return $template($dao, array(), $overwritedParams);
+        return $template($dao, array('s' => array('prefijo' => $this->getPrefijo())), $overwritedParams);
     }
     
     public function getAction()
