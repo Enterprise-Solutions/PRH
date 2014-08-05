@@ -318,7 +318,6 @@ Ext.onReady(function(){
 							autoLoad: true
 						});
 						
-					
 					var buttonCrear = function(b,e)
 					{
 									var basicForm = b.up('form').getForm();  
@@ -333,6 +332,9 @@ Ext.onReady(function(){
 						           	var auxgenero = valoresForm.genero;
 						           	var auxhijos = valoresForm.hijos;
 						           	var auxprofesion = valoresForm.org_profesion_id;
+						        	var auxnacionalidad = valoresForm.nacionalidad;
+						        	var auxreligion = valoresForm.religion;
+						        	var auxestado_civil = valoresForm.estado_civil;
 
 						        	var agregarDoc = [];
 						        	
@@ -387,11 +389,6 @@ Ext.onReady(function(){
 									var elemento4 = { "org_profesion_id": auxprofesion };
 			           				agregarProf.push(elemento4);
 						           	
-						        	var auxnacionalidad = valoresForm.nacionalidad;
-						        	var auxreligion = valoresForm.religion;
-						        	var auxestado_civil = valoresForm.estado_civil;
-  							  
-
 									Ext.Ajax.request({
 										   url: baseURL + '/org/personas/crear',
 										   success: function(response, opt){
@@ -461,36 +458,6 @@ Ext.onReady(function(){
 				doc_add_tipo = 'tipo_a'+id_add_doc;
 				doc_add_origen = 'origen_a'+id_add_doc;
 				
-				var paisStore2 = Ext.create('Ext.data.Store', {
-					model: 'Pais',
-					proxy: {
-						type: 'ajax',
-						extraParams: {'p[limit]':'all'},
-						headers: {'Accept':'application/json'},
-						url: baseURL + '/login/dir-pais?format=json',
-						reader: {
-							type: 'json',
-							root: 'records'
-						}
-					},
-					autoLoad: true
-				});
-	
-				var tipoDocumentoStore2 = Ext.create('Ext.data.Store', {
-					model: 'TipoDoc',
-					proxy: {
-						type: 'ajax',
-						extraParams: {'p[limit]':'all'},
-						headers: {'Accept':'application/json'},
-						url: baseURL + '/login/per-doc-tipo?format=json',
-						reader: {
-							type: 'json',
-							root: 'records'
-						}
-					},
-					autoLoad: true
-				});
-	
 				var aux_valor = Ext.create('Ext.form.TextField', {
 					fieldLabel: 'Nro. de Doc',
 	    	    	labelWidth: 110,
@@ -506,7 +473,7 @@ Ext.onReady(function(){
 			        labelWidth: 95,
 			        padding: 15,
 			        anchor:'90%',
-			        store: tipoDocumentoStore2,
+			        store: tipoDocumentoStore,
 			        displayField: 'nombre',
 			        valueField: 'orgDocumentoTipoCodigo',
 			        queryMode: 'local',    
@@ -519,7 +486,7 @@ Ext.onReady(function(){
 			        forceSelection: true,
 			        padding: 15,
 			        anchor:'90%',
-			        store: paisStore2,
+			        store: paisStore,
 			        displayField: 'nombre',
 			        valueField: 'dirPaisId',
 			        queryMode: 'local',     
@@ -553,23 +520,7 @@ Ext.onReady(function(){
 				ubic_add_name = 'ubic_a'+id_add_ubic;
 				ubic_add_dir = 'dir_a'+id_add_ubic;
 				ubic_add_lug = 'lug_a'+id_add_ubic;
-	
-				var comboLugarStore2 = Ext.create('Ext.data.Store', {
-					model: 'lugar',
-					pageSize: itemsPorPagina, 
-					proxy: {
-						type: 'ajax',
-						headers: {'Accept':'application/json'},
-						url: baseURL + '/org/combos/dir-barrio?format=json',
-						reader: {
-							type: 'json',
-							root: 'records',
-							totalProperty: 'numResults'
-						}
-					},
-					autoLoad: true
-				});
-					
+		
 				var aux_direccion = Ext.create('Ext.form.TextField', {
 					fieldLabel: 'Direcci&oacute;n',
 					labelwidth: 40,
@@ -586,7 +537,7 @@ Ext.onReady(function(){
 			        valueField: 'dir_barrio_id',
 			        displayField: 'search',
 			        labelWidth: 90,
-			        store: comboLugarStore2,
+			        store: comboLugarStore,
 			        queryMode: 'remote',
 			        typeAhead: true,
 			        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
@@ -623,22 +574,7 @@ Ext.onReady(function(){
 					cont_add_name = 'cont_a'+id_add_cont;
 					cont_add_valor = 'valor_a'+id_add_cont;
 					cont_add_tipo = 'tip_a'+id_add_cont;
-		
-					var contactoTipoStore = Ext.create('Ext.data.Store', {
-						model: 'contactoTipo',
-						proxy: {
-							type: 'ajax',
-							extraParams: {'p[limit]':'all'},
-							headers: {'Accept':'application/json'},
-							url: baseURL + '/org/combos/org-contacto-tipo?format=json',
-							reader: {
-								type: 'json',
-								root: 'records'
-							}
-						},
-						autoLoad: true
-					});
-						
+			
 					var aux_tipo = Ext.create('Ext.form.ComboBox', {
 						fieldLabel: 'Tipo de Contacto',
 				        labelWidth: 130,
@@ -700,6 +636,7 @@ Ext.onReady(function(){
 										xtype: 'textfield',
 										fieldLabel: 'Nro. de Doc',
 						    	    	labelWidth: 110,
+						    	    	tabIndex: 1,
 						    	        allowBlank: false,
 						    	        padding: 15,
 						    	        anchor:'90%',
@@ -717,6 +654,7 @@ Ext.onReady(function(){
 										forceSelection: true,
 								        labelWidth: 95,
 								        padding: 15,
+								        tabIndex: 2,
 								        anchor:'90%',
 								        store: tipoDocumentoStore,
 								        displayField: 'nombre',
@@ -736,6 +674,7 @@ Ext.onReady(function(){
 										forceSelection: true,
 								        labelWidth: 110,
 								        padding: 15,
+								        tabIndex: 3,
 								        anchor:'90%',
 								        store: paisStore,
 								        displayField: 'nombre',
@@ -784,6 +723,7 @@ Ext.onReady(function(){
 								        fieldLabel: 'Nombres',
 								        allowBlank: false,
 								        padding: 15,
+								        tabIndex: 4,
 								        labelWidth: 110,
 								        anchor:'90%',
 								        name: 'nombre'
@@ -792,6 +732,7 @@ Ext.onReady(function(){
 							        	labelWidth: 110,
 							 	        xtype: 'datefield',
 							 	       	format: 'd/m/Y',
+							 	       tabIndex: 6,
 							 	        allowBlank: false,
 							 	        padding: 15,
 							 	        anchor:'90%',
@@ -802,6 +743,7 @@ Ext.onReady(function(){
 								        forceSelection: true,
 								        labelWidth: 110,
 								        padding: 15,
+								        tabIndex: 8,
 								        store: estadoCivilStore,
 								        queryMode: 'local',
 								        displayField: 'nombre',
@@ -814,6 +756,7 @@ Ext.onReady(function(){
 								        xtype: 'combobox',
 								        forceSelection: true,
 								        labelWidth: 110,
+								        tabIndex: 10,
 								        store: comboReligionStore,
 								        queryMode: 'local',
 								        displayField: 'nombre',
@@ -829,6 +772,7 @@ Ext.onReady(function(){
 								    	minValue: 0,
 								    	value: 0,
 								    	anchor:'90%',
+								    	tabIndex: 12,
 								    	padding: 15,
 								    	name: 'hijos',
 						    	 	}
@@ -842,6 +786,7 @@ Ext.onReady(function(){
 					    	        labelWidth: 110,
 					    	        allowBlank: false,
 					    	        padding: 15,
+					    	        tabIndex: 5,
 							        anchor:'90%',
 							        name: 'apellido'
 					    	    },{
@@ -850,6 +795,7 @@ Ext.onReady(function(){
 							        forceSelection: true,
 							        labelWidth: 110,
 							        store: nacionalidadStore,
+							        tabIndex: 7,
 							        queryMode: 'local',
 							        displayField: 'nacionalidad',
 							        valueField: 'nacionalidad',
@@ -872,6 +818,7 @@ Ext.onReady(function(){
 						                 {
 						                     boxLabel  : 'Masculino',
 						                     name      : 'genero',
+						                     tabIndex: 9,
 						                     inputValue: 'M',
 						                     id        : 'radio1'
 						                 }, {
@@ -890,6 +837,7 @@ Ext.onReady(function(){
 								        labelWidth: 110,
 								        store: comboProfesionStore,
 								        typeAhead: true,
+								        tabIndex: 11,
 								        emptyText: 'Escriba el nombre de la Profesion...',
 								        loadingText: 'Buscando Profesiones...',
 								        hideTrigger: true,
@@ -921,6 +869,7 @@ Ext.onReady(function(){
 												fieldLabel: 'Direcci&oacute;n',
 												labelwidth: 40,
 										        allowBlank: true,
+										        tabIndex: 13,
 										        padding: 15,
 										        anchor:'90%',
 										        name: ubic_add_dir
@@ -940,6 +889,7 @@ Ext.onReady(function(){
 										        displayField: 'search',
 										        labelWidth: 90,
 										        store: comboLugarStore,
+										        tabIndex: 14,
 										        queryMode: 'remote',
 										        typeAhead: true,
 										        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
@@ -992,6 +942,7 @@ Ext.onReady(function(){
 														fieldLabel: 'Tipo de Contacto',
 														forceSelection: true,
 												        labelWidth: 130,
+												        tabIndex: 15,
 												        padding: 15,
 												        anchor:'90%',
 												        store: contactoTipoStore,
@@ -1011,6 +962,7 @@ Ext.onReady(function(){
 														xtype: 'textfield',
 														fieldLabel: 'Contacto',
 													    labelWidth: 90,
+													    tabIndex: 16,
 													    anchor:'90%',
 													    padding: 15,
 													    name: cont_add_valor,
@@ -1048,6 +1000,7 @@ Ext.onReady(function(){
 				 	    	  xtype: 'button',
 				 	    	  margin: '5 0 15 0',
 						      scale: 'large',
+						      tabIndex: 17,
 						      width: 100,
 						      text: 'Guardar',
 							  //disabled: true,
