@@ -66,52 +66,6 @@ Ext.onReady(function(){
 				delete Ext.tip.Tip.prototype.minWidth;
 
 		//modelos
-		Ext.define('personas', {
-			extend: 'Ext.data.Model',
-			fields: [{
-					type: 'int',
-					name: 'org_parte_id'
-				},{
-					type: 'string',
-					name: 'org_parte_tipo_codigo'
-				},{
-					type: 'string',
-					name: 'nombre_organizacion'
-				},{
-					type: 'string', 
-					name: 'nombre_persona'
-				},{
-					type: 'string', 
-					name: 'apellido_persona'
-				},{
-					type: 'string', 
-					name: 'fecha_nacimiento'
-				},{
-					type: 'string', 
-					name: 'genero_persona'
-				},{
-					type: 'png', 
-					name: 'foto'
-				},{
-					type: 'string', 
-					name: 'org_parte_tipo_nombre'
-				},{
-					type: 'object', 
-					name: 'documentos'
-				}
-			]
-		});
-
-		Ext.define('Pais', {
-			extend: 'Ext.data.Model',
-			fields: [{
-						type: 'int',
-						name: 'dirPaisId'
-					},{
-						type: 'string',
-						name: 'nombre'
-					}]
-		});
 
 		Ext.define('nacionalidad', {
 			extend: 'Ext.data.Model',
@@ -304,21 +258,6 @@ Ext.onReady(function(){
 			}
 		};
 		
-		var paisStore = Ext.create('Ext.data.Store', {
-			model: 'Pais',
-			proxy: {
-				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
-				headers: {'Accept':'application/json'},
-				url: baseURL + '/login/dir-pais?format=json',
-				reader: {
-					type: 'json',
-					root: 'records'
-				}
-			},
-			autoLoad: true
-		});
-
 		var tipoDocumentoStore = Ext.create('Ext.data.Store', {
 			model: 'TipoDoc',
 			proxy: {
@@ -368,9 +307,9 @@ Ext.onReady(function(){
 			        labelWidth: 110,
 			        padding: 15,
 			        anchor:'90%',
-			        store: paisStore,
+			        store: nacionalidadStore,
 			        displayField: 'nombre',
-			        valueField: 'dirPaisId',
+			        valueField: 'dir_pais_id',
 			        queryMode: 'local',     
 			        name: doc_add_origen,
 			  	});
@@ -434,9 +373,9 @@ Ext.onReady(function(){
 					        labelWidth: 110,
 					        padding: 15,
 					        anchor:'90%',
-					        store: paisStore,
+					        store: nacionalidadStore,
 					        displayField: 'nombre',
-					        valueField: 'dirPaisId',
+					        valueField: 'dir_pais_id',
 					        queryMode: 'local',  
 					        value: origen,    
 					        name: doc_edit_origen,
@@ -576,6 +515,7 @@ Ext.onReady(function(){
 					pageSize: itemsPorPagina, 
 					proxy: {
 						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
 						headers: {'Accept':'application/json'},
 						url: baseURL + '/org/combos/dir-barrio?format=json',
 						reader: {
