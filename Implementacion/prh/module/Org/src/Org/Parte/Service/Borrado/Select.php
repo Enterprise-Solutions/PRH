@@ -64,6 +64,16 @@ class Select extends EsSelect
 									'dd.calle' => 'calle'	 	
 								),
 								ZFSelect::JOIN_LEFT
+					 )
+				->join(
+					array('pr' => 'org_parte_profesion'),
+			 				'op.org_parte_id = pr.org_parte_id',
+								array(
+									'pr_org_parte_profesion_id' => 'org_parte_profesion_id',
+									'pr_org_parte_id' => 'org_parte_id',
+									'pr_org_profesion_id' => 'org_profesion_id'	 	
+								),
+								ZFSelect::JOIN_LEFT
 					 );
 	}
 	

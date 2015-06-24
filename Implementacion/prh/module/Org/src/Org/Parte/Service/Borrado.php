@@ -39,10 +39,13 @@ class Borrado
 			foreach($datos['direcciones'] as $direccion){
 				$this->_repository->borrar($direccion, 'dir_direccion', 'dir_direccion_id');
 			}
+			foreach($datos['profesion'] as $profesion){
+				$this->_repository->borrar($profesion, 'org_parte_profesion', 'org_parte_profesion_id');
+			}
 			$this->_repository->borrar($datos['org_parte'], 'org_parte', 'org_parte_id');
 			return $datos['org_parte']['org_parte_id'];
 		}catch(Exception $e){
-			Thrower::throwValidationException(null,array("La parte {$datos['org_parte']['org_parte_id']} tiene dependencias, no puede ser borrada"));
+			Thrower::throwValidationException(null,array("La persona {$datos['org_parte']['nombre_persona']} {$datos['org_parte']['apellido_persona']} no puede ser borrada, porque tiene actividades o roles relacionados"));
 		}
 	}
 	

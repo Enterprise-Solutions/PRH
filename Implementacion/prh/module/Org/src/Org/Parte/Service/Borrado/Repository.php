@@ -30,13 +30,15 @@ class Repository extends EsRepository
 				'org_parte' => $camposOp,
 				'documentos' => array(),
 				'contactos'  => array(),
-				'direcciones' => array()
+				'direcciones' => array(),
+				'profesion' => array()
 			);
 		}
 		$parte = &$partes[$orgParteId];
 		$parte['documentos'] = $this->_hidrar($row, $parte['documentos'],'od','org_documento_id');
 		$parte['contactos']  = $this->_hidrar($row, $parte['contactos'],'oc','org_contacto_id');
 		$parte['direcciones'] = $this->_hidrar($row, $parte['direcciones'],'dd','dir_direccion_id');
+		$parte['profesion'] = $this->_hidrar($row, $parte['profesion'],'pr','org_parte_profesion_id');
 		return $partes;
 	}
 	
