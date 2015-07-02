@@ -1,0 +1,593 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+
+			var auxcarrera = null;
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+
+			var aux=null;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+				aux = buscarId();
+				
+				Ext.define('actividadTipo', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'act_actividad_tipo_id'
+						},{
+							type: 'string',
+							name: 'titulo'
+						},{
+							type: 'string',
+							name: 'modalidad'
+						}
+					]
+				});
+                                    
+                var si_no = Ext.create('Ext.data.Store', {
+                fields: ['id', 'nombre'],
+                data : [
+				        {"id": "S", "nombre":"Si"},
+				        {"id": "N" , "nombre":"No"}
+			        ]
+				});
+                
+                var tipo_nombre = Ext.create('Ext.data.Store', {
+                    fields: ['id', 'nombre'],
+                    data : [
+					        {"id": "Personal", "nombre":"Personal"},
+					        {"id": "Pedag&oacute;gico" , "nombre":"Pedag&oacute;gico"},
+					        {"id": "FPM/FPP", "nombre":"FPM/FPP"},
+					        {"id": "FRA", "nombre":"FRA"},
+					        {"id": "Otros" , "nombre":"Otros"}
+				        ]
+					});
+
+
+				Ext.define('anhoFormacion', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'cal_anho_formacion_id'
+						},{
+							type: 'string',
+							name: 'anho'
+						}
+					]
+				});
+
+				Ext.define('moneda', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'cont_moneda_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						}
+					]
+				});
+				
+                Ext.define('ciclo', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'act_ciclo_id'
+						},{
+							type: 'string',
+							name: 'nombre'
+						}
+					]
+				});
+                                    
+                Ext.define('participantes', {
+					extend: 'Ext.data.Model',
+					fields: [
+						{
+							type: 'int',
+							name: 'act_participante_anonimo_id'
+						},{
+							type: 'string',
+							name: 'identificador'
+						},{
+							type: 'string',
+							name: 'alias'
+						},{
+							type: 'string',
+							name: 'descripcion'
+						}
+					]
+				});
+                                    
+                var participantesStore = Ext.create('Ext.data.Store', {
+					model: 'participantes',
+					proxy: {
+					type: 'ajax',
+					extraParams: {'p[limit]':'all'},
+					headers: {'Accept':'application/json'},
+					url: baseURL + '/actividad/relacion-ayuda/listar-participantes',
+					reader: {
+						type: 'json',
+						root: 'records'
+					}
+				},
+					autoLoad: true
+                });
+                                    
+				var actividadTipoStore = Ext.create('Ext.data.Store', {
+					model: 'actividadTipo',
+					proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all','relacion_ayuda': 'S'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/actividad/combos/act-actividad-tipo',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+					autoLoad: true
+				});
+                                    
+
+				var anhoFormacionStore = Ext.create('Ext.data.Store', {
+					model: 'anhoFormacion',
+					proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/actividad/combos/cal-anho-formacion',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+					autoLoad: true
+				});
+
+				var monedaStore = Ext.create('Ext.data.Store', {
+					model: 'moneda',
+					proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/actividad/combos/cont-moneda',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+					autoLoad: true
+				});
+                                    
+                var cicloStore = Ext.create('Ext.data.Store', {
+						model: 'ciclo',
+						proxy: {
+						type: 'ajax',
+						extraParams: {'p[limit]':'all'},
+						headers: {'Accept':'application/json'},
+						url: baseURL + '/actividad/combos/act-ciclo',
+						reader: {
+							type: 'json',
+							root: 'records'
+						}
+					},
+                                            autoLoad: true
+				});
+                
+
+                var cargarDatos = function (){
+        			aux = buscarId();
+        			Ext.Ajax.request({
+        			    url: baseURL +'/actividad/relacion-ayuda/get',
+        			    params: {
+        			        'id': aux,
+        			    },
+        			    success: function(response) {
+        	                
+        			    	var campos = Ext.decode(response.responseText);
+        			    	var form = Ext.getCmp('form').getForm();
+        			    	
+        			    	for (campo in campos) {
+        				    	
+        				    	var name = form.findField(campo);
+        				    		if (name) {
+        				    			if (campo == "fecha_inicio")
+        						    	{
+        				    				if (campos[campo]){
+        							    		var fecha = campos[campo];
+        					 			    	var fecha2 = fecha.split("-");
+        					 			    	var result = fecha2[2]+'-'+fecha2[1]+'-'+fecha2[0];
+        					 			    	campos[campo] = result;
+        					 			    	name.setValue(campos[campo]);
+        				    				}
+        						    	 }else {		
+        									    	name.setValue(campos[campo]);
+        							     }
+        					    }	}	
+        			    	}
+        				});
+        		};
+		
+				var buttonEditar = function(b,e)
+				{
+								var basicForm = b.up('form').getForm();
+					if(basicForm.isValid())
+					{  						
+					            var valoresForm = basicForm.getFieldValues();
+
+					            Ext.Ajax.request({
+									   url: baseURL + '/actividad/relacion-ayuda/put',
+									   success: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+										   aux = aux_mensaje['act_actividad_id'];
+										   Ext.Msg.show({
+											    title:'Aviso',
+												msg:'Actividad Creada Correctamente'
+										   });
+										   function hide_message() {
+										       Ext.defer(function() {
+										           Ext.MessageBox.hide();
+									       }, delay);
+										   var url = baseURL+'/actividad/relacion-ayuda/get-ui#?id='+aux;  
+						                   window.location = url;
+									   }
+									   hide_message();										   
+									   
+								   },
+									failure: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+										   var mensaje = " ";
+											   for (error in aux_mensaje.datos) {
+				                            		mensaje = mensaje +"- "+ error +": "+aux_mensaje.datos[error]+'<br>';  
+				                                }
+											Ext.MessageBox.show({
+					                            title: aux_mensaje.mensaje,
+					                            msg: mensaje,
+					                            width: 250,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+									},
+								   jsonData:{
+								       'put':{
+									       'Actividad':{
+									    	   'act_actividad_id': valoresForm.act_actividad_id,
+											   'titulo': valoresForm.titulo,
+											   'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
+											   'duracion': valoresForm.duracion,
+											   'monto_referencial': valoresForm.monto_referencial,
+											   'cont_moneda_id': valoresForm.cont_moneda_id,
+                                               'requiere_certificado': 'N',
+											   'nro_personas': 1,
+											   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
+											   'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
+											   'fecha_fin': (formatearFecha(valoresForm.fecha_inicio, 1)),
+											   'observaciones': valoresForm.observacion
+									         },
+                                            'Participantes':[{
+                                                 'act_actividad_participantes_id': valoresForm.act_actividad_participantes_id,
+                                                 'cont_moneda_id': valoresForm.cont_moneda_id,
+                                                 'monto_participante': valoresForm.monto_pagado,
+                                                 'act_participante_anonimo_id': valoresForm.identificador,
+                                                 'act_participante_anonimo_id': '17',
+                                                 'identificador': valoresForm.identificador,
+                                                 'alias': valoresForm.alias,
+                                                 'descripcion': valoresForm.descripcion
+                                             }]
+										    	
+								       	}
+								   }
+							 });
+						}
+						else
+						{
+							Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+							return;
+						}  	
+					
+					
+				};
+				
+		var pantallaActividad = Ext.create('Ext.form.Panel', {
+			id: 'form',
+			items:[{
+			    xtype: 'panel',
+			    bodyStyle: {
+		        	background: '#C8CED8',
+		        },
+			    title: 'Actividad',
+			    //anchor:'90%',
+			    height: 'fit',
+			    width: 'fit',
+			    border: 1,
+			//    flex: 1,
+			    padding: 10,
+			    layout: 'hbox',
+			    defaultType: 'textfield',
+			    items: [{
+					xtype: 'container',
+					flex: 1,
+					layout: 'anchor',
+					defaultType: 'textfield',
+					items: [{
+								xtype: 'hiddenfield',
+								hidden: true,
+								name: 'act_actividad_id',
+								id: 'act_actividad_id'
+							},{
+						        fieldLabel: 'Tipo',
+						        allowBlank: false,
+						        padding: 15,
+						        labelWidth: 110,
+						        anchor:'90%',								        
+						        xtype: 'combobox',
+                                forceSelection: true,
+                                store: tipo_nombre,
+                                displayField: 'nombre',
+                                queryMode: 'local',
+                                valueField: 'id',
+                                value: 'Personal',
+						        tabIndex: 1,
+						        name: 'titulo'
+					    	},{
+						    	fieldLabel: 'Costo',
+						    	labelWidth: 110,
+						    	xtype: 'numberfield',
+						    	minValue: 0,
+						    	tabIndex: 3,
+						    	allowBlank: true,
+						    	hideTrigger: true,
+						    	anchor:'90%',
+						    	padding: 15,
+						    	name: 'monto_referencial',
+                            },{
+                                fieldLabel: 'Fecha',
+                                xtype: 'datefield',
+                                format: 'd/m/Y',
+                                tabIndex: 5,
+                                padding: 15,
+                                labelWidth: 110,
+                                anchor:'90%',
+                                name: 'fecha_inicio' 
+                            },{
+                                fieldLabel: 'A&ntilde;o de Form.',
+                                xtype: 'combobox',
+                                forceSelection: true,
+                                labelWidth: 110,
+                                store: anhoFormacionStore,
+                                displayField: 'anho',
+                                queryMode: 'local',
+                                valueField: 'cal_anho_formacion_id',
+                                allowBlank: false,
+                                padding: 15,
+                                tabIndex: 7,
+                                anchor:'90%',
+                                name: 'cal_anho_formacion_id',
+                                id: 'cal_anho_formacion_id'	
+                            }
+			    	]},{
+			    		xtype: 'container',
+		                flex: 1,
+		                layout: 'anchor',
+		                defaultType: 'textfield',
+		                items: [{
+                                    fieldLabel: 'Tipo de Act',
+                                    xtype: 'combobox',
+                                    //forceSelection: true,
+                                    labelWidth: 110,
+                                    tabIndex: 2,
+                                    store: actividadTipoStore,
+                                    displayField: 'titulo',
+                                    queryMode: 'local',
+                                    valueField: 'act_actividad_tipo_id',
+                                    allowBlank: false,
+                                    padding: 15,
+                                    anchor:'90%',
+                                    id : 'act_actividad_tipo_id',
+                                    name: 'act_actividad_tipo_id'
+                        		},{
+							        fieldLabel: 'Moneda',
+							        xtype: 'combobox',
+							        forceSelection: true,
+							        labelWidth: 110,
+							        store: monedaStore,
+							        displayField: 'nombre',
+							        queryMode: 'local',
+							        valueField: 'cont_moneda_id',
+							        allowBlank: false,
+							        padding: 15,
+							        tabIndex: 4,
+						 	        anchor:'90%',
+						 	        name: 'cont_moneda_id',
+						 	        id: 'cont_moneda_id'
+                                },{
+							    	fieldLabel: 'Duraci&oacute;n (hs.)',
+							    	labelWidth: 110,
+							    	xtype: 'numberfield',
+							    	minValue: 0,
+							    	value: 0,
+							    	step: 0.25,
+							    	tabIndex: 6,
+							    	anchor:'90%',
+							    	padding: 15,
+							    	name: 'duracion',
+                                },{
+	                                fieldLabel: 'Observaci&oacute;n',
+	                                xtype: 'textarea',
+	                                padding: 15,
+	                                tabIndex: 8,
+	                                labelWidth: 110,
+	                                anchor:'90%',
+	                                name: 'observaciones',                   
+                                }]
+			    	}]},{
+					    xtype: 'panel',
+					    bodyStyle: {
+				        	background: '#C8CED8',
+				        },
+					    title: 'Datos de la Persona',
+					    height: 200,
+					    width: 'fit',
+					    border: 1,
+					    padding: '0 10 10 10',
+					    layout: 'hbox',
+					    defaultType: 'textfield',
+					    items: [{
+							xtype: 'container',
+							flex: 0.8,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [{
+								xtype: 'hiddenfield',
+								hidden: true,
+								name: 'act_actividad_participantes_id',
+								id: 'act_actividad_participantes_id'
+							},{
+									fieldLabel: 'Identificador',
+							        padding: 15,
+							        xtype: 'displayfield',
+							        labelWidth: 110,
+							        anchor:'90%',
+							        name: 'identificador',
+                         
+								},{
+                                        fieldLabel: 'Descripci&oacute;n',
+                                        xtype: 'textarea',
+                                        padding: 15,
+                                        tabIndex: 13,
+                                        labelWidth: 110,
+                                        anchor:'265%',
+                                        name: 'descripcion',
+                                        id: 'descripcion'
+                                
+                                    }
+					    	]},{
+							xtype: 'container',
+							flex: 0.5,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [{	
+										fieldLabel: 'Nombre',
+								        allowBlank: false,
+								        padding: 15,
+								        xtype: 'displayfield',
+								        labelWidth: 70,
+								        anchor:'90%',
+								        tabIndex: 11,
+								        name: 'alias',
+								        id: 'alias'
+                                    }
+					    	]},{
+							xtype: 'container',
+							flex: 0.9,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [{
+
+								    	fieldLabel: 'Monto Pagado',
+								    	labelWidth: 115,
+								    	xtype: 'numberfield',
+								    	minValue: 0,
+								    	tabIndex: 12,
+								    	hideTrigger: true,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'monto_pagado',
+                                    }
+					    	]}
+					    
+					    	]}],
+					    	listeners:{
+										'render':function(){
+											cargarDatos();
+										}
+					    	}
+			});
+	
+		var pantalla = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 
+			 width: 'fit',
+			 height: 'fit',		           
+			 items:[
+								{
+									xtype: 'panel',
+									height: 500,
+								    width: 'fit',
+									//style:'background-color: #C8CED8',
+									//layout: 'fit',
+									items: [pantallaActividad]
+								},{
+							    	xtype: 'container',
+							 	    height: 'fit',
+							 	    width: 'fit',
+							 	   layout: 'hbox',
+							 	   // flex: 1,
+							 	   // padding: '5 0 10 440',
+							 	    items:[
+											  { xtype: 'tbfill' },	
+									 	      {	  
+									 	    	  xtype: 'button',
+									 	    	  margin: '5 0 15 0',
+											      scale: 'large',
+											      width: 100, 
+											      text: 'Guardar',
+												  handler: buttonEditar
+									 	      },{
+									 	    	  xtype: 'button',
+									 	    	  margin: '5 15 15 20',
+									 	    	  width: 100, 
+											      scale: 'large',
+											      text: 'Cancelar',
+												  //disabled: true,
+												  handler: function() {
+													  window.location = baseURL+'/actividad/relacion-ayuda/index-ui';
+												}
+									 	      }
+										    ]
+							     }
+								
+			  ],
+			  listeners:{
+						'render':function(){
+								Ext.getCmp('topTabPanel').setActiveTab(1);
+//								Ext.getCmp('actividadTabPanel').setActiveTab(1);
+						}
+			  }	    	
+		});
+
+		Ext.getCmp('centerPanel').add(pantalla);
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>

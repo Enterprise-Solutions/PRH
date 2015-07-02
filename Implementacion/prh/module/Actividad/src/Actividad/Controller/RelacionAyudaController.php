@@ -6,6 +6,7 @@ use Actividad\RelacionAyuda\QueryObject\Get;
 use Actividad\RelacionAyuda\QueryObject\Participante;
 use Actividad\RelacionAyuda\QueryObject\Select;
 use Actividad\RelacionAyuda\Service\Crear as CrearRelacionAyudaService;
+use Actividad\RelacionAyuda\Service\Editar as EditarRelacionAyudaService;
 use Actividad\RelacionAyuda\Service\Eliminar as EliminarRelacionAyudaService;
 use Doctrine\ORM\EntityManager;
 use EnterpriseSolutions\Controller\BaseController;
@@ -66,6 +67,19 @@ class RelacionAyudaController extends BaseController
         $this->getEntityManager()->flush();
         
         return $this->toJson($service->getRespuesta());
+    }
+    
+    public function putAction()
+    {
+    	$dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+    	$em = $this->getEntityManager();
+    	$data = $this->SubmitParams()->getParam('put');
+    
+    	$service = new CrearRelacionAyudaService($em, $dbAdapter);
+    	$service->ejecutar($data);
+    	$this->getEntityManager()->flush();
+    
+    	return $this->toJson($service->getRespuesta());
     }
     
     public function deleteAction()

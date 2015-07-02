@@ -379,6 +379,18 @@ Ext.onReady(function(){
                 }
             },{
                 xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    tooltip: 'Edit',
+               		handler: function(grid, rowIndex, colIndex) {
+                   		var url = baseURL+'/actividad/relacion-ayuda/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_id');  
+                   		window.location = url;                     
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
                 width: 35,
                 align: 'center',
                 items: [{
