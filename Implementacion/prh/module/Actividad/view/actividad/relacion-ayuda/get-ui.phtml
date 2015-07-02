@@ -227,7 +227,17 @@ Ext.onReady(function(){
 							 	   // padding: '5 0 10 440',
 							 	    items:[
 									  { xtype: 'tbfill' },
-							 	      {
+									  {
+							 	    	  xtype: 'button',
+							 	    	  margin: '5 0 15 0',
+									      scale: 'large',
+									      width: 100,
+									      text: 'Editar',
+										  //disabled: true,
+										  handler: function() {
+											  window.location = baseURL+'/actividad/relacion-ayuda/editar-ui#?id='+aux;
+										}
+							 	      },{
 							 	    	  xtype: 'button',
 							 	    	  margin: '5 15 15 20',
 									      scale: 'large',

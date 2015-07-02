@@ -248,7 +248,7 @@ Ext.onReady(function(){
 										   aux = aux_mensaje['act_actividad_id'];
 										   Ext.Msg.show({
 											    title:'Aviso',
-												msg:'Actividad Creada Correctamente'
+												msg:'Actividad Editada Correctamente'
 										   });
 										   function hide_message() {
 										       Ext.defer(function() {
@@ -288,14 +288,14 @@ Ext.onReady(function(){
 											   'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
 											   'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
 											   'fecha_fin': (formatearFecha(valoresForm.fecha_inicio, 1)),
-											   'observaciones': valoresForm.observacion
+											   'observaciones': valoresForm.observaciones
 									         },
                                             'Participantes':[{
                                                  'act_actividad_participantes_id': valoresForm.act_actividad_participantes_id,
                                                  'cont_moneda_id': valoresForm.cont_moneda_id,
                                                  'monto_participante': valoresForm.monto_pagado,
-                                                 'act_participante_anonimo_id': valoresForm.identificador,
-                                                 'act_participante_anonimo_id': '17',
+                                                 'act_participante_anonimo_id': valoresForm.act_participante_anonimo_id,
+                                                 //'act_participante_anonimo_id': '17',
                                                  'identificador': valoresForm.identificador,
                                                  'alias': valoresForm.alias,
                                                  'descripcion': valoresForm.descripcion
@@ -468,6 +468,11 @@ Ext.onReady(function(){
 								hidden: true,
 								name: 'act_actividad_participantes_id',
 								id: 'act_actividad_participantes_id'
+							},{
+								xtype: 'hiddenfield',
+								hidden: true,
+								name: 'act_participante_anonimo_id',
+								id: 'act_participante_anonimo_id'
 							},{
 									fieldLabel: 'Identificador',
 							        padding: 15,

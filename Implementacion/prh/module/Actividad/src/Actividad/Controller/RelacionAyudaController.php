@@ -73,9 +73,10 @@ class RelacionAyudaController extends BaseController
     {
     	$dbAdapter = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
     	$em = $this->getEntityManager();
+
     	$data = $this->SubmitParams()->getParam('put');
     
-    	$service = new CrearRelacionAyudaService($em, $dbAdapter);
+    	$service = new EditarRelacionAyudaService($em, $dbAdapter);
     	$service->ejecutar($data);
     	$this->getEntityManager()->flush();
     

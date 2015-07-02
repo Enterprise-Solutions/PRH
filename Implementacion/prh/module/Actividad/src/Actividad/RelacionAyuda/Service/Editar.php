@@ -54,11 +54,16 @@ class Editar
      * @var string
      */
     protected $prefijoIdentificador;
+
+    protected $dbAdapter;
     
     public function __construct($em, $dbAdapter = null)
     {
         $this->em = $em;
+        $this->actividad = null;
+        $this->dbAdapter = $dbAdapter;
     }
+    
     
     public function setLoggedUser($loggedUser)
     {
@@ -68,15 +73,27 @@ class Editar
     public function ejecutar($data)
     {
         $this->editarRelacionAyuda($data['Actividad']);
-        //$this->asociarParticipantes($data['Participantes']);
+        $this->em->persist($this->actividad);
+        $this->asociarParticipantes($data['Participantes']);
         //$this->asociarFormador();
     }
     
     protected function editarRelacionAyuda($data)
     {
-        $act_actividad_id = $data['act_actividad_id'];
-        $this->actividad->fromArray($data);
+        /*$this->editarActividad($data['Actividad']);
         $this->em->persist($this->actividad);
+        $this->asociarFormadores($data['Formadores']);*/
+
+        $act_actividad_id = $data['act_actividad_id'];
+        $this->actividad = $this->em->find('Actividad\Actividad\Actividad', $act_actividad_id);
+        
+        if ($this->actividad == null) {
+            Thrower::throwValidationException('Error de Validacion', "No existe la actividad solicitada");
+        }
+        
+        $this->actividad->fromArray($data);
+       // $this->actividad->fromArray($data);
+        
     }
 
     protected function asociarParticipantes($data)
@@ -88,7 +105,9 @@ class Editar
     
     		$this->actualizarParticipanteAnonimo($data[$i]);
     
-    		$this->participanteDeActividad = new Participante();
+            
+    		$this->participanteDeActividad = $this->em->find('Actividad\Actividad\Participante', $data[$i]['act_actividad_participantes_id']);
+
     		$this->participanteDeActividad->setActividad($this->actividad);
     		$this->participanteDeActividad->setParticipanteAnonimo($this->participanteAnonimo);
     		$this->participanteDeActividad->setMoneda($data[$i]['cont_moneda_id']);
@@ -97,6 +116,34 @@ class Editar
     
     		$this->em->persist($this->participanteDeActividad);
     	}
+    }
+
+    protected function tieneIdentificador($data)
+    {
+        if (isset($data['identificador'])) {
+            if (!$data['identificador']) {
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    protected function actualizarParticipanteAnonimo($data)
+    {
+        // if ($data['act_participante_anonimo_id'] == 'new_id') {
+        //     $this->participanteAnonimo = new ParticipanteAnonimo();
+        //     $identificador = $this->prefijoIdentificador . $data['identificador'];
+        // } else {
+            $this->participanteAnonimo = $this->em->find('Actividad\Actividad\Participante\Anonimo', $data['act_participante_anonimo_id']);
+            $identificador = $data['identificador'];
+        //}
+        
+        $this->participanteAnonimo->setIdentificador($identificador);
+        $this->participanteAnonimo->setAlias($data['alias']);
+        $this->participanteAnonimo->setDescripcion($data['descripcion']);
+        
+        $this->em->persist($this->participanteAnonimo);
     }
     
     public function getRespuesta()
