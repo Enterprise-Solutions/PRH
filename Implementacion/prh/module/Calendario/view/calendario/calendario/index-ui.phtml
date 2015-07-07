@@ -21,7 +21,7 @@
 			var page = 0;
 			
 Ext.onReady(function(){
-				delete Ext.tip.Tip.prototype.minWidth;
+				
 		//modelos
 
 		Ext.define('calendario', {
@@ -202,7 +202,7 @@ Ext.onReady(function(){
 //								   auxnombre = null;
 //								   auxestado = null;
 //								   auxpersona = null;
-//								   usuariosStore.load();
+//								   calendarioStore.load();
 //							   },
 //							   failure: function(response, opt){
 //								   var aux_mensaje = Ext.decode(response.responseText);
@@ -371,7 +371,7 @@ Ext.onReady(function(){
 //								   Ext.getCmp('filtros').up('form').getForm().reset();
 //								   auxnombre = null;
 //								   auxestado = null;
-//								   usuariosStore.load();
+//								   calendarioStore.load();
 //							   },
 //								   jsonData: json_data,
 //						 });
@@ -457,7 +457,7 @@ Ext.onReady(function(){
 //							           	page = 0;
 //										gridUsuarios.store.currentPage = 1;
 //										
-//						                usuariosStore.load({
+//						                calendarioStore.load({
 //											params: {
 //												"s[nombre]": auxnombre,
 //												"s[estado]": auxestado
@@ -480,7 +480,7 @@ Ext.onReady(function(){
 //											gridUsuarios.store.currentPage = 1;
 //											//console.log(this);
 //						           			b.up('form').getForm().reset();
-//						           			usuariosStore.load();						   	
+//						           			calendarioStore.load();						   	
 //				           		  		}
 //								}]}
 //				    	]
@@ -488,10 +488,7 @@ Ext.onReady(function(){
 		
 		var gridCalendario= Ext.create('Ext.grid.Panel', {
             //title: 'Religi&oacute;n',
-            selModel: {
-                checkOnly: true,
-                injectCheckbox: 1
-            },
+
             width: 'fit',
             padding: 10,
             height: 410,
@@ -526,7 +523,7 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
-           				usuariosStore.load({
+           				calendarioStore.load({
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page, 
@@ -538,7 +535,7 @@ Ext.onReady(function(){
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
 						this.store.currentPage--;
-						usuariosStore.load({
+						calendarioStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
@@ -550,7 +547,7 @@ Ext.onReady(function(){
              		moveFirst : function(){ 
              			page = 0;
 						this.store.currentPage = 1;
-						usuariosStore.load({
+						calendarioStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
@@ -569,7 +566,7 @@ Ext.onReady(function(){
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
-            	 		usuariosStore.load({
+            	 		calendarioStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
@@ -610,87 +607,10 @@ Ext.onReady(function(){
                 dataIndex: 'actual',
                 align: 'center',
                 flex: 0.5,
-            },{
-                xtype:'actioncolumn',
-                width:35,
-                align: 'center',
-                items: [{
-                    icon: baseURL+'/img/icons/grid/edit.png',  
-                    //tooltip: 'Edit',
-//                handler: function(grid, rowIndex, colIndex) {
-//                    	var id_edit = usuariosStore.getAt(rowIndex).get('adm_usuario_id');
-//                    	var org_parte_edit = usuariosStore.getAt(rowIndex).get('org_parte_id');
-//                    	var nombre_edit = ' '+usuariosStore.getAt(rowIndex).get('apellido')+', '+usuariosStore.getAt(rowIndex).get('nombre')+' ';
-//                    	var estado_edit = usuariosStore.getAt(rowIndex).get('estado');
-//                    	var id_doc = usuariosStore.getAt(rowIndex).get('org_documento_id');
-//           			 	documentoStore.load({
-//							params: {
-//								"s[org_parte_id]": org_parte_edit	
-//					   		},
-//					   		callback: function(records, operation, success) {	
-//				   				editarwindow(id_edit, nombre_edit, estado_edit, id_doc);       
-//					   		}
-//	         			});                 
-//                    }
-                }]
-            },{
-                xtype:'actioncolumn',
-                width: 35,
-                align: 'center',
-                items: [{
-                	icon: baseURL+'/img/icons/grid/delete.png',  
-                    //tooltip: 'Delete',
-//                    handler: function(grid, rowIndex, colIndex) {
-//                    	var id_delete = usuariosStore.getAt(rowIndex).get('adm_usuario_id');
-//                    	var nombre_delete = usuariosStore.getAt(rowIndex).get('nombre');
-//                    	var apellido_delete = usuariosStore.getAt(rowIndex).get('apellido');
-//                    	var auxmensaje = 'Confirma que desea borrar al usuario '+nombre_delete+' '+apellido_delete+'?';
-//                    	Ext.Msg.show({
-//                            title:'Consulta',
-//                            msg: auxmensaje,
-//                            width: 250,
-//                            buttons: Ext.Msg.YESNO,
-//                            icon: Ext.Msg.QUESTION,
-//                            fn: function(rec) {
-//                               if (rec === "yes") {
-//                            	   Ext.Ajax.request({
-//        							   url: baseURL + '/adm/usuario/delete',
-//        							   success: function(response, opt){
-//        								   Ext.Msg.show({
-//        									    title:'Aviso',
-//        										msg:'Usuario Borrado Correctamente',
-//        										closable: false,
-//        										width: 250
-//        								   });
-//        								   function hide_message() {
-//        								       Ext.defer(function() {
-//        								           Ext.MessageBox.hide();
-//        								       }, delay);
-//        								   }
-//        								   hide_message();
-//        								   Ext.getCmp('filtros').up('form').getForm().reset();
-//        								   auxnombre = null;
-//        								   auxestado = null;
-//        								   usuariosStore.load();
-//        							   },
-//        							   jsonData:{
-//        							       'delete':[
-//        							    	id_delete
-//        							       ]
-//        							   }
-//        						 });
-//                              }
-//                               else{
-//                            	   this.close();
-//                               }	                               
-//                           }
-//                       });
-//
-//                    	
-//                        
-//                    }
-                }]
-            }       
+            }
+
+
+            //}       
             ]
             	        	
 		 });

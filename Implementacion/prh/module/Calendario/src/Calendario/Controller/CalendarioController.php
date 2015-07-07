@@ -15,9 +15,9 @@ use EnterpriseSolutions\Simple\Repository\DataSource;
 use EnterpriseSolutions\Simple\Service\Service as EsService;
 use EnterpriseSolutions\Db\Dao\Get as GetDao;
 
-use Calendario\Service\Listado\Select as SelectDeCalendarios;
+use Calendario\Calendario\Service\Listado\Select as SelectDeCalendarios;
 
-class IndexController extends BaseController
+class CalendarioController extends BaseController
 {
     public function indexAction()
     {
@@ -27,10 +27,4 @@ class IndexController extends BaseController
         return $template($dao,array(),array());
     }
 
-    public function fooAction()
-    {
-        // This shows the :controller and :action parameters in default route
-        // are working when you browse to /module-specific-root/skeleton/foo
-        return array();
-    }
 }
