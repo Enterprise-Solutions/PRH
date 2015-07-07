@@ -9,13 +9,22 @@
 
 namespace Calendario\Controller;
 
-use Zend\Mvc\Controller\AbstractActionController;
+use EnterpriseSolutions\Controller\BaseController;
+use EnterpriseSolutions\Db\Dao;
+use EnterpriseSolutions\Simple\Repository\DataSource;
+use EnterpriseSolutions\Simple\Service\Service as EsService;
+use EnterpriseSolutions\Db\Dao\Get as GetDao;
 
-class IndexController extends AbstractActionController
+use Calendario\Service\Listado\Select as SelectDeCalendarios;
+
+class IndexController extends BaseController
 {
     public function indexAction()
     {
-        return array();
+        $select = new SelectDeCalendarios($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao = new Dao($select);
+        $template = $this->_crearTemplateParaListado();
+        return $template($dao,array(),array());
     }
 
     public function fooAction()
