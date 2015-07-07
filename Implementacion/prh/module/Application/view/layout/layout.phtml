@@ -200,11 +200,29 @@
 		var menuCalendario = Ext.create('Ext.tab.Panel', {
 			autoHeight:true,
 			plain: true,
+			activeTab: 2,
 			style:'background-color: #C8CED8',
 			//border:0,
 			id: 'calendarioTabPanel',
 			//renderTo: document.body,
-			items: []
+			items: [{
+		        title: 'Calendario',
+		        tabConfig: {style:'width:120px'},
+		        pathName: '/calendario/calendario/index-ui',
+		    },{
+		        title: 'prueba',
+		        tabConfig: {style:'width:120px'},
+		        hidden: true,
+		    }],
+		    listeners:{
+				'tabchange':function(tabPanel, newTab, oldTab, opciones)
+				{
+					if(window.location.pathname !== (baseURL + newTab.pathName))//si son diferentes cambiar
+					{
+						window.location.pathname = baseURL + newTab.pathName;
+					}	
+				}
+			 }
 		});
 
 		var menuStock = Ext.create('Ext.tab.Panel', {
@@ -385,8 +403,7 @@
 								},{
 								    title: 'Calendario',
 								    tabConfig: {style:'width:120px'},
-								    items:[menuCalendario],
-								    disabled: true,
+								    items:[menuCalendario]
 								},{
 								    title: 'Stock',
 								    tabConfig: {style:'width:120px'},
