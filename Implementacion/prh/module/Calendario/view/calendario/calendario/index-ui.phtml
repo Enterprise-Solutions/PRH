@@ -95,21 +95,21 @@ Ext.onReady(function(){
                bodyPadding: 10,
 
                fieldDefaults: {
-                   labelAlign: 'top',
+                   labelAlign: 'left',
                    labelWidth: 100,
                    labelStyle: 'font-weight:bold'
                },
                items: [{	
                            xtype: 'textfield',
 	           			   fieldLabel: 'A&ntilde;o',
-                           labelWidth: 120,
+                           labelWidth: 130,
                            width: 400,  
                            tabIndex: 0,
                            allowBlank: false,
                            name: 'anho',   
                       },{
 	                        fieldLabel: 'Fecha de Inicio:',
-				        	labelWidth: 110,
+				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	        tabIndex: 1,
@@ -119,7 +119,7 @@ Ext.onReady(function(){
 				 	        name: 'fecha_inicio'
                       },{
 	                        fieldLabel: 'Fecha de Fin:',
-				        	labelWidth: 110,
+				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	        tabIndex: 2,
@@ -136,14 +136,14 @@ Ext.onReady(function(){
 	           		        value: 'N',
 	           		     	forceSelection: true,
 	           		        width: 400,
-	           		        labelWidth: 120,
+	           		        labelWidth: 130,
 	           		        store: actualStore,
 	           		        queryMode: 'local',
 	           		        typeAhead: true,
                       },{	
                            xtype: 'textarea',
 	           			   fieldLabel: 'Descripci&oacute;n',
-                           labelWidth: 120,
+                           labelWidth: 130,
                            //width: 400,  
                            tabIndex: 3,
                            name: 'descripcion',   
@@ -170,7 +170,7 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   //Ext.getCmp('filtros').up('form').getForm().reset();
 								   calendarioStore.load();
 							   },
 							   failure: function(response, opt){
@@ -232,7 +232,7 @@ Ext.onReady(function(){
                bodyPadding: 10,
 
                fieldDefaults: {
-                   labelAlign: 'top',
+                   labelAlign: 'left',
                    labelWidth: 100,
                    labelStyle: 'font-weight:bold'
                },
@@ -240,14 +240,14 @@ Ext.onReady(function(){
                            xtype: 'textfield',
 	           			   fieldLabel: 'A&ntilde;o',
 	           			   value: anho_edit,
-                           labelWidth: 120,
+                           labelWidth: 130,
                            width: 400,  
                            tabIndex: 0,
                            allowBlank: false,
                            name: 'anho_edit',   
                       },{
 	                        fieldLabel: 'Fecha de Inicio:',
-				        	labelWidth: 110,
+				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	       	value: fecha_inicio_edit,
@@ -258,7 +258,7 @@ Ext.onReady(function(){
 				 	        name: 'fecha_inicio_edit'
                       },{
 	                        fieldLabel: 'Fecha de Fin:',
-				        	labelWidth: 110,
+				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	       	value: fecha_fin_edit,
@@ -271,20 +271,30 @@ Ext.onReady(function(){
                       		xtype: 'combobox',
 	                       	fieldLabel: 'A&ntilde;o actual',
 	           		        name: 'actual_edit',
+	           		        id: 'actual_edit',
 	           		        displayField: 'nombre',
 	           		        valueField: 'id',
 	           		        value: actual_edit,
 	           		     	forceSelection: true,
 	           		        width: 400,
-	           		        labelWidth: 120,
+	           		        labelWidth: 130,
 	           		        store: actualStore,
 	           		        queryMode: 'local',
 	           		        typeAhead: true,
+	           		        listeners:{
+										'render':function(){
+											if (this.value == 'S')
+											{
+												console.log (this.value);
+												Ext.getCmp('actual_edit').setDisabled(true);
+											}
+							}
+			}
                       },{	
                            xtype: 'textarea',
 	           			   fieldLabel: 'Descripci&oacute;n',
 	           			   value: descripcion_edit,
-                           labelWidth: 120,
+                           labelWidth: 130,
                            //width: 400,  
                            tabIndex: 3,
                            name: 'descripcion_edit',   
@@ -311,7 +321,7 @@ Ext.onReady(function(){
 								       }, delay);
 								   }
 								   hide_message();
-								   Ext.getCmp('filtros').up('form').getForm().reset();
+								   //Ext.getCmp('filtros').up('form').getForm().reset();
 								   calendarioStore.load();
 							   },
 								   jsonData:{
@@ -563,7 +573,7 @@ Ext.onReady(function(){
             	text: "Actual",
                 dataIndex: 'es_actual',
                 align: 'center',
-                flex: 0.5,
+                flex: 0.7,
             },{
                 xtype:'actioncolumn',
                 width:35,
