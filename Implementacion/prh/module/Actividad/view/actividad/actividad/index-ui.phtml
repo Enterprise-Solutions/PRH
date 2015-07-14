@@ -461,6 +461,15 @@ Ext.onReady(function(){
         								   hide_message();
         								   actividadStore.load();
         							   },
+        							   failure: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+											Ext.MessageBox.show({
+					                            title: aux_mensaje.status,
+					                            msg: aux_mensaje.datos,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+										},
         							   jsonData:{
         							       'delete':{
                                                                         'act_actividad_id': id_delete,
