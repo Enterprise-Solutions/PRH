@@ -211,7 +211,7 @@ Ext.onReady(function(){
 
            win = Ext.widget('window', {
                title: 'Crear Calendario',
-               closeAction: 'hide',
+               closeAction: 'destroy',
                width: 400,
                //height: 350,
                layout: 'fit',
@@ -285,7 +285,6 @@ Ext.onReady(function(){
 										'render':function(){
 											if (this.value == 'S')
 											{
-												console.log (this.value);
 												Ext.getCmp('actual_edit').setReadOnly(true);
 											}
 							}
@@ -324,6 +323,15 @@ Ext.onReady(function(){
 								   //Ext.getCmp('filtros').up('form').getForm().reset();
 								   calendarioStore.load();
 							   },
+							   failure: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+											Ext.MessageBox.show({
+					                            title: aux_mensaje.status,
+					                            msg: aux_mensaje.datos,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+								},
 								   jsonData:{
 								       'put':{
 								    	   'cal_anho_formacion_id': id_edit,
@@ -342,6 +350,7 @@ Ext.onReady(function(){
                    text: 'Cancelar',
                    handler: function() {
                        this.up('form').getForm().reset();
+                       this.up('window').destroy();
                        this.up('window').close();
                    }
                }]
@@ -349,7 +358,7 @@ Ext.onReady(function(){
 
            win = Ext.widget('window', {
                title: 'Editar Calendario',
-               closeAction: 'hide',
+               closeAction: 'destroy',
                width: 400,
               // height: 320,
                layout: 'fit',
