@@ -12,8 +12,47 @@ class Select extends EsSelect
 	{
 		$this->_select
              ->from('cal_anho_formacion')
-             ->columns(array('cal_anho_formacion_id', 'org_parte_rol_centro', 'anho', 'fecha_inicio', 'fecha_fin', 'descripcion', 'actual', 'es_actual' => new Expression(" case when actual = 'S' then 'Si' else 'No' end")));
-	
+             ->columns(array('cal_anho_formacion_id', 
+             				 'org_parte_rol_centro', 
+             				 'anho', 
+             				 'fecha_inicio', 
+             				 'fecha_fin', 
+             				 'descripcion', 
+             				 'actual', 
+             				 'es_actual' => new Expression(" case when actual = 'S' then 'Si' else 'No' end")
+             				 )
+        );
+	}
+
+	public function addSearchByCalAnhoFormacionId($calAnhoFormacionId)
+	{
+		$this->_select
+		     ->columns(array(
+				'cal_anho_formacion_id',
+				'org_parte_rol_centro',
+		     	'anho',
+				'fecha_inicio', 
+				'fecha_fin', 
+				'descripcion', 
+				'actual', 
+		    ))
+			->where("cal_anho_formacion_id = $calAnhoFormacionId");
+	}
+
+	public function getCalendariosNoActuales($calAnhoFormacionId)
+	{
+		//$calAnhoFormacionId = join(',',$calAnhoFormacionId);
+		$this->_select
+			 ->columns(array('cal_anho_formacion_id','actual'))
+			 ->where("cal_anho_formacion_id not in ($calAnhoFormacionId)");
 	}
 	
+	public function addSearchByCalAnhoFormacionIds($calAnhoFormacionIds)
+	{
+		$calAnhoFormacionIds = join(',',$calAnhoFormacionIds);
+		$this->_select
+			 ->columns(array('cal_anho_formacion_id','org_parte_rol_centro','anho','fecha_inicio','fecha_fin', 'descripcion', 'actual'));
+		$this->_select
+			 ->where("cal_anho_formacion_id in ($calAnhoFormacionIds) and actual != 'S'");
+	}
 }

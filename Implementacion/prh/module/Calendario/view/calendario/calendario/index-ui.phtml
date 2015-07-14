@@ -286,7 +286,7 @@ Ext.onReady(function(){
 											if (this.value == 'S')
 											{
 												console.log (this.value);
-												Ext.getCmp('actual_edit').setDisabled(true);
+												Ext.getCmp('actual_edit').setReadOnly(true);
 											}
 							}
 			}
@@ -463,7 +463,7 @@ Ext.onReady(function(){
                             xtype: 'tbfill' 
                         },{
                        	xtype: 'button',	
-    			            text: 'Crear Usuario',
+    			            text: 'Crear A&ntilde;o',
     		                handler: agregarwindow,
                         }]
 	                },
@@ -626,7 +626,7 @@ Ext.onReady(function(){
         								       }, delay);
         								   }
         								   hide_message();
-        								   Ext.getCmp('filtros').up('form').getForm().reset();
+        								   //Ext.getCmp('filtros').up('form').getForm().reset();
         								   //auxnombre = null;
         								   //auxestado = null;
         								   calendarioStore.load();

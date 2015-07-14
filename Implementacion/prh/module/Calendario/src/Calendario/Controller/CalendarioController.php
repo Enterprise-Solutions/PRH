@@ -14,8 +14,12 @@ use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Simple\Repository\DataSource;
 use EnterpriseSolutions\Simple\Service\Service as EsService;
 use EnterpriseSolutions\Db\Dao\Get as GetDao;
+use Doctrine\ORM\EntityManager;
 
 use Calendario\Calendario\Service\Listado\Select as SelectDeCalendarios;
+use Calendario\Calendario\Service\Edicion;
+use Calendario\Calendario\Service\Borrado;
+use Calendario\Calendario\Repository;
 
 class CalendarioController extends BaseController
 {
@@ -25,6 +29,55 @@ class CalendarioController extends BaseController
         $dao = new Dao($select);
         $template = $this->_crearTemplateParaListado();
         return $template($dao,array(),array());
+    }
+
+
+    public function putAction()
+    {
+    	// $dbAdapter 	= $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+
+    	// $em 		= $this->getEntityManager();
+    	// echo "Hasta aca llega\n";
+
+    	// $data 		= $this->SubmitParams()->getParam('put');
+    
+    	// $service 	= new EditarCalendarioService($em, $dbAdapter);
+    	// $service->ejecutar($data);
+    	// $this->getEntityManager()->flush();
+    
+    	// return $this->toJson($service->getRespuesta());
+
+		$adapter 	= $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+		$ds 		= new DataSource($adapter);
+		$repository = new Repository($ds);
+		$edicion 	= new Edicion($repository);
+		$params 	= $this->SubmitParams()->getParam('put');
+		$service 	= function($params) use($edicion){
+			return $edicion->ejecutar($params);
+		};
+		$esService 	= new EsService();
+		$transaccion= $esService->transaccional($service,$ds);
+		$respuesta 	= $transaccion($params);
+
+		return $this->_returnAsJson($respuesta);
+
+    }
+
+    public function deleteAction()
+    {
+        $adapter    = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $ds         = new DataSource($adapter);
+        $repository = new Repository($ds);
+        $borrado    = new Borrado($repository);
+        $params     = $this->SubmitParams()->getParam('delete');
+        $service    = function($params) use($borrado){
+            return $borrado->ejecutar($params);
+        };
+        $esService  = new EsService();
+        $transaccion= $esService->transaccional($service,$ds);
+        $respuesta  = $transaccion($params);
+
+        return $this->_returnAsJson($respuesta);
     }
 
 }
