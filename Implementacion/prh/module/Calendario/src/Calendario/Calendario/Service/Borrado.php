@@ -16,20 +16,27 @@ class Borrado
 	
 	public function ejecutar($params)
 	{
-		$rs 		= $this->_repository->findCalendario($params);
-		if($rs)
+		
+		if($this->_repository->findActividades($params))
 		{
-			$self 		= $this;
-			$borrados 	= array_map(
-							function($datosCalendario) use($self){
-								return $self->borrarCalendario($datosCalendario);
-							}, 
-							$rs
-						);
-
-			return $this->_construirRespuesta($rs);	
+			Thrower::throwValidationException('Error de Validacion', "El año de formación seleccionado no puede borrarse ya que tiene actividades asociadas.");			
+			
 		}else{
-			Thrower::throwValidationException('Error de Validacion', "El año de formación seleccionado no puede borrarse ya que tiene actividades asociadas.");
+			$rs 			= $this->_repository->findCalendario($params);
+			if($rs)
+			{
+				$self 		= $this;
+				$borrados 	= array_map(
+								function($datosCalendario) use($self){
+									return $self->borrarCalendario($datosCalendario);
+								}, 
+								$rs
+							);
+
+				return $this->_construirRespuesta($rs);	
+			}else{
+				Thrower::throwValidationException('Error de Validacion', "No puede eliminarse el año de formación actual");
+			}            
 		}
 			
 		
@@ -42,7 +49,11 @@ class Borrado
 						array_flip(array('cal_anho_formacion_id','org_parte_rol_centro','anho','fecha_inicio','fecha_fin', 'descripcion', 'actual'))
 					);
 
-		return $this->_repository->borrar($calendario, 'cal_anho_formacion', 'cal_anho_formacion_id');
+		try {
+			$this->_repository->borrar($calendario, 'cal_anho_formacion', 'cal_anho_formacion_id');
+		} catch (Exception $e) {
+            Thrower::throwValidationException('Error de Validacion', "El año de formación seleccionado no puede borrarse ya que tiene actividades asociadas.");
+		}
 	}
 	
 	public function _construirRespuesta($rs)

@@ -61,4 +61,16 @@ class Repository extends EsRepository
 		}
 		return $rs;
 	}
+
+	public function findActividades($calAnhoFormacionId)
+	{
+		$dbAdapter 	= $this->_ds->_getDbConnection();
+		$select 	= new SelectDeCalendario($dbAdapter);
+		$select->addSearchByActividad($calAnhoFormacionId);
+		$rs 		= $select->execute()->toArray();
+		if(count($rs) <= 0){
+			return false;
+		}
+		return $rs;
+	}
 }
