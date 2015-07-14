@@ -106,6 +106,7 @@ Ext.onReady(function(){
                            width: 400,  
                            tabIndex: 0,
                            allowBlank: false,
+                           hideTrigger: true,
                            name: 'anho',   
                       },{
 	                        fieldLabel: 'Fecha de Inicio:',
@@ -240,6 +241,7 @@ Ext.onReady(function(){
                            xtype: 'numberfield',
 	           			   fieldLabel: 'A&ntilde;o',
 	           			   value: anho_edit,
+	           			   hideTrigger: true,
                            labelWidth: 130,
                            width: 400,  
                            tabIndex: 0,
@@ -350,7 +352,6 @@ Ext.onReady(function(){
                    text: 'Cancelar',
                    handler: function() {
                        this.up('form').getForm().reset();
-                       this.up('window').destroy();
                        this.up('window').close();
                    }
                }]
