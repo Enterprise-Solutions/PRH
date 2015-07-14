@@ -3,6 +3,7 @@
 namespace Calendario\Calendario\Service;
 
 use Calendario\Calendario\Repository;
+use EnterpriseSolutions\Exceptions\Thrower;
 
 class Borrado
 {
@@ -28,10 +29,7 @@ class Borrado
 
 			return $this->_construirRespuesta($rs);	
 		}else{
-			return array(
-				'status'  => false,
-				'mensaje' => 'El año académico seleccionado no puede ser borrado',
-			);
+			Thrower::throwValidationException('Error de Validacion', "El año de formación seleccionado no puede borrarse ya que tiene actividades asociadas.");
 		}
 			
 		
