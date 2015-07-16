@@ -63,4 +63,10 @@ class Select extends EsSelect
 			 ->join(array('aa' => 'act_actividad'), 'aa.cal_anho_formacion_id = caf.cal_anho_formacion_id')
 			 ->where("aa.cal_anho_formacion_id = $id");
 	}
+
+	public function addSearchByAnho($calAnhoFormacion)
+	{
+		$this->_select
+			 ->where("anho = $calAnhoFormacion");
+	}
 }

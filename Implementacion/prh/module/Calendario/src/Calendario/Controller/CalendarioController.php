@@ -17,6 +17,7 @@ use EnterpriseSolutions\Db\Dao\Get as GetDao;
 use Doctrine\ORM\EntityManager;
 
 use Calendario\Calendario\Service\Listado\Select as SelectDeCalendarios;
+use Calendario\Calendario\Service\Creacion;
 use Calendario\Calendario\Service\Edicion;
 use Calendario\Calendario\Service\Borrado;
 use Calendario\Calendario\Repository;
@@ -25,28 +26,32 @@ class CalendarioController extends BaseController
 {
     public function indexAction()
     {
-        $select = new SelectDeCalendarios($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $dao = new Dao($select);
-        $template = $this->_crearTemplateParaListado();
+        $select     = new SelectDeCalendarios($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao        = new Dao($select);
+        $template   = $this->_crearTemplateParaListado();
+
         return $template($dao,array(),array());
     }
 
+    public function postAction()
+    {
+        $adapter    = $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $ds         = new DataSource($adapter);
+        $repository = new Repository($ds);
+        $creacion   = new Creacion($repository);
+        $params     = $this->SubmitParams()->getParam('post');
+        $service    = function($params) use($creacion){
+            return $creacion->ejecutar($params);
+        };
+        $esService  = new EsService();
+        $transaccion= $esService->transaccional($service,$ds);
+        $respuesta  = $transaccion($params);
+        
+        return $this->_returnAsJson($respuesta);
+    }
 
     public function putAction()
     {
-    	// $dbAdapter 	= $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
-
-    	// $em 		= $this->getEntityManager();
-    	// echo "Hasta aca llega\n";
-
-    	// $data 		= $this->SubmitParams()->getParam('put');
-    
-    	// $service 	= new EditarCalendarioService($em, $dbAdapter);
-    	// $service->ejecutar($data);
-    	// $this->getEntityManager()->flush();
-    
-    	// return $this->toJson($service->getRespuesta());
-
 		$adapter 	= $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
 		$ds 		= new DataSource($adapter);
 		$repository = new Repository($ds);
@@ -60,7 +65,6 @@ class CalendarioController extends BaseController
 		$respuesta 	= $transaccion($params);
 
 		return $this->_returnAsJson($respuesta);
-
     }
 
     public function deleteAction()
