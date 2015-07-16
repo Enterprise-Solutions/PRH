@@ -9,7 +9,8 @@ return array(
         'Stock',
     	'Actividad',
     	'Adm',
-        'Calendario'
+        'Calendario',
+        'Aporte'
     ),
 
     // These are various options for the listeners attached to the ModuleManager
