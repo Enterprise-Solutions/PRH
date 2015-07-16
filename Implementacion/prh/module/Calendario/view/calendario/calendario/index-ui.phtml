@@ -104,7 +104,7 @@ Ext.onReady(function(){
 	           			   fieldLabel: 'A&ntilde;o',
                            labelWidth: 130,
                            width: 400,  
-                           tabIndex: 0,
+                           //tabIndex: 0,
                            allowBlank: false,
                            hideTrigger: true,
                            name: 'anho',   
@@ -113,7 +113,7 @@ Ext.onReady(function(){
 				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
-				 	        tabIndex: 1,
+				 	        //tabIndex: 1,
 				 	        allowBlank: false,
 				 	        //padding: 15,
 				 	        anchor:'90%',
@@ -123,7 +123,7 @@ Ext.onReady(function(){
 				        	labelWidth: 130,
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
-				 	        tabIndex: 2,
+				 	        //tabIndex: 2,
 				 	        allowBlank: false,
 				 	        //padding: 15,
 				 	        anchor:'90%',
@@ -146,14 +146,16 @@ Ext.onReady(function(){
 	           			   fieldLabel: 'Descripci&oacute;n',
                            labelWidth: 130,
                            //width: 400,  
-                           tabIndex: 3,
+                           //tabIndex: 3,
                            name: 'descripcion',   
                       }],
 
                buttons: [{
                    text: 'Crear',
                    handler: function(b,e) {
-                   	var basicForm = b.up('form').getForm();  						
+                   	var basicForm = b.up('form').getForm();
+                   	if(basicForm.isValid())
+					{    						
 			            var valoresForm = basicForm.getFieldValues();
 	
 						Ext.Ajax.request({
@@ -195,7 +197,12 @@ Ext.onReady(function(){
 							       }
 							   }
 						 });
-						 this.up('window').close();
+						 	 this.up('window').destroy();
+						 }
+						 else{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+						}  	
                    }
                },{
                    text: 'Cancelar',
@@ -240,7 +247,7 @@ Ext.onReady(function(){
 	           			   hideTrigger: true,
                            labelWidth: 130,
                            width: 400,  
-                           tabIndex: 0,
+                           //tabIndex: 0,
                            allowBlank: false,
                            name: 'anho_edit',   
                       },{
@@ -249,7 +256,7 @@ Ext.onReady(function(){
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	       	value: fecha_inicio_edit,
-				 	        tabIndex: 1,
+				 	        //tabIndex: 1,
 				 	        allowBlank: false,
 				 	        //padding: 15,
 				 	        anchor:'90%',
@@ -260,7 +267,7 @@ Ext.onReady(function(){
 				 	        xtype: 'datefield',
 				 	       	format: 'd/m/Y',
 				 	       	value: fecha_fin_edit,
-				 	        tabIndex: 2,
+				 	        //tabIndex: 2,
 				 	        allowBlank: false,
 				 	        //padding: 15,
 				 	        anchor:'90%',
@@ -279,30 +286,30 @@ Ext.onReady(function(){
 	           		        store: actualStore,
 	           		        queryMode: 'local',
 	           		        typeAhead: true,
-	           		        listeners:{
-										'render':function(){
-											if (this.value == 'S')
-											{
-												Ext.getCmp('actual_edit').setReadOnly(true);
-											}
-							}
-			}
+	      //      		    listeners:{
+							// 			'render':function(){
+							// 				if (this.value == 'S')
+							// 				{
+							// 					Ext.getCmp('actual_edit').setReadOnly(true);
+							// 				}
+							// }
+							//}
                       },{	
                            xtype: 'textarea',
 	           			   fieldLabel: 'Descripci&oacute;n',
 	           			   value: descripcion_edit,
                            labelWidth: 130,
                            //width: 400,  
-                           tabIndex: 3,
+                           //tabIndex: 3,
                            name: 'descripcion_edit',   
                       }],
                buttons: [{
                    text: 'Guardar',
                    handler: function(b,e) {
-                   	var basicForm = b.up('form').getForm();  						
+                   	var basicForm = b.up('form').getForm();
+                   	if(basicForm.isValid())
+					{  						
 			            var valoresForm = basicForm.getFieldValues();
-						
-							
 						Ext.Ajax.request({
 							   url: baseURL + '/calendario/calendario/put',
 							   success: function(response, opt){
@@ -341,8 +348,13 @@ Ext.onReady(function(){
 										   'actual': valoresForm.actual_edit
 								       }
 							   		}
-						 });
-						 this.up('window').destroy();
+							 });
+							 this.up('window').destroy();
+						 }
+						 else{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+						}  	
                    }
                },{
                    text: 'Cancelar',
