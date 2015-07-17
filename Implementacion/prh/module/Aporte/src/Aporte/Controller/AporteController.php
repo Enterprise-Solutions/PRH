@@ -16,12 +16,10 @@ use EnterpriseSolutions\Simple\Service\Service as EsService;
 use EnterpriseSolutions\Db\Dao\Get as DaoGet;
 use Doctrine\ORM\EntityManager;
 
-use Aporte\Aporte\Service\Listado\Select as SelectDeAportes;
+use Aporte\Aporte\Service\Listado\Select as SelectPartes;
+use Aporte\Aporte\Service\Listado\SelectAportes;
 use Aporte\Aporte\Service\Get\GetPersona;
-use Aporte\Aporte\Service\Get\GetRol;
-use Aporte\Aporte\Service\Get\GetAportes;
 use Aporte\Aporte\Service\Get\Dao as GetDao;
-use Aporte\Aporte\Service\Get\DaoAportes;
 use Aporte\Aporte\Service\Creacion;
 use Aporte\Aporte\Service\Edicion;
 use Aporte\Aporte\Service\Borrado;
@@ -31,7 +29,7 @@ class AporteController extends BaseController
 {
     public function indexAction()
     {
-        $select     = new SelectDeAportes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $select     = new SelectPartes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao        = new Dao($select);
         $template   = $this->_crearTemplateParaListado();
 
@@ -47,11 +45,13 @@ class AporteController extends BaseController
         return $template($dao, array());
     }
 
-    public function getAportesAction()
+    public function listAportesAction()
     {
-        $aportes    = new GetAportes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
-        $dao        = new DaoAportes($aportes);
-        $template   = $this->_crearTemplateParaGet();
+        $aportes    = new SelectAportes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $params     = $this->SubmitParams()->getParam('id');
+        $aportes->addSearchById($params);
+        $dao        = new Dao($aportes);
+        $template   = $this->_crearTemplateParaListado();
 
         return $template($dao, array());
     }
