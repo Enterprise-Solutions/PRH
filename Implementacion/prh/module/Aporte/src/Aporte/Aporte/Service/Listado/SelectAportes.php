@@ -35,7 +35,7 @@ class SelectAportes extends DbSelect
                )                            
              ->join(
                 array('rs' => 'org_parte_rol_socio'), 
-                'opr.org_parte_rol_id = rs.org_parte_rol_id',
+                'apd.org_parte_rol_socio_id = rs.org_parte_rol_socio_id',
                 array(),
                 ZFSelect::JOIN_LEFT
                )   
