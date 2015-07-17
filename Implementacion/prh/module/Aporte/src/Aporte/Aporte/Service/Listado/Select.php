@@ -16,8 +16,16 @@ class Select extends EsSelect
              ->join(
              	array('od' => 'org_documento'), 
              	'od.org_parte_id = op.org_parte_id',
-             	array('documento' => new Expression("od.valor||'/'||od.org_documento_tipo_codigo")));
+             	array('documento' => new Expression("od.valor||'/'||od.org_documento_tipo_codigo")))
+             ->order('org_parte_id');
             
 	}
 
+	public function addSearchById ($parteId)
+	{
+        if ($id) {
+            $this->_select
+                 ->where("op.org_parte_id = $parteId");
+        }
+	}
 }

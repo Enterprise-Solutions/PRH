@@ -13,10 +13,12 @@ use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Dao;
 use EnterpriseSolutions\Simple\Repository\DataSource;
 use EnterpriseSolutions\Simple\Service\Service as EsService;
-use EnterpriseSolutions\Db\Dao\Get as GetDao;
+use EnterpriseSolutions\Db\Dao\Get as DaoGet;
 use Doctrine\ORM\EntityManager;
 
 use Aporte\Aporte\Service\Listado\Select as SelectDeAportes;
+use Aporte\Aporte\Service\Get\GetPersona;
+use Aporte\Aporte\Service\Get\Dao as GetDao;
 use Aporte\Aporte\Service\Creacion;
 use Aporte\Aporte\Service\Edicion;
 use Aporte\Aporte\Service\Borrado;
@@ -31,6 +33,15 @@ class AporteController extends BaseController
         $template   = $this->_crearTemplateParaListado();
 
         return $template($dao,array(),array());
+    }
+
+    public function getPersonaAction()
+    {
+        $persona    = new GetPersona($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao        = new GetDao($persona);
+        $template   = $this->_crearTemplateParaGet();
+
+        return $template($dao, array());
     }
 
     public function postAction()
