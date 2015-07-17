@@ -220,24 +220,27 @@ Ext.onReady(function(){
                 text: "Nombre",
                 dataIndex: 'persona',
                 align: 'left',
-                flex: 2,
+                flex: 1,
+                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
+                    return '<a href="'+baseURL+'/aporte/aporte/editar-ui#?id=' + metadata.record.data.org_parte_id +'">'+ val +'</a>';
+            	}
             },{
                 text: "Documento",
                 dataIndex: 'documento',
                 align: 'center',
-                flex: 1,
-            },{
-                xtype:'actioncolumn',
-                width:35,
-                align: 'center',
-                items: [{
-                    icon: baseURL+'/img/icons/grid/edit.png',  
-                    //tooltip: 'Edit',
-                handler: function(grid, rowIndex, colIndex) {
-                   		var url = baseURL+'/aporte/aporte/editar-ui#?id='+personasStore.getAt(rowIndex).get('org_parte_id');  
-                   		window.location = url;                     
-                    }
-                }]
+                flex: 1
+            // },{
+            //     xtype:'actioncolumn',
+            //     width:35,
+            //     align: 'center',
+            //     items: [{
+            //         icon: baseURL+'/img/icons/grid/edit.png',  
+            //         //tooltip: 'Edit',
+            //     handler: function(grid, rowIndex, colIndex) {
+            //        		var url = baseURL+'/aporte/aporte/editar-ui#?id='+personasStore.getAt(rowIndex).get('org_parte_id');  
+            //        		window.location = url;                     
+            //         }
+            //     }]
             }  
             ]
             	        	
