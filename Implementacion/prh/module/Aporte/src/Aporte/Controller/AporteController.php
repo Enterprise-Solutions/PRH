@@ -18,7 +18,10 @@ use Doctrine\ORM\EntityManager;
 
 use Aporte\Aporte\Service\Listado\Select as SelectDeAportes;
 use Aporte\Aporte\Service\Get\GetPersona;
+use Aporte\Aporte\Service\Get\GetRol;
+use Aporte\Aporte\Service\Get\GetAportes;
 use Aporte\Aporte\Service\Get\Dao as GetDao;
+use Aporte\Aporte\Service\Get\DaoAportes;
 use Aporte\Aporte\Service\Creacion;
 use Aporte\Aporte\Service\Edicion;
 use Aporte\Aporte\Service\Borrado;
@@ -39,6 +42,15 @@ class AporteController extends BaseController
     {
         $persona    = new GetPersona($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao        = new GetDao($persona);
+        $template   = $this->_crearTemplateParaGet();
+
+        return $template($dao, array());
+    }
+
+    public function getAportesAction()
+    {
+        $aportes    = new GetAportes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao        = new DaoAportes($aportes);
         $template   = $this->_crearTemplateParaGet();
 
         return $template($dao, array());

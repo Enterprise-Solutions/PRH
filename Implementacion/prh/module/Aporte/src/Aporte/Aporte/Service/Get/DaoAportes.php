@@ -4,19 +4,19 @@ namespace Aporte\Aporte\Service\Get;
 
 use EnterpriseSolutions\Db\Dao\Get as GetDao;
 
-class Dao extends GetDao
+class DaoAportes extends GetDao
 {
 	public function _consultarDs()
 	{
 		$record = current($this->_select->execute()->toArray());
-		
-		if(!$record['roles']){
-			$roles = array();
+
+		if(!$record['detalles']){
+			$detalles = array();
 		}else{
-			$roles = explode(';*', $record['roles']);
+			$detalles = explode(';*', $record['detalles']);
 		}
 
-		$roles = array_map(
+		$detalles = array_map(
 				function($documentoString){
 					$keyValueTokens = explode(",!",$documentoString);
 					$documento = array();
@@ -24,13 +24,13 @@ class Dao extends GetDao
 						//$tokens = explode(':', $keyValueToken);
 						list($key,$value) = explode(':', $token);
 						//$documento[$key] = ($key == 'org_documento_id')?(integer)$value:$value;
-						$documento[$key] = (in_array($key, array('org_parte_rol_id')))?(integer)$value:$value;
+						$documento[$key] = (in_array($key, array('ap_aporte_detalle_id')))?(integer)$value:$value;
 					}
 					return $documento;
 				},
-				$roles);
-		$record['roles'] = $roles;
-		
+				$detalles);
+		$record['detalles'] = $detalles;
+
 		return $record;
 		
 	} 
