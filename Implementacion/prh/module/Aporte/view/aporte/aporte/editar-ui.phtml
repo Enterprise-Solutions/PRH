@@ -90,7 +90,7 @@ Ext.onReady(function(){
 		    	for (campo in campos) {
 		    	    if (campo == "org_parte_id"){
                             aux_org_parte_id  = campos[campo];
-                            aportesStore.load();
+                            aportesStore.load({params: {'id':aux_org_parte_id, 'p[limit]':'all'}});
                     }else if(campo == "roles"){
                     	var roles = campos[campo];              
                     	for (rol in roles) {
