@@ -60,23 +60,112 @@ Ext.onReady(function(){
             ]
        });
 
+       Ext.define('aporteTipo', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'ap_aporte_tipo_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				}
+			]
+		});
+
+       Ext.define('moneda', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'cont_moneda_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				}
+			]
+		});
+
+       Ext.define('roles', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'org_parte_rol_socio_id'
+				},{
+					type: 'string',
+					name: 'nombre'
+				}
+			]
+		});
+
                                         
         var aportesStore = Ext.create('Ext.data.Store', {
                 model: 'aportes',
+                pageSize: itemsPorPagina, 
                 proxy: {
                         type: 'ajax',
-                        extraParams: {'id':aux_org_parte_id, 'p[limit]':'all'},
+      //                   extraParams:{
+      //                   "id": aux_org_parte_id,
+				  //   	"p[limit]": itemsPorPagina,
+						// "p[page]":  page
+				  // 		},
                         headers: {'Accept':'application/json'},
                         url: baseURL + '/aporte/aporte/list-aportes',
                         reader: {
                                 type: 'json',
-                                root: 'records'
+                                root: 'records',
+                                totalProperty: 'numResults'
                         }
                 }
                 //autoLoad: true
         });
 
-		
+		var aporteTipoStore = Ext.create('Ext.data.Store', {
+			model: 'aporteTipo',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/aporte/combos/aportes-tipos',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var monedaStore = Ext.create('Ext.data.Store', {
+			model: 'moneda',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/aporte/combos/moneda-tipos',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: true
+		});
+
+		var rolesStore = Ext.create('Ext.data.Store', {
+			model: 'roles',
+			proxy: {
+				type: 'ajax',
+				extraParams: {'p[limit]':'all'},
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/aporte/combos/roles-tipos',
+				reader: {
+					type: 'json',
+					root: 'records'
+				}
+			},
+			autoLoad: false
+		});
+
 		var cargarDatos = function (){
 			Ext.Ajax.request({
 			   	url: baseURL +'/aporte/aporte/getpersona',
@@ -90,7 +179,15 @@ Ext.onReady(function(){
 		    	for (campo in campos) {
 		    	    if (campo == "org_parte_id"){
                             aux_org_parte_id  = campos[campo];
-                            aportesStore.load({params: {'id':aux_org_parte_id, 'p[limit]':'all'}});
+                            aportesStore.load(
+                            	{params: {  "id": aux_org_parte_id, 
+                            				"p[limit]": itemsPorPagina,
+                            				"p[page]":  page,
+                            			  }});
+                            rolesStore.load(
+                            	{params: {  "id": aux_org_parte_id, 
+                            				"p[limit]": 'all'
+                            			  }});
                     }else if(campo == "roles"){
                     	var roles = campos[campo];              
                     	for (rol in roles) {
@@ -117,7 +214,163 @@ Ext.onReady(function(){
 			});
 		};
 
-				
+		
+	function agregarwindow() {
+			 
+           var form = Ext.widget('form', {
+               layout: {
+                   type: 'vbox',
+                   align: 'stretch'
+               },
+               border: false,
+               bodyPadding: 10,
+
+               fieldDefaults: {
+                   labelAlign: 'left',
+                   labelWidth: 100,
+                   labelStyle: 'font-weight:bold'
+               },
+               items: [{	
+                           xtype: 'numberfield',
+	           			   fieldLabel: 'Monto',
+                           labelWidth: 130,
+                           width: 400,  
+                           //tabIndex: 0,
+                           allowBlank: false,
+                           hideTrigger: true,
+                           name: 'monto',   
+                      },{
+	                        xtype: 'combobox',
+			    		    fieldLabel: 'Moneda',
+					        labelWidth: 130,
+					        width: 400,
+					        anchor:'90%',
+					        forceSelection: true,
+					        store: monedaStore,
+					        displayField: 'nombre',
+					        valueField: 'cont_moneda_id',
+				 	        name: 'moneda',
+                      },{
+                      		xtype: 'combobox',
+	                       	fieldLabel: 'Tipo de Aporte',
+	           		        displayField: 'nombre',
+	           		        valueField: 'ap_aporte_id',
+	           		     	forceSelection: true,
+	           		        width: 400,
+	           		        labelWidth: 130,
+	           		        store: aporteTipoStore,
+	           		        typeAhead: true,
+	           		        name: 'aporte_tipo'
+                      },{
+                      		xtype: 'combobox',
+	                       	fieldLabel: 'Tipo de Socio',
+	           		        displayField: 'nombre',
+	           		        valueField: 'org_parte_rol_socio_id',
+	           		     	forceSelection: true,
+	           		        width: 400,
+	           		        labelWidth: 130,
+	           		        store: rolesStore,
+	           		        typeAhead: true,
+	           		        name: 'rol_socio'
+                      },{
+	                        fieldLabel: 'Fecha',
+				        	labelWidth: 130,
+				 	        xtype: 'datefield',
+				 	       	format: 'd/m/Y',
+				 	        //tabIndex: 2,
+				 	        allowBlank: false,
+				 	        //padding: 15,
+				 	        anchor:'90%',
+				 	        name: 'fecha'
+                      },{	
+                           xtype: 'textarea',
+	           			   fieldLabel: 'Descripci&oacute;n',
+                           labelWidth: 130,
+                           //width: 400,  
+                           //tabIndex: 3,
+                           name: 'descripcion',   
+                      }],
+
+               buttons: [{
+                   text: 'Crear',
+                   handler: function(b,e) {
+                   	var basicForm = b.up('form').getForm();
+                   	if(basicForm.isValid())
+					{    						
+			            var valoresForm = basicForm.getFieldValues();
+	
+						Ext.Ajax.request({
+							   url: baseURL + '/aporte/aporte/post',
+							   success: function(response, opt){
+								   Ext.Msg.show({
+									    title:'Aviso',
+										msg:'Aporte Creado Correctamente',
+										closable: false,
+										width: 250
+								   });
+								   function hide_message() {
+								       Ext.defer(function() {
+								           Ext.MessageBox.hide();
+								       }, delay);
+								   }
+								   hide_message();
+								   //Ext.getCmp('filtros').up('form').getForm().reset();
+								   calendarioStore.load();
+							   },
+							   failure: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+											Ext.MessageBox.show({
+					                            title: aux_mensaje.status,
+					                            msg: aux_mensaje.datos,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+								},
+							   jsonData:{
+							       'post':{
+									   'ap_aporte_detalle_id': 'new',
+									   'ap_aporte_id': 'new',
+									   'org_parte_rol_cargador_id': aux_org_parte_id,
+							    	   'cont_ejercicio_fiscal_id': '1',
+							    	   'monto': valoresForm.monto,
+							    	   'aporte_total': valoresForm.monto,
+							    	   'cont_moneda_id': valoresForm.moneda,
+							    	   'org_parte_rol_socio_id': valoresForm.rol_socio,
+							    	   'ap_aporte_tipo_id': valoresForm.aporte_tipo,
+							    	   'fecha': (formatearFecha(valoresForm.fecha, 1)),
+							    	   'descripcion': valoresForm.descripcion
+							       }
+							   }
+						 });
+						 	 this.up('window').destroy();
+						 }
+						 else{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+						}  	
+                   }
+               },{
+                   text: 'Cancelar',
+                   handler: function() {
+                       this.up('form').getForm().reset();
+                       this.up('window').close();
+                   }
+               }]
+           });
+
+           win = Ext.widget('window', {
+               title: 'Crear Aporte',
+               closeAction: 'destroy',
+               width: 400,
+               //height: 350,
+               layout: 'fit',
+               resizable: true,
+               modal: true,
+               items: form
+           }); 
+      	 win.show();
+   	}  
+
 				// var buttonEditar = function(b,e)
 				// {
 				// 				var basicForm = b.up('form').getForm();
@@ -377,114 +630,101 @@ Ext.onReady(function(){
 	  //      	 win.show();
 	  //   	}
 			
-			// var agregarParticipante = Ext.create('Ext.form.Panel', {
-			// 	 type:  'hbox',
-			// 	 padding: '10 10 10 10',
-			// 	 collapsible: true,
-			// 	 name: 'agregarParticipante',
-			// 	 title:'Agregar Participantes',
-			// 	    width: 'fit',	
-			// 	    height: 'fit',			           
-			// 	    items:[
-			// 			{
-			// 			    xtype: 'container',
-			// 			    id: 'filtros2',
-			// 			    height: 45,
-			// 			    layout:'hbox',
-			// 			    items:[{   	
-			// 					    	fieldLabel: 'Nombre',
-			// 					    	xtype: 'combobox',
-			// 					    	forceSelection: true,
-			// 					        labelWidth: 90,
-			// 					        store: posiblesParticipantesStore,
-			// 					        displayField: 'mostrar',
-			// 					        valueField: 'org_parte_id',
-			// 					        width: 300,
-			// 					        tabIndex: 1,
-			// 					        padding: '10 0 5 15',
-			// 				 	        anchor:'90%',
-			// 					    	name: 'auxparticipante',
-			// 					    	queryMode: 'remote',							        
-			// 					        typeAhead: true,								        
-			// 					        loadingText: 'Buscando...',
-			// 					        hideTrigger: true,
-			// 					        queryParam: 's[parte]',
-			// 					        minChars: 1,          
-			// 			    	  },{
-			// 			    		  	fieldLabel: 'Monto Pagado',
-			// 					    	labelWidth: 110,
-			// 					    	xtype: 'numberfield',
-			// 					    	minValue: 0,
-			// 					    	width: 300,
-			// 					    	tabIndex: 2,
-			// 					    	hideTrigger: true,
-			// 					    	anchor:'90%',
-			// 					    	padding: '10 0 5 15',
-			// 					    	name: 'monto', 
-			// 			    	  },{ 
-			//                              xtype: 'tbfill' 
-			//                       },{					
-			// 			           		xtype: 'button',
-			// 			           		width: 100,
-			// 			           		margin: '10 20 0 20',
-			// 			            	text: 'Agregar',
-			// 				            scale   : 'small',
-			// 				            handler: function(b,e) {
-							            	
-			// 						           var basicForm = b.up('form').getForm();						
-			// 						           var valoresForm = basicForm.getFieldValues();
-		
-			// 									var nuevoParticipante = valoresForm.auxparticipante;
-			// 									var monto = valoresForm.monto;
-			// 									var moneda = Ext.getCmp('cont_moneda_id').getValue();
-												
-			// 									Ext.Ajax.request({
-			//  	        							   url: baseURL + '/actividad/actividad/set-participante',
-			//  	        							   success: function(response, opt){
-			//  	        								  Ext.getCmp('filtros2').up('form').getForm().reset();
-			// 								                participantesStore.load();
-			// 								                posiblesFormadoresStore.load();
-			// 		        								posiblesParticipantesStore.load();
-			//  	        								   Ext.Msg.show({
-			//  	        									    title:'Aviso',
-			//  	        										msg:'Participante Asignado a la Actividad',
-			//  	        										closable: false,
-			//  	        										width: 250
-			//  	        								   });
-			//  	        								   function hide_message() {
-			//  	        								       Ext.defer(function() {
-			//  	        								           Ext.MessageBox.hide();
-			//  	        								       }, delay);
-			//  	        								   }
-			//  	        								  hide_message();
-			//  	        							   },
-			//  	        							   jsonData:{
-			//  	        								   'post':{		 	        							       
-			//  	        							    	    'act_actividad_id': aux,
-			//  													'org_parte_id': nuevoParticipante,
-			//  													'monto_participante': monto,
-			//  													'cont_moneda_id': moneda
-			//  	        								   }			 	        							       
-			//  	        							   }
-			//  	        						 });
-			// 					            }  									        
-			// 						}
-			// 				   ]
-			// 				}
-			// 		  ]
-			// });
 			
 			var gridAportes = Ext.create('Ext.grid.Panel', {
 	            width: 'fit',
 	            padding: '10 10 0 10',
-	            height: 335,
-	            title: 'Aportes',
+	            height: 372,
 	            region: 'center',              
 	            layout: 'fit',
 	            emptyText: "No existen aportes registrados para esta persona",        
 	            store: aportesStore,
 	            loadMask: true,
-	            // grid columns
+	           	dockedItems: [
+	                {     
+		          	    xtype: 'toolbar',
+                        dock: 'top',
+                        items: [
+                        { 
+                            xtype: 'tbfill' 
+                        },{
+                       	xtype: 'button',	
+    			            text: 'Crear Aporte',
+    		             	handler: agregarwindow,
+                        }]
+	                },
+	                {
+                    xtype: 'pagingtoolbar',
+                    store: aportesStore, 
+                    dock: 'bottom',
+                    displayInfo: true,
+                    listeners: {
+                        'afterrender': function (component)
+                        {
+                            component.down('#refresh').hide()
+                        },single: true
+                    },
+                    displayMsg: 'Registro {0} al {1} de {2}',
+                    beforePageText: 'P&aacute;gina',
+                    afterPageText : 'de {0}',
+                    moveNext : function(){ 
+                   		page = page + itemsPorPagina;
+                   	 	this.store.currentPage++;
+           				aportesStore.load({
+	       				    params:{
+	       				    	"p[limit]": itemsPorPagina,
+	       						"p[page]": page, 
+//	       						"s[nombre]": auxnombre,
+//								"s[estado]": auxestado     
+	       				    }
+       					});
+                	 },
+                 	 movePrevious : function(){ 
+                 		page = page - itemsPorPagina;
+						this.store.currentPage--;
+						aportesStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page, 
+//		   						"s[nombre]": auxnombre,
+//								"s[estado]": auxestado	        
+		   				    }
+   						});
+            		 },
+             		moveFirst : function(){ 
+             			page = 0;
+						this.store.currentPage = 1;
+						aportesStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page, 
+//		   						"s[nombre]": auxnombre,
+//								"s[estado]": auxestado	        
+		   				    }
+   						});
+            	 	},
+            	 	moveLast : function(){                 	 	
+            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+            	 		}
+						else
+						{
+							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+						}
+            	 		aportesStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+//		   						"s[nombre]": auxnombre,
+//								"s[estado]": auxestado		        
+		   				    }
+   						});       					
+            	 	},
+                }
+	                ],  
+
 	            columns:[{
 			                text: "Fecha",
 			                dataIndex: 'fecha',
