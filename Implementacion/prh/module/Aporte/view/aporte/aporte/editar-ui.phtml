@@ -155,7 +155,8 @@ Ext.onReady(function(){
 			model: 'roles',
 			proxy: {
 				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
+				extraParams: {'p[limit]':'all',
+							  'id': aux_org_parte_id},
 				headers: {'Accept':'application/json'},
 				url: baseURL + '/aporte/combos/roles-tipos',
 				reader: {
@@ -246,6 +247,7 @@ Ext.onReady(function(){
 					        width: 400,
 					        anchor:'90%',
 					        forceSelection: true,
+					        allowBlank: false,
 					        store: monedaStore,
 					        displayField: 'nombre',
 					        valueField: 'cont_moneda_id',
@@ -254,7 +256,8 @@ Ext.onReady(function(){
                       		xtype: 'combobox',
 	                       	fieldLabel: 'Tipo de Aporte',
 	           		        displayField: 'nombre',
-	           		        valueField: 'ap_aporte_id',
+	           		        valueField: 'ap_aporte_tipo_id',
+	           		        allowBlank: false,
 	           		     	forceSelection: true,
 	           		        width: 400,
 	           		        labelWidth: 130,
@@ -267,6 +270,7 @@ Ext.onReady(function(){
 	           		        displayField: 'nombre',
 	           		        valueField: 'org_parte_rol_socio_id',
 	           		     	forceSelection: true,
+	           		     	allowBlank: false,
 	           		        width: 400,
 	           		        labelWidth: 130,
 	           		        store: rolesStore,
@@ -325,20 +329,25 @@ Ext.onReady(function(){
 					                            icon: Ext.MessageBox.ERROR,
 					                            buttons: Ext.Msg.OK
 					                        });
-								},
+								},								
 							   jsonData:{
 							       'post':{
-									   'ap_aporte_detalle_id': 'new',
-									   'ap_aporte_id': 'new',
-									   'org_parte_rol_cargador_id': aux_org_parte_id,
-							    	   'cont_ejercicio_fiscal_id': '1',
-							    	   'monto': valoresForm.monto,
-							    	   'aporte_total': valoresForm.monto,
-							    	   'cont_moneda_id': valoresForm.moneda,
-							    	   'org_parte_rol_socio_id': valoresForm.rol_socio,
-							    	   'ap_aporte_tipo_id': valoresForm.aporte_tipo,
-							    	   'fecha': (formatearFecha(valoresForm.fecha, 1)),
-							    	   'descripcion': valoresForm.descripcion
+							       		'Aporte':{											   
+											   'ap_aporte_id': 'new',											   
+									    	   'cont_ejercicio_fiscal_id': '1',							    	   
+									    	   'aporte_total': valoresForm.monto						    	   
+									    },
+									    'Detalle':{
+									    		'ap_aporte_detalle_id': 'new',
+									    		'org_parte_rol_cargador_id': aux_org_parte_id,
+									    		'monto': valoresForm.monto,
+									    		'cont_moneda_id': valoresForm.moneda,
+									    		'org_parte_rol_socio_id': valoresForm.rol_socio,
+									    	    'ap_aporte_tipo_id': valoresForm.aporte_tipo,
+									    	    'fecha': (formatearFecha(valoresForm.fecha, 1)),
+									    	    'descripcion': valoresForm.descripcion
+
+									    }
 							       }
 							   }
 						 });
