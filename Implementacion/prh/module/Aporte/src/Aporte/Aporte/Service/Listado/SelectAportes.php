@@ -24,13 +24,13 @@ class SelectAportes extends DbSelect
              ->join(
                 array('apt' => 'ap_aporte_tipo'), 
                 'apd.ap_aporte_tipo_id = apt.ap_aporte_tipo_id',
-                array('tipo' => 'nombre'),
+                array('tipo' => 'nombre', 'ap_aporte_tipo_id'),
                 ZFSelect::JOIN_LEFT
                )
              ->join(
                 array('cm' => 'cont_moneda'), 
                 'apd.cont_moneda_id = cm.cont_moneda_id',
-                array('moneda' => 'simbolo'),
+                array('moneda' => 'simbolo', 'cont_moneda_id'),
                 ZFSelect::JOIN_LEFT
                )             
              ->join(
@@ -42,7 +42,7 @@ class SelectAportes extends DbSelect
              ->join(
                 array('rs' => 'org_parte_rol_socio'), 
                 'apd.org_parte_rol_socio_id = rs.org_parte_rol_socio_id',
-                array(),
+                array('org_parte_rol_socio_id'),
                 ZFSelect::JOIN_LEFT
                )   
              ->join(
@@ -61,4 +61,11 @@ class SelectAportes extends DbSelect
         }
     }
 
+    public function addSearchByAporteId($id = null)
+    {
+        if ($id) {
+            $this->_select
+                 ->where("ap.ap_aporte_id = $id");
+        }
+    }
 }
