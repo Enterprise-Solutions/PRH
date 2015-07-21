@@ -37,5 +37,17 @@ class CombosController extends BaseController
         $template  = $this->_crearTemplateParaListado();
 
         return $template($dao);    
-    }    
+    }   
+
+    public function monedaTiposAction()
+    {
+        $select    	= new Select($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $select->_select
+        	   ->from('cont_moneda')
+        	   ->columns(array('cont_moneda_id', 'nombre'));
+        $dao       	= new Dao($select);
+        $template 	= $this->_crearTemplateParaListado();
+
+        return $template($dao);      	
+    }
 }
