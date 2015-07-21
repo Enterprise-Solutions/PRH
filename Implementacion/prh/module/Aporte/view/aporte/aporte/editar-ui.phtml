@@ -105,11 +105,6 @@ Ext.onReady(function(){
                 pageSize: itemsPorPagina, 
                 proxy: {
                         type: 'ajax',
-      //                   extraParams:{
-      //                   "id": aux_org_parte_id,
-				  //   	"p[limit]": itemsPorPagina,
-						// "p[page]":  page
-				  // 		},
                         headers: {'Accept':'application/json'},
                         url: baseURL + '/aporte/aporte/list-aportes',
                         reader: {
@@ -140,7 +135,6 @@ Ext.onReady(function(){
 			model: 'moneda',
 			proxy: {
 				type: 'ajax',
-				extraParams: {'p[limit]':'all'},
 				headers: {'Accept':'application/json'},
 				url: baseURL + '/aporte/combos/moneda-tipos',
 				reader: {
@@ -155,8 +149,8 @@ Ext.onReady(function(){
 			model: 'roles',
 			proxy: {
 				type: 'ajax',
-				extraParams: {'p[limit]':'all',
-							  'id': aux_org_parte_id},
+				// extraParams: {'p[limit]':'all',
+				// 			  'id': aux_org_parte_id},
 				headers: {'Accept':'application/json'},
 				url: baseURL + '/aporte/combos/roles-tipos',
 				reader: {
@@ -185,10 +179,14 @@ Ext.onReady(function(){
                             				"p[limit]": itemsPorPagina,
                             				"p[page]":  page,
                             			  }});
-                            rolesStore.load(
-                            	{params: {  "id": aux_org_parte_id, 
-                            				"p[limit]": 'all'
-                            			  }});
+
+							Ext.apply(rolesStore.getProxy().extraParams, {
+							    "id": aux_org_parte_id, 
+                   				"p[limit]": 'all'
+							});
+
+                            rolesStore.load();
+
                     }else if(campo == "roles"){
                     	var roles = campos[campo];              
                     	for (rol in roles) {
@@ -245,6 +243,7 @@ Ext.onReady(function(){
 			    		    fieldLabel: 'Moneda',
 					        labelWidth: 130,
 					        width: 400,
+					        queryMode: 'local',
 					        anchor:'90%',
 					        forceSelection: true,
 					        allowBlank: false,
@@ -258,11 +257,12 @@ Ext.onReady(function(){
 	           		        displayField: 'nombre',
 	           		        valueField: 'ap_aporte_tipo_id',
 	           		        allowBlank: false,
+	           		        queryMode: 'local',
 	           		     	forceSelection: true,
 	           		        width: 400,
 	           		        labelWidth: 130,
 	           		        store: aporteTipoStore,
-	           		        typeAhead: true,
+	           		        //typeAhead: true,
 	           		        name: 'aporte_tipo'
                       },{
                       		xtype: 'combobox',
@@ -274,7 +274,7 @@ Ext.onReady(function(){
 	           		        width: 400,
 	           		        labelWidth: 130,
 	           		        store: rolesStore,
-	           		        typeAhead: true,
+	           		        //typeAhead: true,
 	           		        name: 'rol_socio'
                       },{
 	                        fieldLabel: 'Fecha',
@@ -319,7 +319,7 @@ Ext.onReady(function(){
 								   }
 								   hide_message();
 								   //Ext.getCmp('filtros').up('form').getForm().reset();
-								   calendarioStore.load();
+								   aportesStore.load();
 							   },
 							   failure: function(response, opt){
 										   var aux_mensaje = Ext.decode(response.responseText);
