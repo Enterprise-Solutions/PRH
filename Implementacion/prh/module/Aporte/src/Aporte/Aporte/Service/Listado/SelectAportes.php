@@ -14,11 +14,11 @@ class SelectAportes extends DbSelect
         $_s = ",!";
         $this->_select
              ->from(array('apd' => 'ap_aporte_detalle'))
-             ->columns(array('ap_aporte_detalle_id', 'monto', 'fecha'))
+             ->columns(array('ap_aporte_detalle_id', 'monto', 'fecha', 'descripcion'))
              ->join(
-                array('cm' => 'cont_moneda'), 
-                'apd.cont_moneda_id = cm.cont_moneda_id',
-                array('moneda' => 'simbolo'),
+                array('ap' => 'ap_aporte'), 
+                'apd.ap_aporte_id = ap.ap_aporte_id',
+                array('ap_aporte_id'),
                 ZFSelect::JOIN_LEFT
                )
              ->join(
@@ -27,6 +27,12 @@ class SelectAportes extends DbSelect
                 array('tipo' => 'nombre'),
                 ZFSelect::JOIN_LEFT
                )
+             ->join(
+                array('cm' => 'cont_moneda'), 
+                'apd.cont_moneda_id = cm.cont_moneda_id',
+                array('moneda' => 'simbolo'),
+                ZFSelect::JOIN_LEFT
+               )             
              ->join(
                 array('opr' => 'org_parte_rol'), 
                 'apd.org_parte_rol_cargador_id = opr.org_parte_rol_id',
@@ -54,4 +60,5 @@ class SelectAportes extends DbSelect
                  ->where("apd.org_parte_rol_cargador_id = $id");
         }
     }
+
 }

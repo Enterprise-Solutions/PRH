@@ -4,8 +4,7 @@ namespace Calendario\Calendario;
 
 use Zend\Db\Adapter\Adapter;
 use EnterpriseSolutions\Simple\Repository\Repository as EsRepository;
-// use Adm\Usuario\Repository\FindDatosDePersonaParaCrearUsuario as SelectDatosParaCrearUsuario;
-// use Adm\Usuario\Repository\SelectRequisitosDePassword;
+
 use Calendario\Calendario\Service\Listado\Select as SelectDeCalendario;
 
 class Repository extends EsRepository
