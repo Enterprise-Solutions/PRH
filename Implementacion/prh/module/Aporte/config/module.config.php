@@ -4,6 +4,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Aporte\Controller\Aporte' => 'Aporte\Controller\AporteController',
+            'Aporte\Controller\Combos' => 'Aporte\Controller\CombosController',
         ),
     ),
     'router' => array(
