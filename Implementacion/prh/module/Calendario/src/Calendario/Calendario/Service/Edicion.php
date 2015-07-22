@@ -3,9 +3,9 @@
 namespace Calendario\Calendario\Service;
 
 use EnterpriseSolutions\Simple\Cambios\Cambios;
-use EnterpriseSolutions\Exceptions\Thrower;
-
 use Calendario\Calendario\Repository;
+use EnterpriseSolutions\Exceptions\Thrower;
+//use Adm\Usuario\Service\Creacion\Validacion;
 
 class Edicion
 {
@@ -18,7 +18,10 @@ class Edicion
 	
 	public function ejecutar($params)
 	{
-		
+		/*
+		 * Validar los datos enviados
+		 * Si fue enviada la contrasenha incluir en cambios
+		 * */
 		$calAnhoFormacion 	= $this->_repository->getCalAnhoFormacion($params['cal_anho_formacion_id']);
 
 		$cambiosCalendario 	= $this->_editarCalendario($calAnhoFormacion, $params, $this->_repository);

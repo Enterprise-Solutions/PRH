@@ -68,4 +68,12 @@ class SelectAportes extends DbSelect
                  ->where("ap.ap_aporte_id = $id");
         }
     }
+
+    public function addSearchByDetalleId($id = null)
+    {
+        if ($id) {
+            $this->_select
+                 ->where("apd.ap_aporte_detalle_id = $id");
+        }
+    }    
 }
