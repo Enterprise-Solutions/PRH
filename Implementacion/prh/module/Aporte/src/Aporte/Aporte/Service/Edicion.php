@@ -48,11 +48,11 @@ class Edicion
 	{
 	    $cambios 		= new Cambios();
 		$cambiosEnviados= $cambios->mapearComoCambios($params,array('monto',
-																	    	    'fecha',
-																	    	    'descripcion',
-																	    	    'ap_aporte_tipo_id',
-																	    		'cont_moneda_id',
-																	    		'org_parte_rol_socio_id'));
+														    	    'fecha',
+														    	    'descripcion',
+														    	    'ap_aporte_tipo_id',
+														    		'cont_moneda_id',
+														    		'org_parte_rol_socio_id'));
 		$cambiosDetalle = $cambios->cambiar($detalle, $cambiosEnviados);
 
 		return $repository->persistirCambiosADatos($cambiosDetalle, $detalle, 'ap_aporte_detalle', 'ap_aporte_detalle_id');

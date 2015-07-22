@@ -485,7 +485,7 @@ Ext.onReady(function(){
 					{  						
 			            var valoresForm = basicForm.getFieldValues();
 						Ext.Ajax.request({
-							   url: baseURL + '/aportes/aportes/put',
+							   url: baseURL + '/aporte/aporte/put',
 							   success: function(response, opt){
 								   Ext.Msg.show({
 									    title:'Aviso',
@@ -764,6 +764,7 @@ Ext.onReady(function(){
 			                    tooltip: 'Delete',
 			                    handler: function(grid, rowIndex, colIndex) {
 			                    	var id_delete = aportesStore.getAt(rowIndex).get('ap_aporte_detalle_id');
+			                    	var aporte_id = aportesStore.getAt(rowIndex).get('ap_aporte_id');
 			                    	var auxmensaje = 'Confirma que desea eliminar el aporte?';
 			                    	Ext.Msg.show({
 			                            title:'Consulta',
@@ -793,7 +794,11 @@ Ext.onReady(function(){
 			        								   aportesStore.load();
 			        							   },
 			        							   jsonData:{
+			        							   		'delete': 
+			        							   		{
 															'ap_aporte_detalle_id': id_delete,
+															'ap_aporte_id' 		  : aporte_id,
+														}
 			        							   }
 			        						 });
 			                              }
