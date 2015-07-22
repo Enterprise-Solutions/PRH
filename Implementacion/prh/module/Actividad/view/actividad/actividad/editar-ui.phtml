@@ -667,6 +667,11 @@ Ext.onReady(function(){
 		 	      }
 			    ]
 		     }],
+     			listeners:{
+							'render':function(){
+										cargarDatos();
+									}
+					    }
 			});
 			
 			function editarwindow (id_edit, nombre_edit, monto_edit, cert_impr_edit, cert_ent_edit, cert_fecha_edit) {
@@ -1072,7 +1077,7 @@ Ext.onReady(function(){
 				  }	    	
 			});
                         
-		cargarDatos();
+		//cargarDatos();
 		Ext.getCmp('centerPanel').add(pantalla);
 });
 

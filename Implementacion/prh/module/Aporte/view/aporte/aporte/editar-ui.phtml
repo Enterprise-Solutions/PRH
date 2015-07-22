@@ -560,75 +560,6 @@ Ext.onReady(function(){
       	 win.show();
    	}  
 
-				// var buttonEditar = function(b,e)
-				// {
-				// 				var basicForm = b.up('form').getForm();
-				// 	if(basicForm.isValid())
-				// 	{  						
-			 //            var valoresForm = basicForm.getFieldValues();
-
-				// 		Ext.Ajax.request({
-				// 			   url: baseURL + '/actividad/actividad/put',
-				// 			   success: function(response, opt){
-				// 				   Ext.Msg.show({
-				// 					    title:'Aviso',
-				// 						msg:'Actividad Editada Correctamente'
-				// 				   });
-				// 				   function hide_message() {
-				// 				       Ext.defer(function() {
-				// 				           Ext.MessageBox.hide();
-				// 				       }, delay);
-				// 				   }
-				// 				   hide_message();
-				// 				   window.location = baseURL+'/actividad/actividad/index-ui';
-				// 			   },
-				// 				failure: function(response, opt){
-				// 					   var aux_mensaje = Ext.decode(response.responseText);
-				// 					   var mensaje = " ";
-				// 						   for (error in aux_mensaje.datos) {
-			 //                            		mensaje = mensaje +"- "+ error +": "+aux_mensaje.datos[error]+'<br>';  
-			 //                                }
-				// 						Ext.MessageBox.show({
-				//                             title: aux_mensaje.mensaje,
-				//                             msg: mensaje,
-				//                             icon: Ext.MessageBox.ERROR,
-				//                             buttons: Ext.Msg.OK
-				//                         });
-				// 				},
-				// 			   jsonData:{
-				// 			       'put':{
-    //                                     'Actividad':{
-    //                                                'act_actividad_id': aux,
-    //                                                'titulo': valoresForm.titulo,
-    //                                                'act_ciclo_id': valoresForm.act_ciclo_id,
-    //                                                'act_actividad_tipo_id': valoresForm.act_actividad_tipo_id,
-    //                                                'duracion': valoresForm.duracion,
-    //                                                'monto_referencial': valoresForm.monto_referencial,
-    //                                                'cont_moneda_id': valoresForm.cont_moneda_id,
-    //                                                'requiere_certificado': valoresForm.requiere_certificado,
-    //                                                'cal_anho_formacion_id': valoresForm.cal_anho_formacion_id,
-    //                                                'fecha_inicio': (formatearFecha(valoresForm.fecha_inicio, 1)),
-    //                                                'fecha_fin': (formatearFecha(valoresForm.fecha_fin, 1)),
-    //                                                'observaciones': valoresForm.observaciones	
-    //                                     },
-    //                                     'Formadores':[{
-    //                                                 'act_actividad_formadores_id': aux_formador_id,
-    //                                                 'org_parte_rol_id': valoresForm.org_parte_rol_id,
-    //                                                 'es_principal': "S"
-    //                                                 }
-    //                                     ]	
-				// 			       }
-				// 			   }
-                                                                   
-				// 		 });
-				// 	}
-				// 	else
-				// 	{
-				// 		Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
-				// 		return;
-				// 	}  	
-					
-				// };
 				
 		var pantallaActividad = Ext.create('Ext.form.Panel', {
 			id: 'form',
@@ -673,151 +604,13 @@ Ext.onReady(function(){
 								        name: 'roles'
 							    }]
 			    		}]
-			    }]
+			    }],
+			    listeners:{
+										'render':function(){
+											cargarDatos();
+										}
+					    	}
 			});
-			
-			// function editarwindow (id_edit, nombre_edit, monto_edit, cert_impr_edit, cert_ent_edit, cert_fecha_edit) {
-				
-	  //           var form = Ext.widget('form', {
-	  //               layout: {
-	  //                   type: 'vbox',
-	  //                   align: 'stretch'
-	  //               },
-	  //               border: false,
-	  //               bodyPadding: 10,
-	
-	  //               fieldDefaults: {
-	  //                   labelAlign: 'left',
-	  //                   labelWidth: 100,
-	  //                   labelStyle: 'font-weight:bold'
-	  //               },
-	  //               items: [
-	  //                      	{
-			//                     xtype: 'displayfield',
-			//                     fieldLabel: 'Nombre',	                    
-			//                     labelWidth: 120,
-			//                     value: nombre_edit,  
-	  //               		},{
-			//                     fieldLabel: 'Monto Pagado',   			                    
-			//                     xtype: 'numberfield',
-			// 			    	minValue: 0,
-			// 			    	labelWidth: 120,
-			// 			    	width: 250,
-			// 			    	tabIndex: 2,
-			// 			    	hideTrigger: true,
-			// 			    	//anchor:'90%',
-			// 			    	name: 'monto', 
-			//                     value: monto_edit  
-	  //               		},{
-	  //               			xtype: 'fieldcontainer',
-	  //                           fieldLabel: 'Certificado',
-	  //                           labelWidth: 120,
-	  //                           defaultType: 'checkboxfield',
-	  //                           items: [
-	  //                               {
-	  //                                   boxLabel  : 'Se imprimio',
-	  //                                   name      : 'imprimio',
-	  //                                   inputValue: '1',
-	  //                                   value: cert_impr_edit, 
-	  //                                   uncheckedValue : 'N',
-	  //                                   id        : 'imprimio'
-	  //                               }, {
-	  //                                   boxLabel  : 'Se entrego',
-	  //                                   name      : 'entrego',
-	  //                                   inputValue: '1',
-	  //                                   value: cert_ent_edit,
-	  //                                   uncheckedValue : 'N',
-	  //                                   id        : 'entrego',
-   //                                  	handler: function (checkbox, checked) {
-   //                                           if (checked) {
-   //                                          	 Ext.getCmp('fecha').show();
-   //                                           }
-   //                                           else if (!checked) {
-   //                                          	 Ext.getCmp('fecha').hide();
-   //                                           }
-   //                                       }
-	  //                               }
-	  //                           ]	
-	  //               		},{
-   //                              fieldLabel: 'Fecha Entrega',
-			// 		 	        xtype: 'datefield',
-			// 		 	        hidden: true,
-			// 		 	       	format: 'd/m/Y',
-   //                              tabIndex: 4,
-			// 		 	        labelWidth: 120,
-			// 		 	        name: 'fecha',
-			// 		 	        id: 'fecha'
-	  //               		}
-	  //               ],
-	
-	  //               buttons: [{
-	  //                   text: 'Guardar',
-	  //                   handler: function(b,e) {
-	  //                   	var basicForm = b.up('form').getForm();  						
-			// 	            var valoresForm = basicForm.getFieldValues();
-		
-			// 				Ext.Ajax.request({
-			// 					   url: baseURL + '/actividad/actividad/editar-participante',
-			// 					   success: function(response, opt){
-			// 						   Ext.Msg.show({
-			// 							    title:'Aviso',
-			// 								msg:'Participante Modificado Correctamente',
-			// 								closable: false,
-			// 								width: 250
-			// 						   });
-			// 						   function hide_message() {
-			// 						       Ext.defer(function() {
-			// 						           Ext.MessageBox.hide();
-			// 						       }, delay);
-			// 						   }
-			// 						   hide_message();
-			// 						   //Ext.getCmp('filtros2').up('form').getForm().reset();
-			// 						   aportesStore.load();
-			// 					   },
-			// 					   jsonData:{
-			// 					       'put':{
-			// 					    	   'act_actividad_participantes_id': id_edit,
-			// 					    	   'monto_participante': valoresForm.monto,
-			// 					    	   'se_imprimio_certificado': (valoresForm.imprimio) ? 'S' : 'N',
-			// 					    	   'se_entrego_certificado': (valoresForm.entrego) ? 'S' : 'N',
-			// 					    	   'fecha_entrega_certificado': (formatearFecha(valoresForm.fecha, 1))
-										   
-			// 					       }
-			// 					   }
-			// 				 });
-			// 				 this.up('window').destroy();
-	  //                   }
-	  //               },{
-	  //                   text: 'Cancelar',
-	  //                   handler: function() {
-	  //                       this.up('form').getForm().reset();
-	  //                       this.up('window').close();
-	  //                   }
-	  //               }]
-	                
-	  //           });
-	            
-   //              if (cert_impr_edit == 'S')
-			// 	{
-			// 		Ext.getCmp('imprimio').setValue(true);
-			// 	}					 
-			// 	if (cert_ent_edit == 'S')
-			// 	{
-			// 		Ext.getCmp('entrego').setValue(true);
-			// 	}
-				
-	  //           win = Ext.widget('window', {
-	  //               title: 'Editar Participante',
-	  //               closeAction: 'hide',
-	  //               width: 400,
-	  //               height: 260,
-	  //               layout: 'fit',
-	  //               resizable: true,
-	  //               modal: true,
-	  //               items: form
-	  //           }); 
-	  //      	 win.show();
-	  //   	}
 			
 			
 			var gridAportes = Ext.create('Ext.grid.Panel', {
@@ -1035,9 +828,8 @@ Ext.onReady(function(){
 	//								Ext.getCmp('actividadTabPanel').setActiveTab(0);
 							}
 				  }	    	
-			});
-                        
-		cargarDatos();
+			});              
+		//cargarDatos();
 		Ext.getCmp('centerPanel').add(pantalla);
 });
 
