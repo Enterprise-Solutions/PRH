@@ -75,7 +75,7 @@ class Dao extends GetDao
 						//$tokens = explode(':', $keyValueToken);
 						list($key,$value) = explode(':', $token);
 						//$documento[$key] = ($key == 'org_documento_id')?(integer)$value:$value;
-						$documento[$key] = (in_array($key, array('dir_direccion_id','dir_barrio_id')))?(integer)$value:$value;
+						$documento[$key] = (in_array($key, array('dir_direccion_id','dir_ciudad_id')))?(integer)$value:$value;
 					}
 					return $documento;
 				},
