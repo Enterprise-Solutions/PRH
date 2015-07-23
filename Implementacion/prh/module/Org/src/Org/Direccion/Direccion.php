@@ -44,6 +44,11 @@ class Direccion
 	 * @Orm\Column(name="org_parte_id")
 	 */
 	protected $org_parte_id;
+
+	/**
+	 * @Orm\Column(name="dir_ciudad_id")
+	 */
+	public $dir_ciudad_id;	
 	
 	public function __construct($dirDireccionTipoId = null)
 	{
@@ -86,10 +91,11 @@ class Direccion
 	public function toArray()
 	{
 		return array(
-				'dir_direccion_id' => $this->id,
-				'direccion'            => $this->direccion,
+				'dir_direccion_id' 		=> $this->id,
+				'direccion'            	=> $this->direccion,
 				'dir_barrio_id'         => $this->dir_barrio_id, 
-				'dir_direccion_tipo_id' => $this->dir_direccion_tipo_id
+				'dir_direccion_tipo_id' => $this->dir_direccion_tipo_id,
+				'dir_ciudad_id' 		=> $this->dir_ciudad_id
 		);
 	}
 }

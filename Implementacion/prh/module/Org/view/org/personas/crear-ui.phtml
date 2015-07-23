@@ -130,11 +130,7 @@ Ext.onReady(function(){
 						fields: [
 							{
 								type: 'int',
-								name: 'dir_barrio_id'
-							},
-							{
-								type: 'string',
-								name: 'barrio'
+								name: 'dir_ciudad_id'
 							},{
 								type: 'string',
 								name: 'search'
@@ -187,9 +183,10 @@ Ext.onReady(function(){
 					
 						var comboLugarStore = Ext.create('Ext.data.Store', {
 							model: 'lugar',
-							pageSize: itemsPorPagina, 
+							//pageSize: itemsPorPagina, 
 							proxy: {
 								type: 'ajax',
+								extraParams: {'p[limit]':'all'},
 								headers: {'Accept':'application/json'},
 								url: baseURL + '/org/combos/dir-barrio?format=json',
 								reader: {
@@ -540,7 +537,7 @@ Ext.onReady(function(){
 			        store: comboLugarStore,
 			        queryMode: 'remote',
 			        typeAhead: true,
-			        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
+			        emptyText: 'Escriba el nombre de su Pais, Departamento o Ciudad',
 			        loadingText: 'Buscando Lugares...',
 			        hideTrigger: true,
 			        queryParam: 's[barrio]:',
