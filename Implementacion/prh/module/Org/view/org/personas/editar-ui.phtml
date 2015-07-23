@@ -435,7 +435,7 @@ Ext.onReady(function(){
 					proxy: {
 						type: 'ajax',
 						headers: {'Accept':'application/json'},
-						url: baseURL + '/org/combos/dir-barrio?format=json',
+						url: baseURL + '/org/combos/dir-ciudad?format=json',
 						reader: {
 							type: 'json',
 							root: 'records',
@@ -457,7 +457,7 @@ Ext.onReady(function(){
 				var aux_lugar = Ext.create('Ext.form.ComboBox', {
 					fieldLabel: 'Lugar',
 			        xtype: 'combobox',
-			        valueField: 'dir_barrio_id',
+			        valueField: 'dir_ciudad_id',
 			        displayField: 'search',
 			        labelWidth: 90,
 			        store: comboLugarStore,
@@ -466,7 +466,7 @@ Ext.onReady(function(){
 			        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
 			        loadingText: 'Buscando Lugares...',
 			        hideTrigger: true,
-			        queryParam: 's[barrio]:',
+			        queryParam: 's[ciudad]:',
 			        minChars: 1,
 			        padding: 15,
 		 	        anchor:'90%',
@@ -517,7 +517,7 @@ Ext.onReady(function(){
 						type: 'ajax',
 						extraParams: {'p[limit]':'all'},
 						headers: {'Accept':'application/json'},
-						url: baseURL + '/org/combos/dir-barrio?format=json',
+						url: baseURL + '/org/combos/dir-ciudad?format=json',
 						reader: {
 							type: 'json',
 							root: 'records',
@@ -570,7 +570,7 @@ Ext.onReady(function(){
 							var aux_lugar = Ext.create('Ext.form.ComboBox', {
 								fieldLabel: 'Lugar',
 						        xtype: 'combobox',
-						        valueField: 'dir_barrio_id',
+						        valueField: 'dir_ciudad_id',
 						        displayField: 'search',
 						        labelWidth: 90,
 						        store: comboLugarStore,
@@ -579,7 +579,7 @@ Ext.onReady(function(){
 						        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
 						        loadingText: 'Buscando Lugares...',
 						        hideTrigger: true,
-						        queryParam: 's[barrio]:',
+						        queryParam: 's[ciudad]:',
 						        minChars: 1,
 						        padding: 15,
 					 	        anchor:'90%',
@@ -781,7 +781,7 @@ Ext.onReady(function(){
 								if(ubic){
 									var id = (ubics[ubic].dir_direccion_id);
 									var direccion = (ubics[ubic].direccion);
-									var lugar = (ubics[ubic].dir_barrio_id);
+									var lugar = (ubics[ubic].dir_ciudad_id);
 									editarUbic(id, direccion, lugar);
 								}							
 							}
@@ -888,7 +888,7 @@ Ext.onReady(function(){
 
 							if (valoresForm[aux_ubic_add_dir]){
 				           		var elemento2 = {"direccion": valoresForm[aux_ubic_add_dir], 
-						           				"dir_barrio_id": valoresForm[aux_ubic_add_lug]};
+						           				"dir_ciudad_id": valoresForm[aux_ubic_add_lug]};
 				           		agregarUbic.push(elemento2);
 							}
 			           	} 
@@ -904,7 +904,7 @@ Ext.onReady(function(){
 							if (valoresForm[aux_ubic_edit_dir]){
 					           		var elemento22 = {"dir_direccion_id":valoresForm[aux_ubic_edit_name], 
 							           				"direccion": valoresForm[aux_ubic_edit_dir], 
-							           				"dir_barrio_id": valoresForm[aux_ubic_edit_lug]};
+							           				"dir_ciudad_id": valoresForm[aux_ubic_edit_lug]};
 					           		editarUbic.push(elemento22);
 							}
 			           	} 
