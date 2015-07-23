@@ -143,9 +143,6 @@ Ext.onReady(function(){
 					name: 'search'
 				},{
 					type: 'string',
-					name: 'ciudad'
-				},{
-					type: 'string',
 					name: 'dpto'
 				},{
 					type: 'string',
@@ -404,7 +401,6 @@ Ext.onReady(function(){
 						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
 									  handler:function() {
 											doc_delete.push(id);
-											console.log(doc_delete);
 											Ext.getCmp('doc_nro').remove(aux_valor);
 											Ext.getCmp('doc_tipo').remove(aux_tipo);
 											Ext.getCmp('doc_origen').remove(aux_origen);
@@ -509,6 +505,7 @@ Ext.onReady(function(){
 				var ubic_edit_name = 'ubic_e'+id_edit_ubic;
 				var ubic_edit_dir = 'dir_e'+id_edit_ubic;
 				var ubic_edit_lug = 'lug_e'+id_edit_ubic;
+
 	
 				var comboLugarStore = Ext.create('Ext.data.Store', {
 					model: 'lugar',
@@ -517,7 +514,7 @@ Ext.onReady(function(){
 						type: 'ajax',
 						extraParams: {'p[limit]':'all'},
 						headers: {'Accept':'application/json'},
-						url: baseURL + '/org/combos/dir-ciudad?format=json',
+						url: baseURL + '/org/combos/dir-ciudad',
 						reader: {
 							type: 'json',
 							root: 'records',
@@ -548,7 +545,6 @@ Ext.onReady(function(){
 						 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
 									  handler:function() {
 											ubic_delete.push(id);
-											console.log(ubic_delete);
 											Ext.getCmp('ubic_direccion').remove(aux_direccion);
 											Ext.getCmp('ubic_lugar').remove(aux_lugar);
 											Ext.getCmp('ubic_button').remove(aux_button);
@@ -566,7 +562,7 @@ Ext.onReady(function(){
 						        value: direccion,
 						        name: ubic_edit_dir
 							});
-				
+							
 							var aux_lugar = Ext.create('Ext.form.ComboBox', {
 								fieldLabel: 'Lugar',
 						        xtype: 'combobox',
@@ -575,7 +571,7 @@ Ext.onReady(function(){
 						        labelWidth: 90,
 						        store: comboLugarStore,
 						        queryMode: 'remote',
-						        typeAhead: true,
+						        //typeAhead: true,
 						        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
 						        loadingText: 'Buscando Lugares...',
 						        hideTrigger: true,
@@ -584,9 +580,9 @@ Ext.onReady(function(){
 						        padding: 15,
 					 	        anchor:'90%',
 					 	        value: lugar,
-						        name: ubic_edit_lug
+						        name: ubic_edit_lug,
 							});
-		
+
 							var aux_id = Ext.create('Ext.form.TextField', {
 				    	        value: id,
 				    	        name: ubic_edit_name,
@@ -726,7 +722,6 @@ Ext.onReady(function(){
 							 	    	  icon: baseURL+'/img/icons/grid/delete3.png',
 										  handler:function() {
 												cont_delete.push(id);
-												console.log(cont_delete);
 												Ext.getCmp('cont_tipo').remove(aux_tipo);
 												Ext.getCmp('cont_contacto').remove(aux_contacto);
 												Ext.getCmp('cont_button').remove(aux_button);
@@ -976,16 +971,6 @@ Ext.onReady(function(){
 			                            buttons: Ext.Msg.OK
 			                        });
 								},
-// 							   failure: function(response, opt){
-// 								   var aux_mensaje = Ext.decode(response.responseText);
-// 								   		console.log(aux_mensaje);
-// 									Ext.MessageBox.show({
-// 			                            title: aux_mensaje.status,
-// 			                            msg: aux_mensaje.datos,
-// 			                            icon: Ext.MessageBox.ERROR,
-// 			                            buttons: Ext.Msg.OK
-// 			                        });
-// 								},
 							   jsonData:{
 							       'put':{
 									   'org_parte_id':aux,
