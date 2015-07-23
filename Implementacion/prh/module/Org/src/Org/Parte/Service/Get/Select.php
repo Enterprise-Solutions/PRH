@@ -19,7 +19,7 @@ class Select extends DbSelect
 			 	'org_religion_id','org_estado_civil_id','nacionalidad_persona',
 			 	'documentos' => new Expression(" string_agg(distinct 'org_documento_id:'||od.org_documento_id||'{$_s}'||'valor:'||od.valor||'{$_s}'||'org_documento_tipo_codigo:'||od.org_documento_tipo_codigo||'{$_s}dir_pais_id:'||od.dir_pais_id||'{$_s}preferencia:'||od.preferencia||'{$_s}dir_pais:'||ddp.nombre||'{$_s}org_documento_tipo:'||odt.nombre,';*')"),
 			 	'contactos'  => new Expression(" string_agg(distinct 'org_contacto_id:'||oc.org_contacto_id||'{$_s}contacto:'||oc.contacto||'{$_s}org_contacto_tipo_codigo:'||oct.org_contacto_tipo_codigo||'{$_s}org_contacto_tipo:'||oct.nombre,';*')"),
-			 	'Direcciones' => new Expression("string_agg(distinct 'dir_direccion_id:'||dd.dir_direccion_id||'{$_s}direccion:'||dd.calle||'{$_s}dir_barrio_id:'||dd.dir_barrio_id||'{$_s}dir_barrio:'||db.nombre,';*')"),
+			 	'Direcciones' => new Expression("string_agg(distinct 'dir_direccion_id:'||dd.dir_direccion_id||'{$_s}direccion:'||dd.calle||'{$_s}dir_ciudad_id:'||dc.dir_ciudad_id||'{$_s}dir_ciudad:'||dc.nombre,';*')"),
 			 	'Profesiones' => new Expression("string_agg(distinct 'org_profesion_id:'||opp.org_profesion_id||'{$_s}profesion:'||oppt.nombre,';*')")
 			 		//'contactos'  => new Expression("string_agg('org_contacto_id:'||oc.org_contacto_id,';')")
 			 	))
@@ -71,12 +71,18 @@ class Select extends DbSelect
 			 	array(),
 			 	ZFSelect::JOIN_LEFT	
 			 )
+			 // ->join(
+			 // 	array('db' => 'dir_barrio'),
+			 // 	'dd.dir_barrio_id = db.dir_barrio_id',
+			 // 	array(),
+			 // 	ZFSelect::JOIN_LEFT	
+			 // )
 			 ->join(
-			 	array('db' => 'dir_barrio'),
-			 	'dd.dir_barrio_id = db.dir_barrio_id',
+			 	array('dc' => 'dir_ciudad'),
+			 	'dd.dir_ciudad_id = dc.dir_ciudad_id',
 			 	array(),
 			 	ZFSelect::JOIN_LEFT	
-			 )
+			 )			 
 			 ->join(
 			 	array('re' => 'org_religion'),
 			 	'op.org_religion_id = re.org_religion_id',

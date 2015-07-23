@@ -6,7 +6,7 @@ use Zend\Db\Sql\Expression;
 
 use EnterpriseSolutions\Db\Select as EsSelect;
 
-class DirBarrioSelect extends EsSelect
+class DirCiudadSelect extends EsSelect
 {
 	// public function _init()
 	// {
@@ -49,7 +49,7 @@ class DirBarrioSelect extends EsSelect
 			 );
 	}
 
-	public function addSearchByBarrio($ciudad)
+	public function addSearchByCiudad($ciudad)
 	{
 		$this->_select
 			 ->where("

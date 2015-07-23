@@ -1,7 +1,7 @@
 <?php
 
 namespace Org\Controller;
-use Org\Parte\Service\Combos\DirBarrioSelect;
+use Org\Parte\Service\Combos\DirCiudadSelect;
 
 use EnterpriseSolutions\Controller\BaseController;
 use EnterpriseSolutions\Db\Select;
@@ -45,9 +45,9 @@ class CombosController extends BaseController
 	    return $template($dao);
 	}
 	
-	public function dirBarrioAction()
+	public function dirCiudadAction()
 	{
-		$select = new DirBarrioSelect($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+		$select = new DirCiudadSelect($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
 		$dao = new Dao($select);
 		$template = $this->_crearTemplateParaListado();
 		return $template($dao);
