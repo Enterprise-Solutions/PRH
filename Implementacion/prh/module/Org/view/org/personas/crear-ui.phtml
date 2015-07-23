@@ -188,7 +188,7 @@ Ext.onReady(function(){
 								type: 'ajax',
 								extraParams: {'p[limit]':'all'},
 								headers: {'Accept':'application/json'},
-								url: baseURL + '/org/combos/dir-barrio?format=json',
+								url: baseURL + '/org/combos/dir-ciudad?format=json',
 								reader: {
 									type: 'json',
 									root: 'records',
@@ -360,7 +360,7 @@ Ext.onReady(function(){
 
 										if (valoresForm[aux_ubic_add_dir]){
 							           		var elemento2 = {"direccion": valoresForm[aux_ubic_add_dir], 
-									           				"dir_barrio_id": valoresForm[aux_ubic_add_lug]};
+									           				"dir_ciudad_id": valoresForm[aux_ubic_add_lug]};
 							           		agregarUbic.push(elemento2);
 										}
 						           	} 
@@ -531,7 +531,7 @@ Ext.onReady(function(){
 					fieldLabel: 'Lugar',
 			        xtype: 'combobox',
 			        forceSelection: true,
-			        valueField: 'dir_barrio_id',
+			        valueField: 'dir_ciudad_id',
 			        displayField: 'search',
 			        labelWidth: 90,
 			        store: comboLugarStore,
@@ -540,7 +540,7 @@ Ext.onReady(function(){
 			        emptyText: 'Escriba el nombre de su Pais, Departamento o Ciudad',
 			        loadingText: 'Buscando Lugares...',
 			        hideTrigger: true,
-			        queryParam: 's[barrio]:',
+			        queryParam: 's[ciudad]:',
 			        minChars: 1,
 			        padding: 15,
 		 	        anchor:'90%',
@@ -882,7 +882,7 @@ Ext.onReady(function(){
 												fieldLabel: 'Lugar',
 												forceSelection: true,
 										        xtype: 'combobox',
-										        valueField: 'dir_barrio_id',
+										        valueField: 'dir_ciudad_id',
 										        displayField: 'search',
 										        labelWidth: 90,
 										        store: comboLugarStore,
@@ -892,7 +892,7 @@ Ext.onReady(function(){
 										        emptyText: 'Escriba el nombre de su Pais, Ciudad o Barrio...',
 										        loadingText: 'Buscando Lugares...',
 										        hideTrigger: true,
-										        queryParam: 's[barrio]:',
+										        queryParam: 's[ciudad]:',
 										        minChars: 1,
 										        padding: 15,
 									 	        anchor:'90%',
