@@ -111,7 +111,7 @@ class Dao extends EsDao
 				return $record;
 				
 			}, 
-			$this->_paginator->execute()->getArrayCopy()
+			$this->_paginator->execute()->toArray()
 		);
 		return array(
 				'records'    => $records,
