@@ -55,18 +55,36 @@ class Select {
 	
 	public function addOrder($orderParams)
 	{
-		$this->_select->reset('order');
-		$default = array(
-				'campo' => null,
-				'dir'   => zdb_select::ORDER_DESCENDING
-		);
-		foreach($orderParams as $orden){
-			$orden = array_merge($default,$orden);
-			if($orden['campo']){
-				$campo = $orden['campo'];
-				$dir   = $orden['dir'];
-				$this->_select->order(array($campo => $dir));
-			}
+		if(!$orderParams || !is_array($orderParams)){
+			return;
 		}
+		//$this->_select->reset('order');
+		$default = array(
+			'campo' => null,
+			'dir'   => zdb_select::ORDER_DESCENDING
+		);
+
+		$orden = array_merge($default,$orderParams);
+		if($orden['campo']){
+			$this->_select->reset('order');
+			$campo = $orden['campo'];
+			$dir   = $orden['dir'];
+			$this->_select->order(array($campo => $dir));
+		}
+
+
+		// $this->_select->reset('order');
+		// $default = array(
+		// 		'campo' => null,
+		// 		'dir'   => zdb_select::ORDER_DESCENDING
+		// );
+		// foreach($orderParams as $orden){
+		// 	$orden = array_merge($default,$orden);
+		// 	if($orden['campo']){
+		// 		$campo = $orden['campo'];
+		// 		$dir   = $orden['dir'];
+		// 		$this->_select->order(array($campo => $dir));
+		// 	}
+		// }
 	}
 }

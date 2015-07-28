@@ -12,12 +12,14 @@ class Select extends EsSelect
 	{
 		$this->_select
              ->from(array('op' => 'org_parte'))
-             ->columns(array('org_parte_id', 'persona' => new Expression("op.nombre_persona||' '||op.apellido_persona")))
+             ->columns(array('org_parte_id', 
+                             'persona'   => new Expression("op.nombre_persona||' '||op.apellido_persona"),
+                             'documento' => new Expression("od.valor||'/'||od.org_documento_tipo_codigo")))
              ->join(
              	array('od' => 'org_documento'), 
              	'od.org_parte_id = op.org_parte_id',
-             	array('documento' => new Expression("od.valor||'/'||od.org_documento_tipo_codigo")))
-             ->order('org_parte_id');
+             	array())
+             ->where('od.preferencia = 1');
             
 	}
 

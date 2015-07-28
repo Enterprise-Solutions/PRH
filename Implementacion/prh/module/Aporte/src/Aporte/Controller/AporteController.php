@@ -31,9 +31,10 @@ class AporteController extends BaseController
     {
         $select     = new SelectPartes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
         $dao        = new Dao($select);
+        $params     = array('o' => array('campo' => 'persona', 'dir' => 'ASC'));
         $template   = $this->_crearTemplateParaListado();
 
-        return $template($dao,array(),array());
+        return $template($dao, $params, array());
     }
 
     public function getPersonaAction()
