@@ -3,31 +3,34 @@
 namespace Calendario\Calendario\Service;
 
 use Calendario\Calendario\Repository;
+use Calendario\Calendario\Service\Edicion;
+
 use EnterpriseSolutions\Simple\Cambios\Cambios;
-use Calendario\Calendario\Service\Creacion\Validacion;
 use EnterpriseSolutions\Exceptions\Thrower;
 
 class Creacion
 {
 	public $_repository;
+
 	public function __construct(Repository $repository)
 	{
 		$this->_repository = $repository;
 	}
 	
-	/**
-	 * @param array $params
-	 * {
-	 *  org_parte_id,
-	 *  org_documento_id,
-	 *  contrasenha,
-	 *  confirmacion,
-	 * }
-	 */
 	public function ejecutar($params)
 	{		
 		$this->_validarOperacion($params);
 		$params['cal_anho_formacion_id'] = $this->_crearAnhoFormacion($params, $this->_repository);
+
+		if($params['actual'] === 'S')
+		{
+			$edicion 		= new Edicion($this->_repository);
+			$calendarios 	= $this->_repository->getCalendariosNoActuales($params['cal_anho_formacion_id']);
+			foreach ($calendarios as $key => $value) {
+			 	$cambiosActual 	= $edicion->_editarCalendario($calendarios[$key], array("actual" => "N"), $this->_repository);	
+			}
+		}
+
 		return $this->_construirRespuesta($params);
 	}
 		

@@ -22,7 +22,7 @@ class Repository extends EsRepository
 		return current($rs);
 	}
 		
-	public function getCalendariosActuales($calAnhoFormacionId)
+	public function getCalendariosNoActuales($calAnhoFormacionId)
 	{
 		$dbAdapter 	= $this->_ds->_getDbConnection();
 		$select 	= new SelectDeCalendario($dbAdapter);
@@ -31,7 +31,7 @@ class Repository extends EsRepository
 		if(count($rs) <= 0){
 			return false;
 		}
-		return current($rs);
+		return $rs;
 	}
 
 	public function findCalendario($calAnhoFormacionId)

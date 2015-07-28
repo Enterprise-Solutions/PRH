@@ -8,7 +8,7 @@ use EnterpriseSolutions\Db\Select as EsSelect;
 
 class Select extends EsSelect
 {
-	public function _init()
+	public function _init ()
 	{
 		$this->_select
              ->from('cal_anho_formacion')
@@ -24,7 +24,7 @@ class Select extends EsSelect
         );
 	}
 
-	public function addSearchByCalAnhoFormacionId($calAnhoFormacionId)
+	public function addSearchByCalAnhoFormacionId ($calAnhoFormacionId)
 	{
 		$this->_select
 		     ->columns(array(
@@ -39,14 +39,13 @@ class Select extends EsSelect
 			->where("cal_anho_formacion_id = $calAnhoFormacionId");
 	}
 
-	public function getCalendariosNoActuales($calAnhoFormacionId)
+	public function getCalendariosNoActuales ($calAnhoFormacionId)
 	{
 		$this->_select
-			 ->columns(array('cal_anho_formacion_id','actual'))
-			 ->where("cal_anho_formacion_id not in ($calAnhoFormacionId)");
+			 ->where("cal_anho_formacion_id != $calAnhoFormacionId");
 	}
 	
-	public function addSearchByCalAnhoFormacionIds($calAnhoFormacionIds)
+	public function addSearchByCalAnhoFormacionIds ($calAnhoFormacionIds)
 	{
 		$calAnhoFormacionIds = join(',',$calAnhoFormacionIds);
 		$this->_select
@@ -55,7 +54,7 @@ class Select extends EsSelect
 			 ->where("cal_anho_formacion_id in ($calAnhoFormacionIds) and actual != 'S'");
 	}
 
-	public function addSearchByActividad($calAnhoFormacionId)
+	public function addSearchByActividad ($calAnhoFormacionId)
 	{
 		$id 	= $calAnhoFormacionId[0];
 		$this->_select
@@ -64,9 +63,15 @@ class Select extends EsSelect
 			 ->where("aa.cal_anho_formacion_id = $id");
 	}
 
-	public function addSearchByAnho($calAnhoFormacion)
+	public function addSearchByAnho ($calAnhoFormacion)
 	{
 		$this->_select
 			 ->where("anho = $calAnhoFormacion");
+	}
+
+	public function addSearchByActual ($actual)
+	{
+		$this->_select
+			 ->where("actual = $actual");
 	}
 }

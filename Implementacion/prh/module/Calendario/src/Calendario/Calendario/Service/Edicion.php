@@ -18,23 +18,15 @@ class Edicion
 	
 	public function ejecutar($params)
 	{
-		/*
-		 * Validar los datos enviados
-		 * Si fue enviada la contrasenha incluir en cambios
-		 * */
-		$calAnhoFormacion 	= $this->_repository->getCalAnhoFormacion($params['cal_anho_formacion_id']);
 
+		$calAnhoFormacion 	= $this->_repository->getCalAnhoFormacion($params['cal_anho_formacion_id']);
 		$cambiosCalendario 	= $this->_editarCalendario($calAnhoFormacion, $params, $this->_repository);
 
 		if($params['actual'] === 'S')
 		{
-			$param 			= array("actual" => "N");
-			
-			$calendarios 	= $this->_repository->getCalendariosActuales($params['cal_anho_formacion_id']);
-			print_r($calendarios);
+			$calendarios 	= $this->_repository->getCalendariosNoActuales($params['cal_anho_formacion_id']);
 			foreach ($calendarios as $key => $value) {
-				echo "key: " . $key . " value: " . $value; 
-				//$cambiosActual 	= $this->_editarEsActual($calendarios['cal_anho_formacion_id'], $param, $this->_repository);	
+			 	$cambiosActual 	= $this->_editarCalendario($calendarios[$key], array("actual" => "N"), $this->_repository);	
 			}
 		}
 			
