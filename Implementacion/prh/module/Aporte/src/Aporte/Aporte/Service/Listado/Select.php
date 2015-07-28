@@ -21,11 +21,23 @@ class Select extends EsSelect
             
 	}
 
-	public function addSearchById ($parteId)
-	{
+    public function addSearchByDocumento ($documento)
+    {
+        $this->_select
+             ->where("od.valor ~* '$documento'");        
+    }
+
+    public function addSearchByNombre ($nombre)
+    { 
+        $this->_select
+             ->where(" ( ('('||op.nombre_persona || '|' || op.apellido_persona||')') ~* '$nombre') ");        
+    }
+
+    public function addSearchById ($parteId)
+    {
         if ($id) {
             $this->_select
                  ->where("op.org_parte_id = $parteId");
         }
-	}
+    }
 }
