@@ -74,12 +74,21 @@ Ext.onReady(function(){
 				    items:[{   	
 					    		xtype: 'textfield',
 						        fieldLabel: 'Nombre',
-						        padding: '10 0 5 15',
+						        padding: '10 50 0 15',
 						        labelWidth: 70,
 						        width: 350,
 						        layout:'anchor',
 						        anchor:'90%',
 						        name: 'nombre',       
+				    	  },{   	
+					    		xtype: 'textfield',
+						        fieldLabel: 'C&eacute;dula',
+						        padding: '10 0 5 15',
+						        labelWidth: 70,
+						        width: 260,
+						        layout:'anchor',
+						        anchor:'90%',
+						        name: 'cedula',       
 				    	  }
 					   ]
 					},{
@@ -97,18 +106,15 @@ Ext.onReady(function(){
 					            	
 							           var basicForm = b.up('form').getForm();						
 							           var valoresForm = basicForm.getFieldValues();
-
-										auxnombre = valoresForm.nombre;
-										auxestado = valoresForm.estado;
 										
 							           //inicializo los pages
 							           	page = 0;
-										gridUsuarios.store.currentPage = 1;
+										gridPersonas.store.currentPage = 1;
 										
 						                personasStore.load({
 											params: {
-												"s[nombre]": auxnombre,
-												"s[estado]": auxestado
+												"s[nombre]": valoresForm.nombre,
+												"s[documento]": valoresForm.cedula
 									   		} 
 						               });
 						            }//end of handler  
@@ -125,7 +131,7 @@ Ext.onReady(function(){
 								           	page = 0;
 								           	auxnombre = null;
 								           	auxestado = null;
-											gridUsuarios.store.currentPage = 1;
+											gridPersonas.store.currentPage = 1;
 											//console.log(this);
 						           			b.up('form').getForm().reset();
 						           			personasStore.load();						   	
@@ -157,36 +163,42 @@ Ext.onReady(function(){
                     moveNext : function(){ 
                    		page = page + itemsPorPagina;
                    	 	this.store.currentPage++;
+                   	 	var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
            				personasStore.load({
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page, 
-//	       						"s[nombre]": auxnombre,
-//								"s[estado]": auxestado     
+	       						"s[nombre]": auxnombre,
+								"s[documento]": valoresForm.cedula 
 	       				    }
        					});
                 	 },
                  	 movePrevious : function(){ 
                  		page = page - itemsPorPagina;
 						this.store.currentPage--;
+						var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
 						personasStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
-//		   						"s[nombre]": auxnombre,
-//								"s[estado]": auxestado	        
+		   						"s[nombre]": auxnombre,
+								"s[documento]": valoresForm.cedula    
 		   				    }
    						});
             		 },
              		moveFirst : function(){ 
              			page = 0;
 						this.store.currentPage = 1;
+						var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
 						personasStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
-//		   						"s[nombre]": auxnombre,
-//								"s[estado]": auxestado	        
+		   						"s[nombre]": auxnombre,
+								"s[documento]": valoresForm.cedula          
 		   				    }
    						});
             	 	},
@@ -200,12 +212,14 @@ Ext.onReady(function(){
 							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
 							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
 						}
+						var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
             	 		personasStore.load({
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-//		   						"s[nombre]": auxnombre,
-//								"s[estado]": auxestado		        
+		   						"s[nombre]": auxnombre,
+								"s[documento]": valoresForm.cedula		        
 		   				    }
    						});       					
             	 	},
@@ -254,7 +268,7 @@ Ext.onReady(function(){
 		    items:[
 			         {	
 			        	 xtype: 'panel',
-						 //items: [panelFiltros]
+						 items: [panelFiltros]
 				        
 			         },{
 			        	 xtype: 'container',
