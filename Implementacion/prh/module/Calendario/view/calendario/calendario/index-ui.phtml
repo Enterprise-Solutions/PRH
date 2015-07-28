@@ -286,14 +286,14 @@ Ext.onReady(function(){
 	           		        store: actualStore,
 	           		        queryMode: 'local',
 	           		        typeAhead: true,
-	      //      		    listeners:{
-							// 			'render':function(){
-							// 				if (this.value == 'S')
-							// 				{
-							// 					Ext.getCmp('actual_edit').setReadOnly(true);
-							// 				}
-							// }
-							//}
+	           		   	 	listeners:{
+										'render':function(){
+											if (this.value == 'S')
+											{
+												Ext.getCmp('actual_edit').setReadOnly(true);
+											}
+							}
+							}
                       },{	
                            xtype: 'textarea',
 	           			   fieldLabel: 'Descripci&oacute;n',
