@@ -38,16 +38,20 @@ Ext.onReady(function(){
 				}
 			]
 		});
-		
+
 		var personasStore = Ext.create('Ext.data.Store', {
 			model: 'personas',
-			pageSize: itemsPorPagina, 
+			pageSize: itemsPorPagina,
+			remoteSort: true, 
 			proxy: {
 				type: 'ajax',
-				  extraParams:{
+				extraParams:{
 				    	"p[limit]": itemsPorPagina,
-						"p[page]": page, 
-				  },
+						"p[page]": page
+				},
+				simpleSortMode: true,
+				sortParam: "sort[property]",
+				directionParam: "sort[direction]",
 				headers: {'Accept':'application/json'},
 				url: baseURL + '/aporte/aporte/index',
 				reader: {
