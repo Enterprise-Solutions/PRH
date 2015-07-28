@@ -59,6 +59,24 @@ Ext.onReady(function(){
 			autoLoad: true
 		});
 
+		var buttonHandlerFiltrar = function(b,e)
+			{
+			   var basicForm = b.up('form').getForm();
+			   if (basicForm)
+			   {						
+		           var valoresForm = basicForm.getFieldValues();
+		           	page = 0;
+					gridPersonas.store.currentPage = 1;
+					
+	                personasStore.load({
+						params: {
+							"s[nombre]": valoresForm.nombre,
+							"s[documento]": valoresForm.documento
+				   		} 
+	               });
+	            }				
+		};
+
 		var panelFiltros = Ext.create('Ext.form.Panel', {
 			 type:  'hbox',
 			 collapsible: true,
@@ -79,16 +97,30 @@ Ext.onReady(function(){
 						        width: 350,
 						        layout:'anchor',
 						        anchor:'90%',
-						        name: 'nombre',       
+						        name: 'nombre',
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+		                                    	buttonHandlerFiltrar(Ext.getCmp('filtrarButton'), null);
+		                                    }
+		                                }
+					            } 
 				    	  },{   	
 					    		xtype: 'textfield',
-						        fieldLabel: 'C&eacute;dula',
+						        fieldLabel: 'Documento',
 						        padding: '10 0 5 15',
-						        labelWidth: 70,
-						        width: 260,
+						        labelWidth: 95,
+						        width: 290,
 						        layout:'anchor',
 						        anchor:'90%',
-						        name: 'cedula',       
+						        name: 'documento',  
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+		                                    	buttonHandlerFiltrar(Ext.getCmp('filtrarButton'), null);
+		                                    }
+		                                }
+					            }     
 				    	  }
 					   ]
 					},{
@@ -97,43 +129,28 @@ Ext.onReady(function(){
 					    layout:'hbox',
 					    items:[{
 			
-				           		xtype: 'button',
-				           		width: 100,
-				           		margin: '5 0 0 20',
-				            	text: 'Filtrar',
-					            scale   : 'medium',
-					            handler: function(b,e) {
-					            	
-							           var basicForm = b.up('form').getForm();						
-							           var valoresForm = basicForm.getFieldValues();
-										
-							           //inicializo los pages
-							           	page = 0;
-										gridPersonas.store.currentPage = 1;
-										
-						                personasStore.load({
-											params: {
-												"s[nombre]": valoresForm.nombre,
-												"s[documento]": valoresForm.cedula
-									   		} 
-						               });
-						            }//end of handler  
-									        
+					           		xtype: 'button',
+					           		width: 100,
+					           		margin: '5 0 0 20',
+					           		id: 'filtrarButton',
+					            	text: 'Filtrar',
+						            scale   : 'medium',
+						            handler: buttonHandlerFiltrar								        
 								},{
 			
-								  		xtype: 'button',
-								  		width: 100,
-								  		margin: '5 0 0 15',
-					               		text: 'Limpiar',
-						           		scale   : 'medium',
-						           		handler: function(b,e) {
-						           			//inicializo los pages
-								           	page = 0;
-											gridPersonas.store.currentPage = 1;
-											//console.log(this);
-						           			b.up('form').getForm().reset();
-						           			personasStore.load();						   	
-				           		  		}
+							  		xtype: 'button',
+							  		width: 100,
+							  		margin: '5 0 0 15',
+				               		text: 'Limpiar',
+					           		scale   : 'medium',
+					           		handler: function(b,e) {
+					           			//inicializo los pages
+							           	page = 0;
+										gridPersonas.store.currentPage = 1;
+										//console.log(this);
+					           			b.up('form').getForm().reset();
+					           			personasStore.load();						   	
+			           		  		}
 								}]}
 				    	]
 		});	
@@ -168,7 +185,7 @@ Ext.onReady(function(){
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page, 
 	       						"s[nombre]": valoresForm.nombre,
-								"s[documento]": valoresForm.cedula 
+								"s[documento]": valoresForm.documento 
 	       				    }
        					});
                 	 },
@@ -182,7 +199,7 @@ Ext.onReady(function(){
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
 		   						"s[nombre]": valoresForm.nombre,
-								"s[documento]": valoresForm.cedula    
+								"s[documento]": valoresForm.documento    
 		   				    }
    						});
             		 },
@@ -196,7 +213,7 @@ Ext.onReady(function(){
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
 		   						"s[nombre]": valoresForm.nombre,
-								"s[documento]": valoresForm.cedula          
+								"s[documento]": valoresForm.documento          
 		   				    }
    						});
             	 	},
@@ -217,7 +234,7 @@ Ext.onReady(function(){
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
 		   						"s[nombre]": valoresForm.nombre,
-								"s[documento]": valoresForm.cedula		        
+								"s[documento]": valoresForm.documento		        
 		   				    }
    						});       					
             	 	},
