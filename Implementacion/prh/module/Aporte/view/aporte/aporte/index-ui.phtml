@@ -129,8 +129,6 @@ Ext.onReady(function(){
 						           		handler: function(b,e) {
 						           			//inicializo los pages
 								           	page = 0;
-								           	auxnombre = null;
-								           	auxestado = null;
 											gridPersonas.store.currentPage = 1;
 											//console.log(this);
 						           			b.up('form').getForm().reset();
@@ -169,7 +167,7 @@ Ext.onReady(function(){
 	       				    params:{
 	       				    	"p[limit]": itemsPorPagina,
 	       						"p[page]": page, 
-	       						"s[nombre]": auxnombre,
+	       						"s[nombre]": valoresForm.nombre,
 								"s[documento]": valoresForm.cedula 
 	       				    }
        					});
@@ -183,7 +181,7 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
-		   						"s[nombre]": auxnombre,
+		   						"s[nombre]": valoresForm.nombre,
 								"s[documento]": valoresForm.cedula    
 		   				    }
    						});
@@ -197,7 +195,7 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page, 
-		   						"s[nombre]": auxnombre,
+		   						"s[nombre]": valoresForm.nombre,
 								"s[documento]": valoresForm.cedula          
 		   				    }
    						});
@@ -218,7 +216,7 @@ Ext.onReady(function(){
 		   				    params:{
 		   				    	"p[limit]": itemsPorPagina,
 		   						"p[page]": page,
-		   						"s[nombre]": auxnombre,
+		   						"s[nombre]": valoresForm.nombre,
 								"s[documento]": valoresForm.cedula		        
 		   				    }
    						});       					
