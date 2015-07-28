@@ -510,7 +510,27 @@ Ext.onReady(function(){
 						        width: 350,
 						        layout:'anchor',
 						        anchor:'90%',
-						        name: 'nombre',       
+						        name: 'nombre',
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridUsuarios.store.currentPage = 1;
+									                usuariosStore.load({
+														params: {
+															"s[nombre]": valoresForm.nombre,
+															"s[estado]": valoresForm.estado
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	  
+
 				    	  },{
 					    	  	xtype: 'combobox',
 				    		  	fieldLabel: 'Estado',
@@ -523,6 +543,25 @@ Ext.onReady(function(){
 						        store: estadoStore,
 						        queryMode: 'local',
 						        typeAhead: true,
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridUsuarios.store.currentPage = 1;
+									                usuariosStore.load({
+														params: {
+															"s[nombre]": valoresForm.nombre,
+															"s[estado]": valoresForm.estado
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }
 					      }
 					   ]
 					},{

@@ -83,7 +83,26 @@ Ext.onReady(function(){
 						        layout:'anchor',
 						        anchor:'90%',
 						        name: 'nombre',
-							    flex: 1  
+							    flex: 1,
+							    listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividadTipo.store.currentPage = 1;
+									                actividadTipoStore.load({
+														params: {
+															"s[nombre]": valoresForm.nombre,
+															"s[modalidad]": valoresForm.modalidad
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	  
 				    	  },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Modalidad',
@@ -94,7 +113,26 @@ Ext.onReady(function(){
 						        padding: '10 30 5 15',
 					 	        anchor:'90%',
 					 	        name: 'modalidad',
-					 	        flex: 1 
+					 	        flex: 1,
+					 	        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividadTipo.store.currentPage = 1;
+									                actividadTipoStore.load({
+														params: {
+															"s[nombre]": valoresForm.nombre,
+															"s[modalidad]": valoresForm.modalidad
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	 
 					    	}
 					   ]
 					},{

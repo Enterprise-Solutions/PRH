@@ -197,28 +197,90 @@ Ext.onReady(function(){
  						        width: 250,
  						        anchor:'90%',
  						        name: 'titulo',
+ 						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[titulo]": valoresForm.titulo,
+															"s[ciclo]": valoresForm.ciclo,
+															"s[actividad_tipo]": valoresForm.actividad_tipo
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	
  				    	  },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Ciclo',
 						        labelWidth: 50,
 						        width: 270,
 						        store: cicloStore,
+						        queryMode: 'local',
 						        displayField: 'nombre',
 						        valueField: 'act_ciclo_id',
 						        padding: '10 20 5 15',
 					 	        anchor:'90%',
 					 	        name: 'ciclo',
+					 	        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[titulo]": valoresForm.titulo,
+															"s[ciclo]": valoresForm.ciclo,
+															"s[actividad_tipo]": valoresForm.actividad_tipo
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	
 					     },{
 				    		    xtype: 'combobox',
 				    		    fieldLabel: 'Tipo Actividad',
 						        labelWidth: 120,
 						        width: 410,
 						        anchor:'90%',
+						        queryMode: 'local',
 						        store: actividadTipoStore,
 						        displayField: 'titulo',
 						        valueField: 'act_actividad_tipo_id',
 						        padding: '10 20 5 15',
 					 	        name: 'actividad_tipo',
+					 	        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[titulo]": valoresForm.titulo,
+															"s[ciclo]": valoresForm.ciclo,
+															"s[actividad_tipo]": valoresForm.actividad_tipo
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	
 					     }
 					   ]
 					},{

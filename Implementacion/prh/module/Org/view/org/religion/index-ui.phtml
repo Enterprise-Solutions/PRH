@@ -251,7 +251,25 @@ Ext.onReady(function(){
 						        width: 400,
 						        layout:'anchor',
 						        anchor:'90%',
-						        name: 'nombre',       
+						        name: 'nombre',
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridReligion.store.currentPage = 1;
+									                religionStore.load({
+														params: {
+															"s[nombre]": valoresForm.nombre
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	         
 				    	  }
 					   ]
 					},{

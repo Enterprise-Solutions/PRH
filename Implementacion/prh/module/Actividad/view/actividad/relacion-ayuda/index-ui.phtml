@@ -156,7 +156,27 @@ Ext.onReady(function(){
 						        labelWidth: 70,
 						        width: 250,
 						        anchor:'90%',
-						        name: 'filtro_alias',					         
+						        name: 'filtro_alias',
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[alias]": valoresForm.filtro_alias,
+															"s[identificador]": valoresForm.filtro_identificador,
+															"s[fecha]": valoresForm.filtro_fecha
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }						         
 				    	  },{   	
 				    			xtype: 'textfield',
 						        fieldLabel: 'Identificador',
@@ -165,7 +185,27 @@ Ext.onReady(function(){
 						        tabIndex: 2,
 						        width: 280,
 						        anchor:'90%',
-						        name: 'filtro_identificador',					         
+						        name: 'filtro_identificador',
+						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[alias]": valoresForm.filtro_alias,
+															"s[identificador]": valoresForm.filtro_identificador,
+															"s[fecha]": valoresForm.filtro_fecha
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }							         
 				    	  },{
 					    		fieldLabel: 'Fecha',
 	                            xtype: 'datefield',
@@ -175,7 +215,27 @@ Ext.onReady(function(){
 	                            labelWidth: 70,
 	                            width: 250,
 	                            anchor:'90%',
-	                            name: 'filtro_fecha' 		    		  
+	                            name: 'filtro_fecha',
+	                            listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[alias]": valoresForm.filtro_alias,
+															"s[identificador]": valoresForm.filtro_identificador,
+															"s[fecha]": valoresForm.filtro_fecha
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }		 		    		  
 				    	  }
 					   ]
 					},{
