@@ -4,8 +4,10 @@ namespace Actividad\Controller;
 
 use Actividad\ActividadGeneral\QueryObject\Select;
 use Actividad\ActividadGeneral\QueryObject\Get;
+use Actividad\ActividadGeneral\QueryObject\Partes;
 use Actividad\ActividadGeneral\QueryObject\Participantes;
 use Actividad\ActividadGeneral\Service\Crear as CrearActividad;
+use Actividad\ActividadGeneral\Service\Editar as EditarActividad;
 use Actividad\ActividadGeneral\Service\AsociarParticipante;
 
 use EnterpriseSolutions\Controller\BaseController;
@@ -53,6 +55,28 @@ class ActividadGeneralController extends BaseController {
         $this->getEntityManager()->flush();
         
         return $this->toJson($service->getRespuesta());
+    }
+
+    public function putAction()
+    {
+        $dbAdapter	= $this->getServiceLocator()->get('Zend\Db\Adapter\Adapter');
+        $em 		= $this->getEntityManager();
+        $data 		= $this->SubmitParams()->getParam('put');
+        
+        $service 	= new EditarActividad($em, $dbAdapter);
+        $service->ejecutar($data);
+        $this->getEntityManager()->flush();
+        
+        return $this->toJson($service->getRespuesta());
+    }
+
+    public function listarPartesAction($overritedParams = array())
+    {
+        $query 		= new Partes($this->getServiceLocator()->get('Zend\Db\Adapter\Adapter'));
+        $dao 		= new Dao($query);
+        $template 	= $this->_crearTemplateParaListado();
+
+        return $template($dao, array(), $overritedParams);
     }
 
     protected function toJson($respuesta)
