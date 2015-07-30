@@ -37,11 +37,12 @@ return array(
     
     'controllers' => array(
         'invokables' => array(  // Se invoca el controlador
-            'Actividad\Controller\Actividad'     => 'Actividad\Controller\ActividadController',
-            'Actividad\Controller\ActividadTipo' => 'Actividad\Controller\ActividadTipoController',
-            'Actividad\Controller\Ciclo'         => 'Actividad\Controller\CicloController',
-            'Actividad\Controller\Combos'        => 'Actividad\Controller\CombosController',
-            'Actividad\Controller\RelacionAyuda' => 'Actividad\Controller\RelacionAyudaController',
+            'Actividad\Controller\Actividad'        => 'Actividad\Controller\ActividadController',
+            'Actividad\Controller\ActividadGeneral' => 'Actividad\Controller\ActividadGeneralController',
+            'Actividad\Controller\ActividadTipo'    => 'Actividad\Controller\ActividadTipoController',
+            'Actividad\Controller\Ciclo'            => 'Actividad\Controller\CicloController',
+            'Actividad\Controller\Combos'           => 'Actividad\Controller\CombosController',
+            'Actividad\Controller\RelacionAyuda'    => 'Actividad\Controller\RelacionAyudaController',
         ),
     ),
     
