@@ -1,0 +1,431 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+			
+Ext.onReady(function(){
+				delete Ext.tip.Tip.prototype.minWidth;
+
+		//modelos
+		Ext.define('actividad', {
+			extend: 'Ext.data.Model',
+			fields: [
+				{
+					type: 'int',
+					name: 'act_actividad_general_id'
+				},{
+					type: 'string',
+					name: 'fecha'
+				},{
+					type: 'float',
+					name: 'duracion'
+				},{
+					type: 'string',
+					name: 'motivo'
+				},{
+					type: 'string',
+					name: 'lugar'
+				},{
+		            name: 'tiempo', 
+		            convert: function (v, rec) {
+		               return rec.get('duracion') + ' horas';
+		            }
+		        }
+			]
+		});
+
+		
+		var actividadStore = Ext.create('Ext.data.Store', {
+			model: 'actividad',
+			pageSize: itemsPorPagina, 
+			proxy: {
+				type: 'ajax',
+				  extraParams:{
+				    	"p[limit]": itemsPorPagina,
+						"p[page]":  page, 
+				  },
+				headers: {'Accept':'application/json'},
+				url: baseURL + '/actividad/actividad-general/index',
+				reader: {
+					type: 'json',
+					root: 'records',
+					totalProperty: 'numResults'
+				}
+			},
+			autoLoad: true
+		});
+		  
+		var panelFiltros = Ext.create('Ext.form.Panel', {
+			 type:  'hbox',
+			 collapsible: true,
+			 title:'Filtros de B&uacute;squeda',
+			    width: 'fit',	
+			    height: 'fit',			           
+			    items:[
+				{
+				    xtype: 'container',
+				    id: 'filtros',
+				    height: 40,
+				    layout:'hbox',
+				    items:[{   	
+ 					    		xtype: 'textfield',
+ 						        fieldLabel: 'Motivo',
+ 						        padding: '10 20 5 15',
+ 						        labelWidth: 60,
+ 						        width: 330,
+ 						        anchor:'90%',
+ 						        name: 'motivo',
+ 						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[motivo]": valoresForm.motivo,
+															"s[fecha]": valoresForm.fecha
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	
+ 				    	  },{   	
+ 					    		xtype: 'datefield',
+ 						        fieldLabel: 'Fecha',
+ 						        padding: '10 20 5 15',
+ 						        labelWidth: 60,
+ 						        width: 190,
+ 						        anchor:'90%',
+ 						        name: 'fecha',
+ 						        listeners:{
+		                            	specialkey: function(field, e){
+		                            		if (e.getKey() == e.ENTER){
+			                            		var basicForm = Ext.getCmp('filtros').up('form').getForm();
+											    if (basicForm)
+											    {						
+										           var valoresForm = basicForm.getFieldValues();
+										           	page = 0;
+													gridActividad.store.currentPage = 1;
+									                actividadStore.load({
+														params: {
+															"s[motivo]": valoresForm.motivo,
+															"s[fecha]": valoresForm.fecha
+												   		} 
+									               });
+		            							}
+		            						}			
+		                                }
+					            }	
+ 				    	  }
+					   ]
+					},{
+						xtype: 'container',
+					    height: 50,
+					    layout:'hbox',
+					    items:[{
+			
+				           		xtype: 'button',
+				           		width: 100,
+				           		margin: '10 5 0 20',
+				            	text: 'Filtrar',
+					            scale   : 'medium',
+					            handler: function(b,e) {
+					            	
+							           var basicForm = b.up('form').getForm();						
+							           var valoresForm = basicForm.getFieldValues();
+					           			
+			
+										//inicializo los pages
+							           	page = 0;
+										gridActividad.store.currentPage = 1;
+										
+						                actividadStore.load({
+											params: {
+												"s[motivo]": valoresForm.motivo,
+												"s[fecha]": valoresForm.fecha
+									   		} 
+						               });
+						            }//end of handler  
+									        
+								},{			
+								  		xtype: 'button',
+								  		width: 100,
+								  		margin: '10 0 0 15',
+					               		text: 'Limpiar',
+						           		scale   : 'medium',
+						           		handler: function(b,e) {
+						           			//inicializo los pages
+								           	page = 0;
+											gridActividad.store.currentPage = 1;
+						           			b.up('form').getForm().reset();
+						           			actividadStore.load();		
+						           			
+				           		  		}
+								}]}
+				    	]
+		});
+    	
+		var gridActividad = Ext.create('Ext.grid.Panel', {
+            selModel: {
+                checkOnly: true,
+                injectCheckbox: 1
+            },
+            width: 'fit',
+            padding: 10,
+            height: 385,
+            region: 'center',  
+	           dockedItems: [
+	                {     
+		          	     xtype: 'toolbar',
+                         dock: 'top',
+                         items: [
+                         { 
+                             xtype: 'tbfill' 
+                         },{
+                            xtype: 'button',	
+                            text: 'Crear Actividad',
+                            handler: function() {
+                                window.location = baseURL+'/actividad/actividad-general/crear-ui';
+                                        }
+                        }
+	                ]},
+	                ,{
+                    xtype: 'pagingtoolbar',
+                    store: actividadStore, 
+                    dock: 'bottom',
+                    displayInfo: true,
+                    listeners: {
+                        'afterrender': function (component)
+                        {
+                            component.down('#refresh').hide()
+                        },single: true
+                    },
+                    displayMsg: 'Registro {0} al {1} de {2}',
+                    beforePageText: 'P&aacute;gina',
+                    afterPageText : 'de {0}',
+                    moveNext : function(){ 
+                   		page = page + itemsPorPagina;
+                   	 	this.store.currentPage++;
+                   	 	var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
+           				actividadStore.load({
+	       				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						"s[nombre]": valoresForm.nombre
+	       				    }
+       					});
+                	 },
+                 	 movePrevious : function(){ 
+                 		page = page - itemsPorPagina;
+						this.store.currentPage--;
+						var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
+						actividadStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,   
+		   						"s[nombre]": valoresForm.nombre
+		   				    }
+   						});
+            		 },
+             		moveFirst : function(){ 
+             			page = 0;
+						this.store.currentPage = 1;
+						var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
+						actividadStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						"s[nombre]": valoresForm.nombre
+		   				    }
+   						});
+            	 	},
+            	 	moveLast : function(){                 	 	
+            	 		if (this.getStore().getTotalCount() % itemsPorPagina == "0"){
+	                	 	page = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)-1)*itemsPorPagina;
+	                	 	this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina));
+            	 		}
+						else
+						{
+							page = parseInt(this.getStore().getTotalCount() / itemsPorPagina)*itemsPorPagina;
+							this.store.currentPage = (parseInt(this.getStore().getTotalCount() / itemsPorPagina)+1);
+						}
+            	 		var basicForm = Ext.getCmp('filtros').up('form').getForm();						
+			           	var valoresForm = basicForm.getFieldValues();
+            	 		actividadStore.load({
+		   				    params:{
+		   				    	"p[limit]": itemsPorPagina,
+		   						"p[page]": page,
+		   						"s[nombre]": valoresForm.nombre
+		   				    }
+   						});      					
+            	 	},
+                }
+	                ],                       
+            layout: 'fit',
+            emptyText: "No existen actividades cargadas",
+            
+            store: actividadStore,
+            loadMask: true,
+            // grid columns
+            columns:[{
+                text: "Motivo",
+                dataIndex: 'motivo',
+                align: 'left',
+                flex: 1.2,
+                renderer: function(val, metadata, record, otraCosa, otraCosaMas) {
+                    return '<a href="'+baseURL+'/actividad/actividad-general/get-ui#?id=' + metadata.record.data.act_actividad_general_id +'">'+ val +'</a>';
+            	}
+            },{
+                text: "Fecha",
+                dataIndex: 'fecha',
+                align: 'center',
+                flex: 0.6,
+            },{
+                text: "Lugar",
+                dataIndex: 'lugar',
+                align: 'center',
+                flex: 1,
+            },{                
+            	text: "Duraci&oacute;n",
+                dataIndex: 'tiempo',
+                align: 'center',
+                flex: 0.6,
+            },{
+                xtype:'actioncolumn',
+                width:35,
+                align: 'center',
+                items: [{
+                    icon: baseURL+'/img/icons/grid/edit.png',  
+                    tooltip: 'Edit',
+               		handler: function(grid, rowIndex, colIndex) {
+                   		var url = baseURL+'/actividad/actividad-general/editar-ui#?id='+actividadStore.getAt(rowIndex).get('act_actividad_general_id');  
+                   		window.location = url;                     
+                    }
+                }]
+            },{
+                xtype:'actioncolumn',
+                width: 35,
+                align: 'center',
+                items: [{
+                	icon: baseURL+'/img/icons/grid/delete.png',  
+                    //tooltip: 'Delete',
+                    handler: function(grid, rowIndex, colIndex) {
+                    	var id_delete = actividadStore.getAt(rowIndex).get('act_actividad_general_id');
+                    	var auxmensaje = 'Confirma que desea borrar la Actividad ?';
+                    	Ext.Msg.show({
+                            title:'Consulta',
+                            msg: auxmensaje,
+                            width: 250,
+                            buttons: Ext.Msg.YESNO,
+                            icon: Ext.Msg.QUESTION,
+                            fn: function(rec) {
+                               if (rec === "yes") {
+                            	   Ext.Ajax.request({
+        							   url: baseURL + '/actividad/actividad-general/delete',
+        							   success: function(response, opt){
+        								   Ext.Msg.show({
+        									    title:'Aviso',
+        										msg:'Actividad Borrada Correctamente'
+        								   });
+        								   function hide_message() {
+        								       Ext.defer(function() {
+        								           Ext.MessageBox.hide();
+        								       }, delay);
+        								   }
+        								   hide_message();
+        								   actividadStore.load();
+        							   },
+        							   failure: function(response, opt){
+										   var aux_mensaje = Ext.decode(response.responseText);
+											Ext.MessageBox.show({
+					                            title: aux_mensaje.status,
+					                            msg: aux_mensaje.datos,
+					                            icon: Ext.MessageBox.ERROR,
+					                            buttons: Ext.Msg.OK
+					                        });
+										},
+        							   jsonData:{
+        							       'delete':{
+                                                     'act_actividad_general_id': id_delete,
+        							       }
+        							   }
+        						 });
+                              }
+                               else{
+                            	   this.close();
+                               }	                               
+                           }
+                       });
+
+                    	
+                        
+                    }
+                }]
+            }       
+            ]
+            	        	
+		 });
+
+		 
+			
+		var pantalla = Ext.create('Ext.panel.Panel', {
+			//id: 'margen',
+		    //title: ' ',
+		    width: 'fit',
+		    height: 510,
+		    items:[
+		         {	
+		        	 xtype: 'panel',
+					 items: [panelFiltros]
+			        
+		         }
+		         ,{
+		        	 xtype: 'container',
+					 items: [gridActividad]
+		         }
+		    ],
+		    listeners:{
+				'render':function(){
+					Ext.getCmp('topTabPanel').setActiveTab(1);
+					Ext.getCmp('actividadTabPanel').setActiveTab(2);
+				}
+			}
+		});
+
+			Ext.getCmp('centerPanel').add(pantalla);
+
+
+				
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
