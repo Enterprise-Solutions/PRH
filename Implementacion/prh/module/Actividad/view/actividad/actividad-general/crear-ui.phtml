@@ -1,0 +1,250 @@
+<?php echo $this->doctype(); ?>
+
+<html lang="es">
+    <head>
+        <meta charset="utf-8">
+        <title>PRH - Tipo de Actividad</title>
+
+		<style type="text/css">
+		
+		#margen{
+				margin: 0px;
+				margin-top: 110px;
+		}
+        </style>
+        
+		<script type="text/javascript">
+
+			var baseURL = '<?=$this->basePath()?>';
+
+			var titulo = null;
+	
+			var itemsPorPagina = 10;
+			var page = 0;
+
+			var aux=null;
+			
+Ext.onReady(function(){
+
+
+			aux = buscarId();
+			
+				delete Ext.tip.Tip.prototype.minWidth;
+                                                               
+					
+					var buttonCrear = function(b,e)
+					{
+									var basicForm = b.up('form').getForm();
+							if(basicForm.isValid())
+							{
+								            var valoresForm = basicForm.getFieldValues();
+		
+									Ext.Ajax.request({
+										   url: baseURL + '/actividad/actividad-general/post',
+										   success: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   aux = aux_mensaje['act_actividad_id'];
+											   Ext.Msg.show({
+												    title:'Aviso',
+													msg:'Actividad Creada Correctamente'
+											   });
+											   function hide_message() {
+											       Ext.defer(function() {
+											           Ext.MessageBox.hide();
+										       }, delay);
+											   var url = baseURL+'/actividad/actividad-general/get-ui#?id='+aux;  
+							                   window.location = url;
+										   }
+										   hide_message();										   
+										   
+									   },
+										failure: function(response, opt){
+											   var aux_mensaje = Ext.decode(response.responseText);
+											   var mensaje = " ";
+												   for (error in aux_mensaje.datos) {
+					                            		mensaje = mensaje +"- "+ error +": "+aux_mensaje.datos[error]+'<br>';  
+					                                }
+												Ext.MessageBox.show({
+						                            title: aux_mensaje.mensaje,
+						                            msg: mensaje,
+						                            width: 250,
+						                            icon: Ext.MessageBox.ERROR,
+						                            buttons: Ext.Msg.OK
+						                        });
+										},
+									   jsonData:{
+									       'post':{
+										       'Actividad':{
+												   'motivo': valoresForm.motivo,
+												   'act_actividad_general_id': 'new_id',
+												   'duracion': valoresForm.duracion,
+												   'lugar': valoresForm.lugar,
+												   'temas_tratados': valoresForm.temas_tratados,
+                                                   'resoluciones': valoresForm.resoluciones,
+												   'fecha': (formatearFecha(valoresForm.fecha, 1)),
+												   'observaciones': valoresForm.observaciones
+										       }
+										    }   
+											    	   
+									       
+									   }
+								 });
+							}
+							else
+							{
+								Ext.Msg.alert('Aviso','Hay campos inv&aacute;lidos');
+								return;
+							}  	
+						
+						
+					};
+
+					
+				var panelActividad = Ext.create('Ext.form.Panel', {
+					items:[{
+					    xtype: 'panel',
+					    bodyStyle: {
+				        	background: '#C8CED8',
+				        },
+					    title: 'Actividad',
+					    //anchor:'90%',
+					    height: 'fit',
+					    width: 'fit',
+					    border: 1,
+					//    flex: 1,
+					    padding: 10,
+					    layout: 'hbox',
+					    defaultType: 'textfield',
+					    items: [{
+							xtype: 'container',
+							flex: 1,
+							layout: 'anchor',
+							defaultType: 'textfield',
+							items: [    
+							    {
+								        fieldLabel: 'Motivo',
+								        allowBlank: false,
+								        padding: 15,
+								        labelWidth: 110,
+								        anchor:'90%',
+								        tabIndex: 1,
+								        name: 'motivo'
+							    },{
+								    	fieldLabel: 'Fecha',
+								    	allowBlank: false,
+								    	labelWidth: 110,
+								    	xtype: 'datefield',
+								    	tabIndex: 3,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'fecha',
+					    	    },{
+								    	fieldLabel: 'Observaciones',
+                                        padding: 15,
+                                        tabIndex: 5,
+                                        labelWidth: 110,
+                                        anchor:'90%',
+                                        name: 'observaciones'
+                                },{
+								    	fieldLabel: 'Temas tratados',
+								    	labelWidth: 110,
+								    	xtype: 'textareafield',
+								    	tabIndex: 7,
+								    	anchor:'90%',
+								    	padding: 15,
+								    	name: 'temas_tratados',
+                                }
+					    	]},{
+					    		xtype: 'container',
+				                flex: 1,
+				                layout: 'anchor',
+				                defaultType: 'textfield',
+				                items: [{
+					    	        fieldLabel: 'Lugar',
+							    	labelWidth: 110,
+							    	xtype: 'textfield',
+							    	tabIndex: 2,
+							    	hideTrigger: true,
+							    	anchor:'90%',
+							    	padding: 15,
+							    	name: 'lugar'
+					    	    },{
+							    	fieldLabel: 'Duraci&oacute;n (hs.)',
+							    	labelWidth: 110,
+							    	xtype: 'numberfield',
+							    	minValue: 0,
+							    	step: 0.25,
+							    	tabIndex: 4,
+							    	hideTrigger: true,
+							    	anchor:'90%',
+							    	padding: 15,
+							    	name: 'duracion'
+					    	    },{
+                                	fieldLabel: 'Resoluciones',
+							    	labelWidth: 110,
+							    	xtype: 'textareafield',
+							    	tabIndex: 6,
+							    	anchor:'90%',
+							    	padding: 15,
+							    	name: 'resoluciones'
+					    	    }]
+					    	}]},{
+				    	xtype: 'container',
+				 	    height: 200,
+				 	    width: 'fit',
+				 	   layout: 'hbox',
+				 	    items:[
+						  { xtype: 'tbfill' },	
+				 	      {	  
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 0 15 0',
+						      scale: 'large',
+						      width: 100, 
+						      text: 'Guardar',
+							  //disabled: true,
+							  handler: buttonCrear
+				 	      },{
+				 	    	  xtype: 'button',
+				 	    	  margin: '5 15 15 20',
+				 	    	  width: 100, 
+						      scale: 'large',
+						      text: 'Cancelar',
+							  //disabled: true,
+							  handler: function() {
+								  window.location = baseURL+'/actividad/actividad-general/index-ui';
+							}
+				 	      }
+					    ]
+				     }]
+					});
+
+					
+				var pantalla = Ext.create('Ext.form.Panel', {
+					 type:  'hbox',			 
+					 width: 'fit',
+					 height: 'fit',		           
+					 items:[
+							{
+								xtype: 'panel',
+			 					items: [panelActividad]
+			 				}
+										
+					  ],
+					  listeners:{
+								'render':function(){
+										Ext.getCmp('topTabPanel').setActiveTab(1);
+//										Ext.getCmp('actividadTabPanel').setActiveTab(0);
+								}
+					  }	    	
+				});
+												
+				Ext.getCmp('centerPanel').add(pantalla);
+																			
+});
+
+			
+		</script>
+    </head>
+    <body>
+    </body>
+</html>
