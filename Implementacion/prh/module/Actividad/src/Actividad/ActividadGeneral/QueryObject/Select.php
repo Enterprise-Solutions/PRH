@@ -17,7 +17,7 @@ class Select extends DbSelect {
     {
     	if($motivo && $motivo != ""){
 			$this->_select
-	    		 ->where("aag.motivo like '%$motivo%'");
+	    		 ->where("aag.motivo ~* '$motivo'");
     	}
     }
 
