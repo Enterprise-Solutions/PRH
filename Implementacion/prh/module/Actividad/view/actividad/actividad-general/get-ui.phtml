@@ -92,7 +92,16 @@ Ext.onReady(function(){
 					 			    	campos[campo] = result;
 					 			    	name.setValue(campos[campo]);
 				    				}
-						    	 }else{ 								    
+						    	 }else if (campo == 'duracion'){
+						    	 		if (campos[campo] == '1')
+						    	 		{
+						    	 			campos[campo] = campos[campo] + ' hora';	
+						    	 		}else{
+						    	 			campos[campo] = campos[campo] + ' horas';
+						    	 		}								    		
+								    		 name.setValue(campos[campo]);
+								 } else
+						    	 { 								    
 									    name.setValue(campos[campo]);
 							     }
 					    }	}	
@@ -148,12 +157,18 @@ Ext.onReady(function(){
 						        anchor:'90%',
 						        name: 'fecha'
 						},{
+						    	fieldLabel: 'Observaciones',
+						        padding: '15 15 8 15',
+						        labelWidth: 120,
+						        anchor:'90%',
+						        name: 'observaciones', 
+				   	 	},{
 						    	fieldLabel: 'Temas tratados',
 						        padding: '15 15 8 15',
 						        labelWidth: 120,
 						        anchor:'90%',
 						        name: 'temas_tratados', 
-				   	 	},
+				   	 	}
 			    	]},{
 					xtype: 'container',
 					flex: 1,
@@ -190,7 +205,7 @@ Ext.onReady(function(){
 		var gridParticipantes = Ext.create('Ext.grid.Panel', {
             width: 'fit',
             padding: '10 10 0 10',
-            height: 250,
+            height: 200,
             title: 'Participantes de la Actividad',
             region: 'center',              
             layout: 'fit',
